@@ -104,50 +104,50 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative bg-[#FAF6EF] pt-4 pb-12 sm:pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Full-width Cinematic Hero Slider Container */}
+    <section className="relative bg-[#FAF6EF]">
+      {/* Full Screen Width (Edge-to-Edge) Cinematic Hero Slider */}
+      <div
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        className="relative w-full overflow-hidden min-h-[540px] sm:min-h-[580px] lg:min-h-[620px] flex items-center shadow-md"
+      >
+        {/* Background Images spanning 100% full screen width with smooth fade transition */}
+        {HERO_SLIDES.map((slide, idx) => (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              idx === currentSlide ? 'opacity-100 scale-100 z-0' : 'opacity-0 scale-105 pointer-events-none'
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt={slide.titleHighlight}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        ))}
+
+        {/* Luxury Dark Gradient Overlay for 100% Text Readability spanning full screen */}
         <div
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          className="relative rounded-3xl overflow-hidden min-h-[520px] sm:min-h-[560px] lg:min-h-[600px] flex items-center shadow-2xl border border-[#2D241E]/30"
-        >
-          {/* Background Images with smooth fade transition */}
-          {HERO_SLIDES.map((slide, idx) => (
-            <div
-              key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                idx === currentSlide ? 'opacity-100 scale-100 z-0' : 'opacity-0 scale-105 pointer-events-none'
-              }`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.titleHighlight}
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-          ))}
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(20, 14, 10, 0.95) 0%, rgba(20, 14, 10, 0.88) 45%, rgba(20, 14, 10, 0.52) 75%, rgba(20, 14, 10, 0.3) 100%)',
+          }}
+        />
 
-          {/* Luxury Dark Gradient Overlay for 100% Text Readability */}
-          <div
-            className="absolute inset-0 z-10"
-            style={{
-              background:
-                'linear-gradient(90deg, rgba(20, 14, 10, 0.95) 0%, rgba(20, 14, 10, 0.88) 45%, rgba(20, 14, 10, 0.52) 75%, rgba(20, 14, 10, 0.3) 100%)',
-            }}
-          />
+        {/* Subtle Vertical Vignette for Top/Bottom Clarity */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(20, 14, 10, 0.4) 0%, transparent 40%, rgba(20, 14, 10, 0.6) 100%)',
+          }}
+        />
 
-          {/* Subtle Vertical Vignette for Top/Bottom Clarity */}
-          <div
-            className="absolute inset-0 z-10 pointer-events-none"
-            style={{
-              background:
-                'linear-gradient(180deg, rgba(20, 14, 10, 0.4) 0%, transparent 40%, rgba(20, 14, 10, 0.6) 100%)',
-            }}
-          />
-
-          {/* Main Slide Content - Always 100% Readable */}
-          <div className="relative z-20 w-full max-w-3xl px-6 sm:px-12 lg:px-16 py-12 text-white">
+        {/* Slide Content Container - Aligned with Global Container Grid */}
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 text-white">
+          <div className="max-w-2xl">
             {/* Top Category Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#D49B37] text-xs font-semibold uppercase tracking-wider mb-5 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#D49B37]" />
@@ -197,44 +197,46 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Left Arrow Button */}
-          <button
-            onClick={handlePrev}
-            aria-label="Previous Slide"
-            className="absolute left-4 z-30 w-11 h-11 rounded-full bg-white/15 hover:bg-[#B84A22] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 shadow-lg"
-          >
-            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
-          </button>
-
-          {/* Right Arrow Button */}
-          <button
-            onClick={handleNext}
-            aria-label="Next Slide"
-            className="absolute right-4 z-30 w-11 h-11 rounded-full bg-white/15 hover:bg-[#B84A22] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 shadow-lg"
-          >
-            <ChevronRight className="w-5 h-5 stroke-[2.5]" />
-          </button>
-
-          {/* Bottom Slide Dots & Preview Indicators */}
-          <div className="absolute bottom-5 right-6 sm:right-12 z-30 flex items-center gap-2">
-            {HERO_SLIDES.map((slide, idx) => (
-              <button
-                key={slide.id}
-                onClick={() => setCurrentSlide(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all rounded-full ${
-                  idx === currentSlide
-                    ? 'w-8 h-2.5 bg-[#B84A22] shadow-md'
-                    : 'w-2.5 h-2.5 bg-white/40 hover:bg-white/80'
-                }`}
-              />
-            ))}
-          </div>
         </div>
 
-        {/* 3 Value Propositions Bar (Fast Delivery, Collection, Open Daily) */}
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Left Arrow Button (Edge-aligned with frosted glass) */}
+        <button
+          onClick={handlePrev}
+          aria-label="Previous Slide"
+          className="absolute left-4 sm:left-6 z-30 w-11 h-11 rounded-full bg-white/15 hover:bg-[#B84A22] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 shadow-lg"
+        >
+          <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+        </button>
+
+        {/* Right Arrow Button (Edge-aligned with frosted glass) */}
+        <button
+          onClick={handleNext}
+          aria-label="Next Slide"
+          className="absolute right-4 sm:right-6 z-30 w-11 h-11 rounded-full bg-white/15 hover:bg-[#B84A22] text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all hover:scale-110 shadow-lg"
+        >
+          <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+        </button>
+
+        {/* Bottom Slide Dots & Preview Indicators */}
+        <div className="absolute bottom-6 right-6 sm:right-12 z-30 flex items-center gap-2">
+          {HERO_SLIDES.map((slide, idx) => (
+            <button
+              key={slide.id}
+              onClick={() => setCurrentSlide(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`transition-all rounded-full ${
+                idx === currentSlide
+                  ? 'w-8 h-2.5 bg-[#B84A22] shadow-md'
+                  : 'w-2.5 h-2.5 bg-white/40 hover:bg-white/80'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 3 Value Propositions Bar (Fast Delivery, Collection, Open Daily) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Prop 1: Fast Delivery */}
           <div
             onClick={() => {
