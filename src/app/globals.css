@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --amber-primary: #B84A22;
+  --amber-dark: #1A130E;
+  --amber-bg: #FAF6EF;
+  --title-color: #3D3D3D;
+  --subtitle-color: #747474;
+}
+
+body {
+  background-color: #FAF6EF;
+  color: #3D3D3D;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F4EDE2;
+}
+::-webkit-scrollbar-thumb {
+  background: #D5C7B7;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B84A22;
+}
+
+/* Section Title - Exact Spec: Poppins 36px/43px, weight 600, color #3D3D3D */
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 36px;
+  line-height: 43px;
+  font-weight: 600;
+  color: #3D3D3D;
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .section-title {
+    font-size: 28px;
+    line-height: 35px;
+  }
+}
+
+/* Section Subtitle - Exact Spec: Poppins 20px/30px, weight 400, color #747474 */
+.section-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 400;
+  color: #747474;
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .section-subtitle {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* Decorative Section Top Line with Orange Accent (as seen in screenshots) */
+.section-decorator {
+  position: relative;
+  width: 70px;
+  height: 3px;
+  background-color: #E6DFD5;
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+.section-decorator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 3px;
+  background-color: #B84A22;
+  border-radius: 2px;
+}
+
+/* Buttons */
+.btn-amber-primary {
+  background-color: #B84A22;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.25s ease;
+}
+.btn-amber-primary:hover {
+  background-color: #9E3E1B;
+  box-shadow: 0 8px 24px rgba(184, 74, 34, 0.28);
+  transform: translateY(-1px);
+}
+
+.btn-amber-outline {
+  border: 1px solid #C4B5A5;
+  background-color: transparent;
+  color: #3D3D3D;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.25s ease;
+}
+.btn-amber-outline:hover {
+  border-color: #B84A22;
+  color: #B84A22;
+  background-color: #FFFFFF;
+}
+
+/* Cards */
+.amber-card {
+  background: #FFFFFF;
+  border: 1px solid #EBE2D7;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(44, 34, 28, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.amber-card:hover {
+  box-shadow: 0 14px 35px rgba(44, 34, 28, 0.1);
+  transform: translateY(-2px);
+}
