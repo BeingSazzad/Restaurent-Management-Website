@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <span className="font-serif font-bold text-lg tracking-[0.14em] text-white block uppercase">
+                <span className="font-extrabold text-lg tracking-[0.14em] text-white block uppercase">
                   AMBER SPICE
                 </span>
                 <span className="text-[10px] tracking-wider text-[#D49B37] block font-medium">
@@ -67,7 +67,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 2: Quick Links (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-serif font-bold text-sm text-white">Quick Links</h4>
+            <h4 className="font-bold text-sm text-white">Quick Links</h4>
             <ul className="space-y-2 text-xs text-[#9B8C80]">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
@@ -99,7 +99,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: Services (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-serif font-bold text-sm text-white">Services</h4>
+            <h4 className="font-bold text-sm text-white">Services</h4>
             <ul className="space-y-2 text-xs text-[#9B8C80]">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
@@ -117,8 +117,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/agent-dashboard" className="text-[#D49B37] hover:underline">
-                  Staff KDS
+                <Link href="/" className="hover:text-white transition-colors">
+                  Offers & Vouchers
                 </Link>
               </li>
               <li>
@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 4: Newsletter Box (4 cols) */}
           <div className="lg:col-span-4 space-y-3">
-            <h4 className="font-serif font-bold text-sm text-white">
+            <h4 className="font-bold text-sm text-white">
               Subscribe to our newsletter
             </h4>
             <p className="text-xs text-[#9B8C80]">

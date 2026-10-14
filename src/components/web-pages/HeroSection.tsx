@@ -38,10 +38,10 @@ export const HeroSection: React.FC = () => {
               AUTHENTIC FLAVORS • TIMELESS RECIPES
             </span>
 
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1A130E] leading-[1.15] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1A130E] leading-[1.15] tracking-tight">
               Discover <br />
               The Real Taste of <br />
-              <span className="italic font-normal text-[#B84A22]">Heritage Spices</span>
+              <span className="font-bold text-[#B84A22]">Heritage Spices</span>
             </h1>
 
             <p className="text-sm sm:text-base text-[#786960] max-w-lg leading-relaxed font-normal">

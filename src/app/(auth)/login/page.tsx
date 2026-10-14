@@ -22,16 +22,19 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md p-8 rounded-3xl bg-white border border-[#EBEBEB] shadow-zomo">
+      <div className="w-full max-w-md p-8 rounded-3xl bg-white border border-[#EBE2D7] shadow-sm">
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#FF8D2F] flex items-center justify-center mx-auto mb-3 shadow-md">
-            <span className="text-white font-black text-xl">z</span>
+          <div className="w-12 h-12 rounded-2xl bg-[#F3ECE2] text-[#B84A22] flex items-center justify-center mx-auto mb-3 border border-[#E9DFD3] shadow-sm">
+            <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#B84A22]">
+              <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
+              <circle cx="50" cy="50" r="10" fill="#D49B37" />
+            </svg>
           </div>
-          <h1 className="text-2xl font-extrabold text-[#1F1F1F]">
-            Welcome to zomo
+          <h1 className="text-2xl font-bold text-[#1A130E]">
+            Welcome to AMBER SPICE
           </h1>
           <p className="text-xs text-[#747474] mt-1">
-            Sign in to access saved addresses and 1-click re-orders
+            Sign in to access saved addresses and 1-click royal re-orders
           </p>
         </div>
 
@@ -45,7 +48,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-[#F9F9F9] border border-[#EBEBEB] rounded-xl pl-9 pr-3 py-2.5 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#FF8D2F]"
+                className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl pl-9 pr-3 py-2.5 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#B84A22]"
               />
             </div>
           </div>
@@ -59,28 +62,28 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-[#F9F9F9] border border-[#EBEBEB] rounded-xl pl-9 pr-3 py-2.5 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#FF8D2F]"
+                className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl pl-9 pr-3 py-2.5 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#B84A22]"
               />
             </div>
           </div>
 
           <div className="flex justify-between items-center text-[11px] text-[#747474] pt-1">
-            <span className="hover:text-[#FF8D2F] cursor-pointer">Forgot password?</span>
-            <span className="text-[#FF8D2F] font-semibold">Demo User Ready</span>
+            <span className="hover:text-[#B84A22] cursor-pointer">Forgot password?</span>
+            <span className="text-[#B84A22] font-semibold">Demo User Ready</span>
           </div>
 
           <button
             type="submit"
-            className="w-full zomo-btn-primary py-3 text-xs font-bold flex items-center justify-center gap-2 mt-4 shadow-md"
+            className="w-full btn-amber-primary py-3 text-xs font-semibold flex items-center justify-center gap-2 mt-4 shadow-amber"
           >
             <span>Sign In to Account</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </form>
 
-        <div className="mt-6 pt-5 border-t border-[#F1F1F1] text-center text-xs text-[#747474]">
+        <div className="mt-6 pt-5 border-t border-[#EBE2D7] text-center text-xs text-[#747474]">
           <span>Want to order immediately? </span>
-          <Link href="/" className="text-[#FF8D2F] font-bold hover:underline">
+          <Link href="/" className="text-[#B84A22] font-semibold hover:underline">
             Use Guest Checkout
           </Link>
         </div>

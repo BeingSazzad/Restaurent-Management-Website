@@ -24,8 +24,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        serif: ["'Playfair Display'", "Georgia", "serif"],
-        sans: ["Poppins", "'Inter'", "sans-serif"],
+        sans: ["'Poppins'", "sans-serif"],
+        serif: ["'Poppins'", "sans-serif"],
       },
       boxShadow: {
         amber: "0 10px 30px rgba(184, 74, 34, 0.15)",

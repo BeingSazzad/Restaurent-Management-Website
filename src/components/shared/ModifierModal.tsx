@@ -137,7 +137,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           </button>
           <div className="absolute bottom-3.5 left-5 right-5 text-white">
             <h2 className="text-lg font-bold leading-tight">{dish.name}</h2>
-            <p className="text-xs font-semibold text-[#FF8D2F] mt-0.5">Base Price: €{dish.price.toFixed(2)}</p>
+            <p className="text-xs font-semibold text-[#D49B37] mt-0.5">Base Price: €{dish.price.toFixed(2)}</p>
           </div>
         </div>
 
@@ -145,8 +145,8 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
         <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
           {/* Allergens Notice */}
           {dish.allergens.length > 0 && (
-            <div className="bg-[#FFF4EC] border border-[#FFE0CC] rounded-2xl p-3 flex items-start gap-2.5 text-[#FF8D2F]">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="bg-[#FAF6EF] border border-[#E9DFD3] rounded-2xl p-3 flex items-start gap-2.5 text-[#B84A22]">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#B84A22]" />
               <div>
                 <span className="font-bold block">Allergen Information:</span>
                 Contains {dish.allergens.join(', ')}. Please mention any dietary needs in special instructions.
@@ -161,13 +161,13 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
               <div key={group.id} className="border-b border-[#F1F1F1] pb-4">
                 <div className="flex items-center justify-between mb-2.5">
                   <div>
-                    <h3 className="font-bold text-sm text-[#1F1F1F]">{group.name}</h3>
+                    <h3 className="font-bold text-sm text-[#1A130E]">{group.name}</h3>
                     <p className="text-[11px] text-[#747474]">
                       {group.maxSelect === 1 ? 'Select 1 option' : `Choose up to ${group.maxSelect} options`}
                     </p>
                   </div>
                   {group.required && (
-                    <span className="text-[10px] bg-[#FFF4EC] text-[#FF8D2F] px-2 py-0.5 rounded-full font-bold">
+                    <span className="text-[10px] bg-[#F3ECE2] text-[#B84A22] px-2 py-0.5 rounded-full font-bold border border-[#E9DFD3]">
                       Required
                     </span>
                   )}
@@ -182,15 +182,15 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
                         onClick={() => handleToggleOption(group.id, option, group.maxSelect)}
                         className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${
                           isSelected
-                            ? 'bg-[#FFF4EC] border-[#FF8D2F] text-[#1F1F1F] font-semibold'
-                            : 'bg-white border-[#EBEBEB] hover:border-[#FF8D2F] text-[#3D3D3D]'
+                            ? 'bg-[#FAF6EF] border-[#B84A22] text-[#1A130E] font-semibold'
+                            : 'bg-white border-[#EBEBEB] hover:border-[#B84A22] text-[#3D3D3D]'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div
                             className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${
                               isSelected
-                                ? 'bg-[#FF8D2F] border-[#FF8D2F] text-white'
+                                ? 'bg-[#B84A22] border-[#B84A22] text-white'
                                 : 'border-[#C0C0C0]'
                             }`}
                           >
@@ -199,7 +199,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
                           <span>{option.name}</span>
                         </div>
                         {option.price > 0 && (
-                          <span className="text-xs font-bold text-[#FF8D2F]">
+                          <span className="text-xs font-bold text-[#B84A22]">
                             +€{option.price.toFixed(2)}
                           </span>
                         )}
@@ -221,22 +221,22 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder="e.g. Extra sauce on side, no onions..."
               rows={2}
-              className="w-full bg-[#F9F9F9] border border-[#EBEBEB] rounded-xl p-3 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#FF8D2F] resize-none"
+              className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl p-3 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#B84A22] resize-none"
             />
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t border-[#EBEBEB] bg-white flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 bg-[#F9F9F9] px-3 py-1.5 rounded-full border border-[#EBEBEB]">
+        <div className="p-4 border-t border-[#EBE2D7] bg-white flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 bg-[#FAF6EF] px-3 py-1.5 rounded-full border border-[#EBE2D7]">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="text-[#747474] hover:text-[#1F1F1F] p-0.5"
+              className="text-[#747474] hover:text-[#1A130E] p-0.5"
             >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="font-bold text-xs text-[#1F1F1F] w-4 text-center">{quantity}</span>
-            <button onClick={() => setQuantity(quantity + 1)} className="text-[#747474] hover:text-[#1F1F1F] p-0.5">
+            <span className="font-bold text-xs text-[#1A130E] w-4 text-center">{quantity}</span>
+            <button onClick={() => setQuantity(quantity + 1)} className="text-[#747474] hover:text-[#1A130E] p-0.5">
               <Plus className="w-4 h-4" />
             </button>
           </div>
@@ -244,7 +244,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           <button
             onClick={handleAddToCart}
             disabled={!isRequiredSatisfied}
-            className="flex-1 zomo-btn-primary py-3 px-5 text-xs font-bold flex items-center justify-between disabled:opacity-50"
+            className="flex-1 btn-amber-primary py-3 px-5 text-xs font-semibold flex items-center justify-between disabled:opacity-50"
           >
             <span>Add to Cart</span>
             <span>€{grandTotal.toFixed(2)}</span>

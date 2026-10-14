@@ -153,7 +153,7 @@ export const MenuSection: React.FC = () => {
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#D49B37] uppercase block">
               SPECIAL OFFER
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
               Get 20% Off <br /> on Your First Order
             </h3>
             <p className="text-xs text-[#C4B5A5] leading-relaxed">
@@ -187,7 +187,7 @@ export const MenuSection: React.FC = () => {
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#B84A22] uppercase block">
               WEEKEND SPECIAL
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A130E] leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#1A130E] leading-tight">
               Family Combo <br /> Meals
             </h3>
             <p className="text-xs text-[#786960] leading-relaxed">

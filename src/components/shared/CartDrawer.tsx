@@ -77,15 +77,15 @@ export const CartDrawer: React.FC = () => {
       />
 
       <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white border-l border-[#EBEBEB] flex flex-col shadow-2xl">
+        <div className="w-screen max-w-md bg-white border-l border-[#EBE2D7] flex flex-col shadow-2xl">
           {/* Header */}
-          <div className="p-5 border-b border-[#EBEBEB] flex items-center justify-between bg-white">
+          <div className="p-5 border-b border-[#EBE2D7] flex items-center justify-between bg-white">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#FFF4EC] text-[#FF8D2F] flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-[#F3ECE2] text-[#B84A22] flex items-center justify-center font-bold">
                 <ShoppingBag className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="font-extrabold text-base text-[#1F1F1F]">My Order Cart</h2>
+                <h2 className="font-bold text-base text-[#1A130E]">My Order Cart</h2>
                 <div className="flex items-center gap-1.5 text-xs text-[#747474]">
                   {fulfillment.type === 'delivery' ? (
                     <>
@@ -94,7 +94,7 @@ export const CartDrawer: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Store className="w-3.5 h-3.5 text-[#FF8D2F]" />
+                      <Store className="w-3.5 h-3.5 text-[#B84A22]" />
                       <span>Takeaway Pickup · ~15-20 mins</span>
                     </>
                   )}
@@ -104,7 +104,7 @@ export const CartDrawer: React.FC = () => {
 
             <button
               onClick={() => dispatch(setCartOpen(false))}
-              className="w-8 h-8 rounded-full bg-[#F9F9F9] text-[#747474] hover:text-[#1F1F1F] flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-full bg-[#FAF6EF] text-[#747474] hover:text-[#1A130E] flex items-center justify-center transition-colors border border-[#EBE2D7]"
             >
               <X className="w-4 h-4" />
             </button>
@@ -112,7 +112,7 @@ export const CartDrawer: React.FC = () => {
 
           {/* Free Delivery Bar */}
           {fulfillment.type === 'delivery' && (
-            <div className="bg-[#FFF4EC] px-6 py-3 border-b border-[#FFE0CC]">
+            <div className="bg-[#FAF6EF] px-6 py-3 border-b border-[#EBE2D7]">
               <div className="flex items-center justify-between text-xs mb-1.5">
                 <span className="text-[#3D3D3D] font-medium">
                   {isFreeDeliveryEligible ? (
@@ -121,17 +121,17 @@ export const CartDrawer: React.FC = () => {
                     </span>
                   ) : (
                     <>
-                      Add <span className="text-[#FF8D2F] font-bold">€{freeDeliveryRemaining.toFixed(2)}</span> more for Free Delivery
+                      Add <span className="text-[#B84A22] font-bold">€{freeDeliveryRemaining.toFixed(2)}</span> more for Free Delivery
                     </>
                   )}
                 </span>
-                <span className="text-[11px] font-bold text-[#FF8D2F]">
+                <span className="text-[11px] font-bold text-[#B84A22]">
                   {Math.round(freeDeliveryProgress)}%
                 </span>
               </div>
-              <div className="w-full h-2 bg-[#FFE0CC] rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-[#EBE2D7] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#FF8D2F] transition-all duration-300 rounded-full"
+                  className="h-full bg-[#B84A22] transition-all duration-300 rounded-full"
                   style={{ width: `${freeDeliveryProgress}%` }}
                 />
               </div>
@@ -139,19 +139,19 @@ export const CartDrawer: React.FC = () => {
           )}
 
           {/* Cart Items List */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-[#F9F9F9]">
+          <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-[#FAF6EF]/50">
             {cart.items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12 text-[#747474]">
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm mb-4">
-                  <ShoppingBag className="w-8 h-8 text-[#A0A0A0]" />
+                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm mb-4 border border-[#EBE2D7]">
+                  <ShoppingBag className="w-8 h-8 text-[#9B8C80]" />
                 </div>
-                <h3 className="font-bold text-[#1F1F1F] text-base mb-1">Your cart is empty</h3>
+                <h3 className="font-bold text-[#1A130E] text-base mb-1">Your cart is empty</h3>
                 <p className="text-xs text-[#747474] max-w-xs mb-6">
                   Add delicious dishes from our menu to begin ordering.
                 </p>
                 <button
                   onClick={() => dispatch(setCartOpen(false))}
-                  className="zomo-btn-primary py-2.5 px-6 text-xs font-bold"
+                  className="btn-amber-primary py-2.5 px-6 text-xs font-semibold"
                 >
                   Explore Food Menu
                 </button>
@@ -251,21 +251,21 @@ export const CartDrawer: React.FC = () => {
                     value={promoInput}
                     onChange={(e) => setPromoInput(e.target.value)}
                     placeholder="Coupon code (e.g. WELCOME10)"
-                    className="w-full bg-[#F9F9F9] border border-[#EBEBEB] rounded-xl pl-9 pr-3 py-2 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#FF8D2F] uppercase"
+                    className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl pl-9 pr-3 py-2 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#B84A22] uppercase"
                   />
                 </div>
                 {cart.promoCode ? (
                   <button
                     type="button"
                     onClick={() => dispatch(removePromoCode())}
-                    className="px-3 py-2 rounded-xl text-xs bg-rose-50 text-[#E23744] border border-[#E23744]/20 font-semibold"
+                    className="px-3 py-2 rounded-xl text-xs bg-rose-50 text-[#B84A22] border border-[#B84A22]/20 font-semibold"
                   >
                     Remove
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#F9F9F9] border border-[#EBEBEB] hover:border-[#FF8D2F] text-[#3D3D3D]"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#FAF6EF] border border-[#EBE2D7] hover:border-[#B84A22] text-[#3D3D3D]"
                   >
                     Apply
                   </button>

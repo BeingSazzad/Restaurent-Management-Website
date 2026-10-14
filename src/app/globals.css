@@ -1,17 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-primary: 'Poppins', sans-serif;
   --amber-primary: #B84A22;
+  --amber-primary-hover: #9E3E1B;
   --amber-dark: #1A130E;
   --amber-bg: #FAF6EF;
-  --title-color: #3D3D3D;
-  --subtitle-color: #747474;
+  --color-text-primary: #3D3D3D;
+  --color-text-muted: #747474;
+}
+
+/* 100% Global Typography Consistency */
+*,
+*::before,
+*::after {
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -21,6 +28,16 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  color: #3D3D3D;
+  letter-spacing: 0;
+}
+
+p, span, label, input, textarea, button {
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Custom Scrollbars */
@@ -39,9 +56,9 @@ body {
   background: #B84A22;
 }
 
-/* Section Title - Exact Spec: Poppins 36px/43px, weight 600, color #3D3D3D */
+/* Global Section Title - Exact Spec: Poppins 36px/43px, weight 600, color #3D3D3D */
 .section-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 36px;
   line-height: 43px;
   font-weight: 600;
@@ -51,14 +68,14 @@ body {
 
 @media (max-width: 640px) {
   .section-title {
-    font-size: 28px;
-    line-height: 35px;
+    font-size: 26px;
+    line-height: 34px;
   }
 }
 
-/* Section Subtitle - Exact Spec: Poppins 20px/30px, weight 400, color #747474 */
+/* Global Section Subtitle - Exact Spec: Poppins 20px/30px, weight 400, color #747474 */
 .section-subtitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 20px;
   line-height: 30px;
   font-weight: 400;
@@ -68,33 +85,34 @@ body {
 
 @media (max-width: 640px) {
   .section-subtitle {
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 15px;
+    line-height: 22px;
   }
 }
 
-/* Decorative Section Top Line with Orange Accent (as seen in screenshots) */
+/* Decorative Section Accent Line */
 .section-decorator {
   position: relative;
-  width: 70px;
+  width: 65px;
   height: 3px;
   background-color: #E6DFD5;
   border-radius: 2px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .section-decorator::before {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
-  width: 28px;
+  width: 26px;
   height: 3px;
   background-color: #B84A22;
   border-radius: 2px;
 }
 
-/* Buttons */
+/* Global Button Styles */
 .btn-amber-primary {
+  font-family: 'Poppins', sans-serif;
   background-color: #B84A22;
   color: #FFFFFF;
   font-weight: 600;
@@ -108,6 +126,7 @@ body {
 }
 
 .btn-amber-outline {
+  font-family: 'Poppins', sans-serif;
   border: 1px solid #C4B5A5;
   background-color: transparent;
   color: #3D3D3D;
@@ -121,7 +140,22 @@ body {
   background-color: #FFFFFF;
 }
 
-/* Cards */
+/* Backward-compatible button alias */
+.zomo-btn-primary {
+  font-family: 'Poppins', sans-serif;
+  background-color: #B84A22;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.25s ease;
+}
+.zomo-btn-primary:hover {
+  background-color: #9E3E1B;
+  box-shadow: 0 8px 24px rgba(184, 74, 34, 0.28);
+  transform: translateY(-1px);
+}
+
+/* Clean Cards */
 .amber-card {
   background: #FFFFFF;
   border: 1px solid #EBE2D7;

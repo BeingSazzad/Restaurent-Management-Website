@@ -67,20 +67,20 @@ export const OrderTrackerModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white border border-[#EBEBEB] rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div className="bg-white border border-[#EBE2D7] rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="p-5 border-b border-[#EBEBEB] flex items-center justify-between bg-white">
+        <div className="p-5 border-b border-[#EBE2D7] flex items-center justify-between bg-white">
           <div>
-            <span className="text-[10px] font-extrabold text-[#FF8D2F] uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-[#B84A22] uppercase tracking-wider block">
               Live Delivery Status
             </span>
-            <h2 className="text-lg font-extrabold text-[#1F1F1F]">
+            <h2 className="text-lg font-bold text-[#1A130E]">
               Order #{currentOrder.orderNumber}
             </h2>
           </div>
           <button
             onClick={() => dispatch(setActiveTrackingOrderId(null))}
-            className="w-8 h-8 rounded-full bg-[#F9F9F9] text-[#747474] hover:text-[#1F1F1F] flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-[#FAF6EF] text-[#747474] hover:text-[#1A130E] flex items-center justify-center border border-[#EBE2D7]"
           >
             <X className="w-4 h-4" />
           </button>
@@ -89,14 +89,14 @@ export const OrderTrackerModal: React.FC = () => {
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
           {/* Estimated Time Card */}
-          <div className="p-4 rounded-2xl bg-[#FFF4EC] border border-[#FFE0CC] flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white text-[#FF8D2F] flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-white text-[#B84A22] flex items-center justify-center shadow-sm border border-[#EBE2D7]">
                 <Clock className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
               </div>
               <div>
                 <span className="text-[11px] text-[#747474] block">Estimated Arrival</span>
-                <span className="text-base font-extrabold text-[#1F1F1F]">
+                <span className="text-base font-bold text-[#1A130E]">
                   {currentOrder.status === 'completed'
                     ? 'Delivered'
                     : `~${currentOrder.estimatedMinutes} Minutes`}
@@ -106,7 +106,7 @@ export const OrderTrackerModal: React.FC = () => {
 
             <button
               onClick={handleAdvanceStatus}
-              className="text-[11px] font-bold bg-white hover:bg-[#FF8D2F] text-[#FF8D2F] hover:text-white px-3 py-1.5 rounded-full border border-[#FF8D2F] transition-colors shadow-sm"
+              className="text-[11px] font-semibold bg-white hover:bg-[#B84A22] text-[#B84A22] hover:text-white px-3 py-1.5 rounded-full border border-[#B84A22] transition-colors shadow-sm"
             >
               Simulate Next Status ➔
             </button>
@@ -127,8 +127,8 @@ export const OrderTrackerModal: React.FC = () => {
                         isFinished
                           ? 'bg-[#0FA958] text-white font-bold'
                           : isCurrent
-                          ? 'bg-[#FF8D2F] text-white font-bold ring-4 ring-[#FFF4EC]'
-                          : 'bg-[#F1F1F1] text-[#A0A0A0]'
+                          ? 'bg-[#B84A22] text-white font-bold ring-4 ring-[#F3ECE2]'
+                          : 'bg-[#F4EDE2] text-[#9B8C80]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -136,7 +136,7 @@ export const OrderTrackerModal: React.FC = () => {
                     {idx < steps.length - 1 && (
                       <div
                         className={`w-0.5 h-7 my-1 transition-colors ${
-                          idx < currentIndex ? 'bg-[#0FA958]' : 'bg-[#EBEBEB]'
+                          idx < currentIndex ? 'bg-[#0FA958]' : 'bg-[#EBE2D7]'
                         }`}
                       />
                     )}
@@ -145,10 +145,10 @@ export const OrderTrackerModal: React.FC = () => {
                     <h4
                       className={`font-bold text-xs ${
                         isCurrent
-                          ? 'text-[#FF8D2F]'
+                          ? 'text-[#B84A22]'
                           : isFinished
-                          ? 'text-[#1F1F1F]'
-                          : 'text-[#A0A0A0]'
+                          ? 'text-[#1A130E]'
+                          : 'text-[#9B8C80]'
                       }`}
                     >
                       {step.label}
@@ -161,8 +161,8 @@ export const OrderTrackerModal: React.FC = () => {
           </div>
 
           {/* Order Details */}
-          <div className="p-4 rounded-2xl bg-[#F9F9F9] border border-[#EBEBEB] space-y-2">
-            <h5 className="font-bold text-[11px] text-[#747474] uppercase tracking-wider">
+          <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7] space-y-2">
+            <h5 className="font-semibold text-[11px] text-[#747474] uppercase tracking-wider">
               Items Ordered ({currentOrder.items.length})
             </h5>
             {currentOrder.items.map((item, i) => (
@@ -170,23 +170,23 @@ export const OrderTrackerModal: React.FC = () => {
                 <span>
                   {item.quantity}x {item.dish.name}
                 </span>
-                <span className="font-bold text-[#1F1F1F]">
+                <span className="font-bold text-[#1A130E]">
                   €{item.totalPrice.toFixed(2)}
                 </span>
               </div>
             ))}
-            <div className="border-t border-[#EBEBEB] pt-2 flex justify-between text-xs font-extrabold text-[#1F1F1F]">
+            <div className="border-t border-[#EBE2D7] pt-2 flex justify-between text-xs font-bold text-[#1A130E]">
               <span>Total Paid</span>
-              <span className="text-[#FF8D2F]">€{currentOrder.total.toFixed(2)}</span>
+              <span className="text-[#B84A22]">€{currentOrder.total.toFixed(2)}</span>
             </div>
           </div>
 
           {/* Destination */}
           {currentOrder.deliveryAddress && (
-            <div className="p-3.5 rounded-2xl bg-white border border-[#EBEBEB] flex items-start gap-3 text-xs text-[#3D3D3D] shadow-sm">
-              <MapPin className="w-4 h-4 text-[#FF8D2F] shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-2xl bg-white border border-[#EBE2D7] flex items-start gap-3 text-xs text-[#3D3D3D] shadow-sm">
+              <MapPin className="w-4 h-4 text-[#B84A22] shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold block text-[#1F1F1F]">Delivering to:</span>
+                <span className="font-bold block text-[#1A130E]">Delivering to:</span>
                 {currentOrder.deliveryAddress} ({currentOrder.eircode})
               </div>
             </div>

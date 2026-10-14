@@ -66,7 +66,7 @@ export const ReviewsSection: React.FC = () => {
           >
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-[#F3ECE2] text-[#B84A22] font-serif font-bold text-sm flex items-center justify-center border border-[#E9DFD3]">
+                <div className="w-10 h-10 rounded-full bg-[#F3ECE2] text-[#B84A22] font-bold text-sm flex items-center justify-center border border-[#E9DFD3]">
                   {rev.author.charAt(0)}
                 </div>
                 <div>
