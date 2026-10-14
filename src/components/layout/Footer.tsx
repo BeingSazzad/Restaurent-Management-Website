@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -162,11 +161,20 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Copyright Line */}
-        <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#7A6C62]">
+        <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7A6C62]">
           <p>© {new Date().getFullYear()} Amber Spice. All rights reserved.</p>
-          <div className="flex items-center gap-1">
-            <span>Made with passion</span>
-            <Heart className="w-3.5 h-3.5 fill-[#B84A22] text-[#B84A22] inline" />
+          <div className="flex items-center gap-4 text-[#8C7D72]">
+            <Link href="/about" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <span>·</span>
+            <Link href="/about" className="hover:text-white transition-colors">
+              Terms of Service
+            </Link>
+            <span>·</span>
+            <Link href="/contact" className="hover:text-white transition-colors">
+              Security
+            </Link>
           </div>
         </div>
       </div>
