@@ -41,7 +41,7 @@ const OFFERS_LIST: OfferCard[] = [
     code: 'FIRSTBITE',
     discount: '10% OFF',
     title: 'Welcome First-Time Diner Gift',
-    description: 'New to Amber Spice? Enjoy 10% off your first authentic culinary doorstep delivery.',
+    description: 'First time ordering? Enjoy 10% off your authentic doorstep delivery.',
     minOrder: 'No minimum order',
     validTill: 'First order only',
     badge: 'New Customer',

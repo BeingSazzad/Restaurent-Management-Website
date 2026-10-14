@@ -9,7 +9,7 @@ export default function AboutPage() {
       <div className="text-center max-w-2xl mx-auto mb-14">
         <div className="section-decorator mx-auto" />
         <h1 className="section-title mb-4">
-          The Story of Amber Spice
+          Our Culinary Heritage
         </h1>
         <p className="section-subtitle leading-relaxed">
           Born out of love for authentic regional heritage recipes: slow dum-cooked biryanis in

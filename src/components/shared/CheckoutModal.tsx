@@ -108,7 +108,7 @@ export const CheckoutModal: React.FC = () => {
               ) : (
                 <>
                   <Store className="w-3.5 h-3.5 text-[#B84A22]" />
-                  <span>Restaurant Collection · ~20 mins</span>
+                  <span>Counter Collection · ~20 mins</span>
                 </>
               )}
             </p>

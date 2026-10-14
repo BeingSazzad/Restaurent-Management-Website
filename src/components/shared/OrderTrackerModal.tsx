@@ -59,12 +59,12 @@ export const OrderTrackerModal: React.FC = () => {
   };
 
   const steps = [
-    { key: 'new', label: 'Order Confirmed', desc: 'Sent to restaurant kitchen', icon: CheckCircle2 },
+    { key: 'new', label: 'Order Confirmed', desc: 'Sent to kitchen chefs', icon: CheckCircle2 },
     { key: 'preparing', label: 'Food Preparing', desc: 'Chefs are grilling & packing', icon: ChefHat },
     {
       key: 'ready',
       label: currentOrder.fulfillmentType === 'delivery' ? 'Out for Delivery' : 'Ready for Pickup',
-      desc: currentOrder.fulfillmentType === 'delivery' ? 'Driver is on the way' : 'Collect at restaurant counter',
+      desc: currentOrder.fulfillmentType === 'delivery' ? 'Driver is on the way' : 'Ready at collection counter',
       icon: currentOrder.fulfillmentType === 'delivery' ? Bike : Store,
     },
     { key: 'completed', label: 'Order Delivered', desc: 'Enjoy your hot delicious meal!', icon: Sparkles },

@@ -19,7 +19,7 @@ export default function ContactPage() {
         {/* Contact Info & Hours */}
         <div className="lg:col-span-5 space-y-6">
           <div className="p-6 rounded-2xl bg-white border border-[#EBE2D7] shadow-sm space-y-4 text-xs">
-            <h3 className="font-bold text-sm text-[#1A130E]">Restaurant Contact</h3>
+            <h3 className="font-bold text-sm text-[#1A130E]">Location & Inquiries</h3>
             <div className="flex items-start gap-3 text-[#3D3D3D]">
               <MapPin className="w-4 h-4 text-[#B84A22] shrink-0 mt-0.5" />
               <div>

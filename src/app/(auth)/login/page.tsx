@@ -41,7 +41,7 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
-            {authMode === 'login' ? 'Welcome to AMBER SPICE' : 'Create Diner Account'}
+            {authMode === 'login' ? 'Welcome Back' : 'Create Account'}
           </h1>
           <p className="text-xs text-[#747474] mt-1">
             {authMode === 'login'

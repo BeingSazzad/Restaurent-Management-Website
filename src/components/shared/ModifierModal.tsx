@@ -125,24 +125,50 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
       <div className="bg-white border border-[#EBEBEB] rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-        {/* Header with Image */}
-        <div className="relative h-44 w-full bg-[#F1F1F1] shrink-0">
+        {/* Header with Food Image & Close Button */}
+        <div className="relative aspect-[16/9] w-full bg-[#F3ECE2] shrink-0 overflow-hidden">
           <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-[#1F1F1F] flex items-center justify-center transition-colors shadow-sm"
+            aria-label="Close modal"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#1A130E] backdrop-blur-md flex items-center justify-center transition-all shadow-md z-10 hover:scale-105"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
-          <div className="absolute bottom-3.5 left-5 right-5 text-white">
-            <h2 className="text-lg font-bold leading-tight">{dish.name}</h2>
-            <p className="text-xs font-semibold text-[#D49B37] mt-0.5">Base Price: €{dish.price.toFixed(2)}</p>
-          </div>
         </div>
 
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
+          {/* Dish Header Info (Title, Price, Description, Badges) */}
+          <div className="border-b border-[#F0E8DE] pb-4">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#1A130E] leading-tight">
+                {dish.name}
+              </h2>
+              <span className="text-lg font-bold text-[#B84A22] shrink-0">
+                €{dish.price.toFixed(2)}
+              </span>
+            </div>
+
+            <p className="text-xs text-[#747474] leading-relaxed mb-3">
+              {dish.description}
+            </p>
+
+            <div className="flex items-center gap-2 flex-wrap text-[11px]">
+              {dish.dietary.map((d) => (
+                <span
+                  key={d}
+                  className="px-2.5 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7] font-semibold capitalize"
+                >
+                  {d}
+                </span>
+              ))}
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF6EF] text-[#747474] border border-[#EBE2D7]">
+                ⏱ {dish.prepTime}
+              </span>
+            </div>
+          </div>
+
           {/* Allergens Notice */}
           {dish.allergens.length > 0 && (
             <div className="bg-[#FAF6EF] border border-[#E9DFD3] rounded-2xl p-3 flex items-start gap-2.5 text-[#B84A22]">
