@@ -57,12 +57,15 @@ export const cartSlice = createSlice({
     },
     applyPromoCode: (state, action: PayloadAction<string>) => {
       const code = action.payload.trim().toUpperCase();
-      if (code === 'WELCOME10') {
-        state.promoCode = 'WELCOME10';
-        state.discountPercentage = 10;
-      } else if (code === 'CHEF20') {
-        state.promoCode = 'CHEF20';
+      if (code === 'SPICE20' || code === 'CHEF20') {
+        state.promoCode = code;
         state.discountPercentage = 20;
+      } else if (code === 'FAMILYFEST') {
+        state.promoCode = code;
+        state.discountPercentage = 15;
+      } else if (code === 'WELCOME10' || code === 'FIRSTBITE' || code === 'AMBER10') {
+        state.promoCode = code;
+        state.discountPercentage = 10;
       } else {
         state.promoCode = null;
         state.discountPercentage = 0;

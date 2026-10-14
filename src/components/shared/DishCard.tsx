@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { MenuItem } from '../../Mockdata';
-import { Star, Plus, AlertCircle } from 'lucide-react';
+import { Star, Plus, AlertCircle, Heart } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { toggleFavorite } from '../../redux/slices/favoritesSlice';
 
 interface DishCardProps {
   dish: MenuItem;
@@ -10,6 +12,15 @@ interface DishCardProps {
 }
 
 export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
+  const dispatch = useAppDispatch();
+  const favoriteDishIds = useAppSelector((state) => state.favorites.favoriteDishIds);
+  const isFavorite = favoriteDishIds.includes(dish.id);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(toggleFavorite(dish.id));
+  };
+
   return (
     <div
       onClick={() => dish.isAvailable && onSelect(dish)}
@@ -27,14 +38,29 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
 
         {/* Bestseller Badge */}
         {dish.isBestSeller && (
-          <div className="absolute top-3 left-3 bg-[#B84A22] text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm tracking-wide">
+          <div className="absolute top-3 left-3 bg-[#B84A22] text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm tracking-wide z-10">
             Bestseller
           </div>
         )}
 
+        {/* Wishlist / Favorite Heart Button */}
+        <button
+          onClick={handleToggleFavorite}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-[#EBE2D7] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-sm z-10"
+        >
+          <Heart
+            className={`w-4 h-4 transition-colors ${
+              isFavorite
+                ? 'fill-[#B84A22] text-[#B84A22]'
+                : 'text-[#747474] hover:text-[#B84A22]'
+            }`}
+          />
+        </button>
+
         {/* Sold out overlay */}
         {!dish.isAvailable && (
-          <div className="absolute inset-0 bg-white/85 backdrop-blur-sm flex items-center justify-center">
+          <div className="absolute inset-0 bg-white/85 backdrop-blur-sm flex items-center justify-center z-20">
             <span className="bg-[#B84A22] text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1 shadow-sm">
               <AlertCircle className="w-3.5 h-3.5" /> Sold Out
             </span>

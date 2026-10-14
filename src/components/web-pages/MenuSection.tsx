@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedCategory, setSearchQuery } from '../../redux/slices/menuSlice';
 import { applyPromoCode, setCartOpen } from '../../redux/slices/cartSlice';
@@ -31,7 +32,7 @@ export const MenuSection: React.FC = () => {
   });
 
   const handleApplyPromoAndScroll = () => {
-    dispatch(applyPromoCode('WELCOME10'));
+    dispatch(applyPromoCode('SPICE20'));
     dispatch(setCartOpen(true));
   };
 
@@ -51,13 +52,13 @@ export const MenuSection: React.FC = () => {
             </p>
           </div>
 
-          <button
-            onClick={() => dispatch(setSelectedCategory('all'))}
+          <Link
+            href="/menu"
             className="text-sm font-semibold text-[#B84A22] hover:text-[#9E3E1B] flex items-center gap-1.5 group self-start sm:self-auto py-1 transition-colors"
           >
             <span>View All Menu</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
 
         {/* 6 Category Cards Grid with Proper Proportions */}
@@ -124,13 +125,13 @@ export const MenuSection: React.FC = () => {
             </p>
           </div>
 
-          <button
-            onClick={() => dispatch(setSelectedCategory('all'))}
+          <Link
+            href="/menu"
             className="text-sm font-semibold text-[#B84A22] hover:text-[#9E3E1B] flex items-center gap-1.5 group self-start sm:self-auto py-1 transition-colors"
           >
             <span>View All</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
 
         {/* Dishes Grid: Ergonomic 4-Column Responsive Layout */}

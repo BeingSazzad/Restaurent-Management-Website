@@ -253,6 +253,51 @@ export const CheckoutModal: React.FC = () => {
                 </span>
               </div>
             </div>
+
+            {/* Card Details Form when card is active */}
+            {paymentMethod === 'card' && (
+              <div className="mt-3 p-3.5 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7] space-y-2.5">
+                <div>
+                  <label className="block text-[10px] uppercase font-semibold text-[#747474] mb-1">
+                    Card Number
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="4532 •••• •••• 8892"
+                    defaultValue="4532 8920 1204 8892"
+                    className="w-full bg-white border border-[#EBE2D7] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#B84A22]"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[10px] uppercase font-semibold text-[#747474] mb-1">
+                      Expiry Date
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="MM/YY"
+                      defaultValue="08/28"
+                      className="w-full bg-white border border-[#EBE2D7] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#B84A22]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase font-semibold text-[#747474] mb-1">
+                      CVC / CVV
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      placeholder="•••"
+                      defaultValue="492"
+                      maxLength={4}
+                      className="w-full bg-white border border-[#EBE2D7] rounded-xl px-3 py-2 text-xs text-[#3D3D3D] focus:outline-none focus:border-[#B84A22]"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Secure SSL Tag */}

@@ -4,6 +4,7 @@ import orderReducer from './slices/orderSlice';
 import menuReducer from './slices/menuSlice';
 import fulfillmentReducer from './slices/fulfillmentSlice';
 import authReducer from './slices/authSlice';
+import favoritesReducer from './slices/favoritesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     menu: menuReducer,
     fulfillment: fulfillmentReducer,
     auth: authReducer,
+    favorites: favoritesReducer,
   },
 });
 

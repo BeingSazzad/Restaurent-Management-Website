@@ -57,18 +57,22 @@ export const Navbar: React.FC = () => {
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B84A22] rounded-full" />
               )}
             </Link>
-            <button
-              onClick={() => scrollToSection('menu-section')}
-              className="py-1 transition-colors hover:text-[#B84A22]"
+            <Link
+              href="/menu"
+              className={`py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/menu' ? 'text-[#B84A22] font-semibold' : ''
+              }`}
             >
               Menu
-            </button>
-            <button
-              onClick={() => scrollToSection('promo-section')}
-              className="py-1 transition-colors hover:text-[#B84A22]"
+            </Link>
+            <Link
+              href="/offers"
+              className={`py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/offers' ? 'text-[#B84A22] font-semibold' : ''
+              }`}
             >
               Offers
-            </button>
+            </Link>
             <Link
               href="/about"
               className={`py-1 transition-colors hover:text-[#B84A22] ${
@@ -123,13 +127,13 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Solid Terracotta "Order Now →" Pill Button */}
-            <button
-              onClick={() => scrollToSection('menu-section')}
+            <Link
+              href="/menu"
               className="btn-amber-primary px-5 py-2.5 text-sm font-semibold flex items-center gap-2 shadow-sm"
             >
               <span>Order Now</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
