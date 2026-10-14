@@ -126,7 +126,7 @@ export default function OffersPage() {
               <div className="p-3.5 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7] flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Tag className="w-4 h-4 text-[#B84A22]" />
-                  <span className="font-mono font-bold text-sm tracking-widest text-[#1A130E]">
+                  <span className="font-bold text-sm tracking-widest text-[#1A130E]">
                     {offer.code}
                   </span>
                 </div>
