@@ -14,30 +14,31 @@
   --color-text-muted: #747474;
 }
 
-/* 100% Global Typography Consistency */
+/* 100% Global Typography Consistency - Strictly Poppins Everywhere */
 *,
 *::before,
 *::after {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
 }
 
+html,
 body {
   background-color: #FAF6EF;
   color: #3D3D3D;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   color: #3D3D3D;
   letter-spacing: 0;
 }
 
-p, span, label, input, textarea, button {
-  font-family: 'Poppins', sans-serif;
+p, span, label, input, textarea, button, a, select, option, table, th, td, div {
+  font-family: 'Poppins', sans-serif !important;
 }
 
 /* Custom Scrollbars */
