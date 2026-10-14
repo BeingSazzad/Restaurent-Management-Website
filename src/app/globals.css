@@ -73,11 +73,11 @@ p, span, label, input, textarea, button {
   }
 }
 
-/* Global Section Subtitle - Exact Spec: Poppins 20px/30px, weight 400, color #747474 */
+/* Global Section Subtitle - Professional Ergonomic Spec: Poppins 16px/26px, weight 400, color #747474 */
 .section-subtitle {
   font-family: 'Poppins', sans-serif !important;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 26px;
   font-weight: 400;
   color: #747474;
   letter-spacing: 0;
@@ -85,8 +85,8 @@ p, span, label, input, textarea, button {
 
 @media (max-width: 640px) {
   .section-subtitle {
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 14px;
+    line-height: 21px;
   }
 }
 
