@@ -66,9 +66,9 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 2: Quick Links (2 cols) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-bold text-sm text-white">Quick Links</h4>
-            <ul className="space-y-2 text-xs text-[#9B8C80]">
+          <div className="lg:col-span-2 space-y-3.5">
+            <h4 className="font-semibold text-[16px] text-white">Quick Links</h4>
+            <ul className="space-y-2.5 text-xs text-[#9B8C80]">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
                   Home
@@ -98,9 +98,9 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 3: Services (2 cols) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-bold text-sm text-white">Services</h4>
-            <ul className="space-y-2 text-xs text-[#9B8C80]">
+          <div className="lg:col-span-2 space-y-3.5">
+            <h4 className="font-semibold text-[16px] text-white">Services</h4>
+            <ul className="space-y-2.5 text-xs text-[#9B8C80]">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
                   Delivery
@@ -130,8 +130,8 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Col 4: Newsletter Box (4 cols) */}
-          <div className="lg:col-span-4 space-y-3">
-            <h4 className="font-bold text-sm text-white">
+          <div className="lg:col-span-4 space-y-3.5">
+            <h4 className="font-semibold text-[16px] text-white">
               Subscribe to our newsletter
             </h4>
             <p className="text-xs text-[#9B8C80]">
