@@ -45,7 +45,7 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Pure Customer Navigation Menu (No Admin Mixed In) */}
-          <nav className="hidden lg:flex items-center gap-8 text-[18px] font-medium text-[#3D3D3D]">
+          <nav className="hidden lg:flex items-center gap-8 text-[16px] font-medium text-[#3D3D3D]">
             <Link
               href="/"
               className={`relative py-1 transition-colors hover:text-[#B84A22] ${
