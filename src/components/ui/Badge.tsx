@@ -1,34 +1,35 @@
 import React from 'react';
 
-interface BadgeProps {
+export interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'gold' | 'green' | 'red' | 'amber' | 'slate';
+  variant?: 'terracotta' | 'gold' | 'green' | 'neutral';
   className?: string;
   size?: 'sm' | 'md';
 }
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
-  variant = 'slate',
+  variant = 'terracotta',
   className = '',
   size = 'sm',
 }) => {
+  const baseStyles = 'inline-flex items-center gap-1.5 font-semibold rounded-full';
+
   const variantStyles = {
-    gold: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
-    green: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    red: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-    amber: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
-    slate: 'bg-slate-800/80 text-slate-300 border-slate-700',
+    terracotta: 'bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7]',
+    gold: 'bg-[#FFF9ED] text-[#D49B37] border border-[#F6E3B8]',
+    green: 'bg-[#F0FAF4] text-[#0FA958] border border-[#BDE8CF]',
+    neutral: 'bg-[#FAF6EF] text-[#747474] border border-[#EBE2D7]',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-0.5',
-    md: 'text-sm px-3 py-1',
+    sm: 'text-[11px] px-2.5 py-0.5 leading-4',
+    md: 'text-xs px-3 py-1 leading-5',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 font-medium rounded-full border ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
     >
       {children}
     </span>
