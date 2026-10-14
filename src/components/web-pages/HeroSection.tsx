@@ -234,51 +234,100 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 3 Value Propositions Bar (Fast Delivery, Collection, Open Daily) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Prop 1: Fast Delivery */}
+      {/* Premium Floating Value Propositions Dock (Senior Product Designer Standard) */}
+      <div className="-mt-10 sm:-mt-14 relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+          {/* Prop 1: Fast Doorstep Delivery */}
           <div
             onClick={() => {
               dispatch(setFulfillmentType('delivery'));
               scrollToMenu();
             }}
-            className="cursor-pointer amber-card p-4 flex items-center gap-3.5 hover:border-[#B84A22] transition-colors"
+            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
           >
-            <div className="w-11 h-11 rounded-2xl bg-[#F3ECE2] text-[#B84A22] flex items-center justify-center shrink-0 border border-[#E9DFD3]">
-              <Bike className="w-5 h-5" />
+            <div className="flex items-center gap-4">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+                <Bike className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7]">
+                    ~30-35 MINS
+                  </span>
+                </div>
+                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  Doorstep Delivery
+                </h3>
+                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                  Across Dublin Zones 1 to 8 · Free over €30
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-sm text-[#1A130E]">Doorstep Delivery</h4>
-              <span className="text-xs text-[#747474]">Across Dublin Zones 1-8 · 30-35 mins</span>
+
+            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+              <ArrowRight className="w-4 h-4" />
             </div>
           </div>
 
-          {/* Prop 2: Takeaway Collection */}
+          {/* Prop 2: Counter Takeaway */}
           <div
             onClick={() => {
               dispatch(setFulfillmentType('collection'));
               scrollToMenu();
             }}
-            className="cursor-pointer amber-card p-4 flex items-center gap-3.5 hover:border-[#B84A22] transition-colors"
+            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
           >
-            <div className="w-11 h-11 rounded-2xl bg-[#F3ECE2] text-[#B84A22] flex items-center justify-center shrink-0 border border-[#E9DFD3]">
-              <Store className="w-5 h-5" />
+            <div className="flex items-center gap-4">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+                <Store className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7]">
+                    ~15-20 MINS
+                  </span>
+                </div>
+                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  Counter Takeaway
+                </h3>
+                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                  18 South William St · Packaged hot & fresh
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-sm text-[#1A130E]">Counter Takeaway</h4>
-              <span className="text-xs text-[#747474]">South William St Counter · 15-20 mins</span>
+
+            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+              <ArrowRight className="w-4 h-4" />
             </div>
           </div>
 
           {/* Prop 3: Open Daily */}
-          <div className="amber-card p-4 flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-[#F3ECE2] text-[#B84A22] flex items-center justify-center shrink-0 border border-[#E9DFD3]">
-              <Clock className="w-5 h-5" />
+          <div
+            onClick={scrollToMenu}
+            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+                <Clock className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#0FA958] border border-[#EBE2D7] flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0FA958] animate-pulse" />
+                    OPEN 7 DAYS
+                  </span>
+                </div>
+                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  Clay Oven Daily
+                </h3>
+                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                  11:00 AM – 11:00 PM · 100% Halal certified
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-sm text-[#1A130E]">Open Daily 7 Days</h4>
-              <span className="text-xs text-[#747474]">11:00 AM – 11:00 PM · Hot & Fresh</span>
+
+            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+              <ArrowRight className="w-4 h-4" />
             </div>
           </div>
         </div>
