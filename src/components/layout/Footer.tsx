@@ -67,29 +67,29 @@ export const Footer: React.FC = () => {
           {/* Col 2: Quick Links (2 cols) */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-semibold text-[16px] text-white">Quick Links</h4>
-            <ul className="space-y-2.5 text-xs text-[#9B8C80]">
+            <ul className="space-y-2.5 text-[14px] text-[#9B8C80]">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/" className="hover:text-white transition-colors text-[14px]">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/menu" className="hover:text-white transition-colors text-[14px]">
                   Menu
                 </Link>
               </li>
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/offers" className="hover:text-white transition-colors text-[14px]">
                   Offers
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-white transition-colors">
+                <Link href="/about" className="hover:text-white transition-colors text-[14px]">
                   Gallery
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
+                <Link href="/contact" className="hover:text-white transition-colors text-[14px]">
                   Contact
                 </Link>
               </li>
@@ -99,29 +99,29 @@ export const Footer: React.FC = () => {
           {/* Col 3: Services (2 cols) */}
           <div className="lg:col-span-2 space-y-3.5">
             <h4 className="font-semibold text-[16px] text-white">Services</h4>
-            <ul className="space-y-2.5 text-xs text-[#9B8C80]">
+            <ul className="space-y-2.5 text-[14px] text-[#9B8C80]">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/menu" className="hover:text-white transition-colors text-[14px]">
                   Delivery
                 </Link>
               </li>
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/menu" className="hover:text-white transition-colors text-[14px]">
                   Collection
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
+                <Link href="/contact" className="hover:text-white transition-colors text-[14px]">
                   Reservations
                 </Link>
               </li>
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/offers" className="hover:text-white transition-colors text-[14px]">
                   Offers & Vouchers
                 </Link>
               </li>
               <li>
-                <Link href="/user-dashboard" className="hover:text-white transition-colors">
+                <Link href="/user-dashboard" className="hover:text-white transition-colors text-[14px]">
                   Order Status
                 </Link>
               </li>
