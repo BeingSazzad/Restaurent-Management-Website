@@ -45,11 +45,11 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Pure Customer Navigation Menu (No Admin Mixed In) */}
-          <nav className="hidden lg:flex items-center gap-8 text-xs font-semibold text-[#3D3D3D]">
+          <nav className="hidden lg:flex items-center gap-8 text-[18px] font-medium text-[#3D3D3D]">
             <Link
               href="/"
-              className={`relative py-2 transition-colors hover:text-[#B84A22] ${
-                pathname === '/' ? 'text-[#B84A22]' : ''
+              className={`relative py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/' ? 'text-[#B84A22] font-semibold' : ''
               }`}
             >
               Home
@@ -59,28 +59,28 @@ export const Navbar: React.FC = () => {
             </Link>
             <button
               onClick={() => scrollToSection('menu-section')}
-              className="py-2 transition-colors hover:text-[#B84A22]"
+              className="py-1 transition-colors hover:text-[#B84A22]"
             >
               Menu
             </button>
             <button
               onClick={() => scrollToSection('promo-section')}
-              className="py-2 transition-colors hover:text-[#B84A22]"
+              className="py-1 transition-colors hover:text-[#B84A22]"
             >
               Offers
             </button>
             <Link
               href="/about"
-              className={`py-2 transition-colors hover:text-[#B84A22] ${
-                pathname === '/about' ? 'text-[#B84A22]' : ''
+              className={`py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/about' ? 'text-[#B84A22] font-semibold' : ''
               }`}
             >
               About
             </Link>
             <Link
               href="/contact"
-              className={`py-2 transition-colors hover:text-[#B84A22] ${
-                pathname === '/contact' ? 'text-[#B84A22]' : ''
+              className={`py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/contact' ? 'text-[#B84A22] font-semibold' : ''
               }`}
             >
               Contact
@@ -125,10 +125,10 @@ export const Navbar: React.FC = () => {
             {/* Solid Terracotta "Order Now →" Pill Button */}
             <button
               onClick={() => scrollToSection('menu-section')}
-              className="btn-amber-primary px-5 py-2.5 text-xs font-semibold flex items-center gap-2 shadow-sm"
+              className="btn-amber-primary px-5 py-2.5 text-sm font-semibold flex items-center gap-2 shadow-sm"
             >
               <span>Order Now</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
