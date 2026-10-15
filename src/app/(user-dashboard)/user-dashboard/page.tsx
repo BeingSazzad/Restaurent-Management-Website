@@ -554,36 +554,23 @@ function DashboardContent() {
                   ) : (
                     /* Edit Mode: Clean Form */
                     <form onSubmit={handleSaveProfile} className="space-y-6">
-                      <div className="p-4 rounded-xl bg-orange-50/70 border border-orange-200/60 flex items-center justify-between">
-                        <div>
-                          <h4 className="text-[14px] font-bold text-[#1A130E]">Edit Profile Information</h4>
-                          <p className="text-[12px] text-[#7A746E] mt-0.5">Update your display name, primary email and delivery contact phone.</p>
-                        </div>
-                        <span className="text-[11px] font-bold text-[#F15A24] uppercase tracking-wider bg-white px-2.5 py-1 rounded-md border border-orange-200/50">
-                          Active Form
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-5">
                         {/* Name Input */}
                         <div>
                           <label className="flex items-center gap-2 text-[13px] font-bold text-[#1A130E] mb-2">
                             <User className="w-4 h-4 text-[#F15A24]" />
                             <span>Full Name</span>
                           </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              value={editForm.name}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, name: e.target.value })
-                              }
-                              placeholder="Your full name"
-                              required
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
-                            />
-                          </div>
-                          <span className="text-[11px] text-[#8C8681] mt-1 block">Displayed on orders and receipts</span>
+                          <input
+                            type="text"
+                            value={editForm.name}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, name: e.target.value })
+                            }
+                            placeholder="Your full name"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                          />
                         </div>
 
                         {/* Email Input */}
@@ -592,40 +579,34 @@ function DashboardContent() {
                             <Mail className="w-4 h-4 text-[#F15A24]" />
                             <span>Email Address</span>
                           </label>
-                          <div className="relative">
-                            <input
-                              type="email"
-                              value={editForm.email}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, email: e.target.value })
-                              }
-                              placeholder="Your email address"
-                              required
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
-                            />
-                          </div>
-                          <span className="text-[11px] text-[#8C8681] mt-1 block">Receives confirmations & invoices</span>
+                          <input
+                            type="email"
+                            value={editForm.email}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, email: e.target.value })
+                            }
+                            placeholder="Your email address"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                          />
                         </div>
 
                         {/* Phone Number Input */}
-                        <div className="sm:col-span-2">
+                        <div>
                           <label className="flex items-center gap-2 text-[13px] font-bold text-[#1A130E] mb-2">
                             <Phone className="w-4 h-4 text-[#F15A24]" />
-                            <span>Phone Number (Dublin Mobile / Landline)</span>
+                            <span>Phone Number</span>
                           </label>
-                          <div className="relative">
-                            <input
-                              type="tel"
-                              value={editForm.phone}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, phone: e.target.value })
-                              }
-                              placeholder="Your phone number"
-                              required
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
-                            />
-                          </div>
-                          <span className="text-[11px] text-[#8C8681] mt-1 block">For delivery coordination & driver arrival</span>
+                          <input
+                            type="tel"
+                            value={editForm.phone}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, phone: e.target.value })
+                            }
+                            placeholder="Your phone number"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                          />
                         </div>
                       </div>
 
