@@ -1440,39 +1440,25 @@ function DashboardContent() {
                   <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
                     Notification Preferences
                   </h1>
-                  <p className="text-[13px] text-[#8C8681] mt-1">
-                    Control how Amber Spice keeps you updated on your culinary orders and dining experiences
+                  <p className="text-[13px] text-[#8C8681] mt-0.5">
+                    Choose the updates and messages you want to receive.
                   </p>
                 </div>
 
-                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
-                  <div className="flex items-center gap-2.5 pb-4 border-b border-[#F2EFE9]">
-                    <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center">
-                      <Bell className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[16px] text-[#1A130E]">
-                        Alerts & Communication Channels
-                      </h3>
-                      <p className="text-[12.5px] text-[#8C8681]">
-                        Manage real-time notifications for kitchen updates, order receipts, and dining offers
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
+                  <div className="divide-y divide-[#F2EFE9]">
                     {/* SMS Live Order Tracking */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/60">
                           <Phone className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14px] text-[#1A130E]">
-                            SMS Live Order Tracking
+                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                            SMS Order Tracking
                           </h4>
                           <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                            Receive instant text messages when your meal is accepted, cooking, and on its way for Dublin delivery
+                            Real-time text alerts when your order is accepted and out for delivery
                           </p>
                         </div>
                       </div>
@@ -1492,18 +1478,18 @@ function DashboardContent() {
                       </label>
                     </div>
 
-                    {/* Email Delivery Receipts */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                    {/* Email Receipts */}
+                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-amber-50 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100/60">
                           <Mail className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14px] text-[#1A130E]">
-                            Email Delivery Receipts & VAT Invoices
+                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                            Email Receipts
                           </h4>
                           <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                            Receive itemized receipts, order confirmations, and VAT breakdowns directly to {profile.email}
+                            Digital order receipts and VAT invoices sent to {profile.email}
                           </p>
                         </div>
                       </div>
@@ -1524,17 +1510,17 @@ function DashboardContent() {
                     </div>
 
                     {/* Kitchen Status Alerts */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/60">
                           <Clock className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14px] text-[#1A130E]">
-                            Kitchen Status & Live Cooking Updates
+                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                            Kitchen Cooking Updates
                           </h4>
                           <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                            Get notified in real-time when the head chef starts grilling your dishes and when dispatch begins
+                            Notifications when the head chef starts preparing and packaging your meal
                           </p>
                         </div>
                       </div>
@@ -1554,18 +1540,18 @@ function DashboardContent() {
                       </label>
                     </div>
 
-                    {/* Exclusive Seasonal Dining */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                    {/* Special Offers & Promotions */}
+                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100/60">
                           <Sparkles className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14px] text-[#1A130E]">
-                            Exclusive Seasonal Dining & Chef Specials
+                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                            Special Offers & Dining Specials
                           </h4>
                           <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                            Be the first to know about seasonal Irish produce specials, weekend chef tables, and dining discounts
+                            Exclusive seasonal promotions, weekend specials, and loyalty discounts
                           </p>
                         </div>
                       </div>
@@ -1584,12 +1570,6 @@ function DashboardContent() {
                         <div className="w-11 h-6 bg-[#E5DFD7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F15A24]"></div>
                       </label>
                     </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <span className="text-[12px] text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3.5 py-1.5 rounded-xl font-medium inline-flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Preferences are saved automatically
-                    </span>
                   </div>
                 </div>
               </div>
