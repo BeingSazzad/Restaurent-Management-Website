@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useAppDispatch } from '../../redux/hooks';
-import { setFulfillmentType } from '../../redux/slices/fulfillmentSlice';
 import {
-  Bike,
-  Store,
-  Clock,
   ArrowRight,
   ChevronLeft,
   ChevronRight,
@@ -73,7 +68,6 @@ const HERO_SLIDES: HeroSlide[] = [
 ];
 
 export const HeroSection: React.FC = () => {
-  const dispatch = useAppDispatch();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -105,7 +99,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative bg-[rgb(249,249,249)] pb-12 sm:pb-16">
+    <section className="relative w-full">
       {/* Full Screen Width (Edge-to-Edge) Cinematic Hero Slider */}
       <div
         onMouseEnter={() => setIsPaused(true)}
@@ -259,73 +253,6 @@ export const HeroSection: React.FC = () => {
               }`}
             />
           ))}
-        </div>
-      </div>
-
-      {/* Clutter-Free Value Strip */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
-        <div className="bg-white border border-[#EFEAE4] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_4px_20px_rgba(26,19,14,0.03)]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-[#F2EFEA]">
-            {/* Prop 1: Fast Doorstep Delivery */}
-            <div
-              onClick={() => {
-                dispatch(setFulfillmentType('delivery'));
-                scrollToMenu();
-              }}
-              className="flex items-center gap-4 py-1 sm:py-2 md:px-6 cursor-pointer group transition-all"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
-                <Bike className="w-5 h-5 stroke-[2]" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
-                  Doorstep Delivery
-                </h4>
-                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
-                  Dublin Zones 1–8 · Free over €30
-                </p>
-              </div>
-            </div>
-
-            {/* Prop 2: Counter Takeaway */}
-            <div
-              onClick={() => {
-                dispatch(setFulfillmentType('collection'));
-                scrollToMenu();
-              }}
-              className="flex items-center gap-4 pt-4 md:pt-2 pb-1 md:pb-2 md:px-6 cursor-pointer group transition-all"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
-                <Store className="w-5 h-5 stroke-[2]" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
-                  Counter Takeaway
-                </h4>
-                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
-                  18 South William St · Ready in 15–20m
-                </p>
-              </div>
-            </div>
-
-            {/* Prop 3: Open Daily */}
-            <div
-              onClick={scrollToMenu}
-              className="flex items-center gap-4 pt-4 md:pt-2 pb-1 md:pb-2 md:px-6 cursor-pointer group transition-all"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
-                <Clock className="w-5 h-5 stroke-[2]" />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
-                  Clay Oven Daily
-                </h4>
-                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
-                  100% Halal · Open 11:00 AM – 11:00 PM
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
