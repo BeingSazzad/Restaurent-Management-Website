@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
 import { setActiveTrackingOrderId } from '@/redux/slices/orderSlice';
-import { toggleFavorite } from '@/redux/slices/favoritesSlice';
 import { logout } from '@/redux/slices/authSlice';
 import { MOCK_USER, MENU_ITEMS, RESTAURANT_INFO, MenuItem } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
@@ -28,10 +27,12 @@ import {
   Trash2,
   RotateCcw,
   PackageCheck,
-  Heart,
   Plus,
-  ShieldCheck,
-  Bell,
+  Home,
+  Briefcase,
+  ExternalLink,
+  ChevronRight,
+  UtensilsCrossed,
 } from 'lucide-react';
 
 type TabType = 'profile' | 'orders' | 'addresses' | 'cards' | 'help' | 'settings' | 'logout';
@@ -46,11 +47,19 @@ interface SavedCardItem {
   isDefault: boolean;
 }
 
+interface AddressItem {
+  id: string;
+  label: string;
+  address: string;
+  phone: string;
+  eircode?: string;
+  isDefault?: boolean;
+}
+
 export default function UserDashboardPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
-  const favoriteDishIds = useAppSelector((state) => state.favorites.favoriteDishIds);
 
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
@@ -61,7 +70,7 @@ export default function UserDashboardPage() {
     email: 'mark-jecno@gmail.com',
     phone: '+1 (692)52 - 95555',
     password: '••••••••',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80',
   });
 
   // 1-Click inline edit state (No popup modals)
@@ -76,12 +85,38 @@ export default function UserDashboardPage() {
   const [saveSuccessMsg, setSaveSuccessMsg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Address management state
-  const [addresses, setAddresses] = useState(MOCK_USER.addresses);
+  // Address management state (Matches Screenshot 2 layout)
+  const [addresses, setAddresses] = useState<AddressItem[]>([
+    {
+      id: 'addr-1',
+      label: 'Home',
+      address: '93, Songbird Cir, Blackville, South Carolina, USA-29817',
+      phone: '+33 (907) 555-0101',
+      isDefault: true,
+    },
+    {
+      id: 'addr-2',
+      label: 'Office',
+      address: '703 Elizabeth Barcus Way, USA-95540',
+      phone: '+33 (907) 555-3456',
+      isDefault: false,
+    },
+    {
+      id: 'addr-3',
+      label: 'Smith Jones',
+      address: '13th Street 47 W 13th St, New York, USA-10011',
+      phone: '+33 (907) 555-1235',
+      isDefault: false,
+    },
+  ]);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [newLabel, setNewLabel] = useState('Home');
   const [newAddress, setNewAddress] = useState('');
-  const [newEircode, setNewEircode] = useState('');
+  const [newPhone, setNewPhone] = useState('+353 (01) 485 9210');
+
+  // Editing single address inline
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+  const [editAddressData, setEditAddressData] = useState({ label: '', address: '', phone: '' });
 
   // Payment cards state
   const [savedCards, setSavedCards] = useState<SavedCardItem[]>([
@@ -110,6 +145,60 @@ export default function UserDashboardPage() {
   const [newCardExp, setNewCardExp] = useState('');
   const [newCardCvv, setNewCardCvv] = useState('');
 
+  // Sample Dublin Takeaway Orders (Matches Screenshot 1 layout)
+  const [mockOrders] = useState([
+    {
+      id: 'ord-mcd',
+      brand: "Mcdonald's",
+      transactionId: '#ACB12345458',
+      date: 'Today, 3:00 PM',
+      totalAmount: 40.0,
+      currency: '$',
+      logo: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=120&q=80',
+      logoColor: 'bg-[#DA291C] text-white',
+      initials: 'M',
+      itemsSummary: '2x Big Mac Meal, 1x 9pc McNuggets, 1x Large Fries',
+    },
+    {
+      id: 'ord-sbx',
+      brand: 'Starbucks',
+      transactionId: '#ACB12345459',
+      date: 'Yesterday, 6:00 PM',
+      totalAmount: 100.0,
+      currency: '$',
+      logo: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80',
+      logoColor: 'bg-[#00704A] text-white',
+      initials: 'S',
+      itemsSummary: '3x Caramel Macchiato, 2x Butter Croissant, 1x Cold Brew',
+    },
+    {
+      id: 'ord-pzh',
+      brand: 'Pizza Hut',
+      transactionId: '#ACB12345678',
+      date: '25 March 2026, 8:00 PM',
+      totalAmount: 60.0,
+      currency: '$',
+      logo: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=120&q=80',
+      logoColor: 'bg-[#EE3124] text-white',
+      initials: 'P',
+      itemsSummary: '1x Stuffed Crust Pepperoni Feast, 1x Garlic Breadsticks',
+    },
+    {
+      id: 'ord-bk',
+      brand: 'Burger King',
+      transactionId: '#ACB12345679',
+      date: '20 March 2026, 2:00 PM',
+      totalAmount: 45.0,
+      currency: '$',
+      logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=120&q=80',
+      logoColor: 'bg-[#D62300] text-white',
+      initials: 'BK',
+      itemsSummary: '2x Flame-Grilled Whopper, 1x Onion Rings, 2x Coke Zero',
+    },
+  ]);
+
+  const [expandedOrderDetails, setExpandedOrderDetails] = useState<string | null>(null);
+
   // Settings toggles
   const [notifications, setNotifications] = useState({
     orderSms: true,
@@ -122,8 +211,6 @@ export default function UserDashboardPage() {
   const [supportSubmitted, setSupportSubmitted] = useState(false);
   const [supportSubject, setSupportSubject] = useState('Order inquiry');
   const [supportMessage, setSupportMessage] = useState('');
-
-  // FAQs open state
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   // 1-Click inline edit handlers
@@ -165,47 +252,46 @@ export default function UserDashboardPage() {
     }
   };
 
-  const handleReorder = (order: typeof orders[0]) => {
-    order.items.forEach((item) => {
-      dispatch(
-        addToCart({
-          ...item,
-          cartItemId: `${item.dish.id}-${Date.now()}-${Math.random()}`,
-        })
-      );
-    });
-    dispatch(setCartOpen(true));
-  };
-
   const handleAddAddress = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newAddress || !newEircode) return;
+    if (!newAddress) return;
 
-    const newEntry = {
+    const newEntry: AddressItem = {
       id: `addr-${Date.now()}`,
       label: newLabel,
       address: newAddress,
-      eircode: newEircode.toUpperCase(),
+      phone: newPhone || '+353 (01) 485 9210',
       isDefault: addresses.length === 0,
     };
 
     setAddresses([...addresses, newEntry]);
     setNewAddress('');
-    setNewEircode('');
     setIsAddingAddress(false);
+  };
+
+  const handleStartEditAddress = (addr: AddressItem) => {
+    setEditingAddressId(addr.id);
+    setEditAddressData({ label: addr.label, address: addr.address, phone: addr.phone });
+  };
+
+  const handleSaveEditAddress = (id: string) => {
+    setAddresses(
+      addresses.map((a) =>
+        a.id === id
+          ? {
+              ...a,
+              label: editAddressData.label.trim() || a.label,
+              address: editAddressData.address.trim() || a.address,
+              phone: editAddressData.phone.trim() || a.phone,
+            }
+          : a
+      )
+    );
+    setEditingAddressId(null);
   };
 
   const handleDeleteAddress = (id: string) => {
     setAddresses(addresses.filter((a) => a.id !== id));
-  };
-
-  const handleSetDefaultAddress = (id: string) => {
-    setAddresses(
-      addresses.map((a) => ({
-        ...a,
-        isDefault: a.id === id,
-      }))
-    );
   };
 
   const handleAddCard = (e: React.FormEvent) => {
@@ -237,15 +323,6 @@ export default function UserDashboardPage() {
     setSavedCards(savedCards.filter((c) => c.id !== id));
   };
 
-  const handleSetDefaultCard = (id: string) => {
-    setSavedCards(
-      savedCards.map((c) => ({
-        ...c,
-        isDefault: c.id === id,
-      }))
-    );
-  };
-
   const handleSupportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!supportMessage) return;
@@ -261,7 +338,7 @@ export default function UserDashboardPage() {
   const faqs = [
     {
       q: 'What are your delivery hours and estimated delivery times?',
-      a: 'We deliver daily across Dublin 1, 2, 4, 6, and 8 from 12:00 PM to 10:30 PM. Average delivery time is 30–35 minutes during weekdays and 40 minutes during peak weekend evenings.',
+      a: 'We deliver daily across Dublin 1, 2, 4, 6, and 8 from 12:00 PM to 10:30 PM. Average delivery time is 30–35 minutes.',
     },
     {
       q: 'Are all meats 100% Halal certified?',
@@ -269,51 +346,51 @@ export default function UserDashboardPage() {
     },
     {
       q: 'How does doorstep delivery fee calculation work?',
-      a: 'Delivery is €2.00–€3.00 depending on postal district. All orders of €30.00 or higher qualify automatically for free delivery.',
+      a: 'Delivery is €2.00–€3.00 depending on postal district. All orders of €30.00 or higher qualify for free delivery.',
     },
     {
       q: 'Can I request adjustments for nut or dairy allergies?',
-      a: 'Absolutely. You can specify mild/medium/spicy spice levels or allergen exclusions in the dish customization modal or checkout order notes.',
+      a: 'Absolutely. You can specify mild/medium/spicy spice levels or allergen exclusions in the order notes.',
     },
   ];
 
   const navigationItems = [
     { id: 'profile' as TabType, label: 'Change Profile', icon: User },
-    { id: 'orders' as TabType, label: 'My Order', icon: ShoppingBag, badge: orders.length },
-    { id: 'addresses' as TabType, label: 'Saved Address', icon: MapPin, badge: addresses.length },
-    { id: 'cards' as TabType, label: 'Saved Card', icon: CreditCard, badge: savedCards.length },
+    { id: 'orders' as TabType, label: 'My Order', icon: ShoppingBag },
+    { id: 'addresses' as TabType, label: 'Saved Address', icon: MapPin },
+    { id: 'cards' as TabType, label: 'Saved Card', icon: CreditCard },
     { id: 'help' as TabType, label: 'Help', icon: HelpCircle },
     { id: 'settings' as TabType, label: 'Setting', icon: Settings },
     { id: 'logout' as TabType, label: 'Log Out', icon: LogOut },
   ];
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] py-8 sm:py-12">
+    <div className="min-h-screen bg-[#FBF9F6] py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main 2-Column Layout */}
+        {/* Main 2-Column Responsive Dashboard Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ================= LEFT SIDEBAR CARD ================= */}
           <aside className="lg:col-span-4 xl:col-span-4">
-            <div className="bg-white border border-[#EBEBEB] rounded-2xl shadow-xs overflow-hidden">
-              {/* Gradient Banner */}
-              <div className="h-28 sm:h-32 bg-gradient-to-r from-[#FBA138] to-[#F15A24] w-full relative" />
+            <div className="bg-white border border-[#EFEAE4] rounded-[20px] shadow-[0_4px_24px_rgba(26,19,14,0.03)] overflow-hidden">
+              {/* Sunset Citrus Gradient Banner Header */}
+              <div className="h-28 sm:h-32 bg-gradient-to-r from-[#FFA940] via-[#FA822D] to-[#F15A24] w-full relative" />
 
-              {/* Overlapping Avatar */}
+              {/* Overlapping Avatar with Crisp White Frame */}
               <div className="px-6 text-center">
                 <div className="relative inline-block -mt-12 sm:-mt-14 mb-3">
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     title="Click to change photo (no modal)"
-                    className="w-22 h-22 sm:w-24 sm:h-24 rounded-full border-4 border-white shadow-md overflow-hidden bg-white mx-auto cursor-pointer relative group"
+                    className="w-22 h-22 sm:w-24 sm:h-24 rounded-full border-[3.5px] border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] overflow-hidden bg-white mx-auto cursor-pointer relative group"
                   >
                     <img
                       src={profile.avatar}
                       alt={profile.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-white">
+                    <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-white">
                       <Camera className="w-5 h-5 mb-0.5" />
-                      <span className="text-[10px] font-medium">Change</span>
+                      <span className="text-[10px] font-semibold tracking-wide">Change</span>
                     </div>
                   </div>
                   <input
@@ -325,20 +402,20 @@ export default function UserDashboardPage() {
                   />
                 </div>
 
-                {/* User Identity */}
-                <h2 className="text-[18px] sm:text-[19px] font-bold text-[#1A130E] leading-snug">
+                {/* User Identity - Clean Modern Typography */}
+                <h2 className="text-[18px] sm:text-[19px] font-bold text-[#1A130E] tracking-tight leading-snug">
                   {profile.name}
                 </h2>
-                <p className="text-[13px] text-[#777777] font-normal mt-0.5">
+                <p className="text-[13px] text-[#8C8681] font-normal mt-0.5">
                   {profile.email}
                 </p>
               </div>
 
-              {/* Divider */}
-              <div className="border-t border-[#F0F0F0] mt-6" />
+              {/* Clean Subtle Separator */}
+              <div className="border-t border-[#F2EFE9] mt-6" />
 
               {/* Navigation Menu List */}
-              <nav className="py-2">
+              <nav className="py-2.5">
                 {navigationItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
@@ -346,47 +423,28 @@ export default function UserDashboardPage() {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => {
-                        if (item.id === 'logout') {
-                          setActiveTab('logout');
-                        } else {
-                          setActiveTab(item.id);
-                        }
-                      }}
-                      className={`w-full flex items-center justify-between px-6 py-3 text-[14px] font-medium transition-all text-left cursor-pointer group ${
+                      onClick={() => setActiveTab(item.id)}
+                      className={`w-full flex items-center justify-between px-6 py-3.5 text-[14px] transition-all text-left cursor-pointer group relative ${
                         isActive
-                          ? 'text-[#F15A24] font-semibold bg-orange-50/40'
-                          : 'text-[#444444] hover:text-[#F15A24] hover:bg-orange-50/20'
+                          ? 'text-[#F15A24] font-semibold bg-gradient-to-r from-orange-50/70 to-transparent'
+                          : 'text-[#55504A] hover:text-[#F15A24] hover:bg-[#FFF9F5] font-medium'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3.5">
                         <Icon
-                          className={`w-4 h-4 transition-colors ${
+                          className={`w-[17px] h-[17px] transition-colors ${
                             isActive
                               ? 'text-[#F15A24]'
-                              : 'text-[#666666] group-hover:text-[#F15A24]'
+                              : 'text-[#7A746E] group-hover:text-[#F15A24]'
                           }`}
                         />
-                        <span>{item.label}</span>
+                        <span className="tracking-[-0.01em]">{item.label}</span>
                       </div>
 
                       {/* Right Indicator (Orange vertical bar for active tab as seen in screenshot) */}
-                      <div className="flex items-center gap-2">
-                        {item.badge !== undefined && item.badge > 0 && (
-                          <span
-                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                              isActive
-                                ? 'bg-orange-100 text-[#F15A24]'
-                                : 'bg-neutral-100 text-[#777777]'
-                            }`}
-                          >
-                            {item.badge}
-                          </span>
-                        )}
-                        {isActive && (
-                          <div className="w-[3px] h-5 bg-[#F15A24] rounded-full" />
-                        )}
-                      </div>
+                      {isActive && (
+                        <div className="w-[3px] h-6 bg-[#F15A24] rounded-full shrink-0" />
+                      )}
                     </button>
                   );
                 })}
@@ -396,22 +454,22 @@ export default function UserDashboardPage() {
 
           {/* ================= RIGHT CONTENT AREA ================= */}
           <main className="lg:col-span-8 xl:col-span-8 min-w-0">
-            {/* Success Toast / Notification */}
+            {/* Global Success Notification */}
             {saveSuccessMsg && (
-              <div className="mb-5 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-medium flex items-center gap-2.5 shadow-xs animate-in fade-in duration-200">
+              <div className="mb-5 p-4 rounded-[14px] bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[13px] font-medium flex items-center gap-2.5 shadow-xs animate-in fade-in duration-200">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Profile details have been updated successfully!</span>
               </div>
             )}
 
-            {/* TAB 1: CHANGE PROFILE (Exact match to screenshot with 1-click inline editing) */}
+            {/* TAB 1: CHANGE PROFILE (Matches Screenshot 3 with 1-click inline editing) */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 {/* Header Title with Orange Accent Line */}
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                    <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
+                    <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                    <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
                       Change Profile
                     </h1>
                   </div>
@@ -420,7 +478,7 @@ export default function UserDashboardPage() {
                   {!isEditingProfile ? (
                     <button
                       onClick={handleStartEdit}
-                      className="px-5 py-2 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
+                      className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
                     >
                       <span>Edit Profile</span>
                     </button>
@@ -428,14 +486,14 @@ export default function UserDashboardPage() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleSaveProfile}
-                        className="px-5 py-2 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer"
+                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Save Changes</span>
                       </button>
                       <button
                         onClick={handleCancelEdit}
-                        className="px-4 py-2 rounded-xl text-[13px] font-semibold border border-[#E5E5E5] text-[#666666] hover:bg-neutral-50 transition-colors cursor-pointer"
+                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -445,7 +503,7 @@ export default function UserDashboardPage() {
 
                 {/* Inline Editing Notice Banner */}
                 {isEditingProfile && (
-                  <div className="p-3.5 rounded-xl bg-orange-50 border border-orange-200/80 text-[#F15A24] text-[13px] font-medium flex items-center justify-between">
+                  <div className="p-3.5 rounded-[14px] bg-orange-50/80 border border-orange-200/80 text-[#F15A24] text-[13px] font-medium flex items-center justify-between">
                     <span>
                       Inline edit mode active: edit any detail directly below without modals.
                     </span>
@@ -458,10 +516,10 @@ export default function UserDashboardPage() {
                   </div>
                 )}
 
-                {/* 4 Cards (Name, Email, Phone Number, Password) */}
-                <div className="space-y-3.5">
+                {/* The 4 Profile Cards (Name, Email, Phone Number, Password) */}
+                <div className="space-y-4">
                   {/* CARD 1: NAME */}
-                  <div className="bg-white border border-[#EBEBEB] rounded-2xl p-5 sm:p-6 shadow-xs transition-all hover:border-[#F15A24]/30">
+                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
@@ -470,7 +528,7 @@ export default function UserDashboardPage() {
                         </div>
 
                         {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#555555] font-normal pl-6 mt-1">
+                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
                             {profile.name}
                           </p>
                         ) : (
@@ -482,7 +540,7 @@ export default function UserDashboardPage() {
                                 setEditForm({ ...editForm, name: e.target.value })
                               }
                               placeholder="Your full name"
-                              className="w-full max-w-lg bg-neutral-50/70 border border-[#E5E5E5] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24] rounded-xl px-4 py-2 text-[14px] text-[#1A130E] outline-none transition-all"
+                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
                             />
                           </div>
                         )}
@@ -492,12 +550,12 @@ export default function UserDashboardPage() {
                         {!isEditingProfile ? (
                           <button
                             onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer"
+                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                           >
                             Edit
                           </button>
                         ) : (
-                          <span className="text-[12px] text-orange-500 font-semibold px-2.5 py-1 bg-orange-50 rounded-full border border-orange-200">
+                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
                             Editing
                           </span>
                         )}
@@ -506,7 +564,7 @@ export default function UserDashboardPage() {
                   </div>
 
                   {/* CARD 2: EMAIL */}
-                  <div className="bg-white border border-[#EBEBEB] rounded-2xl p-5 sm:p-6 shadow-xs transition-all hover:border-[#F15A24]/30">
+                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
@@ -515,7 +573,7 @@ export default function UserDashboardPage() {
                         </div>
 
                         {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#555555] font-normal pl-6 mt-1">
+                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
                             {profile.email}
                           </p>
                         ) : (
@@ -527,7 +585,7 @@ export default function UserDashboardPage() {
                                 setEditForm({ ...editForm, email: e.target.value })
                               }
                               placeholder="Your email address"
-                              className="w-full max-w-lg bg-neutral-50/70 border border-[#E5E5E5] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24] rounded-xl px-4 py-2 text-[14px] text-[#1A130E] outline-none transition-all"
+                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
                             />
                           </div>
                         )}
@@ -537,12 +595,12 @@ export default function UserDashboardPage() {
                         {!isEditingProfile ? (
                           <button
                             onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer"
+                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                           >
                             Change
                           </button>
                         ) : (
-                          <span className="text-[12px] text-orange-500 font-semibold px-2.5 py-1 bg-orange-50 rounded-full border border-orange-200">
+                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
                             Editing
                           </span>
                         )}
@@ -551,7 +609,7 @@ export default function UserDashboardPage() {
                   </div>
 
                   {/* CARD 3: PHONE NUMBER */}
-                  <div className="bg-white border border-[#EBEBEB] rounded-2xl p-5 sm:p-6 shadow-xs transition-all hover:border-[#F15A24]/30">
+                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
@@ -560,7 +618,7 @@ export default function UserDashboardPage() {
                         </div>
 
                         {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#555555] font-normal pl-6 mt-1">
+                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
                             {profile.phone}
                           </p>
                         ) : (
@@ -572,7 +630,7 @@ export default function UserDashboardPage() {
                                 setEditForm({ ...editForm, phone: e.target.value })
                               }
                               placeholder="Your phone number"
-                              className="w-full max-w-lg bg-neutral-50/70 border border-[#E5E5E5] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24] rounded-xl px-4 py-2 text-[14px] text-[#1A130E] outline-none transition-all"
+                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
                             />
                           </div>
                         )}
@@ -582,12 +640,12 @@ export default function UserDashboardPage() {
                         {!isEditingProfile ? (
                           <button
                             onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer"
+                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                           >
                             Change
                           </button>
                         ) : (
-                          <span className="text-[12px] text-orange-500 font-semibold px-2.5 py-1 bg-orange-50 rounded-full border border-orange-200">
+                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
                             Editing
                           </span>
                         )}
@@ -596,7 +654,7 @@ export default function UserDashboardPage() {
                   </div>
 
                   {/* CARD 4: PASSWORD */}
-                  <div className="bg-white border border-[#EBEBEB] rounded-2xl p-5 sm:p-6 shadow-xs transition-all hover:border-[#F15A24]/30">
+                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
@@ -605,7 +663,7 @@ export default function UserDashboardPage() {
                         </div>
 
                         {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#555555] font-normal pl-6 mt-1 tracking-widest">
+                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-widest">
                             {profile.password}
                           </p>
                         ) : (
@@ -620,12 +678,12 @@ export default function UserDashboardPage() {
                                 })
                               }
                               placeholder="Enter new password (optional)"
-                              className="w-full bg-neutral-50/70 border border-[#E5E5E5] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24] rounded-xl px-4 py-2 pr-11 text-[14px] text-[#1A130E] outline-none transition-all"
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 pr-11 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
                             />
                             <button
                               type="button"
                               onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#1A130E] p-1 cursor-pointer"
+                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer"
                             >
                               {showPassword ? (
                                 <EyeOff className="w-4 h-4" />
@@ -641,12 +699,12 @@ export default function UserDashboardPage() {
                         {!isEditingProfile ? (
                           <button
                             onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer"
+                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                           >
                             Change
                           </button>
                         ) : (
-                          <span className="text-[12px] text-orange-500 font-semibold px-2.5 py-1 bg-orange-50 rounded-full border border-orange-200">
+                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
                             Editing
                           </span>
                         )}
@@ -660,14 +718,14 @@ export default function UserDashboardPage() {
                   <div className="pt-2 flex items-center gap-3">
                     <button
                       onClick={handleSaveProfile}
-                      className="px-6 py-2.5 rounded-xl font-bold text-[13px] bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-2 cursor-pointer"
+                      className="px-6 py-2.5 rounded-full font-bold text-[13px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-2 cursor-pointer active:scale-95"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                       <span>Save Profile Changes</span>
                     </button>
                     <button
                       onClick={handleCancelEdit}
-                      className="px-5 py-2.5 rounded-xl font-semibold text-[13px] border border-[#E5E5E5] text-[#666666] hover:bg-neutral-50 transition-colors cursor-pointer"
+                      className="px-5 py-2.5 rounded-full font-semibold text-[13px] border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -676,141 +734,207 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 2: MY ORDERS */}
+            {/* TAB 2: MY ORDERS (Matches Screenshot 1 Layout with Luxury Brand Badges & Dotted Line) */}
             {activeTab === 'orders' && (
               <div className="space-y-6">
                 <div>
-                  <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
-                    My Orders
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    My Order
                   </h1>
-                  <p className="text-[13px] text-[#666666] mt-0.5">
-                    Track active meals or re-order your favorite heritage dishes
-                  </p>
                 </div>
 
-                {orders.length > 0 ? (
-                  <div className="space-y-4">
+                {/* Real-time Orders from Redux (if any exist) */}
+                {orders.length > 0 && (
+                  <div className="space-y-4 mb-6">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C8681]">
+                      Live Dublin Kitchen Deliveries
+                    </h3>
                     {orders.map((order) => (
                       <div
                         key={order.id}
-                        className="p-5 sm:p-6 rounded-2xl bg-white border border-[#EBEBEB] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all hover:border-[#F15A24]/40"
+                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all"
                       >
-                        <div className="space-y-1.5 flex-1">
-                          <div className="flex items-center gap-2.5 flex-wrap">
-                            <span className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
-                              #{order.orderNumber}
-                            </span>
-                            <span
-                              className={`text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase ${
-                                order.status === 'completed'
-                                  ? 'bg-neutral-100 text-[#555555] border border-[#E5E5E5]'
-                                  : order.status === 'preparing'
-                                  ? 'bg-[#FFF8E7] text-[#D49B37] border border-[#D49B37]/30'
-                                  : 'bg-orange-50 text-[#F15A24] border border-orange-200'
-                              }`}
-                            >
-                              {order.status.replace('_', ' ')}
-                            </span>
-                            <span className="text-[12px] text-[#888888]">
-                              {new Date(order.createdAt).toLocaleDateString('en-IE', {
-                                month: 'short',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </span>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-center gap-3.5">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFA940] to-[#F15A24] text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+                              AS
+                            </div>
+                            <div>
+                              <h3 className="text-[16px] font-bold text-[#1A130E]">
+                                AMBER SPICE Dublin
+                              </h3>
+                              <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
+                                Transaction Id :{' '}
+                                <span className="font-semibold text-[#1A130E]">
+                                  #{order.orderNumber}
+                                </span>
+                              </p>
+                            </div>
                           </div>
-
-                          <p className="text-[13px] sm:text-[14px] text-[#444444] font-normal leading-relaxed">
-                            {order.items.map((i) => `${i.quantity}x ${i.dish.name}`).join(' · ')}
-                          </p>
-
-                          <div className="flex items-center gap-3 text-[13px] text-[#666666]">
-                            <span className="font-bold text-[#1A130E] text-[16px]">
-                              €{order.total.toFixed(2)}
-                            </span>
-                            <span>•</span>
-                            <span className="capitalize">{order.fulfillmentType}</span>
-                            {order.deliveryAddress && (
-                              <>
-                                <span>•</span>
-                                <span className="truncate max-w-xs">{order.deliveryAddress}</span>
-                              </>
-                            )}
-                          </div>
+                          <span className="text-[12px] text-[#8C8681] font-medium">
+                            {new Date(order.createdAt).toLocaleDateString('en-IE', {
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
                         </div>
 
-                        <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
-                          <button
-                            onClick={() => dispatch(setActiveTrackingOrderId(order.id))}
-                            className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-[13px] font-semibold bg-white hover:bg-neutral-50 text-[#1A130E] border border-[#E5E5E5] hover:border-[#F15A24] transition-colors cursor-pointer"
-                          >
-                            Track Delivery
-                          </button>
-                          <button
-                            onClick={() => handleReorder(order)}
-                            className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center justify-center gap-1.5 transition-opacity cursor-pointer"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Re-order</span>
-                          </button>
+                        {/* Subtle Dotted Divider Line (Matching Screenshot 1) */}
+                        <div className="border-b border-dashed border-[#EAE6E1] my-4" />
+
+                        {/* Bottom Total Amount and Action Button */}
+                        <div className="flex items-center justify-between gap-4 pt-1">
+                          <p className="text-[14px] text-[#1A130E]">
+                            <span className="text-[#666059] font-medium">Total Amount : </span>
+                            <span className="font-bold text-[16px]">
+                              € {order.total.toFixed(2)}
+                            </span>
+                          </p>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => dispatch(setActiveTrackingOrderId(order.id))}
+                              className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                            >
+                              Track
+                            </button>
+                            <button
+                              onClick={() => {
+                                order.items.forEach((item) => {
+                                  dispatch(
+                                    addToCart({
+                                      ...item,
+                                      cartItemId: `${item.dish.id}-${Date.now()}-${Math.random()}`,
+                                    })
+                                  );
+                                });
+                                dispatch(setCartOpen(true));
+                              }}
+                              className="px-5 py-1.5 rounded-full bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold tracking-wide hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
+                            >
+                              Re-order
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <div className="bg-white rounded-2xl p-10 text-center border border-[#EBEBEB]">
-                    <PackageCheck className="w-12 h-12 text-[#9B8C80] mx-auto mb-3" />
-                    <h3 className="font-bold text-[16px] text-[#1A130E] mb-1">
-                      No orders placed yet
-                    </h3>
-                    <p className="text-[14px] text-[#666666] mb-4">
-                      Start by exploring our authentic Dublin menu
-                    </p>
-                    <button
-                      onClick={() => router.push('/menu')}
-                      className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs cursor-pointer"
-                    >
-                      Browse Dublin Menu
-                    </button>
-                  </div>
                 )}
+
+                {/* List of Orders Matching Screenshot 1 Layout */}
+                <div className="space-y-4">
+                  {mockOrders.map((ord) => {
+                    const isExpanded = expandedOrderDetails === ord.id;
+                    return (
+                      <div
+                        key={ord.id}
+                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all"
+                      >
+                        {/* Upper Section: Brand Avatar + Name + Transaction Id + Date */}
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-center gap-3.5">
+                            <div className="w-12 h-12 rounded-full overflow-hidden border border-[#EAE6E1] bg-white flex items-center justify-center p-1 shadow-xs shrink-0">
+                              <img
+                                src={ord.logo}
+                                alt={ord.brand}
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            </div>
+                            <div>
+                              <h3 className="text-[16px] font-bold text-[#1A130E] tracking-tight">
+                                {ord.brand}
+                              </h3>
+                              <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
+                                Transaction Id :{' '}
+                                <span className="font-semibold text-[#332E29]">
+                                  {ord.transactionId}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+
+                          <span className="text-[12.5px] text-[#8C8681] font-medium">
+                            {ord.date}
+                          </span>
+                        </div>
+
+                        {/* Subtle Dotted Divider Line (Matching Screenshot 1) */}
+                        <div className="border-b border-dashed border-[#EAE6E1] my-4" />
+
+                        {/* Lower Section: Total Amount & Details Button */}
+                        <div className="flex items-center justify-between gap-4 pt-0.5">
+                          <p className="text-[14px] text-[#1A130E]">
+                            <span className="text-[#666059] font-medium">Total Amount : </span>
+                            <span className="font-bold text-[15.5px]">
+                              {ord.currency} {ord.totalAmount.toFixed(2)}
+                            </span>
+                          </p>
+
+                          <button
+                            onClick={() =>
+                              setExpandedOrderDetails(isExpanded ? null : ord.id)
+                            }
+                            className="px-6 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                          >
+                            {isExpanded ? 'Hide' : 'Details'}
+                          </button>
+                        </div>
+
+                        {/* Inline Expandable Details (No Modal Popup) */}
+                        {isExpanded && (
+                          <div className="mt-4 pt-3.5 border-t border-[#F2EFE9] text-[13px] text-[#55504A] bg-[#FAF8F5] p-4 rounded-xl space-y-1.5 animate-in fade-in">
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-[#1A130E]">Ordered Items:</span>
+                              <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md text-xs border border-emerald-200/60">
+                                Delivered
+                              </span>
+                            </div>
+                            <p className="text-[#666059]">{ord.itemsSummary}</p>
+                            <p className="text-[12px] text-[#8C8681] pt-1">
+                              Payment: Card ending in •••• 4242 · Dublin Delivery
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
 
-            {/* TAB 3: SAVED ADDRESS */}
+            {/* TAB 3: SAVED ADDRESS (Matches Screenshot 2 Layout with 2-Column Grid & Add New Address Slot) */}
             {activeTab === 'addresses' && (
               <div className="space-y-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                    <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
-                      Saved Address
-                    </h1>
-                    <p className="text-[13px] text-[#666666] mt-0.5">
-                      Manage delivery destinations across Dublin postal districts
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setIsAddingAddress(!isAddingAddress)}
-                    className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 transition-opacity cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add Address</span>
-                  </button>
+                <div>
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    Saved Address
+                  </h1>
                 </div>
 
-                {/* Inline Add Address Form (No Modal) */}
+                {/* Inline Add Address Form Accordion (If opened) */}
                 {isAddingAddress && (
                   <form
                     onSubmit={handleAddAddress}
-                    className="p-6 rounded-2xl bg-white border border-[#EBEBEB] space-y-3.5 text-[13px] shadow-sm animate-in fade-in"
+                    className="p-6 rounded-[18px] bg-white border border-[#EFEAE4] space-y-4 text-[13px] shadow-[0_4px_20px_rgba(26,19,14,0.03)] animate-in fade-in mb-6"
                   >
-                    <h4 className="font-bold text-[15px] text-[#1A130E]">
-                      Add New Dublin Address
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-[15px] text-[#1A130E]">
+                        Add New Delivery Address
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingAddress(false)}
+                        className="text-xs text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2.5">
                       {['Home', 'Office', 'Other'].map((label) => (
                         <button
                           key={label}
@@ -818,8 +942,8 @@ export default function UserDashboardPage() {
                           onClick={() => setNewLabel(label)}
                           className={`p-2.5 rounded-xl text-[13px] font-semibold border transition-all cursor-pointer ${
                             newLabel === label
-                              ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white border-transparent'
-                              : 'bg-white text-[#555555] border-[#E5E5E5]'
+                              ? 'bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white border-transparent shadow-xs'
+                              : 'bg-white text-[#55504A] border-[#E5DFD7]'
                           }`}
                         >
                           {label}
@@ -829,43 +953,43 @@ export default function UserDashboardPage() {
 
                     <div>
                       <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        Street Address
+                        Full Street Address
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. 18 South William St, Apt 4"
+                        placeholder="e.g. 93, Songbird Cir, Blackville, South Carolina, USA-29817"
                         value={newAddress}
                         onChange={(e) => setNewAddress(e.target.value)}
-                        className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
                       />
                     </div>
 
                     <div>
                       <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        Eircode
+                        Contact Phone Number
                       </label>
                       <input
-                        type="text"
+                        type="tel"
                         required
-                        placeholder="D02 P682"
-                        value={newEircode}
-                        onChange={(e) => setNewEircode(e.target.value.toUpperCase())}
-                        className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24] uppercase"
+                        placeholder="+33 (907) 555-0101"
+                        value={newPhone}
+                        onChange={(e) => setNewPhone(e.target.value)}
+                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
                       />
                     </div>
 
                     <div className="flex items-center gap-2 pt-2">
                       <button
                         type="submit"
-                        className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer"
+                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
                       >
-                        Save Destination
+                        Save Address
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsAddingAddress(false)}
-                        className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-[#666666] hover:text-[#1A130E] cursor-pointer"
+                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -873,83 +997,162 @@ export default function UserDashboardPage() {
                   </form>
                 )}
 
-                {/* Address Cards List */}
-                <div className="space-y-3">
-                  {addresses.map((addr) => (
-                    <div
-                      key={addr.id}
-                      className="p-5 rounded-2xl bg-white border border-[#EBEBEB] flex items-start justify-between gap-3 shadow-xs hover:border-[#F15A24]/30 transition-all"
-                    >
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-full bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-200/60 mt-0.5">
-                          <MapPin className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-[14px] text-[#1A130E]">
-                              {addr.label}
-                            </span>
-                            {addr.isDefault && (
-                              <span className="text-[10px] bg-orange-50 text-[#F15A24] px-2 py-0.5 rounded-full font-semibold border border-orange-200">
-                                Default
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[13px] text-[#444444] mt-0.5">{addr.address}</p>
-                          <span className="text-[12px] text-[#888888] block">{addr.eircode}</span>
-                        </div>
-                      </div>
+                {/* 2-Column Grid (Exactly as shown in Screenshot 2) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {addresses.map((addr) => {
+                    const isEditingThis = editingAddressId === addr.id;
 
-                      <div className="flex items-center gap-2.5">
-                        {!addr.isDefault && (
-                          <button
-                            onClick={() => handleSetDefaultAddress(addr.id)}
-                            className="text-[12px] text-[#F15A24] hover:underline font-semibold cursor-pointer"
-                          >
-                            Make Default
-                          </button>
+                    return (
+                      <div
+                        key={addr.id}
+                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all flex flex-col justify-between min-h-[175px]"
+                      >
+                        {!isEditingThis ? (
+                          <>
+                            <div>
+                              {/* Header: Icon + Label in Warm Orange + Edit Button */}
+                              <div className="flex items-center justify-between pb-3 border-b border-[#F2EFE9]">
+                                <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[14.5px]">
+                                  {addr.label.toLowerCase().includes('home') ? (
+                                    <Home className="w-4 h-4 text-[#F15A24]" />
+                                  ) : addr.label.toLowerCase().includes('office') ? (
+                                    <Briefcase className="w-4 h-4 text-[#F15A24]" />
+                                  ) : (
+                                    <User className="w-4 h-4 text-[#F15A24]" />
+                                  )}
+                                  <span>{addr.label}</span>
+                                </div>
+
+                                <button
+                                  onClick={() => handleStartEditAddress(addr)}
+                                  className="px-4 py-1 rounded-full bg-orange-50/70 border border-orange-200/60 text-[#F15A24] text-[11.5px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
+                                >
+                                  Edit
+                                </button>
+                              </div>
+
+                              {/* Address Text */}
+                              <p className="text-[13.5px] text-[#55504A] font-normal leading-relaxed mt-3">
+                                {addr.address}
+                              </p>
+                            </div>
+
+                            {/* Phone Number */}
+                            <div className="pt-3 flex items-center justify-between">
+                              <span className="text-[13px] text-[#7A746E] font-medium">
+                                {addr.phone}
+                              </span>
+                              <button
+                                onClick={() => handleDeleteAddress(addr.id)}
+                                title="Delete address"
+                                className="text-[#A59F98] hover:text-red-600 transition-colors p-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          /* Inline Edit Mode inside the card (No Modal) */
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-[13px] text-[#1A130E]">
+                                Edit {addr.label}
+                              </span>
+                              <span className="text-xs text-orange-600 font-semibold">
+                                Inline
+                              </span>
+                            </div>
+
+                            <input
+                              type="text"
+                              value={editAddressData.label}
+                              onChange={(e) =>
+                                setEditAddressData({
+                                  ...editAddressData,
+                                  label: e.target.value,
+                                })
+                              }
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-lg px-3 py-1.5 text-[13px] outline-none"
+                              placeholder="Label (e.g. Home, Office)"
+                            />
+
+                            <textarea
+                              rows={2}
+                              value={editAddressData.address}
+                              onChange={(e) =>
+                                setEditAddressData({
+                                  ...editAddressData,
+                                  address: e.target.value,
+                                })
+                              }
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-lg px-3 py-1.5 text-[13px] outline-none resize-none"
+                              placeholder="Address"
+                            />
+
+                            <input
+                              type="text"
+                              value={editAddressData.phone}
+                              onChange={(e) =>
+                                setEditAddressData({
+                                  ...editAddressData,
+                                  phone: e.target.value,
+                                })
+                              }
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-lg px-3 py-1.5 text-[13px] outline-none"
+                              placeholder="Phone"
+                            />
+
+                            <div className="flex items-center gap-2 pt-1">
+                              <button
+                                onClick={() => handleSaveEditAddress(addr.id)}
+                                className="px-4 py-1 rounded-full text-xs font-semibold bg-[#F15A24] text-white hover:opacity-90"
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={() => setEditingAddressId(null)}
+                                className="px-3 py-1 rounded-full text-xs font-medium text-[#666059]"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
                         )}
-                        <button
-                          onClick={() => handleDeleteAddress(addr.id)}
-                          className="text-[#888888] hover:text-red-600 p-1.5 transition-colors cursor-pointer"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+
+                  {/* Add New Address Card Slot (Matching Screenshot 2) */}
+                  <div
+                    onClick={() => setIsAddingAddress(true)}
+                    className="border-2 border-dashed border-[#E5DFD7] bg-[#FCFBF9] hover:bg-orange-50/20 hover:border-orange-300 rounded-[18px] p-6 flex flex-col items-center justify-center min-h-[175px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)]"
+                  >
+                    <button
+                      type="button"
+                      className="px-6 py-2 rounded-xl border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold group-hover:bg-[#F15A24] group-hover:text-white transition-all shadow-xs"
+                    >
+                      Add New Address
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* TAB 4: SAVED CARD */}
+            {/* TAB 4: SAVED CARD (Clean 2-Column Grid with Add Card Slot) */}
             {activeTab === 'cards' && (
               <div className="space-y-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                    <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
-                      Saved Card
-                    </h1>
-                    <p className="text-[13px] text-[#666666] mt-0.5">
-                      Encrypted payment methods for 1-click Dublin takeaway checkout
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setIsAddingCard(!isAddingCard)}
-                    className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 transition-opacity cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add New Card</span>
-                  </button>
+                <div>
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    Saved Card
+                  </h1>
                 </div>
 
-                {/* Inline Add Card Form (No Modal) */}
+                {/* Inline Add Card Form */}
                 {isAddingCard && (
                   <form
                     onSubmit={handleAddCard}
-                    className="p-6 rounded-2xl bg-white border border-[#EBEBEB] space-y-3.5 text-[13px] shadow-sm animate-in fade-in"
+                    className="p-6 rounded-[18px] bg-white border border-[#EFEAE4] space-y-4 text-[13px] shadow-[0_4px_20px_rgba(26,19,14,0.03)] animate-in fade-in mb-6"
                   >
                     <h4 className="font-bold text-[15px] text-[#1A130E]">
                       Add New Credit / Debit Card
@@ -964,13 +1167,13 @@ export default function UserDashboardPage() {
                         value={newCardHolder}
                         onChange={(e) => setNewCardHolder(e.target.value)}
                         placeholder="Mark Jecno"
-                        className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
                       />
                     </div>
 
                     <div>
                       <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        Card Number
+                        16-Digit Card Number
                       </label>
                       <input
                         type="text"
@@ -979,7 +1182,7 @@ export default function UserDashboardPage() {
                         value={newCardNumber}
                         onChange={(e) => setNewCardNumber(e.target.value)}
                         placeholder="•••• •••• •••• 4242"
-                        className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
                       />
                     </div>
 
@@ -995,12 +1198,12 @@ export default function UserDashboardPage() {
                           value={newCardExp}
                           onChange={(e) => setNewCardExp(e.target.value)}
                           placeholder="12/28"
-                          className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                          className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
                         />
                       </div>
                       <div>
                         <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                          CVV Security Code
+                          CVV Code
                         </label>
                         <input
                           type="password"
@@ -1009,7 +1212,7 @@ export default function UserDashboardPage() {
                           value={newCardCvv}
                           onChange={(e) => setNewCardCvv(e.target.value)}
                           placeholder="•••"
-                          className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[14px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                          className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
                         />
                       </div>
                     </div>
@@ -1017,14 +1220,14 @@ export default function UserDashboardPage() {
                     <div className="flex items-center gap-2 pt-2">
                       <button
                         type="submit"
-                        className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer"
+                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
                       >
                         Save Card
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsAddingCard(false)}
-                        className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-[#666666] hover:text-[#1A130E] cursor-pointer"
+                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -1032,53 +1235,57 @@ export default function UserDashboardPage() {
                   </form>
                 )}
 
-                {/* Cards List */}
-                <div className="space-y-3">
+                {/* Cards 2-Column Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {savedCards.map((card) => (
                     <div
                       key={card.id}
-                      className="p-5 rounded-2xl bg-white border border-[#EBEBEB] flex items-center justify-between gap-4 shadow-xs hover:border-[#F15A24]/30 transition-all"
+                      className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all flex flex-col justify-between min-h-[175px]"
                     >
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-11 h-8 rounded-lg bg-neutral-100 border border-[#E5E5E5] flex items-center justify-center font-bold text-[11px] text-[#333333] tracking-wider uppercase">
-                          {card.cardType}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-[14px] text-[#1A130E]">
-                              •••• •••• •••• {card.last4}
-                            </span>
-                            {card.isDefault && (
-                              <span className="text-[10px] bg-orange-50 text-[#F15A24] px-2 py-0.5 rounded-full font-semibold border border-orange-200">
-                                Default
-                              </span>
-                            )}
+                      <div>
+                        <div className="flex items-center justify-between pb-3 border-b border-[#F2EFE9]">
+                          <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[14px] uppercase tracking-wider">
+                            <CreditCard className="w-4 h-4 text-[#F15A24]" />
+                            <span>{card.cardType}</span>
                           </div>
-                          <p className="text-[12px] text-[#777777] mt-0.5">
-                            Expires {card.expMonth}/{card.expYear} · {card.holder}
-                          </p>
+                          {card.isDefault && (
+                            <span className="text-[10px] bg-orange-50 text-[#F15A24] px-2.5 py-0.5 rounded-full font-semibold border border-orange-200">
+                              Default
+                            </span>
+                          )}
                         </div>
+
+                        <p className="text-[17px] font-bold text-[#1A130E] tracking-widest mt-3.5">
+                          •••• •••• •••• {card.last4}
+                        </p>
                       </div>
 
-                      <div className="flex items-center gap-2.5">
-                        {!card.isDefault && (
-                          <button
-                            onClick={() => handleSetDefaultCard(card.id)}
-                            className="text-[12px] text-[#F15A24] hover:underline font-semibold cursor-pointer"
-                          >
-                            Set Default
-                          </button>
-                        )}
+                      <div className="pt-3 flex items-center justify-between text-[12.5px] text-[#7A746E]">
+                        <span>
+                          Expires {card.expMonth}/{card.expYear} · {card.holder}
+                        </span>
                         <button
                           onClick={() => handleDeleteCard(card.id)}
-                          className="text-[#888888] hover:text-red-600 p-1.5 transition-colors cursor-pointer"
-                          title="Delete"
+                          className="text-[#A59F98] hover:text-red-600 transition-colors p-1 cursor-pointer"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
                   ))}
+
+                  {/* Add New Card Slot */}
+                  <div
+                    onClick={() => setIsAddingCard(true)}
+                    className="border-2 border-dashed border-[#E5DFD7] bg-[#FCFBF9] hover:bg-orange-50/20 hover:border-orange-300 rounded-[18px] p-6 flex flex-col items-center justify-center min-h-[175px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)]"
+                  >
+                    <button
+                      type="button"
+                      className="px-6 py-2 rounded-xl border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold group-hover:bg-[#F15A24] group-hover:text-white transition-all shadow-xs"
+                    >
+                      Add New Card
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -1087,24 +1294,20 @@ export default function UserDashboardPage() {
             {activeTab === 'help' && (
               <div className="space-y-6">
                 <div>
-                  <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
-                    Help & Dublin Support
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    Help & Support
                   </h1>
-                  <p className="text-[13px] text-[#666666] mt-0.5">
-                    Clear answers on delivery, dietary certifications, and orders
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                  {/* FAQs */}
                   <div className="md:col-span-7 space-y-3">
                     {faqs.map((faq, idx) => {
                       const isOpen = openFaq === idx;
                       return (
                         <div
                           key={idx}
-                          className="bg-white border border-[#EBEBEB] rounded-2xl overflow-hidden shadow-xs"
+                          className="bg-white border border-[#EFEAE4] rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(26,19,14,0.02)]"
                         >
                           <button
                             onClick={() => setOpenFaq(isOpen ? null : idx)}
@@ -1112,13 +1315,13 @@ export default function UserDashboardPage() {
                           >
                             <span>{faq.q}</span>
                             <ChevronDown
-                              className={`w-4 h-4 text-[#747474] transition-transform ${
+                              className={`w-4 h-4 text-[#7A746E] transition-transform ${
                                 isOpen ? 'rotate-180' : ''
                               }`}
                             />
                           </button>
                           {isOpen && (
-                            <div className="px-5 pb-5 text-[13px] text-[#555555] leading-relaxed border-t border-[#F0F0F0] pt-3.5">
+                            <div className="px-5 pb-5 text-[13.5px] text-[#55504A] leading-relaxed border-t border-[#F2EFE9] pt-3.5">
                               {faq.a}
                             </div>
                           )}
@@ -1127,20 +1330,18 @@ export default function UserDashboardPage() {
                     })}
                   </div>
 
-                  {/* Direct Contact Box */}
                   <div className="md:col-span-5 space-y-4">
-                    <div className="bg-white border border-[#EBEBEB] rounded-2xl p-6 shadow-xs space-y-4">
-                      <div className="space-y-2 pb-3 border-b border-[#F0F0F0]">
+                    <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-4">
+                      <div className="space-y-1.5 pb-3 border-b border-[#F2EFE9]">
                         <h4 className="font-bold text-[15px] text-[#1A130E]">
-                          Dublin Store Supervisor
+                          Dublin Supervisor
                         </h4>
-                        <p className="text-[13px] text-[#666666]">
+                        <p className="text-[13px] text-[#7A746E]">
                           {RESTAURANT_INFO.location}
                         </p>
-                        <div className="flex items-center gap-2 text-[13px] text-[#F15A24] font-semibold pt-1">
-                          <Phone className="w-4 h-4" />
-                          <span>{RESTAURANT_INFO.phone}</span>
-                        </div>
+                        <p className="text-[13px] text-[#F15A24] font-semibold">
+                          {RESTAURANT_INFO.phone}
+                        </p>
                       </div>
 
                       {!supportSubmitted ? (
@@ -1152,10 +1353,10 @@ export default function UserDashboardPage() {
                             <select
                               value={supportSubject}
                               onChange={(e) => setSupportSubject(e.target.value)}
-                              className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl px-3 py-2 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 text-[13px] text-[#1A130E] outline-none"
                             >
                               <option value="Order inquiry">Active Order Status Inquiry</option>
-                              <option value="Allergen question">Special Allergen Request</option>
+                              <option value="Allergen question">Special Dietary / Allergen</option>
                               <option value="Feedback">Feedback or Suggestion</option>
                             </select>
                           </div>
@@ -1169,14 +1370,14 @@ export default function UserDashboardPage() {
                               required
                               value={supportMessage}
                               onChange={(e) => setSupportMessage(e.target.value)}
-                              placeholder="How can we help with your order?"
-                              className="w-full bg-neutral-50 border border-[#E5E5E5] focus:bg-white rounded-xl p-3 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24] resize-none"
+                              placeholder="How can we assist you today?"
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl p-3 text-[13px] text-[#1A130E] outline-none resize-none"
                             />
                           </div>
 
                           <button
                             type="submit"
-                            className="w-full py-2.5 rounded-xl text-[13px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer"
+                            className="w-full py-2.5 rounded-full text-[12.5px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
                           >
                             Send Inquiry
                           </button>
@@ -1202,23 +1403,20 @@ export default function UserDashboardPage() {
             {activeTab === 'settings' && (
               <div className="space-y-6">
                 <div>
-                  <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
                     Setting
                   </h1>
-                  <p className="text-[13px] text-[#666666] mt-0.5">
-                    Customize your alerts, receipts, and dining security
-                  </p>
                 </div>
 
-                <div className="bg-white border border-[#EBEBEB] rounded-2xl p-6 shadow-xs space-y-5">
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F0F0F0]">
+                <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-5">
+                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
                     <div>
                       <h4 className="font-bold text-[14px] text-[#1A130E]">
                         SMS Order Tracking Alerts
                       </h4>
-                      <p className="text-[13px] text-[#777777] mt-0.5">
-                        Receive instant SMS when driver leaves Dublin kitchen
+                      <p className="text-[13px] text-[#7A746E] mt-0.5">
+                        Instant SMS notification when takeaway leaves Dublin kitchen
                       </p>
                     </div>
                     <input
@@ -1234,12 +1432,12 @@ export default function UserDashboardPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F0F0F0]">
+                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
                     <div>
                       <h4 className="font-bold text-[14px] text-[#1A130E]">
                         Email Delivery Receipts & VAT Invoices
                       </h4>
-                      <p className="text-[13px] text-[#777777] mt-0.5">
+                      <p className="text-[13px] text-[#7A746E] mt-0.5">
                         Send detailed PDF invoices directly to {profile.email}
                       </p>
                     </div>
@@ -1256,12 +1454,12 @@ export default function UserDashboardPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F0F0F0]">
+                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
                     <div>
                       <h4 className="font-bold text-[14px] text-[#1A130E]">
                         Chef Tariq’s Tasting Specials & Seasonal Promos
                       </h4>
-                      <p className="text-[13px] text-[#777777] mt-0.5">
+                      <p className="text-[13px] text-[#7A746E] mt-0.5">
                         Exclusive weekly weekend secret tasting invitations
                       </p>
                     </div>
@@ -1283,7 +1481,7 @@ export default function UserDashboardPage() {
                       <h4 className="font-bold text-[14px] text-[#1A130E]">
                         Two-Factor Authentication (2FA)
                       </h4>
-                      <p className="text-[13px] text-[#777777] mt-0.5">
+                      <p className="text-[13px] text-[#7A746E] mt-0.5">
                         Require SMS verification code on account login
                       </p>
                     </div>
@@ -1307,13 +1505,13 @@ export default function UserDashboardPage() {
             {activeTab === 'logout' && (
               <div className="space-y-6">
                 <div>
-                  <div className="w-7 h-[3px] bg-[#F15A24] rounded-full mb-2" />
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E]">
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
                     Log Out
                   </h1>
                 </div>
 
-                <div className="bg-white border border-[#EBEBEB] rounded-2xl p-8 shadow-xs text-center max-w-md mx-auto space-y-4">
+                <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-8 shadow-[0_4px_24px_rgba(26,19,14,0.03)] text-center max-w-md mx-auto space-y-4">
                   <div className="w-14 h-14 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto">
                     <LogOut className="w-7 h-7" />
                   </div>
@@ -1321,20 +1519,20 @@ export default function UserDashboardPage() {
                     <h3 className="font-bold text-[17px] text-[#1A130E]">
                       Sign out of AMBER SPICE?
                     </h3>
-                    <p className="text-[13px] text-[#666666] mt-1">
+                    <p className="text-[13px] text-[#7A746E] mt-1">
                       You will need to sign back in to access saved addresses and past orders.
                     </p>
                   </div>
                   <div className="flex items-center gap-3 pt-2">
                     <button
                       onClick={handleLogout}
-                      className="flex-1 py-2.5 rounded-xl text-[13px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 rounded-full text-[13px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
                     >
                       Yes, Sign Out
                     </button>
                     <button
                       onClick={() => setActiveTab('profile')}
-                      className="flex-1 py-2.5 rounded-xl text-[13px] font-semibold border border-[#E5E5E5] text-[#555555] hover:bg-neutral-50 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 rounded-full text-[13px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
                     >
                       Stay Logged In
                     </button>
