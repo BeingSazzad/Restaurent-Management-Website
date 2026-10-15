@@ -15,7 +15,6 @@ import {
   ArrowRight,
   Star,
   Clock,
-  ShieldCheck,
   ChevronRight,
   BookOpen,
   Users,
@@ -77,55 +76,6 @@ export default function AboutPage() {
             <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed">
               We pair timeless Indian heritage techniques with premium Irish produce — from 100% grass-fed halal beef to farm-fresh vegetables and local dairy, delivering honest flavours in every bite.
             </p>
-
-            {/* Culinary Highlights: Unified Standard Pillars */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF7F4] border border-[#EAE5DF]">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Pillar 1 */}
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
-                    <Flame className="w-4 h-4 stroke-[2]" />
-                  </div>
-                  <div>
-                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Authentic Dum Pukht</h4>
-                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Slow-sealed in antique copper handis</p>
-                  </div>
-                </div>
-
-                {/* Pillar 2 */}
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
-                    <ShieldCheck className="w-4 h-4 stroke-[2]" />
-                  </div>
-                  <div>
-                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">100% Halal Certified</h4>
-                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Grass-fed Irish beef & local poultry</p>
-                  </div>
-                </div>
-
-                {/* Pillar 3 */}
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
-                    <Sparkles className="w-4 h-4 stroke-[2]" />
-                  </div>
-                  <div>
-                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Stone-Ground Spices</h4>
-                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">28 royal aromatics roasted daily</p>
-                  </div>
-                </div>
-
-                {/* Pillar 4 */}
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
-                    <ChefHat className="w-4 h-4 stroke-[2]" />
-                  </div>
-                  <div>
-                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Heritage Master Chefs</h4>
-                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Centuries-old Lucknow culinary lineage</p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* CTA & Customer Social Proof */}
             <div className="pt-3 flex flex-wrap items-center gap-6">
