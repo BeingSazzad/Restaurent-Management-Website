@@ -193,30 +193,33 @@ export const HeroSection: React.FC = () => {
                 <img
                   src="/images/avatars/sarah.jpg"
                   alt="Customer avatar"
-                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
                 />
                 <img
                   src="/images/avatars/james.jpg"
                   alt="Customer avatar"
-                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
                 />
                 <img
                   src="/images/avatars/ayesha.jpg"
                   alt="Customer avatar"
-                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
                 />
               </div>
 
-              {/* Rating Stars & Reviews */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center text-[#FBA138]">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-[#FBA138] text-[#FBA138]" />
-                  ))}
+              {/* Rating Stars & Reviews - Standard Stacked Layout */}
+              <div className="flex flex-col justify-center">
+                <div className="flex items-center gap-1.5 text-[#FBA138]">
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-[#FBA138] text-[#FBA138]" />
+                    ))}
+                  </div>
+                  <span className="font-bold text-white text-xs sm:text-[13px] leading-none">4.9</span>
                 </div>
-                <span className="font-bold text-white text-xs sm:text-sm">4.9</span>
-                <span className="text-white/60 text-xs">·</span>
-                <span className="text-white/90 text-xs sm:text-sm font-medium">1,240+ reviews</span>
+                <span className="text-white/85 text-[11.5px] sm:text-xs font-medium tracking-tight mt-0.5">
+                  1,240+ reviews
+                </span>
               </div>
             </div>
           </div>
