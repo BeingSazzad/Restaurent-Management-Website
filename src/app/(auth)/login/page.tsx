@@ -41,7 +41,7 @@ export default function LoginPage() {
             Welcome Back
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
-            Sign in to access saved Dublin addresses and 1-click re-orders
+            Sign in to access saved addresses and 1-click re-orders
           </p>
         </div>
 
@@ -78,9 +78,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-[12px] text-[#7A746E] pt-0.5">
-            <span className="hover:text-[#B84A22] cursor-pointer">Forgot password?</span>
-            <span className="text-[#B84A22] font-semibold">Demo Account Ready</span>
+          <div className="flex justify-end items-center text-[12px] text-[#7A746E] pt-0.5">
+            <span className="hover:text-[#B84A22] cursor-pointer transition-colors">Forgot password?</span>
           </div>
 
           <button
