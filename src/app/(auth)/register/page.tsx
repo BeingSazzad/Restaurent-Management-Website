@@ -43,10 +43,10 @@ export default function RegisterPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
-            Create Diner Account
+            Create Account
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
-            Join AMBER SPICE to save Dublin delivery addresses and order in 1 click
+            Sign up to save Dublin delivery addresses and 1-click re-orders
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
-              Mobile Phone (for delivery SMS)
+              Phone Number
             </label>
             <div className="relative">
               <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-[#9E9790]" />
@@ -143,7 +143,7 @@ export default function RegisterPage() {
             disabled={!termsAccepted}
             className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-50 transition-all active:scale-95"
           >
-            <span>Create Account & Continue</span>
+            <span>Create Account</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

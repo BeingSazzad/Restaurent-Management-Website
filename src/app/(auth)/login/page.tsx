@@ -87,7 +87,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 mt-2 cursor-pointer active:scale-95 transition-all"
           >
-            <span>Sign In to Account</span>
+            <span>Sign In</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
