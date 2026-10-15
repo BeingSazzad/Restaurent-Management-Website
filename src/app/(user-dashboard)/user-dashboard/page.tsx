@@ -140,15 +140,6 @@ function DashboardContent() {
       holder: "Liam O'Connor",
       isDefault: true,
     },
-    {
-      id: 'card-2',
-      cardType: 'mastercard',
-      last4: '8831',
-      expMonth: '11',
-      expYear: '27',
-      holder: "Liam O'Connor",
-      isDefault: false,
-    },
   ]);
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [newCardNumber, setNewCardNumber] = useState('');
