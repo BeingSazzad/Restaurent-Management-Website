@@ -217,14 +217,6 @@ export const Navbar: React.FC = () => {
                     </div>
                   )}
                 </div>
-
-                <Link
-                  href="/menu"
-                  className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-sm font-semibold hidden md:flex items-center gap-1.5 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:shadow-[0_6px_20px_rgba(184,74,34,0.4)] transition-all hover:scale-102 active:scale-95 cursor-pointer"
-                >
-                  <span>Order Now</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             )}
 
