@@ -102,7 +102,7 @@ export default function CookiePolicyPage() {
       <div className="mt-8 text-center">
         <Link
           href="/"
-          className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] shadow-xs inline-flex items-center gap-2 transition-colors"
+          className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] shadow-xs inline-flex items-center gap-2 transition-colors"
         >
           <span>Return to Homepage</span>
           <ArrowRight className="w-3.5 h-3.5" />

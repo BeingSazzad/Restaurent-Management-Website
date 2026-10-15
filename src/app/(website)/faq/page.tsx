@@ -109,7 +109,7 @@ export default function FAQPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search questions (e.g. Halal, delivery time, gluten-free)..."
-          className="w-full bg-white rounded-full pl-11 pr-5 py-3 text-[14px] text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#B84A22] shadow-xs transition-all"
+          className="w-full bg-white rounded-xl pl-11 pr-5 py-3 text-[14px] text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#B84A22] shadow-xs transition-all"
         />
       </div>
 
@@ -125,7 +125,7 @@ export default function FAQPage() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
-            className={`px-5 py-2.5 rounded-full text-[13px] font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all ${
               activeTab === tab.key
                 ? 'bg-[#B84A22] text-white shadow-sm'
                 : 'bg-white text-[#555555] hover:text-[#1A130E] border border-[#E5E5E5]'
@@ -196,7 +196,7 @@ export default function FAQPage() {
 
         <Link
           href="/contact"
-          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all"
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all"
         >
           <span>Contact Kitchen</span>
           <ArrowRight className="w-4 h-4" />

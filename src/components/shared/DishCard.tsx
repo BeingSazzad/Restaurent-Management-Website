@@ -38,7 +38,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
 
         {/* Bestseller Badge */}
         {dish.isBestSeller && (
-          <div className="absolute top-3 left-3 bg-[#B84A22] text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm tracking-wide z-10">
+          <div className="absolute top-3 left-3 bg-[#B84A22] text-white text-[11px] font-semibold px-2 py-0.5 rounded-md shadow-sm tracking-wide z-10">
             Bestseller
           </div>
         )}
@@ -61,7 +61,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
         {/* Sold out overlay */}
         {!dish.isAvailable && (
           <div className="absolute inset-0 bg-white/85 backdrop-blur-sm flex items-center justify-center z-20">
-            <span className="bg-[#B84A22] text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1 shadow-sm">
+            <span className="bg-[#B84A22] text-white px-3 py-1 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-1 shadow-sm">
               <AlertCircle className="w-3.5 h-3.5" /> Sold Out
             </span>
           </div>
@@ -88,7 +88,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
             <span className="font-bold text-[18px] sm:text-[19px] text-[#1A130E] tracking-tight">
               €{dish.price.toFixed(2)}
             </span>
-            <div className="flex items-center gap-1 text-[12px] font-semibold text-[#1A130E] bg-white px-2.5 py-0.5 rounded-full border border-[#E5E5E5] shadow-2xs">
+            <div className="flex items-center gap-1 text-[12px] font-semibold text-[#1A130E] bg-white px-2 py-0.5 rounded-md border border-[#E5E5E5] shadow-2xs">
               <Star className="w-3.5 h-3.5 fill-[#D49B37] text-[#D49B37]" />
               <span>{dish.rating}</span>
             </div>
@@ -97,7 +97,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
           {/* Sunset Orange Gradient Add Button */}
           <button
             disabled={!dish.isAvailable}
-            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
               dish.isAvailable
                 ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white shadow-sm hover:scale-105 active:scale-95'
                 : 'bg-[#E5E5E5] text-[#999999] cursor-not-allowed'

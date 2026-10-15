@@ -140,7 +140,7 @@ export const OrderTrackerModal: React.FC = () => {
 
             <button
               onClick={handleAdvanceStatus}
-              className="text-[12px] font-semibold bg-white hover:bg-[#F15A24] text-[#F15A24] hover:text-white px-3.5 py-1.5 rounded-full border border-[#F15A24] transition-colors shadow-xs"
+              className="text-[12px] font-semibold bg-white hover:bg-[#F15A24] text-[#F15A24] hover:text-white px-3.5 py-1.5 rounded-xl border border-[#F15A24] transition-colors shadow-xs"
             >
               Simulate Next Status ➔
             </button>
@@ -292,7 +292,7 @@ export const OrderTrackerModal: React.FC = () => {
                   <div className="flex items-center justify-between gap-3 pt-1">
                     <button
                       type="submit"
-                      className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 cursor-pointer"
                     >
                       <Check className="w-4 h-4" />
                       <span>Submit Review</span>
@@ -301,7 +301,7 @@ export const OrderTrackerModal: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleReorder}
-                      className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
                     >
                       <RotateCcw className="w-4 h-4" />
                       <span>Re-order Meal</span>
@@ -317,7 +317,7 @@ export const OrderTrackerModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleReorder}
-                    className="px-3.5 py-1.5 rounded-full text-[12px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 shrink-0 cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl text-[12px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 shrink-0 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Re-order</span>

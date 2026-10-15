@@ -129,7 +129,7 @@ export default function DeliveryInformationPage() {
         </p>
         <Link
           href="/menu"
-          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
+          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
         >
           <span>Start Your Order</span>
           <ArrowRight className="w-4 h-4" />

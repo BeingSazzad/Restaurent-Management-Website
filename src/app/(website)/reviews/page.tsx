@@ -137,7 +137,7 @@ export default function CustomerReviewsPage() {
             <p className="text-[13px] text-[#747474]">Based on 2,140+ verified customer reviews</p>
             <button
               onClick={() => setShowReviewModal(true)}
-              className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all"
+              className="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all"
             >
               Write a Review
             </button>
@@ -173,7 +173,7 @@ export default function CustomerReviewsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setFilterRating('all')}
-            className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-colors ${
+            className={`px-4 py-2 rounded-xl text-[13px] font-semibold transition-colors ${
               filterRating === 'all'
                 ? 'bg-[#B84A22] text-white shadow-sm'
                 : 'bg-white text-[#555555] border border-[#E5E5E5]'
@@ -183,7 +183,7 @@ export default function CustomerReviewsPage() {
           </button>
           <button
             onClick={() => setFilterRating(5)}
-            className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-colors flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-[13px] font-semibold transition-colors flex items-center gap-1.5 ${
               filterRating === 5
                 ? 'bg-[#B84A22] text-white shadow-sm'
                 : 'bg-white text-[#555555] border border-[#E5E5E5]'
@@ -349,13 +349,13 @@ export default function CustomerReviewsPage() {
                 <button
                   type="button"
                   onClick={() => setShowReviewModal(false)}
-                  className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
+                  className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
+                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
                 >
                   Submit Review
                 </button>
@@ -373,7 +373,7 @@ export default function CustomerReviewsPage() {
         </p>
         <Link
           href="/menu"
-          className="px-8 py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
+          className="px-8 py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
         >
           <span>Order From Menu</span>
           <ArrowRight className="w-4 h-4" />

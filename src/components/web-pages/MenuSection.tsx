@@ -176,7 +176,7 @@ export const MenuSection: React.FC = () => {
             <div className="pt-2">
               <button
                 onClick={handleApplyPromoAndScroll}
-                className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Order Now</span>
                 <ArrowRight className="w-4 h-4" />
@@ -211,7 +211,7 @@ export const MenuSection: React.FC = () => {
             <div className="pt-2">
               <button
                 onClick={() => dispatch(setCartOpen(true))}
-                className="px-6 py-3 rounded-full bg-white hover:bg-[rgb(249,249,249)] text-[#1A130E] text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-white hover:bg-[rgb(249,249,249)] text-[#1A130E] text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Order Now</span>
                 <ArrowRight className="w-4 h-4 text-[#F15A24]" />

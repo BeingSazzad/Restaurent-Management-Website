@@ -309,7 +309,7 @@ export const CartDrawer: React.FC = () => {
               {/* Checkout Trigger */}
               <button
                 onClick={handleProceedToCheckout}
-                className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-between shadow-md hover:scale-[1.02] active:scale-98 transition-all"
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-between shadow-md hover:scale-[1.01] active:scale-98 transition-all"
               >
                 <span>Proceed to Checkout</span>
                 <div className="flex items-center gap-1.5">

@@ -247,14 +247,14 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder="e.g. Extra sauce on side, no onions..."
               rows={2}
-              className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-xl p-3 text-[13px] text-[#1A130E] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#F15A24] resize-none"
+              className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-2xl p-3.5 text-[13px] text-[#1A130E] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#F15A24] resize-none transition-colors"
             />
           </div>
         </div>
 
         {/* Modal Footer */}
         <div className="p-4 border-t border-[#E5E5E5] bg-white flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 bg-[rgb(249,249,249)] px-3.5 py-1.5 rounded-full border border-[#E5E5E5]">
+          <div className="flex items-center gap-3 bg-[rgb(249,249,249)] px-3.5 py-1.5 rounded-xl border border-[#E5E5E5]">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="text-[#747474] hover:text-[#1A130E] p-0.5"
@@ -270,7 +270,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           <button
             onClick={handleAddToCart}
             disabled={!isRequiredSatisfied}
-            className="flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-semibold flex items-center justify-between shadow-md disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-98"
+            className="flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-semibold flex items-center justify-between shadow-md disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-98"
           >
             <span>Add to Cart</span>
             <span>€{grandTotal.toFixed(2)}</span>

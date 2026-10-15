@@ -145,7 +145,7 @@ export default function UserDashboardPage() {
           <div className="flex items-center gap-3 w-full md:w-auto">
             <button
               onClick={() => dispatch(setCartOpen(true))}
-              className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 flex-1 md:flex-initial justify-center transition-opacity"
+              className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 flex-1 md:flex-initial justify-center transition-opacity"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>View Active Cart</span>
@@ -253,13 +253,13 @@ export default function UserDashboardPage() {
                   <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
                     <button
                       onClick={() => dispatch(setActiveTrackingOrderId(order.id))}
-                      className="flex-1 sm:flex-initial px-4 py-2.5 rounded-full text-[13px] font-semibold bg-white hover:bg-neutral-50 text-[#1A130E] border border-[#E5E5E5] hover:border-[#F15A24] transition-colors"
+                      className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-[13px] font-semibold bg-white hover:bg-neutral-50 text-[#1A130E] border border-[#E5E5E5] hover:border-[#F15A24] transition-colors"
                     >
                       Track Delivery
                     </button>
                     <button
                       onClick={() => handleReorder(order)}
-                      className="flex-1 sm:flex-initial px-5 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center justify-center gap-1.5 transition-opacity"
+                      className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center justify-center gap-1.5 transition-opacity"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Re-order</span>
@@ -344,7 +344,7 @@ export default function UserDashboardPage() {
                 </div>
                 <button
                   onClick={() => setIsAddingAddress(!isAddingAddress)}
-                  className="px-4 py-2 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 transition-opacity cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 transition-opacity cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Address</span>
@@ -421,14 +421,14 @@ export default function UserDashboardPage() {
                   <div className="flex items-center gap-2 pt-2">
                     <button
                       type="submit"
-                      className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95"
+                      className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95"
                     >
                       Save Destination
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsAddingAddress(false)}
-                      className="px-4 py-2.5 rounded-full text-[13px] font-semibold text-[#666666] hover:text-[#1A130E]"
+                      className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-[#666666] hover:text-[#1A130E]"
                     >
                       Cancel
                     </button>
@@ -517,7 +517,7 @@ export default function UserDashboardPage() {
                 </div>
 
                 <div className="pt-2">
-                  <button className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity">
+                  <button className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity">
                     Save Changes
                   </button>
                 </div>
@@ -645,7 +645,7 @@ export default function UserDashboardPage() {
 
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full text-[13px] sm:text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
+                      className="w-full py-3.5 rounded-xl text-[13px] sm:text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
                     >
                       Send Message to Kitchen
                     </button>

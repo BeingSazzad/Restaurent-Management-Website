@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Eye } from 'lucide-react';
+import { ArrowRight, Sparkles, Eye, Clock, ShieldCheck, UtensilsCrossed, Calendar } from 'lucide-react';
 
 interface GalleryItem {
   id: number;
@@ -85,27 +85,55 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {[
-          { key: 'all', label: 'All Dishes' },
-          { key: 'biryani', label: 'Dum Biryanis' },
-          { key: 'curry', label: 'Royal Curries' },
-          { key: 'tandoor', label: 'Clay Tandoor' },
-          { key: 'heritage', label: 'Heritage Feasts' },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveFilter(tab.key as any)}
-            className={`px-5 py-2.5 rounded-full text-[13px] sm:text-[14px] font-semibold transition-all ${
-              activeFilter === tab.key
-                ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md'
-                : 'bg-white text-[#555555] hover:text-[#1A130E] border border-[#E5E5E5]'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Modern Segmented Control Filter Bar */}
+      <div className="flex justify-center mb-12">
+        <div className="bg-white border border-[#E5E5E5] p-1.5 rounded-2xl shadow-xs inline-flex items-center gap-1.5 max-w-full overflow-x-auto scrollbar-none">
+          {[
+            { key: 'all', label: 'All Dishes', count: GALLERY_ITEMS.length },
+            {
+              key: 'biryani',
+              label: 'Dum Biryanis',
+              count: GALLERY_ITEMS.filter((i) => i.category === 'biryani').length,
+            },
+            {
+              key: 'curry',
+              label: 'Royal Curries',
+              count: GALLERY_ITEMS.filter((i) => i.category === 'curry').length,
+            },
+            {
+              key: 'tandoor',
+              label: 'Clay Tandoor',
+              count: GALLERY_ITEMS.filter((i) => i.category === 'tandoor').length,
+            },
+            {
+              key: 'heritage',
+              label: 'Heritage Feasts',
+              count: GALLERY_ITEMS.filter((i) => i.category === 'heritage').length,
+            },
+          ].map((tab) => {
+            const isActive = activeFilter === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveFilter(tab.key as any)}
+                className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+                  isActive
+                    ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs'
+                    : 'text-[#555555] hover:text-[#1A130E] hover:bg-[rgb(249,249,249)]'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span
+                  className={`text-[11px] px-2 py-0.5 rounded-md font-bold transition-colors ${
+                    isActive ? 'bg-white/25 text-white' : 'bg-[rgb(249,249,249)] text-[#747474]'
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Photo Grid */}
@@ -185,13 +213,13 @@ export default function GalleryPage() {
               <div className="flex items-center justify-between gap-4 pt-4 border-t border-[#E5E5E5]">
                 <button
                   onClick={() => setSelectedImage(null)}
-                  className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
+                  className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
                 >
                   Close Preview
                 </button>
                 <Link
                   href="/menu"
-                  className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 transition-opacity"
+                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 transition-opacity"
                 >
                   <span>Order on Menu</span>
                   <ArrowRight className="w-4 h-4" />
@@ -202,19 +230,63 @@ export default function GalleryPage() {
         </div>
       )}
 
-      {/* Call to Action Footer */}
-      <div className="text-center p-8 sm:p-10 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
-        <h3 className="font-bold text-[20px] text-[#1A130E] mb-2">Want to Taste the Difference?</h3>
-        <p className="text-[14px] text-[#555555] max-w-md mx-auto mb-6">
-          Explore our complete online menu with direct doorstep delivery across Dublin zones.
-        </p>
-        <Link
-          href="/menu"
-          className="px-8 py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
-        >
-          <span>View Online Menu</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+      {/* Luxury Culinary Experience Call to Action */}
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1C120C] via-[#241710] to-[#150D08] border border-[#3E291C] text-white p-8 sm:p-12 shadow-2xl">
+        {/* Ambient Warm Embers Glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F15A24]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#D49B37]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#D49B37] text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Taste the Royal Dublin Heritage</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+              Ready to Taste the Craft in Person?
+            </h2>
+
+            <p className="text-[14px] sm:text-[15px] text-[#D5CBC2] max-w-2xl leading-relaxed">
+              Every dish in our gallery is cooked to order using whole spices stone-ground daily, 
+              simmered slowly in antique copper handis, and dispatched steaming hot across Dublin.
+            </p>
+
+            {/* Dublin Service Highlights */}
+            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-[#E2D8CE]">
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+                <Clock className="w-3.5 h-3.5 text-[#0FA958]" />
+                <span>30-45 Min Express Dublin Delivery</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#D49B37]" />
+                <span>100% Certified Irish Halal Meats</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
+                <UtensilsCrossed className="w-3.5 h-3.5 text-[#F15A24]" />
+                <span>Collection at South William St, D2</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center lg:items-end">
+            <Link
+              href="/menu"
+              className="w-full sm:w-auto lg:w-full py-3.5 px-7 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-98 transition-all"
+            >
+              <span>Explore Complete Menu</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              href="/reservations"
+              className="w-full sm:w-auto lg:w-full py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[14px] font-semibold flex items-center justify-center gap-2 transition-all"
+            >
+              <Calendar className="w-4 h-4 text-[#D49B37]" />
+              <span>Book Table in Dublin 2</span>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

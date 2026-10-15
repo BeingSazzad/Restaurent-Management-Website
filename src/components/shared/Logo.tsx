@@ -20,32 +20,37 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <Link href="/" className={`flex items-center gap-3 group ${className}`}>
       {/* 
-        LOGO AUTO-UPDATE TARGET:
-        Whenever you place an image at:
-        "public/images/logo.png" (or "public/images/logo.svg")
-        it will immediately and automatically display here!
+        BRAND EMBLEM:
+        Automatically loads from /images/logo.svg (vector) or /images/logo.png / logo.jpg
+        Perfect height (42px-44px), beautifully contained, never broken.
       */}
-      <div className="relative shrink-0 flex items-center justify-center">
+      <div
+        className={`relative shrink-0 flex items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105 ${
+          isFooter
+            ? 'w-11 h-11 bg-white/10 border border-white/15 p-1.5'
+            : 'w-11 h-11 bg-white border border-[#E5E5E5] p-1.5 shadow-2xs'
+        }`}
+      >
         {!imgFailed ? (
           <img
             src="/images/logo.svg"
-            alt="Amber Spice Logo"
+            alt="Amber Spice Dublin"
             onError={(e) => {
               const currentSrc = e.currentTarget.getAttribute('src');
               if (currentSrc === '/images/logo.svg') {
                 e.currentTarget.src = '/images/logo.png';
+              } else if (currentSrc === '/images/logo.png') {
+                e.currentTarget.src = '/images/logo.jpg';
               } else {
                 setImgFailed(true);
               }
             }}
-            className={`object-contain transition-transform duration-300 group-hover:scale-105 ${
-              isFooter ? 'h-9 w-auto max-h-9' : 'h-10 w-auto max-h-10'
-            }`}
+            className="w-full h-full object-contain"
           />
         ) : (
-          /* Default Star Anise Luxury Emblem Fallback */
-          <div className="w-9 h-9 flex items-center justify-center text-[#B84A22] group-hover:rotate-45 transition-transform duration-500">
-            <svg viewBox="0 0 100 100" className="w-9 h-9 fill-[#B84A22]">
+          /* Default Star Anise Luxury Fallback */
+          <div className="w-full h-full flex items-center justify-center text-[#B84A22] group-hover:rotate-45 transition-transform duration-500">
+            <svg viewBox="0 0 100 100" className="w-8 h-8 fill-[#B84A22]">
               <path
                 d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z"
                 opacity="0.95"
@@ -55,7 +60,7 @@ export const Logo: React.FC<LogoProps> = ({
                 fill="#D49B37"
                 opacity="0.9"
               />
-              <circle cx="50" cy="50" r="8" fill={isFooter ? '#FFFFFF' : '#1A130E'} />
+              <circle cx="50" cy="50" r="7" fill={isFooter ? '#FFFFFF' : '#1A130E'} />
             </svg>
           </div>
         )}
@@ -63,19 +68,21 @@ export const Logo: React.FC<LogoProps> = ({
 
       {/* Brand Text Heading */}
       {showText && (
-        <div className="leading-tight">
+        <div className="leading-tight select-none">
           <span
-            className={`font-bold tracking-[0.1em] block uppercase ${
-              isFooter ? 'text-lg text-white' : 'text-xl sm:text-2xl text-[#1A130E]'
+            className={`font-extrabold tracking-[0.06em] block uppercase ${
+              isFooter ? 'text-lg sm:text-xl text-white' : 'text-xl sm:text-[22px] text-[#1A130E]'
             }`}
           >
             AMBER SPICE
           </span>
-          {isFooter && (
-            <span className="text-[10px] tracking-wider text-[#D49B37] block font-medium">
-              Authentic Flavors. Timeless Recipes.
-            </span>
-          )}
+          <span
+            className={`text-[10px] tracking-[0.16em] uppercase block font-semibold mt-0.5 ${
+              isFooter ? 'text-[#D49B37]' : 'text-[#B84A22]'
+            }`}
+          >
+            {isFooter ? 'Authentic Flavors · Timeless Recipes' : 'Dublin · Est. 2018'}
+          </span>
         </div>
       )}
     </Link>

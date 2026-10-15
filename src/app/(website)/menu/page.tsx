@@ -95,7 +95,7 @@ export default function MenuPage() {
                 placeholder="Search biryani, korma, tandoori, naan, or ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-full pl-11 pr-4 py-3 text-[14px] text-[#1A130E] placeholder:text-[#888888] focus:outline-none focus:border-[#B84A22] transition-colors"
+                className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-xl pl-11 pr-4 py-3 text-[14px] text-[#1A130E] placeholder:text-[#888888] focus:outline-none focus:border-[#B84A22] transition-colors"
               />
               {searchQuery && (
                 <button
@@ -109,7 +109,7 @@ export default function MenuPage() {
 
             {/* Sorting Dropdown & Dietary Pills */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 bg-[rgb(249,249,249)] border border-[#E5E5E5] rounded-full px-4 py-2.5">
+              <div className="flex items-center gap-2 bg-[rgb(249,249,249)] border border-[#E5E5E5] rounded-xl px-4 py-2.5">
                 <SlidersHorizontal className="w-4 h-4 text-[#B84A22]" />
                 <span className="text-[13px] font-medium text-[#747474] hidden sm:inline">Sort:</span>
                 <select
@@ -133,7 +133,7 @@ export default function MenuPage() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`whitespace-nowrap px-4 py-2 rounded-full text-[13px] font-semibold transition-all flex items-center gap-1.5 ${
+                className={`whitespace-nowrap px-4 py-2 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-1.5 ${
                   selectedCategory === cat.id
                     ? 'bg-[#B84A22] text-white shadow-sm'
                     : 'bg-[rgb(249,249,249)] hover:bg-white text-[#3D3D3D] border border-[#E5E5E5]'
@@ -216,7 +216,7 @@ export default function MenuPage() {
             </p>
             <button
               onClick={resetFilters}
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-sm"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-sm"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filters</span>

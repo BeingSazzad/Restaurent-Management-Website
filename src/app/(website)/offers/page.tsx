@@ -167,7 +167,7 @@ export default function OffersPage() {
           </div>
           <Link
             href="/menu"
-            className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap shadow-md hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap shadow-md hover:scale-105 active:scale-95 transition-all"
           >
             <span>Explore Menu & Order</span>
             <ArrowRight className="w-4 h-4" />

@@ -123,7 +123,7 @@ export default function LocationPage() {
                     href="https://maps.google.com/?q=18+South+William+Street+Dublin+2"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1A130E] hover:bg-[rgb(249,249,249)] text-[12px] font-semibold shadow-md transition-all hover:scale-105"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-[#1A130E] hover:bg-[rgb(249,249,249)] text-[12px] font-semibold shadow-md transition-all hover:scale-105"
                   >
                     <Navigation className="w-3.5 h-3.5 text-[#B84A22]" />
                     <span>Open in Google Maps</span>
@@ -140,7 +140,7 @@ export default function LocationPage() {
               </div>
               <Link
                 href="/menu"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 shadow-xs hover:scale-105 active:scale-95 transition-all"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 shadow-xs hover:scale-105 active:scale-95 transition-all"
               >
                 Order Takeaway
               </Link>
@@ -157,7 +157,7 @@ export default function LocationPage() {
         </p>
         <Link
           href="/menu"
-          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
+          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
         >
           <span>Order for Collection</span>
           <ArrowRight className="w-4 h-4" />

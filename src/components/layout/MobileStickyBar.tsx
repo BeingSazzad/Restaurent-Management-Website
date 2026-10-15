@@ -17,7 +17,7 @@ export const MobileStickyBar: React.FC = () => {
     <div className="fixed bottom-4 left-4 right-4 z-40 md:hidden">
       <button
         onClick={() => dispatch(setCartOpen(true))}
-        className="w-full btn-amber-primary py-3.5 px-5 rounded-full flex items-center justify-between shadow-amber text-white font-bold text-xs"
+        className="w-full btn-amber-primary py-3.5 px-5 rounded-2xl flex items-center justify-between shadow-amber text-white font-bold text-xs"
       >
         <div className="flex items-center gap-2.5">
           <div className="w-6 h-6 rounded-full bg-white text-[#B84A22] text-xs flex items-center justify-center font-black">

@@ -237,7 +237,7 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
   color: #FFFFFF;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: 14px;
   border: 1px solid transparent;
   box-shadow: 0 4px 14px rgba(184, 74, 34, 0.2);
   transition: all 0.22s ease;
@@ -268,7 +268,7 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
   color: #1A130E;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: 14px;
   border: 1px solid #E5E5E5;
   transition: all 0.22s ease;
   cursor: pointer;
@@ -292,7 +292,7 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
   color: #3D3D3D;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: 14px;
   border: 1px solid #C4B5A5;
   transition: all 0.22s ease;
   cursor: pointer;
@@ -315,7 +315,7 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
   color: #747474;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
-  border-radius: 9999px;
+  border-radius: 12px;
   border: 1px solid transparent;
   transition: all 0.2s ease;
   cursor: pointer;

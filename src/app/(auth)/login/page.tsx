@@ -148,7 +148,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 flex items-center justify-center gap-2 mt-4 transition-all"
+            className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 flex items-center justify-center gap-2 mt-4 transition-all"
           >
             <span>{authMode === 'login' ? 'Sign In to Account' : 'Complete Registration'}</span>
             <ArrowRight className="w-4 h-4" />

@@ -225,14 +225,14 @@ export default function ContactPage() {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2.5 rounded-full text-[13px] font-semibold text-[#747474] hover:text-[#1A130E] hover:bg-[rgb(249,249,249)] transition-colors"
+                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold text-[#747474] hover:text-[#1A130E] hover:bg-[rgb(249,249,249)] transition-colors"
                 >
                   Clear
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                  className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                 >
                   {isSubmitting ? (
                     <span>Sending...</span>

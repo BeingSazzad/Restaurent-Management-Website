@@ -179,7 +179,7 @@ export const HeroSection: React.FC = () => {
 
               <button
                 onClick={scrollToMenu}
-                className="px-6 py-3.5 rounded-full border border-white/40 bg-white/10 hover:bg-white hover:text-[#1A130E] text-white text-sm font-semibold backdrop-blur-md transition-all shadow-sm"
+                className="px-6 py-3.5 rounded-xl border border-white/40 bg-white/10 hover:bg-white hover:text-[#1A130E] text-white text-sm font-semibold backdrop-blur-md transition-all shadow-sm"
               >
                 View Menu
               </button>
