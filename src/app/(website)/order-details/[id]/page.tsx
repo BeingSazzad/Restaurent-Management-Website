@@ -668,27 +668,21 @@ export default function OrderDetailsPage() {
 
         {/* Live Delivery Status Card with Stepper */}
         <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.03)] space-y-6">
-          <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-white text-[#F15A24] flex items-center justify-center shadow-xs border border-[#EFEAE4] shrink-0">
-                <Clock className="w-6 h-6 animate-spin" style={{ animationDuration: '8s' }} />
-              </div>
-              <div>
-                <span className="text-[12px] font-bold text-[#F15A24] uppercase tracking-wider block">
-                  {currentOrder.fulfillmentType === 'delivery' ? 'Live Delivery Status' : 'Live Order Status'}
-                </span>
-                <span className="text-lg sm:text-xl font-bold text-[#1A130E]">
-                  {activeStatus === 'completed'
-                    ? (currentOrder.fulfillmentType === 'delivery' ? 'Order Delivered' : 'Order Picked Up')
-                    : currentOrder.fulfillmentType === 'delivery'
-                    ? `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`
-                    : `Estimated Ready Time: ~${currentOrder.estimatedMinutes} Minutes`}
-                </span>
-              </div>
+          <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white text-[#F15A24] flex items-center justify-center shadow-xs border border-[#EFEAE4] shrink-0">
+              <Clock className="w-6 h-6 animate-spin" style={{ animationDuration: '8s' }} />
             </div>
-
-            <div className="text-[12.5px] text-[#7A746E] bg-white px-4 py-2 rounded-xl border border-[#EFEAE4] self-start sm:self-auto font-medium shadow-2xs">
-              Fulfillment: {currentOrder.fulfillmentType === 'delivery' ? 'Doorstep Delivery' : 'Restaurant Pickup'}
+            <div>
+              <span className="text-[12px] font-bold text-[#F15A24] uppercase tracking-wider block">
+                {currentOrder.fulfillmentType === 'delivery' ? 'Live Delivery Status' : 'Live Order Status'}
+              </span>
+              <span className="text-lg sm:text-xl font-bold text-[#1A130E]">
+                {activeStatus === 'completed'
+                  ? (currentOrder.fulfillmentType === 'delivery' ? 'Order Delivered' : 'Order Picked Up')
+                  : currentOrder.fulfillmentType === 'delivery'
+                  ? `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`
+                  : `Estimated Ready Time: ~${currentOrder.estimatedMinutes} Minutes`}
+              </span>
             </div>
           </div>
 
