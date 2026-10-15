@@ -109,7 +109,7 @@ export const HeroSection: React.FC = () => {
       <div
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative w-full overflow-hidden min-h-[420px] sm:min-h-[460px] lg:min-h-[490px] flex items-center shadow-md"
+        className="relative w-full overflow-hidden min-h-[540px] sm:min-h-[600px] lg:min-h-[640px] flex items-center shadow-md"
       >
         {/* Background Images spanning 100% full screen width with smooth fade transition */}
         {HERO_SLIDES.map((slide, idx) => (
@@ -146,16 +146,16 @@ export const HeroSection: React.FC = () => {
         />
 
         {/* Slide Content Container - Aligned with Global Container Grid */}
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 sm:py-12 text-white">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 sm:py-16 lg:py-20 text-white">
           <div className="max-w-2xl">
             {/* Top Category Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#D49B37] text-[11px] font-semibold uppercase tracking-wider mb-3.5 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#D49B37] text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#D49B37]" />
               <span>{HERO_SLIDES[currentSlide].badge}</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-extrabold text-white leading-[1.16] tracking-tight mb-3 drop-shadow-sm">
+            <h1 className="text-3xl sm:text-5xl lg:text-[52px] font-extrabold text-white leading-[1.14] tracking-tight mb-4 drop-shadow-sm">
               {HERO_SLIDES[currentSlide].titlePrefix} <br />
               <span className="text-[#D49B37]">
                 {HERO_SLIDES[currentSlide].titleHighlight}
@@ -163,15 +163,15 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             {/* Description Paragraph */}
-            <p className="text-xs sm:text-[14px] text-[#E2D8CE] max-w-lg leading-relaxed mb-6 drop-shadow font-normal">
+            <p className="text-sm sm:text-base text-[#E2D8CE] max-w-xl leading-relaxed mb-8 drop-shadow font-normal">
               {HERO_SLIDES[currentSlide].description}
             </p>
 
             {/* Dual CTAs & Live Dish Pill */}
-            <div className="flex flex-wrap items-center gap-3.5">
+            <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={scrollToMenu}
-                className="btn-amber-primary px-6 py-3 text-xs sm:text-sm font-semibold flex items-center gap-2 shadow-amber hover:scale-105 transition-transform"
+                className="btn-amber-primary px-7 py-3.5 text-sm font-semibold flex items-center gap-2 shadow-amber hover:scale-105 transition-transform"
               >
                 <span>Order Now</span>
                 <ArrowRight className="w-4 h-4" />
@@ -179,13 +179,13 @@ export const HeroSection: React.FC = () => {
 
               <button
                 onClick={scrollToMenu}
-                className="px-5 py-3 rounded-full border border-white/40 bg-white/10 hover:bg-white hover:text-[#1A130E] text-white text-xs sm:text-sm font-semibold backdrop-blur-md transition-all shadow-sm"
+                className="px-6 py-3.5 rounded-full border border-white/40 bg-white/10 hover:bg-white hover:text-[#1A130E] text-white text-sm font-semibold backdrop-blur-md transition-all shadow-sm"
               >
                 View Menu
               </button>
 
               {/* Floating Dish Pill */}
-              <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A130E]/80 backdrop-blur-md border border-white/15 text-xs text-[#E2D8CE]">
+              <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A130E]/80 backdrop-blur-md border border-white/15 text-xs text-[#E2D8CE]">
                 <span className="w-2 h-2 rounded-full bg-[#0FA958] animate-pulse" />
                 <span className="font-semibold text-white">
                   {HERO_SLIDES[currentSlide].dishHighlight}
