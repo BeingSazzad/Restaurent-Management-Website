@@ -65,8 +65,8 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
       {/* Card Body & Info */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          {/* Dish Title: Bold 17px/18px Poppins */}
-          <h3 className="font-semibold text-[16px] sm:text-[17px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-[23px] line-clamp-2 min-h-[46px]">
+          {/* Dish Title: Bold 16px Poppins */}
+          <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-[22px] line-clamp-2 min-h-[44px]">
             {dish.name}
           </h3>
 
