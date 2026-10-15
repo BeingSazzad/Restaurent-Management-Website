@@ -84,8 +84,13 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-white transition-colors text-[14px]">
+                <Link href="/gallery" className="hover:text-white transition-colors text-[14px]">
                   Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href="/reviews" className="hover:text-white transition-colors text-[14px]">
+                  Customer Reviews
                 </Link>
               </li>
               <li>
@@ -101,18 +106,18 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold text-[16px] text-white">Services</h4>
             <ul className="space-y-2.5 text-[14px] text-[#9B8C80]">
               <li>
-                <Link href="/menu" className="hover:text-white transition-colors text-[14px]">
-                  Delivery
+                <Link href="/delivery" className="hover:text-white transition-colors text-[14px]">
+                  Delivery Information
                 </Link>
               </li>
               <li>
-                <Link href="/menu" className="hover:text-white transition-colors text-[14px]">
-                  Collection
+                <Link href="/location" className="hover:text-white transition-colors text-[14px]">
+                  Location / Find Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors text-[14px]">
-                  Reservations
+                <Link href="/faq" className="hover:text-white transition-colors text-[14px]">
+                  FAQ
                 </Link>
               </li>
               <li>
@@ -164,16 +169,16 @@ export const Footer: React.FC = () => {
         <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7A6C62]">
           <p>© {new Date().getFullYear()} Amber Spice. All rights reserved.</p>
           <div className="flex items-center gap-4 text-[#8C7D72]">
-            <Link href="/about" className="hover:text-white transition-colors">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
             <span>·</span>
-            <Link href="/about" className="hover:text-white transition-colors">
-              Terms of Service
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms & Conditions
             </Link>
             <span>·</span>
-            <Link href="/contact" className="hover:text-white transition-colors">
-              Security
+            <Link href="/cookie-policy" className="hover:text-white transition-colors">
+              Cookie Policy
             </Link>
           </div>
         </div>

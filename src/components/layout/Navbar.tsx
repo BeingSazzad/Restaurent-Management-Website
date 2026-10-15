@@ -74,6 +74,14 @@ export const Navbar: React.FC = () => {
               Offers
             </Link>
             <Link
+              href="/gallery"
+              className={`py-1 transition-colors hover:text-[#B84A22] ${
+                pathname === '/gallery' ? 'text-[#B84A22] font-semibold' : ''
+              }`}
+            >
+              Gallery
+            </Link>
+            <Link
               href="/about"
               className={`py-1 transition-colors hover:text-[#B84A22] ${
                 pathname === '/about' ? 'text-[#B84A22] font-semibold' : ''
