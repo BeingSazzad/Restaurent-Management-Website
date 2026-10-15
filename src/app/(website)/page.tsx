@@ -11,11 +11,11 @@ export default function WebsitePage() {
       {/* Amber Spice Hero Section with Delivery Dock */}
       <HeroSection />
 
-      {/* Categories, Popular Dishes & Dual Promo Banners */}
-      <MenuSection />
-
       {/* Auto-scrolling Brand Essence Marquee Ribbon */}
       <MarqueeRibbon />
+
+      {/* Categories, Popular Dishes & Dual Promo Banners */}
+      <MenuSection />
 
       {/* Customer Testimonials: Loved by Food Lovers */}
       <ReviewsSection />
