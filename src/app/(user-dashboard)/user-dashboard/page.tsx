@@ -1202,16 +1202,16 @@ function DashboardContent() {
 
                 {/* Password Change Card */}
                 <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
-                  <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center">
+                  <div className="flex items-center justify-between pb-5 border-b border-[#F2EFEA]">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
                         <KeyRound className="w-5 h-5" />
                       </div>
                       <div>
                         <h3 className="font-bold text-[16px] text-[#1A130E]">
                           Change Password
                         </h3>
-                        <p className="text-[12.5px] text-[#8C8681]">
+                        <p className="text-[13px] text-[#8C8681] mt-0.5">
                           Update your password to keep your account secure
                         </p>
                       </div>
@@ -1232,11 +1232,11 @@ function DashboardContent() {
                     </div>
                   )}
 
-                  <form onSubmit={handlePasswordUpdate} className="space-y-5 max-w-xl">
-                    <div className="flex flex-col gap-4.5">
+                  <form onSubmit={handlePasswordUpdate} className="space-y-6 max-w-xl">
+                    <div className="space-y-5">
                       {/* Current Password */}
                       <div>
-                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-2">
                           Current Password
                         </label>
                         <div className="relative">
@@ -1245,6 +1245,7 @@ function DashboardContent() {
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
                             placeholder="Enter current account password"
+                            required
                             className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
@@ -1263,7 +1264,7 @@ function DashboardContent() {
 
                       {/* New Password */}
                       <div>
-                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-2">
                           New Password
                         </label>
                         <div className="relative">
@@ -1272,6 +1273,7 @@ function DashboardContent() {
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="Enter new password (min. 6 characters)"
+                            required
                             className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
@@ -1290,7 +1292,7 @@ function DashboardContent() {
 
                       {/* Confirm New Password */}
                       <div>
-                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-2">
                           Confirm Password
                         </label>
                         <div className="relative">
@@ -1299,6 +1301,7 @@ function DashboardContent() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="Confirm new password"
+                            required
                             className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
