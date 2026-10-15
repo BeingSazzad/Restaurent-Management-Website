@@ -36,12 +36,6 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
 
-        {/* Bestseller Badge */}
-        {dish.isBestSeller && (
-          <div className="absolute top-3 left-3 bg-[#B84A22] text-white text-[11px] font-semibold px-2 py-0.5 rounded-md shadow-sm tracking-wide z-10">
-            Bestseller
-          </div>
-        )}
 
         {/* Wishlist / Favorite Heart Button */}
         <button
