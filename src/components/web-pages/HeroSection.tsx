@@ -186,39 +186,41 @@ export const HeroSection: React.FC = () => {
               </button>
             </div>
 
-            {/* Visual Social Proof Review Badge - Fixed, rock-solid position across all slides */}
+            {/* Visual Social Proof Review Badge */}
             <div className="flex items-center gap-3 pt-1">
               {/* Overlapping Customer Avatars */}
-              <div className="flex items-center -space-x-2 shrink-0">
+              <div className="flex -space-x-2.5 overflow-hidden shrink-0">
                 <img
-                  src="/images/avatars/sarah.jpg"
-                  alt="Customer avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
-                />
-                <img
-                  src="/images/avatars/james.jpg"
-                  alt="Customer avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
-                />
-                <img
+                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
                   src="/images/avatars/ayesha.jpg"
-                  alt="Customer avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white/40 object-cover shadow-sm"
+                  alt="Customer"
+                />
+                <img
+                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  src="/images/avatars/cian.jpg"
+                  alt="Customer"
+                />
+                <img
+                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  src="/images/avatars/elena.jpg"
+                  alt="Customer"
+                />
+                <img
+                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  src="/images/avatars/james.jpg"
+                  alt="Customer"
                 />
               </div>
 
-              {/* Rating Stars & Reviews - Standard Stacked Layout */}
-              <div className="flex flex-col justify-center">
-                <div className="flex items-center gap-1.5 text-[#FBA138]">
-                  <div className="flex items-center gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-[#FBA138] text-[#FBA138]" />
-                    ))}
-                  </div>
-                  <span className="font-bold text-white text-xs sm:text-[13px] leading-none">4.9</span>
+              {/* Rating Stars & 10K+ Happy Diners */}
+              <div>
+                <div className="flex items-center gap-0.5 text-[#FBA138]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                  ))}
                 </div>
-                <span className="text-white/85 text-[11.5px] sm:text-xs font-medium tracking-tight mt-0.5">
-                  1,240+ reviews
+                <span className="text-[12.5px] sm:text-[13px] font-bold text-white block mt-0.5 drop-shadow-sm">
+                  10K+ Happy Diners
                 </span>
               </div>
             </div>
