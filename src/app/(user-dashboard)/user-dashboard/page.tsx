@@ -577,7 +577,7 @@ function DashboardContent() {
                               {profile.phone}
                             </h3>
                             <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
-                              Used by Dublin drivers for arrival & doorstep calls
+                              Used by delivery drivers for arrival & doorstep calls
                             </p>
                           </div>
                         </div>
@@ -613,7 +613,7 @@ function DashboardContent() {
                       <div className="pt-4 border-t border-[#F2EFEA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[12.5px] text-[#8C8681]">
                         <div className="flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>Data protected under Irish & EU GDPR standards · Amber Spice Dublin</span>
+                          <span>Data protected under GDPR standards · Amber Spice</span>
                         </div>
                         <button
                           onClick={handleStartEdit}

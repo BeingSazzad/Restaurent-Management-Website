@@ -652,7 +652,7 @@ export default function OrderDetailsPage() {
               </span>
             </div>
             <p className="text-[13px] text-[#8C8681] mt-1.5">
-              Placed on {formattedOrderDate} · Amber Spice South William Street Kitchen
+              Placed on {formattedOrderDate} · Amber Spice Kitchen
             </p>
           </div>
 
@@ -691,18 +691,20 @@ export default function OrderDetailsPage() {
               </div>
               <div>
                 <span className="text-[12px] font-bold text-[#F15A24] uppercase tracking-wider block">
-                  Live Dublin Delivery Status
+                  {currentOrder.fulfillmentType === 'delivery' ? 'Live Delivery Status' : 'Live Order Status'}
                 </span>
                 <span className="text-lg sm:text-xl font-bold text-[#1A130E]">
                   {activeStatus === 'completed'
-                    ? 'Delicious Meal Delivered'
-                    : `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`}
+                    ? (currentOrder.fulfillmentType === 'delivery' ? 'Order Delivered' : 'Order Picked Up')
+                    : currentOrder.fulfillmentType === 'delivery'
+                    ? `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`
+                    : `Estimated Ready Time: ~${currentOrder.estimatedMinutes} Minutes`}
                 </span>
               </div>
             </div>
 
             <div className="text-[12.5px] text-[#7A746E] bg-white px-4 py-2 rounded-xl border border-[#EFEAE4] self-start sm:self-auto font-medium shadow-2xs">
-              Fulfillment: {currentOrder.fulfillmentType === 'delivery' ? 'Dublin Doorstep Delivery' : 'Restaurant Collection'}
+              Fulfillment: {currentOrder.fulfillmentType === 'delivery' ? 'Doorstep Delivery' : 'Restaurant Pickup'}
             </div>
           </div>
 
@@ -830,7 +832,7 @@ export default function OrderDetailsPage() {
                 </div>
               )}
               <div className="flex justify-between">
-                <span>Dublin Delivery Fee</span>
+                <span>Delivery Fee</span>
                 <span className="font-semibold text-[#1A130E]">
                   {Number(currentOrder.deliveryFee || 0) === 0 ? 'FREE' : `€${Number(currentOrder.deliveryFee || 0).toFixed(2)}`}
                 </span>
