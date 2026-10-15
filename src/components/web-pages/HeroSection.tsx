@@ -187,46 +187,36 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Visual Social Proof Review Badge - Fixed, rock-solid position across all slides */}
-            <div className="flex items-center">
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-black/70 hover:bg-black/85 backdrop-blur-md shadow-lg transition-all">
-                {/* Overlapping Customer Avatars */}
-                <div className="flex items-center -space-x-2 shrink-0">
-                  <img
-                    src="/images/avatars/sarah.jpg"
-                    alt="Sarah"
-                    className="w-7 h-7 rounded-full border-2 border-[#1A130E] object-cover ring-1 ring-white/20"
-                  />
-                  <img
-                    src="/images/avatars/james.jpg"
-                    alt="James"
-                    className="w-7 h-7 rounded-full border-2 border-[#1A130E] object-cover ring-1 ring-white/20"
-                  />
-                  <img
-                    src="/images/avatars/ayesha.jpg"
-                    alt="Ayesha"
-                    className="w-7 h-7 rounded-full border-2 border-[#1A130E] object-cover ring-1 ring-white/20"
-                  />
-                </div>
+            <div className="flex items-center gap-3 pt-1">
+              {/* Overlapping Customer Avatars */}
+              <div className="flex items-center -space-x-2 shrink-0">
+                <img
+                  src="/images/avatars/sarah.jpg"
+                  alt="Customer avatar"
+                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                />
+                <img
+                  src="/images/avatars/james.jpg"
+                  alt="Customer avatar"
+                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                />
+                <img
+                  src="/images/avatars/ayesha.jpg"
+                  alt="Customer avatar"
+                  className="w-7 sm:w-8 h-7 sm:h-8 rounded-full border-2 border-white/30 object-cover shadow-sm"
+                />
+              </div>
 
-                {/* Rating Stars & Details */}
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex items-center text-[#FBA138]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-[#FBA138] text-[#FBA138]" />
-                      ))}
-                    </div>
-                    <span className="font-bold text-white text-xs">4.9 / 5.0</span>
-                  </div>
-                  <div className="text-[11px] text-[#E2D8CE] font-medium flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0FA958] animate-pulse shrink-0" />
-                    <span className="font-semibold text-white truncate max-w-[150px]">
-                      {HERO_SLIDES[currentSlide].dishHighlight}
-                    </span>
-                    <span className="text-white/40">·</span>
-                    <span className="text-[#FBA138]">1,240+ reviews</span>
-                  </div>
+              {/* Rating Stars & Reviews */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center text-[#FBA138]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-[#FBA138] text-[#FBA138]" />
+                  ))}
                 </div>
+                <span className="font-bold text-white text-xs sm:text-sm">4.9</span>
+                <span className="text-white/60 text-xs">·</span>
+                <span className="text-white/90 text-xs sm:text-sm font-medium">1,240+ reviews</span>
               </div>
             </div>
           </div>
