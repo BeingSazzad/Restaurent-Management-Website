@@ -81,24 +81,24 @@ export default function AboutPage() {
 
               {/* Avatar stack + Social Proof */}
               <div className="flex items-center gap-3">
-                <div className="flex -space-x-2.5 overflow-hidden">
+                <div className="flex -space-x-2 shrink-0">
                   <img
-                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                     src="/images/avatars/ayesha.jpg"
                     alt="Customer"
                   />
                   <img
-                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                     src="/images/avatars/cian.jpg"
                     alt="Customer"
                   />
                   <img
-                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                     src="/images/avatars/elena.jpg"
                     alt="Customer"
                   />
                   <img
-                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                     src="/images/avatars/james.jpg"
                     alt="Customer"
                   />

@@ -183,24 +183,24 @@ export const HeroSection: React.FC = () => {
             {/* Visual Social Proof Review Badge */}
             <div className="flex items-center gap-3 pt-1">
               {/* Overlapping Customer Avatars */}
-              <div className="flex -space-x-2.5 overflow-hidden shrink-0">
+              <div className="flex -space-x-2 shrink-0">
                 <img
-                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                   src="/images/avatars/ayesha.jpg"
                   alt="Customer"
                 />
                 <img
-                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                   src="/images/avatars/cian.jpg"
                   alt="Customer"
                 />
                 <img
-                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                   src="/images/avatars/elena.jpg"
                   alt="Customer"
                 />
                 <img
-                  className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover shadow-sm"
+                  className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
                   src="/images/avatars/james.jpg"
                   alt="Customer"
                 />
