@@ -198,7 +198,7 @@ export default function ReservationsPage() {
               <div className="pt-2 flex justify-end">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.01] active:scale-98 transition-all cursor-pointer"
                 >
                   Confirm Table Reservation
                 </button>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Search, HelpCircle, MessageCircle, ArrowRight } from 'lucide-react';
+import { ChevronDown, MessageCircle, ArrowRight } from 'lucide-react';
 
 interface FAQItem {
   id: number;
@@ -71,8 +71,6 @@ const FAQ_LIST: FAQItem[] = [
 ];
 
 export default function FAQPage() {
-  const [activeTab, setActiveTab] = useState<'all' | 'ordering' | 'dietary' | 'delivery' | 'payments'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [openIds, setOpenIds] = useState<number[]>([1, 2]);
 
   const toggleAccordion = (id: number) => {
@@ -81,106 +79,64 @@ export default function FAQPage() {
     );
   };
 
-  const filtered = FAQ_LIST.filter((item) => {
-    const matchesTab = activeTab === 'all' || item.category === activeTab;
-    const matchesSearch =
-      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
-  });
-
   return (
-    <div className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-10">
+      <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="section-decorator mx-auto" />
         <h1 className="section-title mb-3">Frequently Asked Questions</h1>
         <p className="section-subtitle">
-          Everything you need to know about our authentic cuisine, Dublin delivery zones, Halal
+          Everything you need to know about our authentic cuisine, doorstep delivery, Halal
           standards, and ordering.
         </p>
       </div>
 
-      {/* Search Input */}
-      <div className="relative max-w-xl mx-auto mb-8">
-        <Search className="w-4 h-4 text-[#9B8C80] absolute left-4 top-1/2 -translate-y-1/2" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search questions (e.g. Halal, delivery time, gluten-free)..."
-          className="w-full bg-white rounded-xl pl-11 pr-5 py-3 text-[14px] text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#B84A22] shadow-xs transition-all"
-        />
-      </div>
-
-      {/* Category Pills */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {[
-          { key: 'all', label: 'All Questions' },
-          { key: 'ordering', label: 'Ordering & Takeaway' },
-          { key: 'delivery', label: 'Dublin Delivery' },
-          { key: 'dietary', label: 'Halal & Dietary' },
-          { key: 'payments', label: 'Payments & Promo' },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
-            className={`px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all ${
-              activeTab === tab.key
-                ? 'bg-[#B84A22] text-white shadow-sm'
-                : 'bg-white text-[#555555] hover:text-[#1A130E] border border-[#E5E5E5]'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
       {/* Accordion List */}
       <div className="space-y-3.5 mb-14">
-        {filtered.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-3xl border border-[#E5E5E5] p-8 shadow-xs">
-            <HelpCircle className="w-10 h-10 text-[#9B8C80] mx-auto mb-3" />
-            <h3 className="text-base font-bold text-[#1A130E] mb-1">No questions found</h3>
-            <p className="text-[14px] text-[#747474]">
-              Try searching with different keywords or browse all categories.
-            </p>
-          </div>
-        ) : (
-          filtered.map((item) => {
-            const isOpen = openIds.includes(item.id);
-            return (
-              <div
-                key={item.id}
-                className="bg-white border border-[#E5E5E5] rounded-3xl overflow-hidden shadow-xs transition-all duration-200"
+        {FAQ_LIST.map((item) => {
+          const isOpen = openIds.includes(item.id);
+          return (
+            <div
+              key={item.id}
+              className={`bg-white border rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs transition-all duration-200 ${
+                isOpen ? 'border-[#B84A22]/50' : 'border-[#E5E5E5] hover:border-[#B84A22]/40'
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => toggleAccordion(item.id)}
+                className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[16px] hover:text-[#B84A22] transition-colors cursor-pointer"
               >
-                <button
-                  onClick={() => toggleAccordion(item.id)}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[16px] text-[#1A130E] hover:text-[#B84A22] transition-colors"
+                <span className={`leading-snug transition-colors ${isOpen ? 'text-[#B84A22]' : 'text-[#1A130E]'}`}>
+                  {item.question}
+                </span>
+                <div
+                  className={`w-9 h-9 min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px] aspect-square rounded-full flex items-center justify-center shrink-0 border transition-all duration-200 ${
+                    isOpen
+                      ? 'text-white bg-gradient-to-r from-[#B84A22] to-[#FBA138] border-transparent shadow-xs'
+                      : 'bg-[rgb(249,249,249)] text-[#747474] border-[#E5E5E5]'
+                  }`}
                 >
-                  <span className="leading-snug">{item.question}</span>
-                  <div
-                    className={`w-8 h-8 rounded-full bg-[rgb(249,249,249)] text-[#747474] flex items-center justify-center shrink-0 border border-[#E5E5E5] transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-[#B84A22] bg-white' : ''
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
                     }`}
-                  >
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
+                  />
+                </div>
+              </button>
 
-                {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6 pt-1 text-[14px] text-[#555555] leading-[23px] border-t border-[#F0F0F0]">
-                    {item.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
+              {isOpen && (
+                <div className="px-5 sm:px-6 pb-6 pt-3 text-[14px] sm:text-[15px] text-[#555555] leading-[24px] border-t border-[#F0F0F0] animate-in fade-in duration-150">
+                  {item.answer}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Still Have Questions Box */}
-      <div className="p-7 sm:p-8 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      <div className="p-7 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#E5E5E5] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
             <MessageCircle className="w-6 h-6" />
@@ -188,7 +144,7 @@ export default function FAQPage() {
           <div>
             <h3 className="font-bold text-[17px] text-[#1A130E]">Still have a specific question?</h3>
             <p className="text-[13px] sm:text-[14px] text-[#666666] mt-0.5">
-              Our central Dublin kitchen team is happy to assist with allergies, catering or custom
+              Our restaurant kitchen team is happy to assist with allergies, catering or custom
               orders.
             </p>
           </div>
@@ -196,7 +152,7 @@ export default function FAQPage() {
 
         <Link
           href="/contact"
-          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all"
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold shrink-0 flex items-center gap-2 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all"
         >
           <span>Contact Kitchen</span>
           <ArrowRight className="w-4 h-4" />

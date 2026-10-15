@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   setCartOpen,
@@ -131,7 +132,7 @@ export const CartDrawer: React.FC = () => {
               </div>
               <div className="w-full h-2 bg-[#E5E5E5] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] transition-all duration-300 rounded-full"
+                  className="h-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] transition-all duration-300 rounded-full"
                   style={{ width: `${freeDeliveryProgress}%` }}
                 />
               </div>
@@ -151,7 +152,7 @@ export const CartDrawer: React.FC = () => {
                 </p>
                 <button
                   onClick={() => dispatch(setCartOpen(false))}
-                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shadow-sm"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all cursor-pointer"
                 >
                   Explore Food Menu
                 </button>
@@ -197,7 +198,7 @@ export const CartDrawer: React.FC = () => {
 
                     <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#F1F1F1]">
                       {/* Quantity Stepper */}
-                      <div className="flex items-center gap-2 bg-[rgb(249,249,249)] px-2.5 py-1 rounded-full border border-[#E5E5E5]">
+                      <div className="flex items-center gap-2 bg-[rgb(249,249,249)] px-2.5 py-1 rounded-lg border border-[#E5E5E5]">
                         <button
                           onClick={() =>
                             dispatch(
@@ -263,12 +264,23 @@ export const CartDrawer: React.FC = () => {
                 ) : (
                   <button
                     type="submit"
-                    className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shrink-0 shadow-xs active:scale-95 transition-transform"
+                    className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shrink-0 shadow-[0_4px_12px_rgba(184,74,34,0.3)] active:scale-95 transition-all"
                   >
                     Apply
                   </button>
                 )}
               </form>
+              <div className="flex items-center justify-between text-[11.5px] px-1 pt-0.5">
+                <span className="text-[#888888]">Looking for discount vouchers?</span>
+                <Link
+                  href="/offers"
+                  onClick={() => dispatch(setCartOpen(false))}
+                  className="text-[#B84A22] hover:text-[#9E3E1B] font-semibold flex items-center gap-1 hover:underline transition-colors"
+                >
+                  <span>View active offers</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
               {promoError && <p className="text-[11px] text-[#E23744]">{promoError}</p>}
               {cart.promoCode && (
                 <p className="text-[11px] text-[#0FA958] font-semibold flex items-center gap-1">
@@ -309,7 +321,7 @@ export const CartDrawer: React.FC = () => {
               {/* Checkout Trigger */}
               <button
                 onClick={handleProceedToCheckout}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-between shadow-md hover:scale-[1.01] active:scale-98 transition-all"
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-bold flex items-center justify-between shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.01] active:scale-98 transition-all cursor-pointer"
               >
                 <span>Proceed to Checkout</span>
                 <div className="flex items-center gap-1.5">

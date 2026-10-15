@@ -1,336 +1,700 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import {
   Flame,
-  ShieldCheck,
-  ArrowRight,
   Sparkles,
-  Clock,
-  MapPin,
-  CheckCircle2,
   ChefHat,
+  Award,
+  Heart,
+  UtensilsCrossed,
+  CheckCircle2,
+  Phone,
   Calendar,
+  ArrowRight,
+  Star,
+  Clock,
+  ShieldCheck,
+  ChevronRight,
+  BookOpen,
+  Users,
 } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24">
-      {/* 1. HERO HEADER */}
-      <div className="text-center max-w-3xl mx-auto">
-        <div className="section-decorator mx-auto mb-3" />
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E5E5E5] text-[#B84A22] text-[12px] font-semibold uppercase tracking-wider mb-4 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Authentic Flavors · Timeless Recipes</span>
+    <div className="min-h-screen bg-[rgb(249,249,249)]">
+      {/* 1. HERO BANNER WITH BREADCRUMB */}
+      <section className="relative bg-[#1A130E] text-white py-16 sm:py-24 overflow-hidden">
+        {/* Background photo with overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/about_banner.jpg"
+            alt="Amber Spice Restaurant Atmosphere"
+            className="w-full h-full object-cover opacity-25 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1A130E] via-[#1A130E]/90 to-[#1A130E]/80" />
         </div>
-        <h1 className="section-title mb-4">Our Culinary Heritage & Dublin Story</h1>
-        <p className="section-subtitle leading-relaxed text-base sm:text-lg">
-          Born out of reverence for centuries-old Awadhi dum cooking, slow-fire copper handi
-          secrets, and clay tandoor mastery — crafted fresh every day in the heart of Dublin 2.
-        </p>
-      </div>
 
-      {/* 2. THE STORY: DUAL COLUMN EDITORIAL WITH HIGH-RES PHOTOGRAPHY */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        {/* Story Text */}
-        <div className="lg:col-span-6 space-y-6">
-          <div className="space-y-3">
-            <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#F15A24] block">
-              EST. 2018 · SOUTH WILLIAM STREET
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1A130E] leading-tight">
-              Reviving Ancient Royal Kitchens in Dublin
-            </h2>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#FBA138] text-[12px] font-bold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Authentic Heritage & Passion</span>
           </div>
 
-          <p className="text-[15px] text-[#444444] leading-relaxed">
-            Amber Spice was founded with a singular conviction: that true Indian heritage cooking
-            cannot be hurried, diluted, or compromised. While modern kitchens turned to pre-ground
-            powders and quick commercial pastes, we chose the slower, sacred path of ancient dum
-            pukht.
-          </p>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-['Poppins']">
+            About Us
+          </h1>
 
-          <p className="text-[15px] text-[#444444] leading-relaxed">
-            Every morning before sunrise, our Dublin kitchen roasts whole green cardamom, star
-            anise, Malabar peppercorns, and Kashmiri chilies. We blend centuries-old Awadhi and
-            Mughlai culinary lineage with the very best local Irish produce — including 100%
-            grass-fed Irish beef, locally sourced dairy, and farm-fresh herbs.
-          </p>
+          <div className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] text-stone-300 font-medium">
+            <Link href="/" className="hover:text-[#F15A24] transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-500" />
+            <span className="text-[#FBA138]">About Us</span>
+          </div>
+        </div>
+      </section>
 
-          {/* Master Chef Quote Box */}
-          <div className="p-6 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-[#1A130E] relative">
-            <p className="text-[14px] italic text-[#632812] leading-relaxed">
-              &quot;In royal heritage cooking, the vessel is as important as the flame. When we seal
-              our antique copper handis with dough, the meat and basmati braise in their own trapped
-              juices. You taste true aroma in every grain.&quot;
+      {/* 2. MAIN STORY SECTION (DUAL COLUMN + MEDIA COLLAGE) */}
+      <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Left Column: Story & Highlights */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="space-y-3">
+              <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
+                Our Story & Heritage
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] leading-tight font-['Poppins']">
+                From Royal Heritage Recipes To Your Modern Dining Table
+              </h2>
+            </div>
+
+            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed">
+              At Amber Spice, every recipe is an authentic homage to centuries-old Awadhi and Mughlai culinary lineage. While fast-paced modern kitchens turned to shortcuts and commercial powders, we chose the sacred, unhurried craft of ancient dum pukht — slow-cooking with 100% stone-ground spices in sealed copper handis.
             </p>
-            <div className="mt-3 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-[14px] text-[#1A130E] block">
-                  Chef Tariq Mahmood
-                </span>
-                <span className="text-[12px] text-[#747474]">
-                  Executive Head Chef · 22 Years Heritage Craft
+
+            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed">
+              We pair timeless Indian heritage techniques with premium Irish produce — from 100% grass-fed halal beef to farm-fresh vegetables and local dairy, delivering honest flavours in every bite.
+            </p>
+
+            {/* Culinary Highlights: Unified Standard Pillars */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF7F4] border border-[#EAE5DF]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Pillar 1 */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
+                    <Flame className="w-4 h-4 stroke-[2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Authentic Dum Pukht</h4>
+                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Slow-sealed in antique copper handis</p>
+                  </div>
+                </div>
+
+                {/* Pillar 2 */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
+                    <ShieldCheck className="w-4 h-4 stroke-[2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">100% Halal Certified</h4>
+                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Grass-fed Irish beef & local poultry</p>
+                  </div>
+                </div>
+
+                {/* Pillar 3 */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
+                    <Sparkles className="w-4 h-4 stroke-[2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Stone-Ground Spices</h4>
+                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">28 royal aromatics roasted daily</p>
+                  </div>
+                </div>
+
+                {/* Pillar 4 */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-[#EAE5DF] text-[#B84A22] flex items-center justify-center shrink-0 shadow-xs">
+                    <ChefHat className="w-4 h-4 stroke-[2]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[13.5px] font-bold text-[#1A130E]">Heritage Master Chefs</h4>
+                    <p className="text-[12px] text-[#78716C] leading-snug mt-0.5">Centuries-old Lucknow culinary lineage</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA & Customer Social Proof */}
+            <div className="pt-3 flex flex-wrap items-center gap-6">
+              <Link
+                href="/menu"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-bold shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.02] active:scale-98 transition-all"
+              >
+                <span>Explore Full Menu</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              {/* Avatar stack + Social Proof */}
+              <div className="flex items-center gap-3">
+                <div className="flex -space-x-2.5 overflow-hidden">
+                  <img
+                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    src="/images/avatars/ayesha.jpg"
+                    alt="Customer"
+                  />
+                  <img
+                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    src="/images/avatars/cian.jpg"
+                    alt="Customer"
+                  />
+                  <img
+                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    src="/images/avatars/elena.jpg"
+                    alt="Customer"
+                  />
+                  <img
+                    className="inline-block h-9 w-9 rounded-full ring-2 ring-white object-cover"
+                    src="/images/avatars/james.jpg"
+                    alt="Customer"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center text-[#FBA138] text-xs">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-[12px] font-bold text-[#1A130E] block">
+                    10K+ Happy Diners
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Visual Montage with Floating Badges */}
+          <div className="lg:col-span-6 relative">
+            <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
+              {/* Primary Large Image */}
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E5E5E5] shadow-xl group aspect-[4/3] sm:aspect-[16/11]">
+                <img
+                  src="/images/amber_hero_dish.jpg"
+                  alt="Amber Spice Royal Dum Cooking"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5 text-white">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#FBA138] block mb-1">
+                    Signature Handi
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-bold">Awadhi Dum Biryani</h3>
+                  <p className="text-xs text-[#E2D8CE] mt-0.5">Sealed with dough over charcoal embers</p>
+                </div>
+              </div>
+
+              {/* Overlapping Badge: 15+ Years Experience (like reference) */}
+              <div className="absolute -top-4 -right-2 sm:-top-6 sm:right-6 bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white p-4 sm:p-5 rounded-2xl shadow-xl text-center border-2 border-white">
+                <span className="text-2xl sm:text-3xl font-extrabold block font-['Poppins']">15+</span>
+                <span className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-wider text-white/90 block leading-tight">
+                  Years of<br />Excellence
                 </span>
               </div>
-              <ChefHat className="w-6 h-6 text-[#B84A22]" />
+
+              {/* Overlapping Secondary Image (bottom-left) */}
+              <div className="absolute -bottom-6 -left-2 sm:-bottom-8 sm:left-4 w-44 sm:w-56 rounded-2xl overflow-hidden border-4 border-white shadow-2xl group">
+                <img
+                  src="/images/grill_dish.jpg"
+                  alt="Charcoal Tandoori Grill"
+                  className="w-full h-28 sm:h-36 object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2.5">
+                  <span className="text-[11px] font-bold text-white flex items-center gap-1">
+                    <Flame className="w-3 h-3 text-[#F15A24]" /> 480°C Clay Tandoor
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Visual Showcase Card with Image & Live Perks */}
-        <div className="lg:col-span-6 relative">
-          <div className="relative rounded-3xl overflow-hidden border border-[#E5E5E5] shadow-xl group aspect-[4/3] sm:aspect-[16/11]">
-            <img
-              src="/images/amber_hero_dish.jpg"
-              alt="Authentic Copper Handi Dum Cooking"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-
-            <div className="absolute top-4 left-4">
-              <span className="px-3.5 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/20 text-[#D49B37] text-xs font-semibold flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-[#F15A24]" />
-                <span>Slow Charcoal Dum · 8+ Hours</span>
-              </span>
+      {/* 3. THE 5 STATS COUNTER CARDS (Proper radius & luxury Amber Spice color palette) */}
+      <section className="py-12 sm:py-14 bg-[#FAF7F4] border-y border-[#EAE5DF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
+            {/* Stat Card 1 */}
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+                <UtensilsCrossed className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-extrabold block text-[#1A130E] group-hover:text-[#B84A22] transition-colors font-['Poppins']">
+                  50k+
+                </span>
+                <span className="text-[11.5px] sm:text-[12px] font-bold text-[#78716C] uppercase tracking-wider block mt-1.5">
+                  Dishes Served
+                </span>
+              </div>
             </div>
 
-            <div className="absolute bottom-5 left-5 right-5 text-white">
-              <h3 className="text-xl sm:text-2xl font-bold mb-1 drop-shadow-md">
-                Handcrafted in Dublin 2
-              </h3>
-              <p className="text-xs sm:text-sm text-[#E2D8CE] line-clamp-2">
-                Simmered in heavy-bottomed brass & copper handis with Dehradun aged basmati and
-                saffron.
-              </p>
+            {/* Stat Card 2 */}
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+                <Heart className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-extrabold block text-[#1A130E] group-hover:text-[#B84A22] transition-colors font-['Poppins']">
+                  15k+
+                </span>
+                <span className="text-[11.5px] sm:text-[12px] font-bold text-[#78716C] uppercase tracking-wider block mt-1.5">
+                  Happy Guests
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Floating Verification Tag */}
-          <div className="absolute -bottom-6 -left-4 sm:left-6 bg-white border border-[#E5E5E5] rounded-2xl p-4 shadow-xl flex items-center gap-3 max-w-xs">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-200/60">
-              <ShieldCheck className="w-5 h-5" />
+            {/* Stat Card 3 */}
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+                <Sparkles className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-extrabold block text-[#1A130E] group-hover:text-[#B84A22] transition-colors font-['Poppins']">
+                  28+
+                </span>
+                <span className="text-[11.5px] sm:text-[12px] font-bold text-[#78716C] uppercase tracking-wider block mt-1.5">
+                  Secret Spices
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="font-bold text-[13px] text-[#1A130E] block">100% Halal Certified</span>
-              <span className="text-[11px] text-[#747474]">Grass-fed Irish meats & freshest spices</span>
+
+            {/* Stat Card 4 */}
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+                <Award className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-extrabold block text-[#1A130E] group-hover:text-[#B84A22] transition-colors font-['Poppins']">
+                  15+
+                </span>
+                <span className="text-[11.5px] sm:text-[12px] font-bold text-[#78716C] uppercase tracking-wider block mt-1.5">
+                  Culinary Awards
+                </span>
+              </div>
+            </div>
+
+            {/* Stat Card 5 */}
+            <div className="col-span-2 md:col-span-1 bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+                <ChefHat className="w-6 h-6 stroke-[2]" />
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-extrabold block text-[#1A130E] group-hover:text-[#B84A22] transition-colors font-['Poppins']">
+                  30+
+                </span>
+                <span className="text-[11.5px] sm:text-[12px] font-bold text-[#78716C] uppercase tracking-wider block mt-1.5">
+                  Master Chefs & Staff
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 3. THE THREE PILLARS OF OUR CRAFT - WITH HIGH-RES REAL IMAGERY */}
-      <div className="space-y-8 pt-6">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#B84A22] block mb-2">
-            CULINARY MASTERY
+      {/* 4. WHAT WE OFFER / 3 CORE SPECIALTIES (Like "Provide Professional..." in ref) */}
+      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
+            Our Specialties
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A130E]">
-            The Three Pillars of Our Kitchen
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
+            Authentic Recipes Crafted with Royal Precision
           </h2>
-          <p className="text-[14px] text-[#747474] mt-2">
-            Every dish we send to your table or doorstep is built on these foundational culinary
-            commitments.
+          <p className="text-[14px] text-[#747474]">
+            Explore the culinary pillars that define the unforgettable dining journey at Amber Spice.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {/* Pillar 1: Dum Cooking */}
-          <div className="group rounded-3xl overflow-hidden bg-white border border-[#E5E5E5] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-            <div className="relative h-56 sm:h-64 overflow-hidden bg-[rgb(249,249,249)]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Service Card 1 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-56 overflow-hidden">
               <img
                 src="/images/amber_hero_dish.jpg"
-                alt="Authentic Dum Cooking"
+                alt="Handi Dum Biryani"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-black/60 text-[#FBA138] border border-white/15 backdrop-blur-md">
-                  ANCIENT DUM PUKHT
-                </span>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold text-white mb-0.5">Dough-Sealed Copper Handis</h3>
-                <p className="text-xs text-[#D5CBC2]">Steamed in its own natural juices</p>
+              <div className="absolute top-4 left-4 w-11 h-11 rounded-xl bg-white/90 backdrop-blur-md text-[#F15A24] flex items-center justify-center shadow-md">
+                <Flame className="w-5 h-5" />
               </div>
             </div>
-
-            <div className="p-6 space-y-3.5 flex-1 flex flex-col justify-between">
-              <p className="text-[14px] text-[#555555] leading-relaxed">
-                Our biryanis are sealed with wheat dough (Purda) in heavy copper pots over mild
-                charcoal embers. The internal steam cycles continuously, ensuring maximum tenderness
-                and aromatic saffron infusion.
-              </p>
-              <div className="pt-3 border-t border-[#F1F1F1] flex items-center justify-between text-xs font-semibold text-[#1A130E]">
-                <span className="flex items-center gap-1.5 text-[#B84A22]">
-                  <CheckCircle2 className="w-4 h-4" /> 8+ Hours Low Embers
-                </span>
-                <span className="text-[#747474]">Aged Basmati</span>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Handi Dum Biryani
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2">
+                  Slow-cooked under dough seals in antique copper handis, braising tender halal meat and fragrant Dehradun basmati rice in trapped aromatic vapors.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=biryani"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Explore Biryanis</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
 
-          {/* Pillar 2: Whole Stone-Ground Spices */}
-          <div className="group rounded-3xl overflow-hidden bg-white border border-[#E5E5E5] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-            <div className="relative h-56 sm:h-64 overflow-hidden bg-[rgb(249,249,249)]">
-              <img
-                src="/images/curry_dish.jpg"
-                alt="Stone-Ground Whole Spices"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-black/60 text-[#0FA958] border border-white/15 backdrop-blur-md">
-                  SINGLE-ORIGIN SPICES
-                </span>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold text-white mb-0.5">Zero Pre-Ground Powders</h3>
-                <p className="text-xs text-[#D5CBC2]">Roasted and ground fresh each morning</p>
-              </div>
-            </div>
-
-            <div className="p-6 space-y-3.5 flex-1 flex flex-col justify-between">
-              <p className="text-[14px] text-[#555555] leading-relaxed">
-                We import whole green cardamom from Idukki, star anise, black cumin, and Kashmiri
-                chilies. Roasted dry in small batches to awaken volatile essential oils, yielding
-                authentic deep layers of spice.
-              </p>
-              <div className="pt-3 border-t border-[#F1F1F1] flex items-center justify-between text-xs font-semibold text-[#1A130E]">
-                <span className="flex items-center gap-1.5 text-[#0FA958]">
-                  <CheckCircle2 className="w-4 h-4" /> 100% Pure Natural
-                </span>
-                <span className="text-[#747474]">No Artificial Colors</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Pillar 3: 480C Clay Tandoor */}
-          <div className="group rounded-3xl overflow-hidden bg-white border border-[#E5E5E5] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-            <div className="relative h-56 sm:h-64 overflow-hidden bg-[rgb(249,249,249)]">
+          {/* Service Card 2 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-56 overflow-hidden">
               <img
                 src="/images/grill_dish.jpg"
-                alt="Clay Tandoor Mastery"
+                alt="Clay Tandoor Kebabs"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-black/60 text-[#F15A24] border border-white/15 backdrop-blur-md">
-                  480°C CLAY OVEN
-                </span>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold text-white mb-0.5">Live Charcoal Embers</h3>
-                <p className="text-xs text-[#D5CBC2]">Blistered naans & smoky succulent kebabs</p>
+              <div className="absolute top-4 left-4 w-11 h-11 rounded-xl bg-white/90 backdrop-blur-md text-[#F15A24] flex items-center justify-center shadow-md">
+                <UtensilsCrossed className="w-5 h-5" />
               </div>
             </div>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Charcoal Tandoori Grills
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2">
+                  Succulent skewers roasted over hardwood lump charcoal at 480°C. Delivers a delicate charred crust while locking in uncompromised juiciness.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=tandoori"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Explore Tandoor</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
 
-            <div className="p-6 space-y-3.5 flex-1 flex flex-col justify-between">
-              <p className="text-[14px] text-[#555555] leading-relaxed">
-                Our authentic clay tandoor oven runs at blistering 480°C heat over hardwood lump
-                charcoal. Hand-stretched dough adheres to clay walls, blistering with charred pockets
-                in seconds while locking in moisture.
-              </p>
-              <div className="pt-3 border-t border-[#F1F1F1] flex items-center justify-between text-xs font-semibold text-[#1A130E]">
-                <span className="flex items-center gap-1.5 text-[#F15A24]">
-                  <CheckCircle2 className="w-4 h-4" /> Blistered Naans
-                </span>
-                <span className="text-[#747474]">Charcoal Smokiness</span>
+          {/* Service Card 3 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-56 overflow-hidden">
+              <img
+                src="/images/curry_dish.jpg"
+                alt="Royal Curries"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-4 left-4 w-11 h-11 rounded-xl bg-white/90 backdrop-blur-md text-[#F15A24] flex items-center justify-center shadow-md">
+                <Sparkles className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Royal Mughlai Curries
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2">
+                  Velvety simmered gravies crafted with 28+ in-house stone-ground spices, natural cream, and slow-braised cuts. Rich, deep, and never greasy.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=curries"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Explore Curries</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 4. DUBLIN PROVENANCE & SOURCING METRICS */}
-      <div className="rounded-3xl bg-white border border-[#E5E5E5] p-8 sm:p-10 shadow-xs">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-[#E5E5E5]">
-          <div className="p-2 space-y-1">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#B84A22] block font-['Poppins']">
-              100%
+      {/* 5. CULINARY PROCESS WITH CENTER CHEF PORTRAIT (Directly inspired by reference row 5) */}
+      <section className="py-14 sm:py-20 bg-stone-100/60 border-y border-[#EAE5DF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
+            <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
+              How We Create Magic
             </span>
-            <span className="text-[13px] font-bold text-[#1A130E] block">Irish Halal Certified</span>
-            <span className="text-[12px] text-[#747474]">Grass-fed beef & local poultry</span>
-          </div>
-
-          <div className="pt-6 md:pt-2 md:px-4 space-y-1">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#B84A22] block font-['Poppins']">
-              8+ Hrs
-            </span>
-            <span className="text-[13px] font-bold text-[#1A130E] block">Slow Dum Infusion</span>
-            <span className="text-[12px] text-[#747474]">Traditional copper handis</span>
-          </div>
-
-          <div className="pt-6 md:pt-2 md:px-4 space-y-1">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#B84A22] block font-['Poppins']">
-              28+
-            </span>
-            <span className="text-[13px] font-bold text-[#1A130E] block">Whole Spices Blended</span>
-            <span className="text-[12px] text-[#747474]">In-house roasted daily</span>
-          </div>
-
-          <div className="pt-6 md:pt-2 md:px-4 space-y-1">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#B84A22] block font-['Poppins']">
-              4.9 ★
-            </span>
-            <span className="text-[13px] font-bold text-[#1A130E] block">Customer Rating</span>
-            <span className="text-[12px] text-[#747474]">Across 2,140+ Dublin diners</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 5. LUXURY CULINARY CTA BANNER */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1C120C] via-[#241710] to-[#150D08] border border-[#3E291C] text-white p-8 sm:p-12 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F15A24]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#D49B37]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#D49B37] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>EXPERIENCE THE ROYAL HERITAGE</span>
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-              Ready to Savor Authentic Royal Flavors?
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
+              Our 4-Step Culinary Journey
             </h2>
-
-            <p className="text-[14px] sm:text-[15px] text-[#D5CBC2] max-w-xl leading-relaxed">
-              Order directly online for prompt 30-45 minute doorstep delivery across Dublin, or join
-              us for an unforgettable dining experience at our South William Street restaurant.
+            <p className="text-[14px] text-[#747474]">
+              Every dish that leaves our kitchen follows a sacred sequence of traditional craftsmanship.
             </p>
+          </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#E2D8CE] pt-1">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-[#F15A24]" />
-                <span>18 South William St, Dublin 2</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Steps: 1 & 2 */}
+            <div className="lg:col-span-4 space-y-6">
+              {/* Step 1 */}
+              <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-xs hover:border-[#B84A22]/40 hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center font-bold text-[14px]">
+                    01
+                  </div>
+                  <Sparkles className="w-5 h-5 text-stone-300" />
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] mb-1.5">
+                  Hand-Picked Whole Spices
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed">
+                  Imported green cardamom, star anise, and saffron roasted gently in-house each morning to awaken essential oils.
+                </p>
               </div>
-              <span>•</span>
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-[#0FA958]" />
-                <span>Open Daily 12:00 PM – 11:00 PM</span>
+
+              {/* Step 2 */}
+              <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-xs hover:border-[#B84A22]/40 hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center font-bold text-[14px]">
+                    02
+                  </div>
+                  <Clock className="w-5 h-5 text-stone-300" />
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] mb-1.5">
+                  24-Hour Secret Marination
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed">
+                  100% Irish halal meats rest in hung yogurt, fresh ginger-garlic paste, and crushed herbs for optimal flavor depth.
+                </p>
+              </div>
+            </div>
+
+            {/* Center: Executive Chef Portrait Card */}
+            <div className="lg:col-span-4 flex justify-center">
+              <div className="relative rounded-3xl overflow-hidden border-2 border-[#E5E5E5] shadow-2xl bg-white max-w-sm w-full group">
+                <div className="aspect-[3/4] overflow-hidden">
+                  <img
+                    src="/images/chef_master.jpg"
+                    alt="Chef Tariq Mahmood - Master Executive Chef"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6 text-white text-center">
+                  <span className="inline-block px-3 py-1 rounded-full bg-[#B84A22] text-white text-[11px] font-bold uppercase tracking-wider mx-auto mb-2 shadow-xs">
+                    Executive Master Chef
+                  </span>
+                  <h3 className="text-xl font-bold font-['Poppins']">Chef Tariq Mahmood</h3>
+                  <p className="text-xs text-[#E2D8CE] mt-0.5">22+ Years Royal Heritage Experience</p>
+
+                  <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-center gap-2 text-xs font-semibold text-[#FBA138]">
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Table Bookings: +353 1 234 5678</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Steps: 3 & 4 */}
+            <div className="lg:col-span-4 space-y-6">
+              {/* Step 3 */}
+              <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-xs hover:border-[#B84A22]/40 hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center font-bold text-[14px]">
+                    03
+                  </div>
+                  <Flame className="w-5 h-5 text-stone-300" />
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] mb-1.5">
+                  Slow Charcoal Dum Cooking
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed">
+                  Sealed with fresh dough in heavy copper vessels over mild charcoal embers, locking steam and juices naturally.
+                </p>
+              </div>
+
+              {/* Step 4 */}
+              <div className="bg-white rounded-2xl p-6 border border-[#E5E5E5] shadow-xs hover:border-[#B84A22]/40 hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center font-bold text-[14px]">
+                    04
+                  </div>
+                  <Award className="w-5 h-5 text-stone-300" />
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] mb-1.5">
+                  Royal Presentation & Service
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed">
+                  Served piping hot with blistered tandoori naans, rich condiments, and warm hospitalitarian care.
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center lg:items-end">
-            <Link
-              href="/menu"
-              className="w-full sm:w-auto lg:w-full py-3.5 px-7 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-98 transition-all"
-            >
-              <span>Explore Online Menu</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+      {/* 6. CALL TO ACTION BANNER (Matching reference dark banner) */}
+      <section className="bg-[#1A130E] text-white py-12 sm:py-16 relative overflow-hidden border-y border-stone-800">
+        <div className="absolute inset-0 bg-radial from-orange-500/10 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-2 text-center md:text-left max-w-xl">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-['Poppins']">
+              Ready for an Unforgettable Dining Experience?
+            </h2>
+            <p className="text-stone-300 text-[14px] leading-relaxed">
+              Reserve your table in our warm Dublin dining room or order your royal feast delivered directly to your doorstep.
+            </p>
+          </div>
 
+          <div className="flex flex-wrap items-center gap-4">
             <Link
               href="/reservations"
-              className="w-full sm:w-auto lg:w-full py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[14px] font-semibold flex items-center justify-center gap-2 transition-all"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-bold shadow-lg hover:scale-[1.02] active:scale-98 transition-all flex items-center gap-2"
             >
-              <Calendar className="w-4 h-4 text-[#D49B37]" />
-              <span>Reserve a Table</span>
+              <Calendar className="w-4 h-4" />
+              <span>Book a Table</span>
+            </Link>
+            <Link
+              href="/order"
+              className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[14px] font-bold hover:scale-[1.02] active:scale-98 transition-all flex items-center gap-2 backdrop-blur-xs"
+            >
+              <UtensilsCrossed className="w-4 h-4" />
+              <span>Order Online</span>
             </Link>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 7. RECENT STORIES / BLOG SECTION (Like "Our Most Recent..." in ref) */}
+      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
+            Behind Our Kitchen
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
+            Our Latest Culinary Stories
+          </h2>
+          <p className="text-[14px] text-[#747474]">
+            Discover the time-honored secrets, craft, and lore behind our signature dishes.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Blog Card 1 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-52 overflow-hidden">
+              <img
+                src="/images/amber_hero_dish.jpg"
+                alt="The Sacred Secret of Dum Pukht Cooking"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/15 text-[11px] font-bold text-[#FBA138]">
+                Culinary Secrets
+              </div>
+            </div>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 text-[12px] text-[#747474] mb-2">
+                  <span>By Chef Tariq</span>
+                  <span>•</span>
+                  <span>5 min read</span>
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  The Sacred Secret of Dough-Sealed Dum Pukht Cooking
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2 line-clamp-2">
+                  Why sealing heavy copper pots with wheat dough over mild embers locks in unmatched moisture and complex aromas.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=biryani"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Read Story</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Blog Card 2 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-52 overflow-hidden">
+              <img
+                src="/images/curry_dish.jpg"
+                alt="Stone Ground Spices"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/15 text-[11px] font-bold text-[#0FA958]">
+                Spice Mastery
+              </div>
+            </div>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 text-[12px] text-[#747474] mb-2">
+                  <span>By Spice Master</span>
+                  <span>•</span>
+                  <span>4 min read</span>
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  Why We Roast 28 Whole Spices Fresh Every Morning
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2 line-clamp-2">
+                  Commercial ground powders lose their essential oils in days. Here is why freshly crushed whole spices transform curries.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=curries"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Read Story</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Blog Card 3 */}
+          <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#B84A22]/40 hover:shadow-xl transition-all duration-300">
+            <div className="relative h-52 overflow-hidden">
+              <img
+                src="/images/grill_dish.jpg"
+                alt="Clay Tandoor Heat"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/15 text-[11px] font-bold text-[#F15A24]">
+                Tandoor Craft
+              </div>
+            </div>
+            <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 text-[12px] text-[#747474] mb-2">
+                  <span>By Grill Chef</span>
+                  <span>•</span>
+                  <span>6 min read</span>
+                </div>
+                <h3 className="text-base font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                  The Intense 480°C Clay Oven: The Science of Smoke & Flame
+                </h3>
+                <p className="text-[13px] text-[#555555] leading-relaxed mt-2 line-clamp-2">
+                  How high radiant heat from authentic clay ovens blisters naan breads and seals marinated meats in seconds.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-[#F1F1F1]">
+                <Link
+                  href="/menu?category=tandoori"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#B84A22] hover:text-[#F15A24] transition-colors"
+                >
+                  <span>Read Story</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -72,7 +72,7 @@ export const RESTAURANT_INFO = {
   location: "18 South William St, Dublin 2, D02 HR58, Ireland",
   phone: "+353 (01) 485 9210",
   email: "orders@amberspice.ie",
-  openingHours: "Mon - Sun: 11:00 AM – 11:00 PM",
+  openingHours: "Mon – Thu: 17:00 – 22:00, Fri – Sat: 16:30 – 22:30 (Sun: Closed)",
   isOpenNow: true,
   rating: 4.9,
   reviewsCount: 1680,

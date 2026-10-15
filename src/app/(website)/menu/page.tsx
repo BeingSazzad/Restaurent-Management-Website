@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { MENU_ITEMS, CATEGORIES, MenuItem } from '@/Mockdata';
 import { DishCard } from '@/components/shared/DishCard';
 import { ModifierModal } from '@/components/shared/ModifierModal';
 import {
   Search,
   SlidersHorizontal,
+  Filter,
   Flame,
   Award,
   Sparkles,
@@ -16,12 +19,21 @@ import {
   Check,
 } from 'lucide-react';
 
-export default function MenuPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+function MenuContent() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category') || 'all';
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [dietaryFilter, setDietaryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'rating'>('popular');
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
+
+  useEffect(() => {
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [categoryParam]);
 
   // Filter & Sort Logic
   const filteredDishes = useMemo(() => {
@@ -89,8 +101,8 @@ export default function MenuPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Senior UX Hierarchy */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#EAE5DF] text-[#F15A24] text-[12px] font-semibold uppercase tracking-wider mb-3.5 shadow-xs">
-            <UtensilsCrossed className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 text-[#B84A22] text-[12px] font-bold uppercase tracking-widest mb-3">
+            <UtensilsCrossed className="w-3.5 h-3.5 text-[#B84A22]" />
             <span>Grand Heritage Menu</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[#1A130E] tracking-tight mb-3">
@@ -102,18 +114,19 @@ export default function MenuPage() {
         </div>
 
         {/* ================= STANDARD MODERN FILTER CONTROLS ================= */}
-        <div className="mb-10 space-y-5">
-          {/* Top Row: Sleek Search Bar & Sort Dropdown */}
+        {/* ================= STANDARD MODERN FILTER CONTROLS ================= */}
+        <div className="mb-10 space-y-6">
+          {/* Top Row: Sleek Search Bar, Filter Dropdown & Sort Dropdown */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[#F15A24] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-[#B84A22] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search biryani, korma, tandoori, naan, or ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 bg-white border border-[#EAE5DF] focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-2xl pl-11 pr-10 text-[14px] text-[#1A130E] placeholder:text-[#9E9790] shadow-[0_2px_8px_rgba(26,19,14,0.02)] outline-none transition-all"
+                className="w-full h-12 bg-white border border-[#EAE5DF] focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/10 rounded-2xl pl-11 pr-10 text-[14px] text-[#1A130E] placeholder:text-[#9E9790] shadow-[0_2px_8px_rgba(26,19,14,0.02)] outline-none transition-all"
               />
               {searchQuery && (
                 <button
@@ -126,9 +139,27 @@ export default function MenuPage() {
               )}
             </div>
 
+            {/* Filter Control (Placed beside Sort) */}
+            <div className="h-12 bg-white border border-[#EAE5DF] rounded-2xl px-4 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(26,19,14,0.02)] shrink-0 hover:border-[#B84A22]/40 transition-colors">
+              <Filter className="w-4 h-4 text-[#B84A22]" />
+              <span className="text-[13px] font-medium text-[#7A746E]">Filter:</span>
+              <select
+                value={dietaryFilter}
+                onChange={(e) => setDietaryFilter(e.target.value)}
+                aria-label="Filter dishes by diet"
+                className="bg-transparent text-[13px] font-semibold text-[#1A130E] focus:outline-none cursor-pointer pr-1"
+              >
+                {dietaryTags.map((diet) => (
+                  <option key={diet.id} value={diet.id}>
+                    {diet.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Sort Control */}
-            <div className="h-12 bg-white border border-[#EAE5DF] rounded-2xl px-4 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(26,19,14,0.02)] shrink-0 hover:border-[#F15A24]/40 transition-colors">
-              <SlidersHorizontal className="w-4 h-4 text-[#F15A24]" />
+            <div className="h-12 bg-white border border-[#EAE5DF] rounded-2xl px-4 flex items-center gap-2.5 shadow-[0_2px_8px_rgba(26,19,14,0.02)] shrink-0 hover:border-[#B84A22]/40 transition-colors">
+              <SlidersHorizontal className="w-4 h-4 text-[#B84A22]" />
               <span className="text-[13px] font-medium text-[#7A746E]">Sort:</span>
               <select
                 value={sortBy}
@@ -144,8 +175,8 @@ export default function MenuPage() {
             </div>
           </div>
 
-          {/* Middle Row: Segmented Category Tabs Navigation */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none py-1">
+          {/* Middle Row: Segmented Category Tabs Navigation (Clean wrap, no horizontal scroll/cut-off) */}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 pb-1">
             {categoryList.map((cat) => {
               const isActive = selectedCategory === cat.id;
 
@@ -153,75 +184,51 @@ export default function MenuPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`whitespace-nowrap px-4.5 py-2.5 rounded-full text-[13px] font-semibold transition-all flex items-center gap-2 cursor-pointer shrink-0 active:scale-95 ${
+                  className={`px-5 py-2.5 rounded-xl text-[13.5px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 active:scale-95 ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-[0_4px_14px_rgba(241,90,36,0.22)]'
+                      ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)]'
                       : 'bg-white hover:bg-[#FAF8F5] text-[#55504A] hover:text-[#1A130E] border border-[#EAE5DF] shadow-[0_1px_4px_rgba(26,19,14,0.02)]'
                   }`}
                 >
                   <span>{cat.name}</span>
                   <span
-                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                      isActive
-                        ? 'bg-white/25 text-white'
-                        : 'bg-neutral-100 text-[#7A746E]'
+                    className={`text-[12px] font-bold ${
+                      isActive ? 'text-white/90' : 'text-[#8A847E]'
                     }`}
                   >
-                    {cat.count}
+                    ({cat.count})
                   </span>
                 </button>
               );
             })}
           </div>
-
-          {/* Bottom Row: Dietary Filter Chips & Live Status */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[12px] font-semibold text-[#8C8681] mr-1.5 uppercase tracking-wider">
-                Filter:
-              </span>
-              {dietaryTags.map((diet) => {
-                const isActive = dietaryFilter === diet.id;
-
-                return (
-                  <button
-                    key={diet.id}
-                    onClick={() => setDietaryFilter(diet.id)}
-                    className={`px-3 py-1 rounded-full text-[12px] font-medium transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-[#1A130E] text-white shadow-xs'
-                        : 'bg-white/90 text-[#666059] hover:text-[#1A130E] hover:bg-white border border-[#EAE5DF]'
-                    }`}
-                  >
-                    {diet.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Reset Action */}
-            {isFiltered && (
-              <button
-                onClick={resetFilters}
-                className="text-[12.5px] font-semibold text-[#F15A24] hover:text-[#D14412] flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto shrink-0"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset all filters</span>
-              </button>
-            )}
-          </div>
         </div>
 
-        {/* Results Counter Header */}
+        {/* Results Counter Header with Optional Reset */}
         <div className="flex items-center justify-between mb-6 px-1">
           <p className="text-[14px] text-[#7A746E]">
             Showing <span className="font-bold text-[#1A130E]">{filteredDishes.length}</span> authentic dishes
             {selectedCategory !== 'all' && (
-              <span className="text-[#F15A24] font-semibold">
+              <span className="text-[#B84A22] font-semibold">
                 {' '}in {categoryList.find((c) => c.id === selectedCategory)?.name}
               </span>
             )}
+            {dietaryFilter !== 'all' && (
+              <span className="text-[#B84A22] font-semibold">
+                {' '}· {dietaryTags.find((d) => d.id === dietaryFilter)?.label}
+              </span>
+            )}
           </p>
+
+          {isFiltered && (
+            <button
+              onClick={resetFilters}
+              className="text-[12.5px] font-semibold text-[#B84A22] hover:text-[#9E3E1B] flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset filters</span>
+            </button>
+          )}
         </div>
 
         {/* 4-Column Responsive Dish Grid */}
@@ -243,7 +250,7 @@ export default function MenuPage() {
             </p>
             <button
               onClick={resetFilters}
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-[0_4px_14px_rgba(184,74,34,0.3)] cursor-pointer transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filters</span>
@@ -255,5 +262,13 @@ export default function MenuPage() {
       {/* Food Details & Customization Modal */}
       <ModifierModal dish={selectedDish} onClose={() => setSelectedDish(null)} />
     </div>
+  );
+}
+
+export default function MenuPage() {
+  return (
+    <Suspense fallback={<div className="py-24 text-center text-sm text-[#747474]">Loading menu...</div>}>
+      <MenuContent />
+    </Suspense>
   );
 }

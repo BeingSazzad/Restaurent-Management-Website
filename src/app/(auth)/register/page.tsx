@@ -36,10 +36,10 @@ export default function RegisterPage() {
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-16 bg-[#FBF9F6]">
       <div className="w-full max-w-md p-8 sm:p-10 rounded-[20px] bg-white border border-[#EFEAE4] shadow-[0_4px_24px_rgba(26,19,14,0.03)]">
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center mx-auto mb-3 border border-orange-200/60 shadow-xs">
-            <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#F15A24]">
+          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center mx-auto mb-3 border border-orange-200/60 shadow-xs">
+            <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#B84A22]">
               <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
-              <circle cx="50" cy="50" r="10" fill="#D49B37" />
+              <circle cx="50" cy="50" r="10" fill="#FBA138" />
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -58,7 +58,7 @@ export default function RegisterPage() {
           >
             Sign In
           </Link>
-          <div className="py-2.5 text-[13px] font-semibold rounded-xl text-center bg-white text-[#F15A24] shadow-xs">
+          <div className="py-2.5 text-[13px] font-bold rounded-xl text-center bg-white text-[#B84A22] shadow-xs border border-[#EAE5DF]">
             Create Account
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function RegisterPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Sarah Ahmed"
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your.email@example.com"
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+353 87 555 1234"
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create secure password"
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
@@ -137,15 +137,15 @@ export default function RegisterPage() {
               id="terms"
               checked={termsAccepted}
               onChange={(e) => setTermsAccepted(e.target.checked)}
-              className="accent-[#F15A24] w-4 h-4"
+              className="accent-[#B84A22] w-4 h-4 cursor-pointer"
             />
             <label htmlFor="terms" className="cursor-pointer">
               I agree to the{' '}
-              <Link href="/terms" className="text-[#F15A24] hover:underline">
+              <Link href="/terms" className="text-[#B84A22] hover:underline font-medium">
                 Terms & Conditions
               </Link>{' '}
               and{' '}
-              <Link href="/privacy-policy" className="text-[#F15A24] hover:underline">
+              <Link href="/privacy-policy" className="text-[#B84A22] hover:underline font-medium">
                 Privacy Policy
               </Link>
             </label>
@@ -154,19 +154,28 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={!termsAccepted}
-            className="w-full py-3 rounded-full text-[13px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 mt-2 cursor-pointer disabled:opacity-50 transition-all active:scale-95"
           >
             <span>Create Account & Continue</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <p className="text-center text-[13px] text-[#7A746E] mt-6">
-          Already have an account?{' '}
-          <Link href="/login" className="text-[#F15A24] font-semibold hover:underline">
-            Sign In
-          </Link>
-        </p>
+        <div className="mt-6 pt-5 border-t border-[#F2EFE9] space-y-2 text-center text-[13px]">
+          <p className="text-[#7A746E]">
+            Already have an account?{' '}
+            <Link href="/login" className="text-[#B84A22] font-bold hover:underline">
+              Sign In
+            </Link>
+          </p>
+
+          <p className="text-[#9E9790] text-[12px]">
+            <span>Want to order without an account? </span>
+            <Link href="/menu" className="text-[#B84A22] font-semibold hover:underline">
+              Use Guest Checkout
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

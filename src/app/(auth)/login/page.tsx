@@ -34,14 +34,14 @@ export default function LoginPage() {
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-16 bg-[#FBF9F6]">
       <div className="w-full max-w-md p-8 sm:p-10 rounded-[20px] bg-white border border-[#EFEAE4] shadow-[0_4px_24px_rgba(26,19,14,0.03)]">
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center mx-auto mb-3 border border-orange-200/60 shadow-xs">
-            <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#F15A24]">
+          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center mx-auto mb-3 border border-orange-200/60 shadow-xs">
+            <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#B84A22]">
               <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
-              <circle cx="50" cy="50" r="10" fill="#D49B37" />
+              <circle cx="50" cy="50" r="10" fill="#FBA138" />
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
-            {authMode === 'login' ? 'Welcome Back' : 'Create Account'}
+            {authMode === 'login' ? 'Welcome Back' : 'Create Diner Account'}
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
             {authMode === 'login'
@@ -57,7 +57,7 @@ export default function LoginPage() {
             onClick={() => setAuthMode('login')}
             className={`py-2.5 text-[13px] font-semibold rounded-xl transition-all cursor-pointer ${
               authMode === 'login'
-                ? 'bg-white text-[#F15A24] shadow-xs'
+                ? 'bg-white text-[#B84A22] font-bold shadow-xs border border-[#EAE5DF]'
                 : 'text-[#666059] hover:text-[#1A130E]'
             }`}
           >
@@ -68,7 +68,7 @@ export default function LoginPage() {
             onClick={() => setAuthMode('register')}
             className={`py-2.5 text-[13px] font-semibold rounded-xl transition-all cursor-pointer ${
               authMode === 'register'
-                ? 'bg-white text-[#F15A24] shadow-xs'
+                ? 'bg-white text-[#B84A22] font-bold shadow-xs border border-[#EAE5DF]'
                 : 'text-[#666059] hover:text-[#1A130E]'
             }`}
           >
@@ -91,7 +91,7 @@ export default function LoginPage() {
                     onChange={(e) => setName(e.target.value)}
                     required
                     placeholder="e.g. Sarah Ahmed"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
                   />
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default function LoginPage() {
                     onChange={(e) => setPhone(e.target.value)}
                     required
                     placeholder="+353 87 555 1234"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
                   />
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
@@ -142,32 +142,66 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
+                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
               />
             </div>
           </div>
 
           {authMode === 'login' && (
             <div className="flex justify-between items-center text-[12px] text-[#7A746E] pt-1">
-              <span className="hover:text-[#F15A24] cursor-pointer">Forgot password?</span>
-              <span className="text-[#F15A24] font-semibold">Demo Account Ready</span>
+              <span className="hover:text-[#B84A22] cursor-pointer">Forgot password?</span>
+              <span className="text-[#B84A22] font-semibold">Demo Account Ready</span>
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full py-3 rounded-full text-[13px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center justify-center gap-2 mt-3 transition-opacity cursor-pointer active:scale-95"
+            className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 mt-3 cursor-pointer active:scale-95 transition-all"
           >
             <span>{authMode === 'login' ? 'Sign In to Account' : 'Complete Registration'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <div className="mt-6 pt-5 border-t border-[#F2EFE9] text-center text-[13px] text-[#7A746E]">
-          <span>Want to order without an account? </span>
-          <Link href="/menu" className="text-[#F15A24] font-semibold hover:underline">
-            Use Guest Checkout
-          </Link>
+        <div className="mt-6 pt-5 border-t border-[#F2EFE9] space-y-2 text-center text-[13px]">
+          {authMode === 'login' ? (
+            <p className="text-[#7A746E]">
+              Don&apos;t have an account?{' '}
+              <button
+                type="button"
+                onClick={() => setAuthMode('register')}
+                className="text-[#B84A22] font-bold hover:underline cursor-pointer"
+              >
+                Sign Up Now
+              </button>
+              {' · '}
+              <Link href="/register" className="text-[#B84A22] font-semibold hover:underline">
+                Register Page →
+              </Link>
+            </p>
+          ) : (
+            <p className="text-[#7A746E]">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => setAuthMode('login')}
+                className="text-[#B84A22] font-bold hover:underline cursor-pointer"
+              >
+                Sign In
+              </button>
+              {' · '}
+              <Link href="/login" className="text-[#B84A22] font-semibold hover:underline">
+                Login Page →
+              </Link>
+            </p>
+          )}
+
+          <p className="text-[#9E9790] text-[12px]">
+            <span>Want to order without an account? </span>
+            <Link href="/menu" className="text-[#B84A22] font-semibold hover:underline">
+              Use Guest Checkout
+            </Link>
+          </p>
         </div>
       </div>
     </div>

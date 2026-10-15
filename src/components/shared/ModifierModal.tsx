@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { MenuItem, CartItem } from '../../Mockdata';
 import { useAppDispatch } from '../../redux/hooks';
 import { addToCart } from '../../redux/slices/cartSlice';
-import { X, Plus, Minus, Check, AlertTriangle } from 'lucide-react';
+import { X, Plus, Minus, Check } from 'lucide-react';
 
 interface ModifierModalProps {
   dish: MenuItem | null;
@@ -169,17 +169,6 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
             </div>
           </div>
 
-          {/* Allergens Notice */}
-          {dish.allergens.length > 0 && (
-            <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3 flex items-start gap-2.5 text-[#B84A22] text-[12px]">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#B84A22]" />
-              <div>
-                <span className="font-bold block">Allergen Information:</span>
-                Contains {dish.allergens.join(', ')}. Please mention any dietary needs in special instructions.
-              </div>
-            </div>
-          )}
-
           {/* Modifier Groups */}
           {dish.modifierGroups?.map((group) => {
             const currentSelected = selectedModifiers[group.id] || [];
@@ -270,7 +259,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           <button
             onClick={handleAddToCart}
             disabled={!isRequiredSatisfied}
-            className="flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-semibold flex items-center justify-between shadow-md disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-98"
+            className="flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-semibold flex items-center justify-between shadow-[0_4px_14px_rgba(184,74,34,0.3)] disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-98 cursor-pointer"
           >
             <span>Add to Cart</span>
             <span>€{grandTotal.toFixed(2)}</span>

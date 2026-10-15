@@ -17,7 +17,7 @@ import {
   Phone,
   User,
   Mail,
-  Lock,
+  ChevronDown,
   ArrowRight,
 } from 'lucide-react';
 
@@ -140,7 +140,7 @@ export const CheckoutModal: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Mobile Phone (for delivery SMS)</label>
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Phone</label>
                 <input
                   type="tel"
                   required
@@ -150,7 +150,7 @@ export const CheckoutModal: React.FC = () => {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Email (for digital receipt)</label>
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Email</label>
                 <input
                   type="email"
                   required
@@ -166,7 +166,7 @@ export const CheckoutModal: React.FC = () => {
           {fulfillment.type === 'delivery' && (
             <div>
               <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F15A24] mb-3 flex items-center gap-1.5">
-                <MapPin className="w-4 h-4" /> 2. Delivery Address in Dublin
+                <MapPin className="w-4 h-4" /> 2. Delivery Address
               </h3>
               <div className="space-y-3">
                 <div className="grid grid-cols-3 gap-3">
@@ -182,7 +182,7 @@ export const CheckoutModal: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Dublin Eircode</label>
+                    <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Eircode</label>
                     <input
                       type="text"
                       required
@@ -195,7 +195,7 @@ export const CheckoutModal: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">
-                    Delivery Instructions (Optional)
+                    Delivery Instructions
                   </label>
                   <input
                     type="text"
@@ -212,51 +212,26 @@ export const CheckoutModal: React.FC = () => {
           {/* Payment Method */}
           <div>
             <h3 className="text-[12px] font-bold uppercase tracking-wider text-[#F15A24] mb-3 flex items-center gap-1.5">
-              <CreditCard className="w-4 h-4" /> 3. Select Payment Method
+              <CreditCard className="w-4 h-4" /> 3. Payment Method
             </h3>
-            <div className="grid grid-cols-3 gap-3">
-              <div
-                onClick={() => setPaymentMethod('apple_pay')}
-                className={`p-3 rounded-2xl border text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1 ${
-                  paymentMethod === 'apple_pay'
-                    ? 'bg-orange-50/60 border-[#F15A24] text-[#F15A24] font-bold shadow-xs'
-                    : 'bg-white border-[#E5E5E5] text-[#555555] hover:border-[#F15A24]'
-                }`}
+            <div className="relative">
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value as any)}
+                className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-xl px-3.5 py-2.5 text-[13px] sm:text-[14px] font-medium text-[#1A130E] focus:outline-none focus:border-[#F15A24] appearance-none pr-10 cursor-pointer transition-colors"
               >
-                <span className="text-[13px] font-bold"> Pay / GPay</span>
-                <span className="text-[11px] text-[#747474]">1-Click Instant</span>
-              </div>
-
-              <div
-                onClick={() => setPaymentMethod('card')}
-                className={`p-3 rounded-2xl border text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1 ${
-                  paymentMethod === 'card'
-                    ? 'bg-orange-50/60 border-[#F15A24] text-[#F15A24] font-bold shadow-xs'
-                    : 'bg-white border-[#E5E5E5] text-[#555555] hover:border-[#F15A24]'
-                }`}
-              >
-                <CreditCard className="w-4 h-4" />
-                <span className="text-[13px] font-semibold">Credit/Debit</span>
-              </div>
-
-              <div
-                onClick={() => setPaymentMethod('cash')}
-                className={`p-3 rounded-2xl border text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1 ${
-                  paymentMethod === 'cash'
-                    ? 'bg-orange-50/60 border-[#F15A24] text-[#F15A24] font-bold shadow-xs'
-                    : 'bg-white border-[#E5E5E5] text-[#555555] hover:border-[#F15A24]'
-                }`}
-              >
-                <span className="text-sm">💵</span>
-                <span className="text-[13px] font-semibold">
+                <option value="apple_pay">Apple Pay / Google Pay</option>
+                <option value="card">Credit or Debit Card</option>
+                <option value="cash">
                   {fulfillment.type === 'delivery' ? 'Cash on Delivery' : 'Pay at Store'}
-                </span>
-              </div>
+                </option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-[#747474] pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2" />
             </div>
 
             {/* Card Details Form when card is active */}
             {paymentMethod === 'card' && (
-              <div className="mt-3 p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5] space-y-2.5">
+              <div className="mt-3 p-4 rounded-xl bg-[rgb(249,249,249)] border border-[#E5E5E5] space-y-2.5">
                 <div>
                   <label className="block text-[11px] uppercase font-semibold text-[#747474] mb-1">
                     Card Number
@@ -266,7 +241,7 @@ export const CheckoutModal: React.FC = () => {
                     required
                     placeholder="4532 •••• •••• 8892"
                     defaultValue="4532 8920 1204 8892"
-                    className="w-full bg-white border border-[#E5E5E5] rounded-xl px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                    className="w-full bg-white border border-[#E5E5E5] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2.5">
@@ -279,7 +254,7 @@ export const CheckoutModal: React.FC = () => {
                       required
                       placeholder="MM/YY"
                       defaultValue="08/28"
-                      className="w-full bg-white border border-[#E5E5E5] rounded-xl px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                      className="w-full bg-white border border-[#E5E5E5] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
                     />
                   </div>
                   <div>
@@ -292,7 +267,7 @@ export const CheckoutModal: React.FC = () => {
                       placeholder="•••"
                       defaultValue="492"
                       maxLength={4}
-                      className="w-full bg-white border border-[#E5E5E5] rounded-xl px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
+                      className="w-full bg-white border border-[#E5E5E5] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1A130E] focus:outline-none focus:border-[#F15A24]"
                     />
                   </div>
                 </div>
@@ -300,17 +275,11 @@ export const CheckoutModal: React.FC = () => {
             )}
           </div>
 
-          {/* Secure SSL Tag */}
-          <div className="flex items-center gap-2 p-3 bg-[rgb(249,249,249)] rounded-xl text-[12px] text-[#555555] border border-[#E5E5E5]">
-            <Lock className="w-3.5 h-3.5 text-[#0FA958]" />
-            <span>256-bit encrypted checkout. PCI-DSS and GDPR compliant.</span>
-          </div>
-
           {/* Submit Order */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-between shadow-md hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-60"
+            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-bold flex items-center justify-between shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-60 cursor-pointer"
           >
             <span>{isSubmitting ? 'Placing Order...' : 'Place Order Now'}</span>
             <span>€{total.toFixed(2)}</span>

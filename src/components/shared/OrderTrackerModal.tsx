@@ -161,7 +161,7 @@ export const OrderTrackerModal: React.FC = () => {
                         isFinished
                           ? 'bg-[#0FA958] text-white font-bold shadow-xs'
                           : isCurrent
-                          ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white font-bold ring-4 ring-orange-100 shadow-xs'
+                          ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white font-bold ring-4 ring-orange-100 shadow-xs'
                           : 'bg-neutral-100 text-[#888888] border border-[#E5E5E5]'
                       }`}
                     >
@@ -269,9 +269,9 @@ export const OrderTrackerModal: React.FC = () => {
                         key={tag}
                         type="button"
                         onClick={() => handleToggleTag(tag)}
-                        className={`px-3 py-1 rounded-full text-[12px] font-medium transition-colors ${
+                        className={`px-3 py-1 rounded-lg text-[12px] font-medium transition-colors ${
                           selectedTags.includes(tag)
-                            ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs'
+                            ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
                             : 'bg-white border border-[#E5E5E5] text-[#555555] hover:border-[#F15A24]'
                         }`}
                       >
@@ -292,7 +292,7 @@ export const OrderTrackerModal: React.FC = () => {
                   <div className="flex items-center justify-between gap-3 pt-1">
                     <button
                       type="submit"
-                      className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 cursor-pointer"
+                      className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_12px_rgba(184,74,34,0.3)] flex items-center gap-1.5 cursor-pointer transition-all"
                     >
                       <Check className="w-4 h-4" />
                       <span>Submit Review</span>
@@ -317,7 +317,7 @@ export const OrderTrackerModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleReorder}
-                    className="px-3.5 py-1.5 rounded-xl text-[12px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-1.5 shrink-0 cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl text-[12px] font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-xs flex items-center gap-1.5 shrink-0 cursor-pointer transition-all"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Re-order</span>

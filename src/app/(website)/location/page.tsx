@@ -43,8 +43,8 @@ export default function LocationPage() {
               </div>
               <div>
                 <span className="font-bold text-[#1A130E] block text-[15px]">Opening Hours</span>
-                <p className="text-[13px] sm:text-[14px] text-[#555555] mt-0.5">Monday – Sunday: 11:00 AM – 11:00 PM</p>
-                <span className="text-[12px] font-semibold text-[#0FA958]">Open 7 Days a Week</span>
+                <p className="text-[13px] sm:text-[14px] text-[#555555] mt-0.5">Mon – Thu: 17:00 – 22:00 · Fri – Sat: 16:30 – 22:30</p>
+                <span className="text-[12px] font-semibold text-[#FBA138]">Sunday: Closed</span>
               </div>
             </div>
 
@@ -100,8 +100,8 @@ export default function LocationPage() {
                   <h3 className="text-xl font-bold text-[#1A130E]">18 South William Street</h3>
                   <p className="text-[13px] text-[#747474]">Heart of Dublin Creative Quarter</p>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#E5E5E5] text-[12px] font-semibold text-[#0FA958] shadow-2xs">
-                  <CheckCircle2 className="w-4 h-4" />
+                <div className="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#0FA958]">
+                  <CheckCircle2 className="w-4 h-4 text-[#0FA958]" />
                   <span>Kitchen Open Now</span>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default function LocationPage() {
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#D49B37_1px,transparent_1px)] [background-size:16px_16px]" />
                 
                 <div className="relative z-10 space-y-3">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FBA138] to-[#F15A24] text-white flex items-center justify-center mx-auto shadow-lg animate-bounce">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center mx-auto shadow-lg animate-bounce">
                     <MapPin className="w-7 h-7" />
                   </div>
                   <div>
@@ -140,7 +140,7 @@ export default function LocationPage() {
               </div>
               <Link
                 href="/menu"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 shadow-xs hover:scale-105 active:scale-95 transition-all"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold shrink-0 shadow-[0_4px_12px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all"
               >
                 Order Takeaway
               </Link>
@@ -157,7 +157,7 @@ export default function LocationPage() {
         </p>
         <Link
           href="/menu"
-          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
+          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold inline-flex items-center gap-2 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all"
         >
           <span>Order for Collection</span>
           <ArrowRight className="w-4 h-4" />

@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
-import { applyPromoCode, setCartOpen } from '@/redux/slices/cartSlice';
-import { Tag, Sparkles, CheckCircle2, Copy, ArrowRight, Clock, Percent } from 'lucide-react';
+import { applyPromoCode } from '@/redux/slices/cartSlice';
+import { Check, Copy, ArrowRight, Percent } from 'lucide-react';
 import Link from 'next/link';
 
 interface OfferCard {
@@ -61,10 +61,16 @@ export default function OffersPage() {
   const dispatch = useAppDispatch();
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  const handleApplyOffer = (code: string) => {
+  const handleCopyCode = async (code: string) => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(code);
+      }
+    } catch {
+      // fallback
+    }
     dispatch(applyPromoCode(code));
     setCopiedCode(code);
-    dispatch(setCartOpen(true));
     setTimeout(() => {
       setCopiedCode(null);
     }, 2500);
@@ -75,15 +81,15 @@ export default function OffersPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E5E5E5] text-[#B84A22] text-[12px] font-semibold uppercase tracking-wider mb-3.5 shadow-2xs">
-            <Percent className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 text-[#B84A22] text-[12px] font-bold uppercase tracking-widest mb-3">
+            <Percent className="w-3.5 h-3.5 text-[#B84A22]" />
             <span>Exclusive Promo Codes</span>
           </div>
           <h1 className="section-title mb-3">
             Special Culinary Offers
           </h1>
           <p className="section-subtitle">
-            Save on authentic Dublin deliveries and collection feasts. Apply any promo voucher below with a single click.
+            Save on authentic Dublin deliveries and collection feasts. Copy any promo voucher below with a single click.
           </p>
         </div>
 
@@ -122,28 +128,33 @@ export default function OffersPage() {
                 </div>
               </div>
 
-              {/* Voucher Code Box & Apply CTA */}
+              {/* Voucher Code Box & Copy CTA */}
               <div className="p-2 sm:p-2.5 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5] flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2 pl-2">
-                  <Tag className="w-4 h-4 text-[#B84A22]" />
-                  <span className="font-bold text-sm tracking-widest text-[#1A130E]">
+                <div className="pl-3 py-1">
+                  <span className="font-bold text-sm tracking-widest text-[#1A130E] font-mono select-all">
                     {offer.code}
                   </span>
                 </div>
 
                 <button
-                  onClick={() => handleApplyOffer(offer.code)}
-                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95 transition-all"
+                  type="button"
+                  onClick={() => handleCopyCode(offer.code)}
+                  className={`px-4 py-2.5 rounded-xl text-[13px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    copiedCode === offer.code
+                      ? 'bg-emerald-600 text-white shadow-xs scale-102'
+                      : 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-102 active:scale-95'
+                  }`}
+                  aria-label={`Copy promo code ${offer.code}`}
                 >
                   {copiedCode === offer.code ? (
                     <>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                      <span>Applied!</span>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied!</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Apply Voucher</span>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Code</span>
                     </>
                   )}
                 </button>
@@ -167,7 +178,7 @@ export default function OffersPage() {
           </div>
           <Link
             href="/menu"
-            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap shadow-md hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all"
           >
             <span>Explore Menu & Order</span>
             <ArrowRight className="w-4 h-4" />

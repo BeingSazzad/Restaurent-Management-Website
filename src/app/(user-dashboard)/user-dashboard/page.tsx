@@ -60,15 +60,16 @@ export default function UserDashboardPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
 
-  // Profile data (matches screenshot layout: Name, Email, Phone Number, Password)
+  // Profile data (matches user state or fallback)
   const [profile, setProfile] = useState({
-    name: 'Mark Jecno',
-    email: 'mark-jecno@gmail.com',
-    phone: '+1 (692)52 - 95555',
+    name: user?.name || 'Liam O\'Connor',
+    email: user?.email || 'liam.oc@example.ie',
+    phone: user?.phone || '+353 87 555 1234',
     password: '••••••••',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80',
   });
@@ -76,9 +77,9 @@ export default function UserDashboardPage() {
   // 1-Click inline edit state (No popup modals)
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editForm, setEditForm] = useState({
-    name: 'Mark Jecno',
-    email: 'mark-jecno@gmail.com',
-    phone: '+1 (692)52 - 95555',
+    name: user?.name || 'Liam O\'Connor',
+    email: user?.email || 'liam.oc@example.ie',
+    phone: user?.phone || '+353 87 555 1234',
     newPassword: '',
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -423,7 +424,13 @@ export default function UserDashboardPage() {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => setActiveTab(item.id)}
+                      onClick={() => {
+                        if (item.id === 'logout') {
+                          handleLogout();
+                          return;
+                        }
+                        setActiveTab(item.id);
+                      }}
                       className={`w-full flex items-center justify-between px-6 py-3.5 text-[14px] transition-all text-left cursor-pointer group relative ${
                         isActive
                           ? 'text-[#F15A24] font-semibold bg-gradient-to-r from-orange-50/70 to-transparent'
@@ -462,11 +469,11 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 1: CHANGE PROFILE (Matches Screenshot 3 with 1-click inline editing) */}
+            {/* TAB 1: CHANGE PROFILE (Single unified box with 1-click bulk editing) */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
-                {/* Header Title with Orange Accent Line */}
-                <div className="flex items-start justify-between gap-4">
+                {/* Header Title with Orange Accent Line and Master Edit Button */}
+                <div className="flex items-center justify-between gap-4">
                   <div>
                     <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
                     <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
@@ -474,200 +481,130 @@ export default function UserDashboardPage() {
                     </h1>
                   </div>
 
-                  {/* 1-Click Master Edit / View Toggle */}
-                  {!isEditingProfile ? (
+                  {!isEditingProfile && (
                     <button
                       onClick={handleStartEdit}
-                      className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
+                      className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
                     >
                       <span>Edit Profile</span>
                     </button>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={handleSaveProfile}
-                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Save Changes</span>
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
-                      >
-                        Cancel
-                      </button>
-                    </div>
                   )}
                 </div>
 
-                {/* Inline Editing Notice Banner */}
-                {isEditingProfile && (
-                  <div className="p-3.5 rounded-[14px] bg-orange-50/80 border border-orange-200/80 text-[#F15A24] text-[13px] font-medium flex items-center justify-between">
-                    <span>
-                      Inline edit mode active: edit any detail directly below without modals.
-                    </span>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="text-xs underline font-bold ml-2 cursor-pointer"
-                    >
-                      Discard
-                    </button>
-                  </div>
-                )}
-
-                {/* The 4 Profile Cards (Name, Email, Phone Number, Password) */}
-                <div className="space-y-4">
-                  {/* CARD 1: NAME */}
-                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex-1">
+                {/* Single Unified Profile Box */}
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
+                  {!isEditingProfile ? (
+                    /* View Mode: All 4 details in 1 unified container */
+                    <div className="divide-y divide-[#F2EFEA]">
+                      {/* Name */}
+                      <div className="pb-5 first:pt-0">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
                           <User className="w-4 h-4 text-[#F15A24]" />
                           <span>Name :</span>
                         </div>
-
-                        {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
-                            {profile.name}
-                          </p>
-                        ) : (
-                          <div className="pl-6 mt-2">
-                            <input
-                              type="text"
-                              value={editForm.name}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, name: e.target.value })
-                              }
-                              placeholder="Your full name"
-                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                            />
-                          </div>
-                        )}
+                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
+                          {profile.name}
+                        </p>
                       </div>
 
-                      <div className="shrink-0 pl-6 sm:pl-0">
-                        {!isEditingProfile ? (
-                          <button
-                            onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                          >
-                            Edit
-                          </button>
-                        ) : (
-                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
-                            Editing
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* CARD 2: EMAIL */}
-                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex-1">
+                      {/* Email */}
+                      <div className="py-5">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
                           <Mail className="w-4 h-4 text-[#F15A24]" />
                           <span>Email :</span>
                         </div>
-
-                        {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
-                            {profile.email}
-                          </p>
-                        ) : (
-                          <div className="pl-6 mt-2">
-                            <input
-                              type="email"
-                              value={editForm.email}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, email: e.target.value })
-                              }
-                              placeholder="Your email address"
-                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                            />
-                          </div>
-                        )}
+                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
+                          {profile.email}
+                        </p>
                       </div>
 
-                      <div className="shrink-0 pl-6 sm:pl-0">
-                        {!isEditingProfile ? (
-                          <button
-                            onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                          >
-                            Change
-                          </button>
-                        ) : (
-                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
-                            Editing
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* CARD 3: PHONE NUMBER */}
-                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex-1">
+                      {/* Phone Number */}
+                      <div className="py-5">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
                           <Phone className="w-4 h-4 text-[#F15A24]" />
                           <span>Phone Number :</span>
                         </div>
-
-                        {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-[-0.01em]">
-                            {profile.phone}
-                          </p>
-                        ) : (
-                          <div className="pl-6 mt-2">
-                            <input
-                              type="tel"
-                              value={editForm.phone}
-                              onChange={(e) =>
-                                setEditForm({ ...editForm, phone: e.target.value })
-                              }
-                              placeholder="Your phone number"
-                              className="w-full max-w-lg bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                            />
-                          </div>
-                        )}
+                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
+                          {profile.phone}
+                        </p>
                       </div>
 
-                      <div className="shrink-0 pl-6 sm:pl-0">
-                        {!isEditingProfile ? (
-                          <button
-                            onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                          >
-                            Change
-                          </button>
-                        ) : (
-                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
-                            Editing
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* CARD 4: PASSWORD */}
-                  <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] transition-all hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)]">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex-1">
+                      {/* Password */}
+                      <div className="pt-5 last:pb-0">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
                           <Lock className="w-4 h-4 text-[#F15A24]" />
                           <span>Password :</span>
                         </div>
+                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5 tracking-widest">
+                          {profile.password}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Edit Mode: Single unified form to edit all 4 fields at once */
+                    <form onSubmit={handleSaveProfile} className="space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        {/* Name Input */}
+                        <div>
+                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                            <User className="w-4 h-4 text-[#F15A24]" />
+                            <span>Name :</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={editForm.name}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, name: e.target.value })
+                            }
+                            placeholder="Your full name"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
+                          />
+                        </div>
 
-                        {!isEditingProfile ? (
-                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1 tracking-widest">
-                            {profile.password}
-                          </p>
-                        ) : (
-                          <div className="pl-6 mt-2 relative w-full max-w-lg">
+                        {/* Email Input */}
+                        <div>
+                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                            <Mail className="w-4 h-4 text-[#F15A24]" />
+                            <span>Email :</span>
+                          </label>
+                          <input
+                            type="email"
+                            value={editForm.email}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, email: e.target.value })
+                            }
+                            placeholder="Your email address"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
+                          />
+                        </div>
+
+                        {/* Phone Number Input */}
+                        <div>
+                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                            <Phone className="w-4 h-4 text-[#F15A24]" />
+                            <span>Phone Number :</span>
+                          </label>
+                          <input
+                            type="tel"
+                            value={editForm.phone}
+                            onChange={(e) =>
+                              setEditForm({ ...editForm, phone: e.target.value })
+                            }
+                            placeholder="Your phone number"
+                            required
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
+                          />
+                        </div>
+
+                        {/* Password Input */}
+                        <div>
+                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                            <Lock className="w-4 h-4 text-[#F15A24]" />
+                            <span>Password :</span>
+                          </label>
+                          <div className="relative">
                             <input
                               type={showPassword ? 'text' : 'password'}
                               value={editForm.newPassword}
@@ -683,7 +620,7 @@ export default function UserDashboardPage() {
                             <button
                               type="button"
                               onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer"
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer"
                             >
                               {showPassword ? (
                                 <EyeOff className="w-4 h-4" />
@@ -692,45 +629,29 @@ export default function UserDashboardPage() {
                               )}
                             </button>
                           </div>
-                        )}
+                        </div>
                       </div>
 
-                      <div className="shrink-0 pl-6 sm:pl-0">
-                        {!isEditingProfile ? (
-                          <button
-                            onClick={handleStartEdit}
-                            className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                          >
-                            Change
-                          </button>
-                        ) : (
-                          <span className="text-[12px] text-orange-600 font-semibold px-3 py-1 bg-orange-50 rounded-full border border-orange-200">
-                            Editing
-                          </span>
-                        )}
+                      {/* Action Buttons */}
+                      <div className="pt-4 flex items-center gap-3 border-t border-[#F2EFEA]">
+                        <button
+                          type="submit"
+                          className="px-6 py-2.5 rounded-xl font-bold text-[13px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-2 cursor-pointer active:scale-95"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>Save Changes</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleCancelEdit}
+                          className="px-5 py-2.5 rounded-xl font-semibold text-[13px] border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
+                        >
+                          Cancel
+                        </button>
                       </div>
-                    </div>
-                  </div>
+                    </form>
+                  )}
                 </div>
-
-                {/* Save / Cancel Action Buttons at Bottom in Edit Mode */}
-                {isEditingProfile && (
-                  <div className="pt-2 flex items-center gap-3">
-                    <button
-                      onClick={handleSaveProfile}
-                      className="px-6 py-2.5 rounded-full font-bold text-[13px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-2 cursor-pointer active:scale-95"
-                    >
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>Save Profile Changes</span>
-                    </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="px-5 py-2.5 rounded-full font-semibold text-[13px] border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                )}
               </div>
             )}
 
@@ -797,7 +718,7 @@ export default function UserDashboardPage() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => dispatch(setActiveTrackingOrderId(order.id))}
-                              className="px-5 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                              className="px-5 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                             >
                               Track
                             </button>
@@ -813,7 +734,7 @@ export default function UserDashboardPage() {
                                 });
                                 dispatch(setCartOpen(true));
                               }}
-                              className="px-5 py-1.5 rounded-full bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold tracking-wide hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
+                              className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold tracking-wide hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
                             >
                               Re-order
                             </button>
@@ -877,7 +798,7 @@ export default function UserDashboardPage() {
                             onClick={() =>
                               setExpandedOrderDetails(isExpanded ? null : ord.id)
                             }
-                            className="px-6 py-1.5 rounded-full border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                            className="px-6 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
                           >
                             {isExpanded ? 'Hide' : 'Details'}
                           </button>
@@ -982,14 +903,14 @@ export default function UserDashboardPage() {
                     <div className="flex items-center gap-2 pt-2">
                       <button
                         type="submit"
-                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
+                        className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
                       >
                         Save Address
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsAddingAddress(false)}
-                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
+                        className="px-4 py-2 rounded-xl text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -1025,7 +946,7 @@ export default function UserDashboardPage() {
 
                                 <button
                                   onClick={() => handleStartEditAddress(addr)}
-                                  className="px-4 py-1 rounded-full bg-orange-50/70 border border-orange-200/60 text-[#F15A24] text-[11.5px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
+                                  className="px-4 py-1 rounded-lg bg-orange-50/70 border border-orange-200/60 text-[#F15A24] text-[11.5px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
                                 >
                                   Edit
                                 </button>
@@ -1105,13 +1026,13 @@ export default function UserDashboardPage() {
                             <div className="flex items-center gap-2 pt-1">
                               <button
                                 onClick={() => handleSaveEditAddress(addr.id)}
-                                className="px-4 py-1 rounded-full text-xs font-semibold bg-[#F15A24] text-white hover:opacity-90"
+                                className="px-4 py-1 rounded-lg text-xs font-semibold bg-[#F15A24] text-white hover:opacity-90"
                               >
                                 Save
                               </button>
                               <button
                                 onClick={() => setEditingAddressId(null)}
-                                className="px-3 py-1 rounded-full text-xs font-medium text-[#666059]"
+                                className="px-3 py-1 rounded-lg text-xs font-medium text-[#666059]"
                               >
                                 Cancel
                               </button>
@@ -1220,14 +1141,14 @@ export default function UserDashboardPage() {
                     <div className="flex items-center gap-2 pt-2">
                       <button
                         type="submit"
-                        className="px-5 py-2 rounded-full text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
+                        className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
                       >
                         Save Card
                       </button>
                       <button
                         type="button"
                         onClick={() => setIsAddingCard(false)}
-                        className="px-4 py-2 rounded-full text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
+                        className="px-4 py-2 rounded-xl text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
                       >
                         Cancel
                       </button>
@@ -1377,7 +1298,7 @@ export default function UserDashboardPage() {
 
                           <button
                             type="submit"
-                            className="w-full py-2.5 rounded-full text-[12.5px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
+                            className="w-full py-2.5 rounded-xl text-[12.5px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
                           >
                             Send Inquiry
                           </button>
@@ -1526,13 +1447,13 @@ export default function UserDashboardPage() {
                   <div className="flex items-center gap-3 pt-2">
                     <button
                       onClick={handleLogout}
-                      className="flex-1 py-2.5 rounded-full text-[13px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 rounded-xl text-[13px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
                     >
                       Yes, Sign Out
                     </button>
                     <button
                       onClick={() => setActiveTab('profile')}
-                      className="flex-1 py-2.5 rounded-full text-[13px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
+                      className="flex-1 py-2.5 rounded-xl text-[13px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-neutral-50 transition-colors cursor-pointer"
                     >
                       Stay Logged In
                     </button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, ChevronLeft, ChevronRight, CheckCircle2, Quote } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 export const ReviewsSection: React.FC = () => {
   const reviews = [
@@ -7,7 +7,7 @@ export const ReviewsSection: React.FC = () => {
       id: 1,
       author: 'Sarah Ahmed',
       location: 'Dublin 2 Diner',
-      date: '2 days ago',
+      avatar: '/images/avatars/sarah.jpg',
       rating: 5,
       comment:
         'Amazing food! The royal biryani was absolutely delicious, perfectly spiced and packed with authentic flavors. Tender meat that melted in the mouth. Will definitely order again!',
@@ -16,7 +16,7 @@ export const ReviewsSection: React.FC = () => {
       id: 2,
       author: 'James Miller',
       location: 'Ranelagh Diner',
-      date: '1 week ago',
+      avatar: '/images/avatars/james.jpg',
       rating: 5,
       comment:
         'Great taste, fast delivery and very friendly staff. The Old Delhi butter chicken is unmatched in quality anywhere in Dublin. Truly authentic restaurant experience at home!',
@@ -25,7 +25,7 @@ export const ReviewsSection: React.FC = () => {
       id: 3,
       author: 'Ayesha Rahman',
       location: 'Ballsbridge Diner',
-      date: '2 weeks ago',
+      avatar: '/images/avatars/ayesha.jpg',
       rating: 5,
       comment:
         'Authentic flavors and excellent quality. The tandoori chicken skewers were so tender, juicy and smoky. My family loved every bite of the garlic naans too!',
@@ -75,8 +75,12 @@ export const ReviewsSection: React.FC = () => {
                 {/* Author Avatar, Name, Location & Stars */}
                 <div className="flex items-center justify-between gap-3 mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white font-bold text-[15px] flex items-center justify-center shadow-xs shrink-0">
-                      {rev.author.charAt(0)}
+                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#B84A22]/20 shadow-xs shrink-0 bg-[#251D17]">
+                      <img
+                        src={rev.avatar}
+                        alt={rev.author}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div>
                       <h4 className="font-bold text-[16px] text-[#1A130E] leading-tight">
@@ -88,7 +92,7 @@ export const ReviewsSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <Quote className="w-5 h-5 text-[#B84A22]/20 shrink-0" />
+                  <Quote className="w-5 h-5 text-[#B84A22]/25 shrink-0" />
                 </div>
 
                 {/* Rating Stars */}
@@ -99,18 +103,10 @@ export const ReviewsSection: React.FC = () => {
                   <span className="text-[12px] font-bold text-[#1A130E] ml-1.5">5.0</span>
                 </div>
 
-                {/* Clear, Readable Review Body (No weak tiny 12px italic text) */}
+                {/* Clear, Readable Review Body */}
                 <p className="text-[14px] sm:text-[15px] text-[#3D3D3D] leading-[24px] font-normal">
                   &ldquo;{rev.comment}&rdquo;
                 </p>
-              </div>
-
-              {/* Verified Diner Footer */}
-              <div className="pt-4 mt-5 border-t border-[#F0F0F0] flex items-center justify-between text-[12px]">
-                <span className="flex items-center gap-1.5 text-[#0FA958] font-semibold">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Verified Diner
-                </span>
-                <span className="text-[#888888] font-medium">{rev.date}</span>
               </div>
             </div>
           ))}

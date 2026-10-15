@@ -88,7 +88,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
             <span className="font-bold text-[18px] sm:text-[19px] text-[#1A130E] tracking-tight">
               €{dish.price.toFixed(2)}
             </span>
-            <div className="flex items-center gap-1 text-[12px] font-semibold text-[#1A130E] bg-white px-2 py-0.5 rounded-md border border-[#E5E5E5] shadow-2xs">
+            <div className="flex items-center gap-1 text-[13px] font-bold text-[#1A130E]">
               <Star className="w-3.5 h-3.5 fill-[#D49B37] text-[#D49B37]" />
               <span>{dish.rating}</span>
             </div>
@@ -99,7 +99,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
             disabled={!dish.isAvailable}
             className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
               dish.isAvailable
-                ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white shadow-sm hover:scale-105 active:scale-95'
+                ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_2px_8px_rgba(184,74,34,0.25)] hover:scale-105 active:scale-95'
                 : 'bg-[#E5E5E5] text-[#999999] cursor-not-allowed'
             }`}
             aria-label={`Add ${dish.name} to order`}

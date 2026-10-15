@@ -40,35 +40,32 @@ export default function CookiePolicyPage() {
           </h2>
 
           <div className="space-y-3">
-            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="badge-base badge-success">STRICTLY ESSENTIAL</span>
-                <span className="font-bold text-[#1A130E]">Session & Cart Persistence</span>
-              </div>
-              <p className="text-[#666666]">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
+              <h3 className="font-bold text-[15px] text-[#1A130E] mb-1">
+                Session & Cart Persistence
+              </h3>
+              <p className="text-[#666666] leading-relaxed">
                 Necessary for the core operation of our ordering platform. These cookies retain the
                 items in your food basket, your chosen Dublin delivery zone, and your authentication
                 status. The website cannot function properly without them.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="badge-base badge-gold">FUNCTIONAL</span>
-                <span className="font-bold text-[#1A130E]">Preferences & Customization</span>
-              </div>
-              <p className="text-[#666666]">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
+              <h3 className="font-bold text-[15px] text-[#1A130E] mb-1">
+                Preferences & Customization
+              </h3>
+              <p className="text-[#666666] leading-relaxed">
                 Remember your past delivery notes, spice preference defaults, and saved Dublin delivery
                 addresses for quicker future checkouts.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="badge-base badge-terracotta">PERFORMANCE</span>
-                <span className="font-bold text-[#1A130E]">Anonymous Traffic Analytics</span>
-              </div>
-              <p className="text-[#666666]">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
+              <h3 className="font-bold text-[15px] text-[#1A130E] mb-1">
+                Anonymous Traffic Analytics
+              </h3>
+              <p className="text-[#666666] leading-relaxed">
                 Help us understand which heritage dishes are most popular and identify any slow-loading
                 pages to continually enhance speed and responsiveness.
               </p>

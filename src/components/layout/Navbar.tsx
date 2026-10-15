@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '../shared/Logo';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setCartOpen } from '../../redux/slices/cartSlice';
+import { logout } from '../../redux/slices/authSlice';
 import {
   ShoppingBag,
   Search,
@@ -15,20 +16,39 @@ import {
   X,
   Calendar,
   UtensilsCrossed,
+  LogIn,
+  UserPlus,
+  LogOut,
+  ChevronDown,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Close mobile menu on route change
+  // Close menus on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsAccountMenuOpen(false);
   }, [pathname]);
+
+  // Click outside to close account menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+        setIsAccountMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const scrollToSection = (id: string) => {
     setIsMobileMenuOpen(false);
@@ -39,7 +59,6 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/menu', label: 'Menu' },
-    { href: '/offers', label: 'Offers' },
     { href: '/gallery', label: 'Gallery' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
@@ -84,7 +103,7 @@ export const Navbar: React.FC = () => {
               <Search className="w-4 h-4 stroke-[2]" />
             </button>
 
-            {/* Shopping Cart Icon with Red Counter Badge */}
+            {/* Shopping Cart Icon with Counter Badge */}
             <button
               onClick={() => dispatch(setCartOpen(true))}
               className="relative text-[#3D3D3D] hover:text-[#B84A22] p-1.5 transition-colors cursor-pointer"
@@ -92,26 +111,144 @@ export const Navbar: React.FC = () => {
             >
               <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
               {totalCartCount > 0 && (
-                <span className="absolute -top-1 -right-2 w-4 h-4 rounded-full bg-[#B84A22] text-white text-[10px] font-bold flex items-center justify-center animate-in zoom-in-75">
+                <span className="absolute -top-1 -right-2 w-4 h-4 rounded-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-[10px] font-bold flex items-center justify-center animate-in zoom-in-75">
                   {totalCartCount}
                 </span>
               )}
             </button>
 
-            {/* Customer Account Icon */}
-            <Link
-              href="/user-dashboard"
-              className="text-[#3D3D3D] hover:text-[#B84A22] p-1.5 transition-colors hidden sm:block"
-              title="My Account & Orders"
-              aria-label="User Account"
-            >
-              <User className="w-5 h-5 stroke-[1.8]" />
-            </Link>
+            {/* Customer Account Button & Dropdown */}
+            <div className="relative hidden sm:block" ref={accountMenuRef}>
+              <button
+                onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+                className="flex items-center gap-1.5 text-[#3D3D3D] hover:text-[#B84A22] p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl hover:bg-orange-50/70 transition-all border border-transparent hover:border-[#F2ECE4] cursor-pointer"
+                title={isAuthenticated ? `Account: ${user?.name || 'Customer'}` : 'Sign In or Sign Up'}
+                aria-label="User Account Menu"
+                aria-expanded={isAccountMenuOpen}
+              >
+                {isAuthenticated ? (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-[11px] font-bold flex items-center justify-center">
+                    {user?.name ? user.name.charAt(0) : 'U'}
+                  </div>
+                ) : (
+                  <User className="w-5 h-5 stroke-[1.8]" />
+                )}
+                <span className="text-xs font-semibold text-[#2D2621]">
+                  {isAuthenticated ? user?.name?.split(' ')[0] || 'Profile' : 'Sign In'}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-[#8C847C] transition-transform duration-200 ${
+                    isAccountMenuOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
 
-            {/* Solid Terracotta "Order Now →" Pill Button (Desktop & Tablet) */}
+              {/* Dropdown Card */}
+              {isAccountMenuOpen && (
+                <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  {isAuthenticated ? (
+                    <div className="space-y-2">
+                      <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4]">
+                        <p className="text-[13px] font-bold text-[#1A130E] truncate">
+                          {user?.name || 'Amber Spice Diner'}
+                        </p>
+                        <p className="text-[11px] text-[#7A746E] truncate mt-0.5">
+                          {user?.email || 'diner@example.com'}
+                        </p>
+                        <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200/60">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>Active Diner Account</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1 pt-1 text-[13px]">
+                        <Link
+                          href="/user-dashboard"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                        >
+                          <User className="w-4 h-4 text-[#B84A22]" />
+                          <span>My Profile & Dashboard</span>
+                        </Link>
+                        <Link
+                          href="/user-dashboard"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                        >
+                          <ShoppingBag className="w-4 h-4 text-[#B84A22]" />
+                          <span>Order History & Tracking</span>
+                        </Link>
+                        <Link
+                          href="/reservations"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                        >
+                          <Calendar className="w-4 h-4 text-[#B84A22]" />
+                          <span>Book Table Reservation</span>
+                        </Link>
+                      </div>
+
+                      <div className="pt-2 border-t border-[#F0ECE7]">
+                        <button
+                          onClick={() => {
+                            dispatch(logout());
+                            setIsAccountMenuOpen(false);
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-[13px] font-semibold transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 p-1">
+                      <div>
+                        <h4 className="text-[14px] font-bold text-[#1A130E]">Welcome to Amber Spice</h4>
+                        <p className="text-[11px] text-[#7A746E] mt-0.5 leading-snug">
+                          Sign in to access saved Dublin addresses, reorder in 1-click, and unlock diner perks.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2 pt-1">
+                        <Link
+                          href="/login"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span>Sign In</span>
+                        </Link>
+
+                        <Link
+                          href="/register"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="w-full py-2 px-4 rounded-xl border border-[#E5DFD7] hover:border-[#B84A22] text-[#2D2621] hover:text-[#B84A22] bg-[#FAF8F5] text-[13px] font-semibold flex items-center justify-center gap-2 transition-all hover:bg-orange-50/40"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          <span>Create Account (Sign Up)</span>
+                        </Link>
+                      </div>
+
+                      <div className="pt-2 border-t border-[#F0ECE7] text-center">
+                        <Link
+                          href="/menu"
+                          onClick={() => setIsAccountMenuOpen(false)}
+                          className="text-[11px] text-[#8C847C] hover:text-[#B84A22] transition-colors"
+                        >
+                          Ordering without account? Use Guest Checkout →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Gradient Terracotta to Golden Amber "Order Now →" Button */}
             <Link
               href="/menu"
-              className="btn-amber-primary px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hidden md:flex items-center gap-1.5 shadow-sm"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-sm font-semibold hidden md:flex items-center gap-1.5 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:shadow-[0_6px_20px_rgba(184,74,34,0.4)] transition-all hover:scale-102 active:scale-95 cursor-pointer"
             >
               <span>Order Now</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -154,16 +291,6 @@ export const Navbar: React.FC = () => {
               );
             })}
             <Link
-              href="/user-dashboard"
-              className={`block px-4 py-2.5 rounded-xl text-[15px] font-medium transition-colors ${
-                pathname === '/user-dashboard'
-                  ? 'bg-orange-50 text-[#B84A22] font-semibold'
-                  : 'text-[#3D3D3D] hover:bg-neutral-50 hover:text-[#B84A22]'
-              }`}
-            >
-              My Profile & Dashboard
-            </Link>
-            <Link
               href="/reservations"
               className={`block px-4 py-2.5 rounded-xl text-[15px] font-medium transition-colors ${
                 pathname === '/reservations'
@@ -175,10 +302,67 @@ export const Navbar: React.FC = () => {
             </Link>
           </nav>
 
+          {/* Account Section in Mobile Menu */}
+          {isAuthenticated ? (
+            <div className="pt-2 pb-1 border-t border-[#F0ECE7] space-y-2">
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-orange-50/60 border border-orange-100">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    {user?.name ? user.name.charAt(0) : 'U'}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-[#1A130E] truncate">{user?.name || 'Valued Diner'}</p>
+                    <p className="text-[11px] text-[#7A746E] truncate">{user?.email}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    dispatch(logout());
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-xs text-rose-600 hover:text-rose-700 font-semibold px-2.5 py-1 rounded-lg hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </div>
+              <Link
+                href="/user-dashboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-4 py-2.5 rounded-xl text-xs font-medium text-[#3D3D3D] hover:bg-neutral-50 transition-colors"
+              >
+                My Profile & Orders
+              </Link>
+            </div>
+          ) : (
+            <div className="pt-2 pb-1 border-t border-[#F0ECE7] space-y-2">
+              <div className="text-[11px] font-bold text-[#8C847C] uppercase tracking-wider px-1">
+                Diner Account
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="py-2.5 px-3 rounded-xl border border-[#E0D9D1] text-[#3D3D3D] text-center text-xs font-bold hover:border-[#B84A22] hover:text-[#B84A22] bg-white transition-all shadow-xs flex items-center justify-center gap-1.5"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-[#B84A22]" />
+                  <span>Sign In</span>
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-center text-xs font-bold shadow-xs hover:opacity-95 transition-all flex items-center justify-center gap-1.5"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Sign Up</span>
+                </Link>
+              </div>
+            </div>
+          )}
+
           <div className="pt-2 border-t border-[#F0ECE7] flex flex-col gap-2">
             <Link
               href="/menu"
-              className="btn-amber-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 shadow-xs"
+              className="w-full py-3 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-sm font-semibold flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all"
             >
               <UtensilsCrossed className="w-4 h-4" />
               <span>Browse Full Menu & Order</span>

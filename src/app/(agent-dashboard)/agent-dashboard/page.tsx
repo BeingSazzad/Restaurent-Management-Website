@@ -82,7 +82,7 @@ export default function AgentDashboardPage() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={playChime}
-            className="px-3 py-2 rounded-full text-xs bg-[#F9F9F9] hover:bg-[#FFF4EC] border border-[#EBEBEB] hover:border-[#FF8D2F] text-[#3D3D3D] flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-xl text-xs bg-[#F9F9F9] hover:bg-[#FFF4EC] border border-[#EBEBEB] hover:border-[#FF8D2F] text-[#3D3D3D] flex items-center gap-1.5 transition-colors"
           >
             <Volume2 className="w-3.5 h-3.5 text-[#FF8D2F]" />
             <span>Sound Bell</span>
@@ -90,7 +90,7 @@ export default function AgentDashboardPage() {
 
           <button
             onClick={() => dispatch(toggleKitchenSnooze(20))}
-            className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
               kitchenSnooze
                 ? 'bg-[#E23744] text-white shadow-sm'
                 : 'bg-[#F9F9F9] text-[#3D3D3D] border border-[#EBEBEB] hover:border-[#FF8D2F]'
@@ -100,10 +100,10 @@ export default function AgentDashboardPage() {
             <span>{kitchenSnooze ? 'Rush Mode ACTIVE (+20m)' : 'Rush Mode (+20m)'}</span>
           </button>
 
-          <div className="flex bg-[#F1F1F1] p-1 rounded-full">
+          <div className="flex bg-[#F1F1F1] p-1 rounded-xl">
             <button
               onClick={() => setSelectedTab('kds')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                 selectedTab === 'kds'
                   ? 'bg-white text-[#FF8D2F] shadow-sm'
                   : 'text-[#747474] hover:text-[#1F1F1F]'
@@ -113,7 +113,7 @@ export default function AgentDashboardPage() {
             </button>
             <button
               onClick={() => setSelectedTab('menu-86')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                 selectedTab === 'menu-86'
                   ? 'bg-white text-[#FF8D2F] shadow-sm'
                   : 'text-[#747474] hover:text-[#1F1F1F]'
@@ -123,7 +123,7 @@ export default function AgentDashboardPage() {
             </button>
             <button
               onClick={() => setSelectedTab('sales')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                 selectedTab === 'sales'
                   ? 'bg-white text-[#FF8D2F] shadow-sm'
                   : 'text-[#747474] hover:text-[#1F1F1F]'
@@ -271,7 +271,7 @@ export default function AgentDashboardPage() {
 
                 <button
                   onClick={() => dispatch(toggleItemAvailability(dish.id))}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
                     dish.isAvailable
                       ? 'bg-[#0FA958]/10 text-[#0FA958] hover:bg-[#0FA958]/20'
                       : 'bg-[#E23744]/10 text-[#E23744] hover:bg-[#E23744]/20'
@@ -411,7 +411,7 @@ function KdsOrderTicket({
         {order.status === 'preparing' && (
           <button
             onClick={() => onStatusChange('ready')}
-            className="w-full bg-[#0FA958] hover:bg-[#0E974F] text-white font-bold py-2 rounded-full text-xs flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full bg-[#0FA958] hover:bg-[#0E974F] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Mark Ready for Pickup</span>
@@ -420,7 +420,7 @@ function KdsOrderTicket({
         {order.status === 'ready' && (
           <button
             onClick={() => onStatusChange('completed')}
-            className="w-full bg-[#1F1F1F] hover:bg-black text-white font-bold py-2 rounded-full text-xs flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full bg-[#1F1F1F] hover:bg-black text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#FF8D2F]" />
             <span>Handover & Complete</span>

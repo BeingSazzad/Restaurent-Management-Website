@@ -8,6 +8,7 @@ interface Review {
   id: number;
   name: string;
   location: string;
+  avatar?: string;
   rating: number;
   date: string;
   dish: string;
@@ -21,6 +22,7 @@ const REVIEWS_DATA: Review[] = [
     id: 1,
     name: 'Sarah Ahmed',
     location: 'Dublin 2 (Grafton Area)',
+    avatar: '/images/avatars/sarah.jpg',
     rating: 5,
     date: 'Yesterday',
     dish: "Chef's Signature Dum Biryani",
@@ -33,6 +35,7 @@ const REVIEWS_DATA: Review[] = [
     id: 2,
     name: 'James Miller',
     location: 'Dublin 4 (Ballsbridge)',
+    avatar: '/images/avatars/james.jpg',
     rating: 5,
     date: '3 days ago',
     dish: 'Old Delhi Butter Chicken',
@@ -45,6 +48,7 @@ const REVIEWS_DATA: Review[] = [
     id: 3,
     name: 'Ayesha Rahman',
     location: 'Dublin 6 (Ranelagh)',
+    avatar: '/images/avatars/ayesha.jpg',
     rating: 5,
     date: 'Last week',
     dish: 'Tandoori Chicken Skewers',
@@ -57,6 +61,7 @@ const REVIEWS_DATA: Review[] = [
     id: 4,
     name: 'Cian O’Connor',
     location: 'Dublin 1 (City Centre)',
+    avatar: '/images/avatars/cian.jpg',
     rating: 5,
     date: '2 weeks ago',
     dish: 'Grand Amber Family Feast',
@@ -69,6 +74,7 @@ const REVIEWS_DATA: Review[] = [
     id: 5,
     name: 'Elena Rostova',
     location: 'Dublin 8 (Portobello)',
+    avatar: '/images/avatars/elena.jpg',
     rating: 5,
     date: '3 weeks ago',
     dish: 'Clay Oven Tandoori Naan Pizza',
@@ -137,7 +143,7 @@ export default function CustomerReviewsPage() {
             <p className="text-[13px] text-[#747474]">Based on 2,140+ verified customer reviews</p>
             <button
               onClick={() => setShowReviewModal(true)}
-              className="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all"
+              className="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold shadow-[0_4px_12px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all"
             >
               Write a Review
             </button>
@@ -158,7 +164,7 @@ export default function CustomerReviewsPage() {
                 </div>
                 <div className="w-full h-2 rounded-full bg-[rgb(249,249,249)] overflow-hidden border border-[#E5E5E5]">
                   <div
-                    className="h-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] rounded-full transition-all duration-500"
                     style={{ width: bar.score }}
                   />
                 </div>
@@ -210,8 +216,14 @@ export default function CustomerReviewsPage() {
             <div>
               <div className="flex items-start justify-between gap-3 mb-3.5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white font-bold text-sm flex items-center justify-center shadow-xs">
-                    {rev.name.charAt(0)}
+                  <div className="w-10 h-10 rounded-full overflow-hidden border border-[#B84A22]/20 shadow-xs shrink-0 bg-[#251D17]">
+                    {rev.avatar ? (
+                      <img src={rev.avatar} alt={rev.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white font-bold text-sm flex items-center justify-center">
+                        {rev.name.charAt(0)}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h4 className="font-bold text-[15px] text-[#1A130E] leading-snug">{rev.name}</h4>
@@ -355,7 +367,7 @@ export default function CustomerReviewsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
+                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_12px_rgba(184,74,34,0.3)] transition-all"
                 >
                   Submit Review
                 </button>
@@ -373,7 +385,7 @@ export default function CustomerReviewsPage() {
         </p>
         <Link
           href="/menu"
-          className="px-8 py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
+          className="px-8 py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
         >
           <span>Order From Menu</span>
           <ArrowRight className="w-4 h-4" />

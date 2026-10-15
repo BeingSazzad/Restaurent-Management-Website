@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Eye, Clock, ShieldCheck, UtensilsCrossed, Calendar } from 'lucide-react';
+import { ArrowRight, Sparkles, Eye } from 'lucide-react';
 
 interface GalleryItem {
   id: number;
@@ -118,7 +118,7 @@ export default function GalleryPage() {
                 onClick={() => setActiveFilter(tab.key as any)}
                 className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all flex items-center gap-2 cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs'
+                    ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-[0_2px_8px_rgba(184,74,34,0.25)]'
                     : 'text-[#555555] hover:text-[#1A130E] hover:bg-[rgb(249,249,249)]'
                 }`}
               >
@@ -219,7 +219,7 @@ export default function GalleryPage() {
                 </button>
                 <Link
                   href="/menu"
-                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 transition-opacity"
+                  className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_12px_rgba(184,74,34,0.3)] flex items-center gap-2 transition-all"
                 >
                   <span>Order on Menu</span>
                   <ArrowRight className="w-4 h-4" />
@@ -229,65 +229,6 @@ export default function GalleryPage() {
           </div>
         </div>
       )}
-
-      {/* Luxury Culinary Experience Call to Action */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#1C120C] via-[#241710] to-[#150D08] border border-[#3E291C] text-white p-8 sm:p-12 shadow-2xl">
-        {/* Ambient Warm Embers Glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F15A24]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#D49B37]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#D49B37] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Taste the Royal Dublin Heritage</span>
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-              Ready to Taste the Craft in Person?
-            </h2>
-
-            <p className="text-[14px] sm:text-[15px] text-[#D5CBC2] max-w-2xl leading-relaxed">
-              Every dish in our gallery is cooked to order using whole spices stone-ground daily, 
-              simmered slowly in antique copper handis, and dispatched steaming hot across Dublin.
-            </p>
-
-            {/* Dublin Service Highlights */}
-            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-[#E2D8CE]">
-              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                <Clock className="w-3.5 h-3.5 text-[#0FA958]" />
-                <span>30-45 Min Express Dublin Delivery</span>
-              </div>
-              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#D49B37]" />
-                <span>100% Certified Irish Halal Meats</span>
-              </div>
-              <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                <UtensilsCrossed className="w-3.5 h-3.5 text-[#F15A24]" />
-                <span>Collection at South William St, D2</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center lg:items-end">
-            <Link
-              href="/menu"
-              className="w-full sm:w-auto lg:w-full py-3.5 px-7 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-bold flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-98 transition-all"
-            >
-              <span>Explore Complete Menu</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              href="/reservations"
-              className="w-full sm:w-auto lg:w-full py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white text-[14px] font-semibold flex items-center justify-center gap-2 transition-all"
-            >
-              <Calendar className="w-4 h-4 text-[#D49B37]" />
-              <span>Book Table in Dublin 2</span>
-            </Link>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
