@@ -708,7 +708,7 @@ export default function OrderDetailsPage() {
 
           {/* Stepper */}
           <div className="py-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {steps.map((step, idx) => {
                 const isFinished = idx < currentIndex;
                 const isCurrent = idx === currentIndex;
@@ -717,48 +717,45 @@ export default function OrderDetailsPage() {
                 return (
                   <div
                     key={step.key}
-                    className={`p-4 sm:p-5 rounded-2xl border transition-all flex flex-col justify-between ${
+                    className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex items-center gap-3 ${
                       isCurrent
-                        ? 'bg-orange-50/60 border-[#F15A24] shadow-xs'
+                        ? 'bg-orange-50/60 border-[#F15A24] shadow-xs ring-1 ring-[#F15A24]/30'
                         : isFinished
                         ? 'bg-emerald-50/40 border-emerald-200'
                         : 'bg-[#FAF8F5] border-[#EFEAE4] opacity-75'
                     }`}
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 transition-all ${
-                          isFinished
-                            ? 'bg-[#0FA958] text-white shadow-xs'
-                            : isCurrent
-                            ? 'bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white ring-4 ring-orange-200/60 shadow-xs'
-                            : 'bg-neutral-200 text-[#7A746E]'
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 transition-all ${
+                        isFinished
+                          ? 'bg-[#0FA958] text-white shadow-xs'
+                          : isCurrent
+                          ? 'bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white ring-4 ring-orange-200/60 shadow-xs'
+                          : 'bg-neutral-200 text-[#7A746E]'
+                      }`}
+                    >
+                      {isFinished ? (
+                        <CheckCircle2 className="w-5 h-5 text-white" />
+                      ) : (
+                        <Icon className="w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C8681] block leading-none mb-1">
+                        Step 0{idx + 1}
+                      </span>
+                      <h4
+                        className={`font-bold text-[13px] sm:text-[13.5px] xl:text-[14px] leading-tight whitespace-nowrap ${
+                          isCurrent
+                            ? 'text-[#F15A24]'
+                            : isFinished
+                            ? 'text-emerald-900'
+                            : 'text-[#55504A]'
                         }`}
                       >
-                        {isFinished ? (
-                          <CheckCircle2 className="w-5 h-5 text-white" />
-                        ) : (
-                          <Icon className="w-4 h-4" />
-                        )}
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C8681] block">
-                          Step 0{idx + 1}
-                        </span>
-                        <h4
-                          className={`font-bold text-[14px] leading-tight ${
-                            isCurrent
-                              ? 'text-[#F15A24]'
-                              : isFinished
-                              ? 'text-emerald-900'
-                              : 'text-[#55504A]'
-                          }`}
-                        >
-                          {step.label}
-                        </h4>
-                      </div>
+                        {step.label}
+                      </h4>
                     </div>
-                    <p className="text-[12px] text-[#7A746E] pl-0.5">{step.desc}</p>
                   </div>
                 );
               })}

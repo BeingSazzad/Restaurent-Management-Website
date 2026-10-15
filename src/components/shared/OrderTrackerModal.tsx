@@ -196,7 +196,7 @@ export const OrderTrackerModal: React.FC = () => {
                   </div>
                   <div className="pt-0.5">
                     <h4
-                      className={`font-semibold text-[14px] ${
+                      className={`font-semibold text-[14px] whitespace-nowrap ${
                         isCurrent
                           ? 'text-[#F15A24]'
                           : isFinished
@@ -206,7 +206,6 @@ export const OrderTrackerModal: React.FC = () => {
                     >
                       {step.label}
                     </h4>
-                    <p className="text-[12px] text-[#666666]">{step.desc}</p>
                   </div>
                 </div>
               );
