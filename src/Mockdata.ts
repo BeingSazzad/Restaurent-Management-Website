@@ -291,7 +291,7 @@ export const INITIAL_ORDERS: OrderItem[] = [
         dish: MENU_ITEMS[2],
         quantity: 1,
         selectedModifiers: [],
-        specialInstructions: "Ring Apt 3 buzzer, leave at reception",
+        specialInstructions: "Medium spice, gravy on side",
         totalPrice: 14.99,
       },
     ],

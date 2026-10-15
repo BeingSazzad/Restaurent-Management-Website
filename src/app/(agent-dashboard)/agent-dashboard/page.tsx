@@ -32,6 +32,7 @@ import {
   FileText,
   BadgePercent,
   CheckCheck,
+  MapPin,
 } from 'lucide-react';
 
 type KdsTab = 'kds' | 'menu-86' | 'sales' | 'manual-order';
@@ -63,6 +64,7 @@ export default function AgentDashboardPage() {
 
   // Thermal Slip Modal
   const [activeSlipOrder, setActiveSlipOrder] = useState<OrderItem | null>(null);
+  const [slipModalTab, setSlipModalTab] = useState<'details' | 'slip'>('details');
 
   // Manual Fast Ticket Entry State
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
@@ -405,9 +407,9 @@ export default function AgentDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* COLUMN 1: NEW INCOMING ORDERS */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white p-4 rounded-[18px] border border-[#EFEAE4] shadow-xs">
+            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-3 h-3 rounded-full bg-[#E23744] animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#E23744]" />
                 <div>
                   <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
                     Incoming Tickets
@@ -415,13 +417,13 @@ export default function AgentDashboardPage() {
                   <p className="text-[11px] text-[#7A746E]">New orders to fire</p>
                 </div>
               </div>
-              <span className="bg-[#E23744]/10 text-[#E23744] border border-[#E23744]/25 px-2.5 py-0.5 rounded-full text-xs font-bold">
+              <span className="bg-rose-50 text-rose-700 border border-rose-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
                 {newOrders.length} Tickets
               </span>
             </div>
 
             {newOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-[18px] p-6 text-xs text-[#9E9790]">
+              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
                 <UtensilsCrossed className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
                 <span className="block font-semibold text-[13px] text-[#55504A]">No New Tickets</span>
                 <span>Incoming takeaway and delivery orders will appear here.</span>
@@ -443,9 +445,9 @@ export default function AgentDashboardPage() {
 
           {/* COLUMN 2: PREPARING IN KITCHEN (COOKING / TANDOOR) */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white p-4 rounded-[18px] border border-[#EFEAE4] shadow-xs">
+            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-3 h-3 rounded-full bg-[#FFA940]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                 <div>
                   <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
                     Cooking / Grilling
@@ -453,13 +455,13 @@ export default function AgentDashboardPage() {
                   <p className="text-[11px] text-[#7A746E]">Active pots & tandoor skewers</p>
                 </div>
               </div>
-              <span className="bg-[#FFF4EC] text-[#F15A24] border border-[#F15A24]/20 px-2.5 py-0.5 rounded-full text-xs font-bold">
+              <span className="bg-orange-50 text-[#F15A24] border border-orange-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
                 {preparingOrders.length} Cooking
               </span>
             </div>
 
             {preparingOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-[18px] p-6 text-xs text-[#9E9790]">
+              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
                 <Flame className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
                 <span className="block font-semibold text-[13px] text-[#55504A]">Tandoors Clear</span>
                 <span>Click &quot;Fire Ticket&quot; on any new order to start cooking.</span>
@@ -481,9 +483,9 @@ export default function AgentDashboardPage() {
 
           {/* COLUMN 3: READY FOR DISPATCH / PICKUP */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white p-4 rounded-[18px] border border-[#EFEAE4] shadow-xs">
+            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
               <div className="flex items-center gap-2.5">
-                <span className="w-3 h-3 rounded-full bg-[#0FA958]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0FA958]" />
                 <div>
                   <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
                     Ready / Out for Delivery
@@ -491,13 +493,13 @@ export default function AgentDashboardPage() {
                   <p className="text-[11px] text-[#7A746E]">Packed in thermal bags</p>
                 </div>
               </div>
-              <span className="bg-[#0FA958]/10 text-[#0FA958] border border-[#0FA958]/30 px-2.5 py-0.5 rounded-full text-xs font-bold">
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
                 {readyOrders.length} Ready
               </span>
             </div>
 
             {readyOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-[18px] p-6 text-xs text-[#9E9790]">
+              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
                 <CheckCircle2 className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
                 <span className="block font-semibold text-[13px] text-[#55504A]">No Packed Orders</span>
                 <span>Ready orders waiting for customer pickup or rider show here.</span>
@@ -774,95 +776,300 @@ export default function AgentDashboardPage() {
         </div>
       )}
 
-      {/* ================= THERMAL SLIP / RECEIPT MODAL ================= */}
+      {/* ================= TICKET DETAILS & KITCHEN SLIP MODAL ================= */}
       {activeSlipOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-[20px] max-w-sm w-full p-6 shadow-2xl border border-[#EAE5DF] space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#EAE5DF]">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E]">
-                Kitchen Thermal Slip
-              </span>
+          <div className="bg-white rounded-[22px] max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#EAE5DF] overflow-hidden">
+            {/* Modal Header */}
+            <div className="px-5 py-4 bg-[#FAF8F5] border-b border-[#EAE5DF] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FFF4EC] border border-[#F15A24]/20 flex items-center justify-center text-[#F15A24]">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-[15px] text-[#1A130E]">
+                      Order #{activeSlipOrder.orderNumber}
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10.5px] font-bold uppercase inline-flex items-center gap-1 ${
+                        activeSlipOrder.fulfillmentType === 'delivery'
+                          ? 'bg-orange-50 text-[#F15A24] border border-orange-200/60'
+                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'
+                      }`}
+                    >
+                      {activeSlipOrder.fulfillmentType === 'delivery' ? (
+                        <Bike className="w-3 h-3" />
+                      ) : (
+                        <Store className="w-3 h-3" />
+                      )}
+                      <span>{activeSlipOrder.fulfillmentType}</span>
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] text-[#7A746E]">
+                    Placed {new Date(activeSlipOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · Status: <span className="font-semibold text-[#1A130E] capitalize">{activeSlipOrder.status.replace('_', ' ')}</span>
+                  </p>
+                </div>
+              </div>
               <button
                 onClick={() => setActiveSlipOrder(null)}
-                className="text-[#9E9790] hover:text-[#1A130E] cursor-pointer"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[#9E9790] hover:text-[#1A130E] hover:bg-[#EFEAE4]/50 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Simulated Thermal Paper */}
-            <div className="bg-[#FAF8F5] p-5 rounded-xl border border-dashed border-[#DCD5CB] font-mono text-xs space-y-3 leading-relaxed">
-              <div className="text-center pb-2 border-b border-dashed border-[#CCC5BC]">
-                <h3 className="font-bold text-sm tracking-tight">{RESTAURANT_INFO.name}</h3>
-                <p className="text-[10px] text-[#7A746E]">{RESTAURANT_INFO.location}</p>
-                <p className="text-[11px] font-bold mt-1 text-[#F15A24]">
-                  *** KITCHEN EXPO TICKET ***
-                </p>
-              </div>
-
-              <div className="flex justify-between font-bold text-sm">
-                <span>ORDER: #{activeSlipOrder.orderNumber}</span>
-                <span className="uppercase">{activeSlipOrder.fulfillmentType}</span>
-              </div>
-
-              <div className="text-[11px] text-[#666059]">
-                <span>Diner: {activeSlipOrder.customerName}</span>
-                <br />
-                <span>Phone: {activeSlipOrder.customerPhone}</span>
-                <br />
-                <span>Time: {new Date(activeSlipOrder.createdAt).toLocaleTimeString()}</span>
-              </div>
-
-              <div className="border-t border-dashed border-[#CCC5BC] pt-2 space-y-2">
-                {activeSlipOrder.items.map((i, idx) => (
-                  <div key={idx}>
-                    <div className="flex justify-between font-bold text-[12px]">
-                      <span>{i.quantity}x {i.dish.name}</span>
-                      <span>€{i.totalPrice.toFixed(2)}</span>
-                    </div>
-                    {i.selectedModifiers.map((m, mIdx) => (
-                      <span key={mIdx} className="block text-[10px] text-[#F15A24] pl-2 font-semibold">
-                        &gt; {m.optionName}
-                      </span>
-                    ))}
-                    {i.specialInstructions && (
-                      <div className="text-[10px] bg-red-100 text-red-800 font-bold p-1 rounded mt-0.5">
-                        ALERTS: {i.specialInstructions}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {activeSlipOrder.specialNotes && (
-                <div className="border-t border-dashed border-[#CCC5BC] pt-2 text-[10px]">
-                  <strong>NOTE:</strong> {activeSlipOrder.specialNotes}
-                </div>
-              )}
-
-              <div className="border-t border-dashed border-[#CCC5BC] pt-2 flex justify-between font-bold text-sm">
-                <span>TOTAL PAID:</span>
-                <span>€{activeSlipOrder.total.toFixed(2)}</span>
-              </div>
+            {/* View Switcher Tabs */}
+            <div className="px-5 pt-3 pb-2 bg-white border-b border-[#F2EFE9] flex items-center gap-2">
+              <button
+                onClick={() => setSlipModalTab('details')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  slipModalTab === 'details'
+                    ? 'bg-[#1A130E] text-white shadow-xs'
+                    : 'bg-[#FAF8F5] text-[#666059] hover:text-[#1A130E] border border-[#EAE5DF]'
+                }`}
+              >
+                Full Ticket Details
+              </button>
+              <button
+                onClick={() => setSlipModalTab('slip')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  slipModalTab === 'slip'
+                    ? 'bg-[#1A130E] text-white shadow-xs'
+                    : 'bg-[#FAF8F5] text-[#666059] hover:text-[#1A130E] border border-[#EAE5DF]'
+                }`}
+              >
+                <Printer className="w-3 h-3" />
+                <span>Thermal ESC/POS Slip</span>
+              </button>
             </div>
 
-            <div className="flex items-center gap-2 pt-1">
+            {/* Modal Body (Scrollable) */}
+            <div className="p-5 overflow-y-auto space-y-4 flex-1">
+              {slipModalTab === 'details' ? (
+                <>
+                  {/* Customer & Delivery Card */}
+                  <div className="bg-[#FAF8F5] rounded-xl p-4 border border-[#EAE5DF] space-y-2.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C8681] block">
+                      Customer & Delivery Destination
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <span className="text-[#7A746E] block text-[11px]">Customer</span>
+                        <span className="font-semibold text-[#1A130E] text-[13px]">{activeSlipOrder.customerName}</span>
+                      </div>
+                      <div>
+                        <span className="text-[#7A746E] block text-[11px]">Contact Phone</span>
+                        <a
+                          href={`tel:${activeSlipOrder.customerPhone}`}
+                          className="font-semibold text-[#F15A24] hover:underline inline-flex items-center gap-1"
+                        >
+                          <Phone className="w-3 h-3" />
+                          <span>{activeSlipOrder.customerPhone}</span>
+                        </a>
+                      </div>
+                      {activeSlipOrder.deliveryAddress && (
+                        <div className="sm:col-span-2">
+                          <span className="text-[#7A746E] block text-[11px]">Delivery Address & Eircode</span>
+                          <div className="font-medium text-[#1A130E] inline-flex items-center gap-1.5 mt-0.5">
+                            <MapPin className="w-3.5 h-3.5 text-[#F15A24] shrink-0" />
+                            <span>{activeSlipOrder.deliveryAddress} {activeSlipOrder.eircode ? `(${activeSlipOrder.eircode})` : ''}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Special Notes & Driver Instructions */}
+                  {activeSlipOrder.specialNotes && (
+                    <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold text-[12px] text-amber-900">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Driver / Packaging Special Notes</span>
+                      </div>
+                      <p className="text-[12px] leading-relaxed pl-5">{activeSlipOrder.specialNotes}</p>
+                    </div>
+                  )}
+
+                  {/* Order Items Breakdown */}
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C8681] mb-2 block">
+                      Ordered Dishes & Modifiers ({activeSlipOrder.items.reduce((acc, i) => acc + i.quantity, 0)} items)
+                    </span>
+                    <div className="divide-y divide-[#F2EFE9] border border-[#EAE5DF] rounded-xl overflow-hidden bg-white">
+                      {activeSlipOrder.items.map((item, idx) => (
+                        <div key={idx} className="p-3 space-y-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="w-5 h-5 rounded bg-[#FAF8F5] border border-[#EAE5DF] flex items-center justify-center text-xs font-bold text-[#F15A24]">
+                                {item.quantity}×
+                              </span>
+                              <span className="font-semibold text-xs text-[#1A130E]">{item.dish.name}</span>
+                            </div>
+                            <span className="font-semibold text-xs text-[#1A130E]">€{item.totalPrice.toFixed(2)}</span>
+                          </div>
+                          {item.selectedModifiers && item.selectedModifiers.length > 0 && (
+                            <div className="pl-7 space-y-0.5">
+                              {item.selectedModifiers.map((mod, mIdx) => (
+                                <p key={mIdx} className="text-[11px] text-[#7A746E]">
+                                  • {mod.optionName} {mod.price > 0 ? `(+€${mod.price.toFixed(2)})` : ''}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+                          {item.specialInstructions && (
+                            <div className="mt-1 ml-7 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200/60 text-[10.5px] font-medium">
+                              <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
+                              <span>{item.specialInstructions}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Payment Breakdown */}
+                  <div className="bg-[#FAF8F5] p-3.5 rounded-xl border border-[#EAE5DF] text-xs space-y-1.5">
+                    <div className="flex justify-between text-[#7A746E]">
+                      <span>Subtotal</span>
+                      <span>€{activeSlipOrder.subtotal.toFixed(2)}</span>
+                    </div>
+                    {activeSlipOrder.deliveryFee > 0 && (
+                      <div className="flex justify-between text-[#7A746E]">
+                        <span>Delivery Fee</span>
+                        <span>€{activeSlipOrder.deliveryFee.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {activeSlipOrder.discount > 0 && (
+                      <div className="flex justify-between text-emerald-700">
+                        <span>Discount</span>
+                        <span>-€{activeSlipOrder.discount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between font-bold text-sm text-[#1A130E] pt-1.5 border-t border-[#EAE5DF]">
+                      <span>Total Paid ({activeSlipOrder.paymentMethod.replace('_', ' ').toUpperCase()})</span>
+                      <span>€{activeSlipOrder.total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* Simulated Thermal Paper */
+                <div className="bg-[#FAF8F5] p-5 rounded-xl border border-dashed border-[#DCD5CB] font-mono text-xs space-y-3 leading-relaxed max-w-sm mx-auto">
+                  <div className="text-center pb-2 border-b border-dashed border-[#CCC5BC]">
+                    <h3 className="font-bold text-sm tracking-tight">{RESTAURANT_INFO.name}</h3>
+                    <p className="text-[10px] text-[#7A746E]">{RESTAURANT_INFO.location}</p>
+                    <p className="text-[11px] font-bold mt-1 text-[#F15A24]">
+                      *** KITCHEN EXPO TICKET ***
+                    </p>
+                  </div>
+
+                  <div className="flex justify-between font-bold text-sm">
+                    <span>ORDER: #{activeSlipOrder.orderNumber}</span>
+                    <span className="uppercase">{activeSlipOrder.fulfillmentType}</span>
+                  </div>
+
+                  <div className="text-[11px] text-[#666059]">
+                    <span>Diner: {activeSlipOrder.customerName}</span>
+                    <br />
+                    <span>Phone: {activeSlipOrder.customerPhone}</span>
+                    <br />
+                    <span>Time: {new Date(activeSlipOrder.createdAt).toLocaleTimeString()}</span>
+                  </div>
+
+                  <div className="border-t border-dashed border-[#CCC5BC] pt-2 space-y-2">
+                    {activeSlipOrder.items.map((i, idx) => (
+                      <div key={idx}>
+                        <div className="flex justify-between font-bold text-[12px]">
+                          <span>{i.quantity}x {i.dish.name}</span>
+                          <span>€{i.totalPrice.toFixed(2)}</span>
+                        </div>
+                        {i.selectedModifiers.map((m, mIdx) => (
+                          <span key={mIdx} className="block text-[10px] text-[#F15A24] pl-2 font-semibold">
+                            &gt; {m.optionName}
+                          </span>
+                        ))}
+                        {i.specialInstructions && (
+                          <div className="text-[10px] bg-red-100 text-red-800 font-bold p-1 rounded mt-0.5">
+                            ALERTS: {i.specialInstructions}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {activeSlipOrder.specialNotes && (
+                    <div className="border-t border-dashed border-[#CCC5BC] pt-2 text-[10px]">
+                      <strong>NOTE:</strong> {activeSlipOrder.specialNotes}
+                    </div>
+                  )}
+
+                  <div className="border-t border-dashed border-[#CCC5BC] pt-2 flex justify-between font-bold text-sm">
+                    <span>TOTAL PAID:</span>
+                    <span>€{activeSlipOrder.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Actions Footer */}
+            <div className="px-5 py-3.5 bg-[#FAF8F5] border-t border-[#EAE5DF] flex items-center justify-between gap-2.5">
               <button
                 onClick={() => {
                   window.print();
-                  setActiveSlipOrder(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl font-bold text-xs bg-[#1A130E] text-white hover:bg-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#1A130E] text-white hover:bg-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print to Thermal ESC/POS</span>
+                <span>Print Thermal Slip</span>
               </button>
-              <button
-                onClick={() => setActiveSlipOrder(null)}
-                className="px-4 py-2.5 rounded-xl font-semibold text-xs border border-[#EAE5DF] text-[#666059] hover:bg-neutral-50 cursor-pointer"
-              >
-                Close
-              </button>
+
+              <div className="flex items-center gap-2">
+                {activeSlipOrder.status === 'new' && (
+                  <button
+                    onClick={() => {
+                      dispatch(updateOrderStatus({ orderId: activeSlipOrder.id, status: 'preparing' }));
+                      showToast(`Order #${activeSlipOrder.orderNumber} sent to cooking!`);
+                      setActiveSlipOrder(null);
+                    }}
+                    className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#F15A24] text-white hover:bg-[#D94E1C] flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <Flame className="w-3.5 h-3.5" />
+                    <span>Start Cooking</span>
+                  </button>
+                )}
+                {activeSlipOrder.status === 'preparing' && (
+                  <button
+                    onClick={() => {
+                      dispatch(updateOrderStatus({ orderId: activeSlipOrder.id, status: 'ready' }));
+                      showToast(`Order #${activeSlipOrder.orderNumber} marked ready!`);
+                      setActiveSlipOrder(null);
+                    }}
+                    className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#0FA958] text-white hover:bg-[#0D914B] flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Mark Ready</span>
+                  </button>
+                )}
+                {activeSlipOrder.status === 'ready' && (
+                  <button
+                    onClick={() => {
+                      dispatch(updateOrderStatus({ orderId: activeSlipOrder.id, status: 'completed' }));
+                      showToast(`Order #${activeSlipOrder.orderNumber} marked completed!`);
+                      setActiveSlipOrder(null);
+                    }}
+                    className="px-4 py-2.5 rounded-xl font-bold text-xs bg-[#1A130E] text-white hover:bg-black flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <CheckCheck className="w-3.5 h-3.5 text-[#FFA940]" />
+                    <span>Complete Order</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setActiveSlipOrder(null)}
+                  className="px-4 py-2.5 rounded-xl font-semibold text-xs border border-[#EAE5DF] text-[#666059] hover:bg-white cursor-pointer transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1025,123 +1232,129 @@ function KdsOrderCard({
     return () => clearInterval(interval);
   }, [order.createdAt]);
 
-  // Urgency Color Pacing
-  const isDelayed = elapsedMinutes >= 20;
-  const isWarning = elapsedMinutes >= 10 && elapsedMinutes < 20;
+  // Urgency Timer Pacing
+  const isDelayed = elapsedMinutes >= 25;
+  const isWarning = elapsedMinutes >= 15 && elapsedMinutes < 25;
+  const totalItemCount = order.items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <div
-      className={`bg-white rounded-[18px] border transition-all duration-200 shadow-[0_2px_12px_rgba(26,19,14,0.02)] overflow-hidden ${
-        isDelayed
-          ? 'border-red-400 ring-2 ring-red-400/20'
-          : isWarning
-          ? 'border-amber-300'
-          : 'border-[#EFEAE4]'
-      }`}
-    >
-      {/* Top Header: Order Number, Type, Print & Live Elapsed Timer */}
-      <div className="p-3.5 bg-[#FAF8F5] border-b border-[#EAE5DF] flex items-center justify-between gap-2">
+    <div className="bg-white rounded-2xl border border-[#EFEAE4] hover:border-[#DFD7CE] shadow-[0_1px_3px_rgba(26,19,14,0.04)] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between group">
+      {/* Top Header: Order Number, Type, Elapsed Timer & Slip Action */}
+      <div className="px-4 py-3 bg-[#FAF8F5] border-b border-[#EFEAE4] flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="font-extrabold text-[15px] text-[#1A130E] tracking-tight">
+          <span className="font-bold text-[15px] text-[#1A130E] tracking-tight">
             #{order.orderNumber}
           </span>
           <span
-            className={`px-2 py-0.5 rounded-full text-[10.5px] font-bold uppercase flex items-center gap-1 ${
+            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1 ${
               isDelivery
-                ? 'bg-orange-50 text-[#F15A24] border border-orange-200/60'
-                : 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'
+                ? 'bg-[#FFF4EC] text-[#F15A24] border border-[#F15A24]/20'
+                : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
             }`}
           >
             {isDelivery ? <Bike className="w-3 h-3" /> : <Store className="w-3 h-3" />}
-            <span>{order.fulfillmentType}</span>
+            <span>{isDelivery ? 'Delivery' : 'Pickup'}</span>
           </span>
         </div>
 
-        {/* Live Elapsed Badge & Print Action */}
+        {/* Live Elapsed Badge & Slip Inspector Button */}
         <div className="flex items-center gap-1.5 shrink-0">
           <span
-            className={`px-2 py-0.5 rounded-full text-[10.5px] font-bold flex items-center gap-1 ${
+            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold flex items-center gap-1 ${
               isDelayed
-                ? 'bg-red-500 text-white animate-pulse'
+                ? 'bg-rose-50 text-rose-700 border border-rose-200/80'
                 : isWarning
-                ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                : 'bg-neutral-100 text-[#55504A]'
+                ? 'bg-amber-50 text-amber-800 border border-amber-200/80'
+                : 'bg-neutral-100 text-[#666059] border border-neutral-200/60'
             }`}
             title="Elapsed cooking & prep time"
           >
-            <Timer className="w-3 h-3" />
+            <Clock className="w-3 h-3" />
             <span>{elapsedMinutes}m</span>
           </span>
 
           <button
             onClick={onPrint}
-            title="Print Kitchen Slip"
-            className="w-7 h-7 rounded-lg bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#666059] flex items-center justify-center transition-colors cursor-pointer"
+            title="View Full Ticket Details & Slip"
+            className="w-7 h-7 rounded-lg bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#666059] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <FileText className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Customer Contact & Station Routing Bar */}
-      <div className="px-4 py-2 border-b border-[#F2EFE9] flex items-center justify-between text-[11.5px] text-[#7A746E] bg-white">
-        <div className="truncate pr-2">
-          <span className="font-bold text-[#1A130E]">{order.customerName}</span>
-          <span className="ml-1.5 font-medium">{order.customerPhone}</span>
-        </div>
-        <span className="font-bold text-[#1A130E] shrink-0">€{order.total.toFixed(2)}</span>
+      {/* Diner & Count Row (Clutter-free: phone & price moved to details slip) */}
+      <div className="px-4 py-2 border-b border-[#F4EFEA] flex items-center justify-between text-xs text-[#7A746E] bg-white">
+        <span className="font-medium text-[#1A130E] truncate">{order.customerName}</span>
+        <span className="shrink-0 text-[11.5px] font-medium">
+          {totalItemCount} {totalItemCount === 1 ? 'item' : 'items'}
+        </span>
       </div>
 
-      {/* Itemized Order Content */}
-      <div className="p-4 space-y-3 text-[13px]">
-        {order.items.map((item, idx) => (
-          <div key={idx} className="pb-2 border-b border-[#FAF8F5] last:border-0 last:pb-0">
-            <div className="flex items-start justify-between gap-2">
-              <span className="font-bold text-[14px] text-[#1A130E] leading-snug">
-                <span className="text-[#F15A24] font-black mr-1">{item.quantity}x</span>
-                {item.dish.name}
-              </span>
-              <span className="text-[10px] uppercase font-bold text-[#8C8681] bg-[#FAF8F5] px-1.5 py-0.5 rounded">
-                {item.dish.category}
-              </span>
-            </div>
+      {/* Itemized Order Content (Clean Chef-Focused Layout) */}
+      <div className="p-4 space-y-3.5 flex-1">
+        {order.items.map((item, idx) => {
+          const hasInstruction =
+            item.specialInstructions &&
+            item.specialInstructions.trim().toLowerCase() !== order.specialNotes?.trim().toLowerCase();
 
-            {/* Modifiers List */}
-            {item.selectedModifiers.map((mod, mIdx) => (
-              <span
-                key={mIdx}
-                className="text-[11.5px] text-[#F15A24] font-semibold block ml-3 mt-0.5"
-              >
-                • {mod.optionName}
-              </span>
-            ))}
+          return (
+            <div key={idx} className="space-y-1">
+              <div className="flex items-start gap-2.5">
+                <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-md bg-[#FAF8F5] border border-[#EFEAE4] text-[12px] font-bold text-[#F15A24] shrink-0 mt-0.5">
+                  {item.quantity}×
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-[13.5px] font-semibold text-[#1A130E] leading-snug">
+                    {item.dish.name}
+                  </h4>
 
-            {/* Special Dietary & Cooking Instructions */}
-            {item.specialInstructions && (
-              <div className="mt-1.5 bg-red-50 border border-red-200/80 text-red-800 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5 text-red-600 shrink-0" />
-                <span>{item.specialInstructions}</span>
+                  {/* Modifiers List */}
+                  {item.selectedModifiers && item.selectedModifiers.length > 0 && (
+                    <div className="mt-0.5 space-y-0.5">
+                      {item.selectedModifiers.map((mod, mIdx) => (
+                        <p key={mIdx} className="text-[11.5px] text-[#7A746E] leading-tight">
+                          • {mod.optionName}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Special Dietary / Culinary Instruction */}
+                  {hasInstruction && (
+                    <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-50/80 border border-amber-200/70 text-amber-900 text-[11px] font-medium leading-tight">
+                      <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
+                      <span>{item.specialInstructions}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
 
-        {/* Global Delivery / Packaging Notes */}
+        {/* Delivery / Packaging Special Note (Muted 1-line preview, full note in modal) */}
         {order.specialNotes && (
-          <div className="p-2 rounded-xl bg-[#FAF8F5] border border-[#EAE5DF] text-[11.5px] text-[#55504A]">
-            <span className="font-bold text-[#1A130E] block">Note:</span>
-            {order.specialNotes}
+          <div
+            onClick={onPrint}
+            title="Click to view full ticket details"
+            className="mt-2 p-2 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4] text-[11.5px] text-[#55504A] flex items-start gap-1.5 cursor-pointer hover:bg-[#F5EFE8] transition-colors"
+          >
+            <FileText className="w-3.5 h-3.5 text-[#9E9790] shrink-0 mt-0.5" />
+            <div className="min-w-0 flex-1">
+              <span className="font-semibold text-[#1A130E]">Note: </span>
+              <span className="line-clamp-1">{order.specialNotes}</span>
+            </div>
           </div>
         )}
       </div>
 
       {/* Footer Forward Action & Accidental Recall */}
-      <div className="p-3 bg-[#FAF8F5] border-t border-[#EAE5DF] flex items-center gap-2">
-        {/* Status Forward Transition */}
+      <div className="p-3 bg-[#FAF8F5] border-t border-[#EFEAE4] flex items-center gap-2">
         {order.status === 'new' && (
           <button
             onClick={() => onStatusChange('preparing')}
-            className="flex-1 py-2.5 rounded-xl font-bold text-[12.5px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white hover:opacity-95 transition-opacity shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#F15A24] hover:bg-[#D94E1C] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
           >
             <Flame className="w-4 h-4" />
             <span>Fire Ticket (Start Cooking)</span>
@@ -1149,44 +1362,41 @@ function KdsOrderCard({
         )}
 
         {order.status === 'preparing' && (
-          <button
-            onClick={() => onStatusChange('ready')}
-            className="flex-1 py-2.5 rounded-xl font-bold text-[12.5px] bg-[#0FA958] hover:bg-[#0D914B] text-white transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>Mark Ready for Pickup</span>
-          </button>
+          <>
+            <button
+              onClick={() => onStatusChange('ready')}
+              className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#0FA958] hover:bg-[#0D914B] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Mark Ready for Pickup</span>
+            </button>
+            <button
+              onClick={() => onStatusChange('new')}
+              title="Recall to Incoming Tickets"
+              className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+            >
+              <Undo2 className="w-3.5 h-3.5" />
+            </button>
+          </>
         )}
 
         {order.status === 'ready' && (
-          <button
-            onClick={() => onStatusChange('completed')}
-            className="flex-1 py-2.5 rounded-xl font-bold text-[12.5px] bg-[#1A130E] hover:bg-black text-white transition-colors shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            <CheckCheck className="w-4 h-4 text-[#FFA940]" />
-            <span>Handover & Complete</span>
-          </button>
-        )}
-
-        {/* Accidental Status Rollback / Undo Button */}
-        {order.status === 'preparing' && (
-          <button
-            onClick={() => onStatusChange('new')}
-            title="Recall to New Tickets"
-            className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <Undo2 className="w-3.5 h-3.5" />
-          </button>
-        )}
-
-        {order.status === 'ready' && (
-          <button
-            onClick={() => onStatusChange('preparing')}
-            title="Return to Cooking"
-            className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <Undo2 className="w-3.5 h-3.5" />
-          </button>
+          <>
+            <button
+              onClick={() => onStatusChange('completed')}
+              className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#1A130E] hover:bg-black text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+            >
+              <CheckCheck className="w-4 h-4 text-[#FFA940]" />
+              <span>Handover & Complete</span>
+            </button>
+            <button
+              onClick={() => onStatusChange('preparing')}
+              title="Return to Cooking"
+              className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+            >
+              <Undo2 className="w-3.5 h-3.5" />
+            </button>
+          </>
         )}
       </div>
     </div>
