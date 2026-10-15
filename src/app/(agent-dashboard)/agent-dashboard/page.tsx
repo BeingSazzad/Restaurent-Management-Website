@@ -33,6 +33,8 @@ import {
   BadgePercent,
   CheckCheck,
   MapPin,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 
 type KdsTab = 'kds' | 'menu-86' | 'sales' | 'manual-order';
@@ -57,6 +59,8 @@ export default function AgentDashboardPage() {
   // 86 Stock Manager Filters
   const [stockSearchQuery, setStockSearchQuery] = useState('');
   const [stockCategoryFilter, setStockCategoryFilter] = useState('all');
+  const [stockStatusFilter, setStockStatusFilter] = useState<'all' | 'in_stock' | 'sold_out'>('all');
+  const [stockViewMode, setStockViewMode] = useState<'grid' | 'table'>('grid');
 
   // Audio Notifications
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -136,6 +140,12 @@ export default function AgentDashboardPage() {
       if (stockCategoryFilter !== 'all' && dish.category !== stockCategoryFilter) {
         return false;
       }
+      if (stockStatusFilter === 'in_stock' && !dish.isAvailable) {
+        return false;
+      }
+      if (stockStatusFilter === 'sold_out' && dish.isAvailable) {
+        return false;
+      }
       if (stockSearchQuery.trim()) {
         const q = stockSearchQuery.toLowerCase();
         return (
@@ -146,7 +156,7 @@ export default function AgentDashboardPage() {
       }
       return true;
     });
-  }, [menuItems, stockCategoryFilter, stockSearchQuery]);
+  }, [menuItems, stockCategoryFilter, stockStatusFilter, stockSearchQuery]);
 
   // Quick Stats
   const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
@@ -533,37 +543,133 @@ export default function AgentDashboardPage() {
           {/* Header Banner */}
           <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-[#1A130E] tracking-tight">
-                Instant Kitchen Stock Manager (86ing)
-              </h2>
-              <p className="text-[13px] text-[#7A746E] mt-0.5">
-                1-tap toggle to immediately grey out or restore dishes on customer ordering menu.
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-bold text-[#1A130E] tracking-tight">
+                  Kitchen Stock &amp; 86 Menu Manager
+                </h2>
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FAF8F5] text-[#55504A] border border-[#EAE5DF]">
+                  Live Menu Sync
+                </span>
+              </div>
+              <p className="text-[13px] text-[#7A746E] mt-1">
+                1-tap toggle to immediately grey out or restore dishes across digital menus, POS, and customer orders.
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-                ✓ {menuItems.length - soldOutCount} In Stock
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                {menuItems.length - soldOutCount} Active In Stock
               </span>
-              <span className="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
-                ✕ {soldOutCount} 86&apos;d Sold Out
+              <span className="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                {soldOutCount} 86&apos;d Sold Out
               </span>
+              {soldOutCount > 0 && (
+                <button
+                  onClick={() => {
+                    menuItems
+                      .filter((item) => !item.isAvailable)
+                      .forEach((item) => dispatch(toggleItemAvailability(item.id)));
+                    showToast('All menu items successfully restocked!');
+                  }}
+                  className="h-9 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer active:scale-95"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Restock All ({soldOutCount})</span>
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Search & Category Filter Controls */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[#F15A24] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search dish by name, ingredients, or ID..."
-                value={stockSearchQuery}
-                onChange={(e) => setStockSearchQuery(e.target.value)}
-                className="w-full h-11 bg-white border border-[#EAE5DF] focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-4 text-sm outline-none shadow-xs"
-              />
+          {/* Search, Filter Bar & View Controls */}
+          <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-3.5">
+            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+              {/* Search Box */}
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#F15A24] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search dish by name, ingredients, category, or ID..."
+                  value={stockSearchQuery}
+                  onChange={(e) => setStockSearchQuery(e.target.value)}
+                  className="w-full h-11 bg-[#FAF8F5] border border-[#EAE5DF] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-9 text-sm outline-none transition-colors"
+                />
+                {stockSearchQuery && (
+                  <button
+                    onClick={() => setStockSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9E9790] hover:text-[#1A130E] p-1 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Status Filter Tabs & View Mode Switcher */}
+              <div className="flex items-center gap-2.5 shrink-0">
+                {/* Stock Status Filter */}
+                <div className="flex items-center p-1 bg-[#FAF8F5] border border-[#EAE5DF] rounded-xl text-xs font-semibold">
+                  <button
+                    onClick={() => setStockStatusFilter('all')}
+                    className={`h-9 px-3 rounded-lg transition-all cursor-pointer ${
+                      stockStatusFilter === 'all'
+                        ? 'bg-white text-[#1A130E] shadow-2xs font-bold'
+                        : 'text-[#7A746E] hover:text-[#1A130E]'
+                    }`}
+                  >
+                    All ({menuItems.length})
+                  </button>
+                  <button
+                    onClick={() => setStockStatusFilter('in_stock')}
+                    className={`h-9 px-3 rounded-lg transition-all cursor-pointer ${
+                      stockStatusFilter === 'in_stock'
+                        ? 'bg-white text-emerald-700 shadow-2xs font-bold'
+                        : 'text-[#7A746E] hover:text-emerald-700'
+                    }`}
+                  >
+                    In Stock ({menuItems.length - soldOutCount})
+                  </button>
+                  <button
+                    onClick={() => setStockStatusFilter('sold_out')}
+                    className={`h-9 px-3 rounded-lg transition-all cursor-pointer ${
+                      stockStatusFilter === 'sold_out'
+                        ? 'bg-white text-rose-700 shadow-2xs font-bold'
+                        : 'text-[#7A746E] hover:text-rose-700'
+                    }`}
+                  >
+                    86&apos;d ({soldOutCount})
+                  </button>
+                </div>
+
+                {/* View Mode (Grid vs Table) */}
+                <div className="hidden sm:flex items-center p-1 bg-[#FAF8F5] border border-[#EAE5DF] rounded-xl">
+                  <button
+                    onClick={() => setStockViewMode('grid')}
+                    title="Cards Grid View"
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
+                      stockViewMode === 'grid'
+                        ? 'bg-white text-[#F15A24] shadow-2xs'
+                        : 'text-[#7A746E] hover:text-[#1A130E]'
+                    }`}
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setStockViewMode('table')}
+                    title="Compact Table View"
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
+                      stockViewMode === 'table'
+                        ? 'bg-white text-[#F15A24] shadow-2xs'
+                        : 'text-[#7A746E] hover:text-[#1A130E]'
+                    }`}
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none pt-1 border-t border-[#F2EFE9]">
               {[
                 { id: 'all', label: 'All Items' },
                 { id: 'biryani', label: 'Biryani' },
@@ -576,10 +682,10 @@ export default function AgentDashboardPage() {
                 <button
                   key={c.id}
                   onClick={() => setStockCategoryFilter(c.id)}
-                  className={`h-11 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer shrink-0 ${
+                  className={`h-9 px-3.5 rounded-xl text-xs font-semibold transition-all cursor-pointer shrink-0 ${
                     stockCategoryFilter === c.id
                       ? 'bg-[#F15A24] text-white shadow-xs'
-                      : 'bg-white text-[#55504A] hover:bg-[#FAF8F5] border border-[#EAE5DF]'
+                      : 'bg-[#FAF8F5] text-[#55504A] hover:bg-white hover:text-[#1A130E] border border-[#EAE5DF]'
                   }`}
                 >
                   {c.label}
@@ -588,63 +694,278 @@ export default function AgentDashboardPage() {
             </div>
           </div>
 
-          {/* Stock Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5">
-            {filteredStockItems.map((dish) => {
-              const inStock = dish.isAvailable;
+          {/* Empty Search / Filter State */}
+          {filteredStockItems.length === 0 && (
+            <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-8 space-y-3">
+              <Search className="w-10 h-10 text-[#CCC5BC] mx-auto mb-1" />
+              <h3 className="text-base font-bold text-[#1A130E]">No dishes found</h3>
+              <p className="text-xs text-[#7A746E] max-w-sm mx-auto">
+                No items match your active search &quot;{stockSearchQuery}&quot; or category filters.
+              </p>
+              <button
+                onClick={() => {
+                  setStockSearchQuery('');
+                  setStockCategoryFilter('all');
+                  setStockStatusFilter('all');
+                }}
+                className="mt-2 h-9 px-4 rounded-xl bg-[#FAF8F5] border border-[#EAE5DF] text-xs font-semibold text-[#1A130E] hover:bg-white cursor-pointer"
+              >
+                Reset Search &amp; Filters
+              </button>
+            </div>
+          )}
 
-              return (
-                <div
-                  key={dish.id}
-                  className={`p-4 sm:p-4.5 rounded-2xl border transition-all flex items-center justify-between gap-3.5 shadow-xs ${
-                    inStock
-                      ? 'bg-white border-[#EFEAE4] hover:border-[#F15A24]/40'
-                      : 'bg-[#FFF8F8] border-rose-200/80 opacity-90'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <img
-                      src={dish.image}
-                      alt={dish.name}
-                      className={`w-14 h-14 rounded-xl object-cover shrink-0 border ${
-                        inStock ? 'border-[#EAE5DF]' : 'border-rose-200 filter grayscale-[40%]'
-                      }`}
-                    />
-                    <div className="min-w-0">
-                      <h4
-                        className={`font-semibold text-sm truncate ${
-                          inStock ? 'text-[#1A130E]' : 'text-rose-950 line-through'
-                        }`}
-                      >
-                        {dish.name}
-                      </h4>
-                      <p className="text-xs text-[#7A746E] mt-0.5">
-                        €{dish.price.toFixed(2)} · {dish.categoryLabel}
-                      </p>
-                    </div>
-                  </div>
+          {/* ============ VIEW 1: STANDARD VISUAL FOOD CARDS (GRID) ============ */}
+          {filteredStockItems.length > 0 && stockViewMode === 'grid' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredStockItems.map((dish) => {
+                const inStock = dish.isAvailable;
 
-                  <button
-                    onClick={() => {
-                      dispatch(toggleItemAvailability(dish.id));
-                      showToast(
-                        inStock
-                          ? `86 Alert: "${dish.name}" marked as Sold Out`
-                          : `Restocked: "${dish.name}" marked as Available`
-                      );
-                    }}
-                    className={`h-9 px-3.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs active:scale-95 ${
+                return (
+                  <div
+                    key={dish.id}
+                    className={`group bg-white rounded-2xl border transition-all duration-200 overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md ${
                       inStock
-                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200'
-                        : 'bg-rose-600 text-white hover:bg-emerald-600'
+                        ? 'border-[#EAE5DF] hover:border-[#D49B37]/60'
+                        : 'bg-[#FFFBFB] border-rose-200/90 shadow-2xs'
                     }`}
                   >
-                    {inStock ? '✓ In Stock' : '✕ 86 Sold Out'}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+                    {/* Top Image Banner with Badges */}
+                    <div className="relative h-48 w-full overflow-hidden bg-[#FAF8F5]">
+                      <img
+                        src={dish.image}
+                        alt={dish.name}
+                        className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                          inStock ? '' : 'grayscale-[35%] opacity-85'
+                        }`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none" />
+
+                      {/* Top Badges */}
+                      <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/60 backdrop-blur-md text-white border border-white/15 uppercase tracking-wide">
+                          {dish.categoryLabel}
+                        </span>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md shadow-xs flex items-center gap-1.5 ${
+                            inStock
+                              ? 'bg-emerald-500/90 text-white'
+                              : 'bg-rose-600/95 text-white'
+                          }`}
+                        >
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              inStock ? 'bg-white animate-pulse' : 'bg-white'
+                            }`}
+                          />
+                          {inStock ? 'In Stock' : '86’d Sold Out'}
+                        </span>
+                      </div>
+
+                      {/* Bottom on Image: Price & Prep Time */}
+                      <div className="absolute bottom-3 inset-x-3 flex items-end justify-between gap-2 pointer-events-none">
+                        <div className="bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg shadow-sm border border-black/5 flex items-baseline gap-0.5">
+                          <span className="text-xs font-semibold text-[#B84A22]">€</span>
+                          <span className="text-base font-extrabold text-[#1A130E] leading-none">
+                            {dish.price.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="bg-black/60 backdrop-blur-md text-white/95 px-2.5 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1 border border-white/10">
+                          <Clock className="w-3 h-3 text-[#FBA138]" />
+                          <span>{dish.prepTime}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Content Body */}
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-3.5">
+                      <div className="space-y-1.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4
+                            className={`font-bold text-[15px] leading-snug tracking-tight line-clamp-1 ${
+                              inStock ? 'text-[#1A130E]' : 'text-rose-950/70 line-through'
+                            }`}
+                          >
+                            {dish.name}
+                          </h4>
+                          {dish.isBestSeller && (
+                            <span className="shrink-0 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                              ★ Popular
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-[#7A746E] line-clamp-2 leading-relaxed min-h-[32px]">
+                          {dish.description}
+                        </p>
+                      </div>
+
+                      {/* Dietary & Allergen Badges */}
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        {dish.dietary?.map((diet) => (
+                          <span
+                            key={diet}
+                            className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-[#FAF8F5] text-[#55504A] border border-[#EAE5DF] capitalize"
+                          >
+                            {diet}
+                          </span>
+                        ))}
+                        {dish.allergens?.map((allg) => (
+                          <span
+                            key={allg}
+                            className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-orange-50/70 text-orange-800 border border-orange-200/60"
+                          >
+                            {allg}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Action Button: 86 Toggle */}
+                      <div className="pt-2 border-t border-[#F2EFE9]">
+                        <button
+                          onClick={() => {
+                            dispatch(toggleItemAvailability(dish.id));
+                            showToast(
+                              inStock
+                                ? `86 Alert: "${dish.name}" marked as Sold Out`
+                                : `Restocked: "${dish.name}" marked as Available`
+                            );
+                          }}
+                          className={`w-full h-11 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-2xs active:scale-[0.98] ${
+                            inStock
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300'
+                              : 'bg-rose-600 text-white hover:bg-emerald-600 border border-rose-600'
+                          }`}
+                        >
+                          {inStock ? (
+                            <>
+                              <Check className="w-4 h-4 text-emerald-600" />
+                              <span>Active on Menu · Tap to 86</span>
+                            </>
+                          ) : (
+                            <>
+                              <AlertTriangle className="w-4 h-4 text-white" />
+                              <span>86&apos;d Sold Out · Tap to Restock</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ============ VIEW 2: COMPACT OPERATIONAL TABLE ============ */}
+          {filteredStockItems.length > 0 && stockViewMode === 'table' && (
+            <div className="bg-white rounded-2xl border border-[#EAE5DF] shadow-xs overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-[#FAF8F5] border-b border-[#EAE5DF] text-[#7A746E] uppercase font-bold text-[11px] tracking-wider">
+                      <th className="py-3.5 px-4">Dish &amp; Details</th>
+                      <th className="py-3.5 px-4">Category</th>
+                      <th className="py-3.5 px-4">Price</th>
+                      <th className="py-3.5 px-4">Prep Pacing</th>
+                      <th className="py-3.5 px-4">Stock Status</th>
+                      <th className="py-3.5 px-4 text-right">Instant 86 Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#F2EFE9]">
+                    {filteredStockItems.map((dish) => {
+                      const inStock = dish.isAvailable;
+
+                      return (
+                        <tr
+                          key={dish.id}
+                          className={`hover:bg-[#FCFAF7] transition-colors ${
+                            inStock ? '' : 'bg-[#FFFBFB]'
+                          }`}
+                        >
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={dish.image}
+                                alt={dish.name}
+                                className={`w-12 h-12 rounded-xl object-cover border shrink-0 ${
+                                  inStock
+                                    ? 'border-[#EAE5DF]'
+                                    : 'border-rose-200 grayscale-[40%] opacity-80'
+                                }`}
+                              />
+                              <div>
+                                <h4
+                                  className={`font-semibold text-sm ${
+                                    inStock
+                                      ? 'text-[#1A130E]'
+                                      : 'text-rose-950/70 line-through'
+                                  }`}
+                                >
+                                  {dish.name}
+                                </h4>
+                                <p className="text-[11px] text-[#7A746E] line-clamp-1 max-w-md">
+                                  {dish.description}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#FAF8F5] text-[#55504A] border border-[#EAE5DF]">
+                              {dish.categoryLabel}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 font-bold text-[#1A130E] text-sm">
+                            €{dish.price.toFixed(2)}
+                          </td>
+                          <td className="py-3.5 px-4 text-[#7A746E]">
+                            <div className="flex items-center gap-1 font-medium">
+                              <Clock className="w-3.5 h-3.5 text-[#F15A24]" />
+                              <span>{dish.prepTime}</span>
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                                inStock
+                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              }`}
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  inStock ? 'bg-emerald-500' : 'bg-rose-500'
+                                }`}
+                              />
+                              {inStock ? 'In Stock' : '86’d Sold Out'}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <button
+                              onClick={() => {
+                                dispatch(toggleItemAvailability(dish.id));
+                                showToast(
+                                  inStock
+                                    ? `86 Alert: "${dish.name}" marked as Sold Out`
+                                    : `Restocked: "${dish.name}" marked as Available`
+                                );
+                              }}
+                              className={`h-9 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                                inStock
+                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300'
+                                  : 'bg-rose-600 text-white hover:bg-emerald-600 border border-rose-600'
+                              }`}
+                            >
+                              {inStock ? '✓ In Stock' : '✕ 86 Sold Out'}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
