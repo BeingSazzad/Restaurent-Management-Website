@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { clearCart } from '../../redux/slices/cartSlice';
 import { setCheckoutOpen } from '../../redux/slices/fulfillmentSlice';
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 export const CheckoutModal: React.FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const fulfillment = useAppSelector((state) => state.fulfillment);
   const cart = useAppSelector((state) => state.cart);
@@ -78,10 +80,13 @@ export const CheckoutModal: React.FC = () => {
       };
 
       dispatch(createOrder(newOrder));
-      dispatch(setActiveTrackingOrderId(orderId));
+      dispatch(setActiveTrackingOrderId(null));
       dispatch(clearCart());
       dispatch(setCheckoutOpen(false));
       setIsSubmitting(false);
+
+      // Senior UX Architecture: Seamlessly navigate to dedicated Order Details & Live Tracking Page
+      router.push(`/order-details/${orderId}`);
 
       confetti({
         particleCount: 90,

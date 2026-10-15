@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import confetti from 'canvas-confetti';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
 import { updateOrderStatus } from '@/redux/slices/orderSlice';
@@ -292,6 +293,20 @@ export default function OrderDetailsPage() {
     'new' | 'preparing' | 'ready' | 'completed' | null
   >(null);
 
+  React.useEffect(() => {
+    // Celebratory confetti burst when customer lands on Order Confirmation & Details
+    try {
+      confetti({
+        particleCount: 85,
+        spread: 70,
+        origin: { y: 0.5 },
+        colors: ['#B84A22', '#D49B37', '#0FA958'],
+      });
+    } catch {
+      // safe fallback
+    }
+  }, []);
+
   const activeStatus = localStatus || currentOrder.status;
 
   const steps = [
@@ -341,13 +356,22 @@ export default function OrderDetailsPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Top Navigation */}
         <div className="flex items-center justify-between">
-          <Link
-            href="/user-dashboard?tab=orders"
-            className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-[#F15A24] hover:text-[#d44715] transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            <span>Back to Orders</span>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/user-dashboard?tab=orders"
+              className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-[#F15A24] hover:text-[#d44715] transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Back to Orders</span>
+            </Link>
+            <span className="text-[#D5CFC9]">|</span>
+            <Link
+              href="/menu"
+              className="text-[13px] font-medium text-[#7A746E] hover:text-[#1A130E] transition-colors"
+            >
+              Browse Menu
+            </Link>
+          </div>
 
           <button
             onClick={() => {
@@ -358,7 +382,7 @@ export default function OrderDetailsPage() {
                 }).catch(() => {});
               }
             }}
-            className="inline-flex items-center gap-1.5 text-xs text-[#7A746E] hover:text-[#1A130E] bg-white border border-[#EFEAE4] px-3.5 py-1.5 rounded-xl cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs text-[#7A746E] hover:text-[#1A130E] bg-white border border-[#EFEAE4] px-3.5 py-1.5 rounded-xl cursor-pointer shadow-2xs hover:bg-[#FAF8F5] transition-colors"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>Share Status</span>
@@ -426,8 +450,8 @@ export default function OrderDetailsPage() {
         <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.03)] space-y-6">
           <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-13 h-13 rounded-2xl bg-white text-[#F15A24] flex items-center justify-center shadow-xs border border-[#EFEAE4] shrink-0">
-                <Clock className="w-7 h-7 animate-spin" style={{ animationDuration: '8s' }} />
+              <div className="w-12 h-12 rounded-2xl bg-white text-[#F15A24] flex items-center justify-center shadow-xs border border-[#EFEAE4] shrink-0">
+                <Clock className="w-6 h-6 animate-spin" style={{ animationDuration: '8s' }} />
               </div>
               <div>
                 <span className="text-[12px] font-bold text-[#F15A24] uppercase tracking-wider block">
@@ -523,7 +547,7 @@ export default function OrderDetailsPage() {
               {currentOrder.items.map((item, i) => (
                 <div key={i} className="py-4 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3.5">
-                    <div className="w-13 h-13 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-[#EAE6E1]">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-[#EAE6E1]">
                       <img
                         src={item.dish.image}
                         alt={item.dish.name}
