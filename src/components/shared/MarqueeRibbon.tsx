@@ -36,7 +36,7 @@ export const MarqueeRibbon: React.FC = () => {
               <span className="text-white text-[16px] sm:text-[17px] font-bold tracking-wide whitespace-nowrap">
                 {word}
               </span>
-              <span className="mx-12 sm:mx-16 md:mx-20 text-[#FEE49A] text-[13px] sm:text-[14px] shrink-0 select-none">
+              <span className="mx-10 sm:mx-14 md:mx-16 text-[#FEE49A] text-[20px] sm:text-[22px] md:text-[24px] shrink-0 select-none leading-none">
                 ✦
               </span>
             </div>
@@ -50,7 +50,7 @@ export const MarqueeRibbon: React.FC = () => {
               <span className="text-white text-[16px] sm:text-[17px] font-bold tracking-wide whitespace-nowrap">
                 {word}
               </span>
-              <span className="mx-12 sm:mx-16 md:mx-20 text-[#FEE49A] text-[13px] sm:text-[14px] shrink-0 select-none">
+              <span className="mx-10 sm:mx-14 md:mx-16 text-[#FEE49A] text-[20px] sm:text-[22px] md:text-[24px] shrink-0 select-none leading-none">
                 ✦
               </span>
             </div>
