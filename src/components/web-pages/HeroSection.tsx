@@ -188,7 +188,7 @@ export const HeroSection: React.FC = () => {
 
             {/* Visual Social Proof Review Badge - Fixed, rock-solid position across all slides */}
             <div className="flex items-center">
-              <div className="inline-flex items-center gap-3 px-3.5 py-2 rounded-xl bg-black/60 hover:bg-black/75 backdrop-blur-md border border-white/10 shadow-md transition-all">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-black/70 hover:bg-black/85 backdrop-blur-md shadow-lg transition-all">
                 {/* Overlapping Customer Avatars */}
                 <div className="flex items-center -space-x-2 shrink-0">
                   <img

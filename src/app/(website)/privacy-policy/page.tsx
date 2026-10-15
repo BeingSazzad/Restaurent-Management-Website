@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Lock, Eye, FileText, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function PrivacyPolicyPage() {
   return (
@@ -12,8 +12,7 @@ export default function PrivacyPolicyPage() {
         <div className="section-decorator mx-auto" />
         <h1 className="section-title mb-3">Privacy Policy</h1>
         <p className="section-subtitle">
-          How Amber Spice Restaurant handles and protects your personal data in full compliance
-          with the General Data Protection Regulation (GDPR) and Irish Data Protection laws.
+          How Amber Spice handles and protects your personal data under GDPR.
         </p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
           Last Updated: October 2026 · Effective Immediately
@@ -23,8 +22,8 @@ export default function PrivacyPolicyPage() {
       <div className="space-y-8 bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 text-[14px] sm:text-[15px] text-[#444444] leading-[26px] shadow-xs">
         {/* Intro */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#F15A24]" /> 1. Commitment to Your Privacy
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            1. Commitment to Your Privacy
           </h2>
           <p>
             Amber Spice (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;), operating from 18 South
@@ -36,8 +35,8 @@ export default function PrivacyPolicyPage() {
 
         {/* What We Collect */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <Eye className="w-4 h-4 text-[#F15A24]" /> 2. Information We Collect
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            2. Information We Collect
           </h2>
           <p>When you place an online delivery order, takeaway request, or contact us, we collect:</p>
           <ul className="list-disc pl-5 space-y-1 text-[#666666]">
@@ -50,8 +49,8 @@ export default function PrivacyPolicyPage() {
 
         {/* Payments */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <Lock className="w-4 h-4 text-[#F15A24]" /> 3. Payment Processing Security
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            3. Payment Processing Security
           </h2>
           <p>
             We do <strong>not</strong> store or have direct access to your credit or debit card
@@ -62,8 +61,8 @@ export default function PrivacyPolicyPage() {
 
         {/* How We Use Your Data */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <FileText className="w-4 h-4 text-[#F15A24]" /> 4. How We Use Personal Information
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            4. How We Use Personal Information
           </h2>
           <p>We process your data exclusively for legitimate operational reasons:</p>
           <ul className="list-disc pl-5 space-y-1 text-[#666666]">
@@ -76,7 +75,9 @@ export default function PrivacyPolicyPage() {
 
         {/* GDPR Rights */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">5. Your Statutory GDPR Rights</h2>
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            5. Your Statutory GDPR Rights
+          </h2>
           <p>Under Irish and EU law, you are entitled to:</p>
           <ul className="list-disc pl-5 space-y-1 text-[#666666]">
             <li>The right to access a copy of the personal data we hold about you.</li>
@@ -88,7 +89,9 @@ export default function PrivacyPolicyPage() {
 
         {/* Contact */}
         <section className="space-y-2 pt-4 border-t border-[#E5E5E5]">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">6. Data Protection Inquiries</h2>
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            6. Data Protection Inquiries
+          </h2>
           <p>
             If you have any questions regarding your data or wish to exercise your rights, please
             contact our Data Protection Officer at{' '}

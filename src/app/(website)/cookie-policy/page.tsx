@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Cookie, Settings, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function CookiePolicyPage() {
   return (
@@ -12,8 +12,7 @@ export default function CookiePolicyPage() {
         <div className="section-decorator mx-auto" />
         <h1 className="section-title mb-3">Cookie Policy</h1>
         <p className="section-subtitle">
-          How Amber Spice uses cookies and local storage technologies to deliver a seamless,
-          responsive dining and ordering experience.
+          How Amber Spice uses cookies to deliver a smooth and secure ordering experience.
         </p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
           Compliant with EU ePrivacy Directive & Irish Data Protection Commission guidelines
@@ -23,8 +22,8 @@ export default function CookiePolicyPage() {
       <div className="space-y-8 bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 text-[14px] sm:text-[15px] text-[#444444] leading-[26px] shadow-xs">
         {/* What are cookies */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <Cookie className="w-4 h-4 text-[#F15A24]" /> 1. What Are Cookies?
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            1. What Are Cookies?
           </h2>
           <p>
             Cookies are small text files stored on your computer or mobile device when you browse
@@ -35,8 +34,8 @@ export default function CookiePolicyPage() {
 
         {/* Categories of Cookies We Use */}
         <section className="space-y-4">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <Settings className="w-4 h-4 text-[#F15A24]" /> 2. Types of Cookies We Use
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            2. Types of Cookies We Use
           </h2>
 
           <div className="space-y-3">
@@ -75,8 +74,8 @@ export default function CookiePolicyPage() {
 
         {/* How to Manage Cookies */}
         <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#0FA958]" /> 3. Managing Cookie Preferences
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            3. Managing Cookie Preferences
           </h2>
           <p>
             Most modern web browsers allow you to manage or delete cookies via browser settings. You
@@ -87,7 +86,9 @@ export default function CookiePolicyPage() {
 
         {/* Contact */}
         <section className="space-y-2 pt-4 border-t border-[#E5E5E5]">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">4. Questions Regarding Cookies</h2>
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+            4. Questions Regarding Cookies
+          </h2>
           <p>
             For further information regarding our cookie practices, please contact us at{' '}
             <strong className="text-[#F15A24]">support@amberspice.ie</strong>.

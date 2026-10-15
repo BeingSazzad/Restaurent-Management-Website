@@ -79,8 +79,8 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative py-1 transition-colors hover:text-[#B84A22] ${
-                    isActive ? 'text-[#B84A22] font-semibold' : ''
+                  className={`relative py-1 text-[16px] font-medium transition-colors hover:text-[#B84A22] ${
+                    isActive ? 'text-[#B84A22] font-semibold' : 'text-[#3D3D3D]'
                   }`}
                 >
                   {link.label}
@@ -117,142 +117,109 @@ export const Navbar: React.FC = () => {
               )}
             </button>
 
-            {/* Customer Account Button & Dropdown */}
-            <div className="relative hidden sm:block" ref={accountMenuRef}>
-              <button
-                onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-                className="flex items-center gap-1.5 text-[#3D3D3D] hover:text-[#B84A22] p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl hover:bg-orange-50/70 transition-all border border-transparent hover:border-[#F2ECE4] cursor-pointer"
-                title={isAuthenticated ? `Account: ${user?.name || 'Customer'}` : 'Sign In or Sign Up'}
-                aria-label="User Account Menu"
-                aria-expanded={isAccountMenuOpen}
+            {/* Right Action: When Logged Out -> "Get Started →", When Logged In -> User Avatar + "Order Now →" */}
+            {!isAuthenticated ? (
+              <Link
+                href="/login"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:shadow-[0_6px_20px_rgba(184,74,34,0.4)] transition-all hover:scale-102 active:scale-95 cursor-pointer"
               >
-                {isAuthenticated ? (
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-[11px] font-bold flex items-center justify-center">
-                    {user?.name ? user.name.charAt(0) : 'U'}
-                  </div>
-                ) : (
-                  <User className="w-5 h-5 stroke-[1.8]" />
-                )}
-                <span className="text-xs font-semibold text-[#2D2621]">
-                  {isAuthenticated ? user?.name?.split(' ')[0] || 'Profile' : 'Sign In'}
-                </span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 text-[#8C847C] transition-transform duration-200 ${
-                    isAccountMenuOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {/* Dropdown Card */}
-              {isAccountMenuOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                  {isAuthenticated ? (
-                    <div className="space-y-2">
-                      <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4]">
-                        <p className="text-[13px] font-bold text-[#1A130E] truncate">
-                          {user?.name || 'Amber Spice Diner'}
-                        </p>
-                        <p className="text-[11px] text-[#7A746E] truncate mt-0.5">
-                          {user?.email || 'diner@example.com'}
-                        </p>
-                        <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200/60">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>Active Diner Account</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1 pt-1 text-[13px]">
-                        <Link
-                          href="/user-dashboard"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
-                        >
-                          <User className="w-4 h-4 text-[#B84A22]" />
-                          <span>My Profile & Dashboard</span>
-                        </Link>
-                        <Link
-                          href="/user-dashboard"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
-                        >
-                          <ShoppingBag className="w-4 h-4 text-[#B84A22]" />
-                          <span>Order History & Tracking</span>
-                        </Link>
-                        <Link
-                          href="/reservations"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
-                        >
-                          <Calendar className="w-4 h-4 text-[#B84A22]" />
-                          <span>Book Table Reservation</span>
-                        </Link>
-                      </div>
-
-                      <div className="pt-2 border-t border-[#F0ECE7]">
-                        <button
-                          onClick={() => {
-                            dispatch(logout());
-                            setIsAccountMenuOpen(false);
-                          }}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-[13px] font-semibold transition-colors cursor-pointer"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
+                <span>Get Started</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* Customer Account Button & Dropdown */}
+                <div className="relative" ref={accountMenuRef}>
+                  <button
+                    onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+                    className="flex items-center gap-1.5 text-[#3D3D3D] hover:text-[#B84A22] p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl hover:bg-orange-50/70 transition-all border border-transparent hover:border-[#F2ECE4] cursor-pointer"
+                    title={`Account: ${user?.name || 'Customer'}`}
+                    aria-label="User Account Menu"
+                    aria-expanded={isAccountMenuOpen}
+                  >
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-[11px] font-bold flex items-center justify-center">
+                      {user?.name ? user.name.charAt(0) : 'U'}
                     </div>
-                  ) : (
-                    <div className="space-y-3 p-1">
-                      <div>
-                        <h4 className="text-[14px] font-bold text-[#1A130E]">Welcome to Amber Spice</h4>
-                        <p className="text-[11px] text-[#7A746E] mt-0.5 leading-snug">
-                          Sign in to access saved Dublin addresses, reorder in 1-click, and unlock diner perks.
-                        </p>
-                      </div>
+                    <span className="text-xs font-semibold text-[#2D2621]">
+                      {user?.name?.split(' ')[0] || 'Profile'}
+                    </span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-[#8C847C] transition-transform duration-200 ${
+                        isAccountMenuOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-                      <div className="space-y-2 pt-1">
-                        <Link
-                          href="/login"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
-                        >
-                          <LogIn className="w-4 h-4" />
-                          <span>Sign In</span>
-                        </Link>
+                  {/* Dropdown Card */}
+                  {isAccountMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4]">
+                          <p className="text-[13px] font-bold text-[#1A130E] truncate">
+                            {user?.name || 'Amber Spice Diner'}
+                          </p>
+                          <p className="text-[11px] text-[#7A746E] truncate mt-0.5">
+                            {user?.email || 'diner@example.com'}
+                          </p>
+                          <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200/60">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>Active Diner Account</span>
+                          </div>
+                        </div>
 
-                        <Link
-                          href="/register"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="w-full py-2 px-4 rounded-xl border border-[#E5DFD7] hover:border-[#B84A22] text-[#2D2621] hover:text-[#B84A22] bg-[#FAF8F5] text-[13px] font-semibold flex items-center justify-center gap-2 transition-all hover:bg-orange-50/40"
-                        >
-                          <UserPlus className="w-4 h-4" />
-                          <span>Create Account (Sign Up)</span>
-                        </Link>
-                      </div>
+                        <div className="space-y-1 pt-1 text-[13px]">
+                          <Link
+                            href="/user-dashboard"
+                            onClick={() => setIsAccountMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                          >
+                            <User className="w-4 h-4 text-[#B84A22]" />
+                            <span>My Profile & Dashboard</span>
+                          </Link>
+                          <Link
+                            href="/user-dashboard"
+                            onClick={() => setIsAccountMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                          >
+                            <ShoppingBag className="w-4 h-4 text-[#B84A22]" />
+                            <span>Order History & Tracking</span>
+                          </Link>
+                          <Link
+                            href="/reservations"
+                            onClick={() => setIsAccountMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
+                          >
+                            <Calendar className="w-4 h-4 text-[#B84A22]" />
+                            <span>Book Table Reservation</span>
+                          </Link>
+                        </div>
 
-                      <div className="pt-2 border-t border-[#F0ECE7] text-center">
-                        <Link
-                          href="/menu"
-                          onClick={() => setIsAccountMenuOpen(false)}
-                          className="text-[11px] text-[#8C847C] hover:text-[#B84A22] transition-colors"
-                        >
-                          Ordering without account? Use Guest Checkout →
-                        </Link>
+                        <div className="pt-2 border-t border-[#F0ECE7]">
+                          <button
+                            onClick={() => {
+                              dispatch(logout());
+                              setIsAccountMenuOpen(false);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-[13px] font-semibold transition-colors cursor-pointer"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign Out</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
                 </div>
-              )}
-            </div>
 
-            {/* Gradient Terracotta to Golden Amber "Order Now →" Button */}
-            <Link
-              href="/menu"
-              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-sm font-semibold hidden md:flex items-center gap-1.5 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:shadow-[0_6px_20px_rgba(184,74,34,0.4)] transition-all hover:scale-102 active:scale-95 cursor-pointer"
-            >
-              <span>Order Now</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+                <Link
+                  href="/menu"
+                  className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[12px] bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-sm font-semibold hidden md:flex items-center gap-1.5 shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:shadow-[0_6px_20px_rgba(184,74,34,0.4)] transition-all hover:scale-102 active:scale-95 cursor-pointer"
+                >
+                  <span>Order Now</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            )}
 
             {/* Mobile Hamburger Toggle Button */}
             <button
@@ -280,7 +247,7 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`block px-4 py-2.5 rounded-xl text-[15px] font-medium transition-colors ${
+                  className={`block px-4 py-2.5 rounded-xl text-[16px] font-medium transition-colors ${
                     isActive
                       ? 'bg-orange-50 text-[#B84A22] font-semibold'
                       : 'text-[#3D3D3D] hover:bg-neutral-50 hover:text-[#B84A22]'
@@ -292,7 +259,7 @@ export const Navbar: React.FC = () => {
             })}
             <Link
               href="/reservations"
-              className={`block px-4 py-2.5 rounded-xl text-[15px] font-medium transition-colors ${
+              className={`block px-4 py-2.5 rounded-xl text-[16px] font-medium transition-colors ${
                 pathname === '/reservations'
                   ? 'bg-orange-50 text-[#B84A22] font-semibold'
                   : 'text-[#3D3D3D] hover:bg-neutral-50 hover:text-[#B84A22]'
@@ -335,25 +302,22 @@ export const Navbar: React.FC = () => {
             </div>
           ) : (
             <div className="pt-2 pb-1 border-t border-[#F0ECE7] space-y-2">
-              <div className="text-[11px] font-bold text-[#8C847C] uppercase tracking-wider px-1">
-                Diner Account
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-2.5 px-3 rounded-xl border border-[#E0D9D1] text-[#3D3D3D] text-center text-xs font-bold hover:border-[#B84A22] hover:text-[#B84A22] bg-white transition-all shadow-xs flex items-center justify-center gap-1.5"
-                >
-                  <LogIn className="w-3.5 h-3.5 text-[#B84A22]" />
-                  <span>Sign In</span>
-                </Link>
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-center text-sm font-semibold shadow-xs flex items-center justify-center gap-2"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <div className="text-center text-xs text-[#7A746E]">
+                <span>Don&apos;t have an account? </span>
                 <Link
                   href="/register"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-center text-xs font-bold shadow-xs hover:opacity-95 transition-all flex items-center justify-center gap-1.5"
+                  className="text-[#B84A22] font-semibold hover:underline"
                 >
-                  <UserPlus className="w-3.5 h-3.5" />
-                  <span>Sign Up</span>
+                  Sign Up
                 </Link>
               </div>
             </div>

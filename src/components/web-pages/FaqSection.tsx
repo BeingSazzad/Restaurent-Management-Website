@@ -87,7 +87,9 @@ export const FaqSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => toggleAccordion(item.id)}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[16px] hover:text-[#B84A22] transition-colors cursor-pointer"
+                  className={`w-full px-5 sm:px-6 pt-4 sm:pt-5 ${
+                    isOpen ? 'pb-3.5' : 'pb-4 sm:pb-5'
+                  } text-left flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[16px] hover:text-[#B84A22] transition-colors cursor-pointer`}
                   aria-expanded={isOpen}
                 >
                   <span className={`leading-snug transition-colors ${isOpen ? 'text-[#B84A22]' : 'text-[#1A130E]'}`}>
@@ -109,7 +111,7 @@ export const FaqSection: React.FC = () => {
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6 pt-3 text-[14px] sm:text-[15px] text-[#555555] leading-[24px] border-t border-[#F0F0F0] animate-in fade-in duration-150">
+                  <div className="px-5 sm:px-6 pb-4 sm:pb-5 pt-3 text-[14px] sm:text-[15px] text-[#555555] leading-[22px] border-t border-[#F0F0F0] animate-in fade-in duration-150">
                     {item.answer}
                   </div>
                 )}

@@ -9,8 +9,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  isAuthenticated: true, // logged in as Liam for demo convenience
-  user: MOCK_USER,
+  isAuthenticated: false,
+  user: null,
   isAuthModalOpen: false,
   authMode: 'login',
 };
