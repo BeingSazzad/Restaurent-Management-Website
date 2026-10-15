@@ -19,7 +19,6 @@ import {
   UtensilsCrossed,
   CreditCard,
   ShoppingBag,
-  Share2,
 } from 'lucide-react';
 
 export default function OrderDetailsPage() {
@@ -616,21 +615,6 @@ export default function OrderDetailsPage() {
               Browse Menu
             </Link>
           </div>
-
-          <button
-            onClick={() => {
-              if (typeof navigator !== 'undefined' && navigator.share) {
-                navigator.share({
-                  title: `Amber Spice Order #${currentOrder.orderNumber}`,
-                  url: window.location.href,
-                }).catch(() => {});
-              }
-            }}
-            className="inline-flex items-center gap-1.5 text-xs text-[#7A746E] hover:text-[#1A130E] bg-white border border-[#EFEAE4] px-3.5 py-1.5 rounded-xl cursor-pointer shadow-2xs hover:bg-[#FAF8F5] transition-colors"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>Share Status</span>
-          </button>
         </div>
 
         {/* Page Header */}
