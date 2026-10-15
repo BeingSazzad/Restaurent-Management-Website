@@ -104,7 +104,7 @@ export const HeroSection: React.FC = () => {
       <div
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative w-full overflow-hidden min-h-[540px] sm:min-h-[600px] lg:min-h-[640px] flex items-center shadow-md"
+        className="relative w-full overflow-hidden min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] xl:min-h-[760px] flex items-center shadow-md"
       >
         {/* Background Images spanning 100% full screen width with smooth fade transition */}
         {HERO_SLIDES.map((slide, idx) => (
@@ -141,7 +141,7 @@ export const HeroSection: React.FC = () => {
         />
 
         {/* Slide Content Container - Aligned with Global Container Grid */}
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-14 sm:py-16 lg:py-20 text-white">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 sm:py-20 lg:py-24 text-white">
           <div className="max-w-2xl">
             {/* Top Category Indicator (Clean Bold Typography without extra pill bg) */}
             <div className="inline-flex items-center gap-2 text-[#FBA138] text-xs font-bold uppercase tracking-widest mb-3">
