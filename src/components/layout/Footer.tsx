@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Logo } from '../shared/Logo';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,22 +11,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 mb-14">
           {/* Col 1: Brand & Socials (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 flex items-center justify-center text-[#B84A22]">
-                <svg viewBox="0 0 100 100" className="w-8 h-8 fill-[#B84A22]">
-                  <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
-                  <circle cx="50" cy="50" r="10" fill="#D49B37" />
-                </svg>
-              </div>
-              <div>
-                <span className="font-extrabold text-lg tracking-[0.14em] text-white block uppercase">
-                  AMBER SPICE
-                </span>
-                <span className="text-[10px] tracking-wider text-[#D49B37] block font-medium">
-                  Authentic Flavors. Timeless Recipes.
-                </span>
-              </div>
-            </div>
+            <Logo variant="footer" />
 
             <p className="text-xs text-[#9B8C80] max-w-sm leading-relaxed">
               Crafted with authentic hand-ground spices, slow-cooked royal traditions, and genuine

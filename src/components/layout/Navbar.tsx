@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Logo } from '../shared/Logo';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setCartOpen } from '../../redux/slices/cartSlice';
 import {
@@ -28,21 +29,8 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5E5E5] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo with Star Anise Emblem */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 flex items-center justify-center text-[#B84A22] group-hover:rotate-45 transition-transform duration-500">
-              <svg viewBox="0 0 100 100" className="w-9 h-9 fill-[#B84A22]">
-                <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" opacity="0.9" />
-                <path d="M50 15 C40 32 32 40 15 50 C32 60 40 68 50 85 C60 68 68 60 85 50 C68 40 60 32 50 15 Z" fill="#D49B37" opacity="0.8" />
-                <circle cx="50" cy="50" r="8" fill="#1A130E" />
-              </svg>
-            </div>
-            <div>
-              <span className="font-bold text-xl sm:text-2xl tracking-[0.1em] text-[#1A130E] block uppercase">
-                AMBER SPICE
-              </span>
-            </div>
-          </Link>
+          {/* Logo with Auto-Updating Image Support (/images/logo.png or /images/logo.svg) */}
+          <Logo variant="navbar" />
 
           {/* Pure Customer Navigation Menu (No Admin Mixed In) */}
           <nav className="hidden lg:flex items-center gap-8 text-[16px] font-medium text-[#3D3D3D]">
