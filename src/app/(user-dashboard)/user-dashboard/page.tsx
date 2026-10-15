@@ -34,6 +34,10 @@ import {
   ArrowLeft,
   Clock,
   Bike,
+  Store,
+  ChefHat,
+  ClipboardCheck,
+  UtensilsCrossed,
   FileText,
   Star,
 } from 'lucide-react';
@@ -679,25 +683,25 @@ export default function UserDashboardPage() {
                       key: 'new',
                       label: 'Order Confirmed',
                       desc: 'Sent to kitchen chefs',
-                      icon: CheckCircle2,
+                      icon: ClipboardCheck,
                     },
                     {
                       key: 'preparing',
                       label: 'Food Preparing',
                       desc: 'Chefs are grilling & packing',
-                      icon: Sparkles,
+                      icon: ChefHat,
                     },
                     {
                       key: 'ready',
-                      label: 'Out for Delivery',
-                      desc: 'Driver is on the way',
-                      icon: Bike,
+                      label: currentOrder.fulfillmentType === 'delivery' ? 'Out for Delivery' : 'Ready for Pickup',
+                      desc: currentOrder.fulfillmentType === 'delivery' ? 'Driver is on the way' : 'Ready at collection counter',
+                      icon: currentOrder.fulfillmentType === 'delivery' ? Bike : Store,
                     },
                     {
                       key: 'completed',
-                      label: 'Order Delivered',
+                      label: currentOrder.fulfillmentType === 'delivery' ? 'Order Delivered' : 'Order Picked Up',
                       desc: 'Enjoy your hot delicious meal!',
-                      icon: CheckCircle2,
+                      icon: UtensilsCrossed,
                     },
                   ];
 

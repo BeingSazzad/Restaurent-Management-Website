@@ -13,7 +13,8 @@ import {
   ChefHat,
   MapPin,
   X,
-  Sparkles,
+  ClipboardCheck,
+  UtensilsCrossed,
   Star,
   RotateCcw,
   Check,
@@ -61,7 +62,7 @@ export const OrderTrackerModal: React.FC = () => {
   };
 
   const steps = [
-    { key: 'new', label: 'Order Confirmed', desc: 'Sent to kitchen chefs', icon: CheckCircle2 },
+    { key: 'new', label: 'Order Confirmed', desc: 'Sent to kitchen chefs', icon: ClipboardCheck },
     { key: 'preparing', label: 'Food Preparing', desc: 'Chefs are grilling & packing', icon: ChefHat },
     {
       key: 'ready',
@@ -69,7 +70,12 @@ export const OrderTrackerModal: React.FC = () => {
       desc: currentOrder.fulfillmentType === 'delivery' ? 'Driver is on the way' : 'Ready at collection counter',
       icon: currentOrder.fulfillmentType === 'delivery' ? Bike : Store,
     },
-    { key: 'completed', label: 'Order Delivered', desc: 'Enjoy your hot delicious meal!', icon: Sparkles },
+    {
+      key: 'completed',
+      label: currentOrder.fulfillmentType === 'delivery' ? 'Order Delivered' : 'Order Picked Up',
+      desc: 'Enjoy your hot delicious meal!',
+      icon: UtensilsCrossed,
+    },
   ];
 
   const getStepIndex = (status: string) => {
