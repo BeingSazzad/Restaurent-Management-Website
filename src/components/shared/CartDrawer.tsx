@@ -242,30 +242,28 @@ export const CartDrawer: React.FC = () => {
           {/* Footer & Checkout Summary */}
           {cart.items.length > 0 && (
             <div className="p-5 border-t border-[#EBEBEB] bg-white space-y-4">
-              {/* Promo Code Input */}
-              <form onSubmit={handleApplyPromo} className="flex gap-2">
-                <div className="relative flex-1">
-                  <Tag className="w-3.5 h-3.5 absolute left-3 top-3 text-[#A0A0A0]" />
-                  <input
-                    type="text"
-                    value={promoInput}
-                    onChange={(e) => setPromoInput(e.target.value)}
-                    placeholder="Coupon code (e.g. WELCOME10)"
-                    className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl pl-9 pr-3 py-2 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#B84A22] uppercase"
-                  />
-                </div>
+              {/* Promo Code Input with Nested Concentric Radius */}
+              <form onSubmit={handleApplyPromo} className="flex items-center bg-[rgb(249,249,249)] border border-[#E5E5E5] rounded-xl p-1 focus-within:border-[#B84A22]/60 transition-colors shadow-xs">
+                <Tag className="w-3.5 h-3.5 ml-2.5 text-[#A0A0A0] shrink-0" />
+                <input
+                  type="text"
+                  value={promoInput}
+                  onChange={(e) => setPromoInput(e.target.value)}
+                  placeholder="Coupon code (e.g. SPICE20)"
+                  className="flex-1 bg-transparent px-2.5 py-1.5 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none uppercase font-semibold"
+                />
                 {cart.promoCode ? (
                   <button
                     type="button"
                     onClick={() => dispatch(removePromoCode())}
-                    className="px-3 py-2 rounded-xl text-xs bg-rose-50 text-[#B84A22] border border-[#B84A22]/20 font-semibold"
+                    className="px-3 py-1.5 rounded-lg text-xs bg-rose-50 text-[#B84A22] border border-[#B84A22]/20 font-semibold shrink-0"
                   >
                     Remove
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#FAF6EF] border border-[#EBE2D7] hover:border-[#B84A22] text-[#3D3D3D]"
+                    className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shrink-0 shadow-xs active:scale-95 transition-transform"
                   >
                     Apply
                   </button>

@@ -138,19 +138,19 @@ export const Footer: React.FC = () => {
                 e.preventDefault();
                 alert('Thank you for subscribing to Amber Spice!');
               }}
-              className="flex gap-2 pt-1"
+              className="flex items-center bg-gradient-to-r from-[#29221C] to-[#302821] border border-[#3E342B] rounded-xl p-1.5 focus-within:border-[#FBA138]/60 transition-colors shadow-inner max-w-md pt-1"
             >
               <input
                 type="email"
                 required
-                placeholder="Your email address"
-                className="flex-1 bg-white rounded-full px-4 py-2.5 text-xs text-[#1A130E] placeholder:text-[#9B8C80] focus:outline-none"
+                placeholder="Enter your Email"
+                className="flex-1 bg-transparent px-3.5 py-2 text-xs text-white placeholder:text-[#8C7D72] focus:outline-none"
               />
               <button
                 type="submit"
-                className="btn-amber-primary px-5 py-2.5 text-xs font-semibold shrink-0"
+                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-xs font-semibold shrink-0 shadow-sm transition-all active:scale-95"
               >
-                Subscribe
+                Subscribe Now
               </button>
             </form>
           </div>
