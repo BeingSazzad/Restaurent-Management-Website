@@ -769,13 +769,10 @@ export default function OrderDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Items Column */}
           <div className="lg:col-span-7 bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.02)] space-y-5">
-            <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
+            <div className="pb-4 border-b border-[#F2EFE9]">
               <h3 className="font-bold text-[17px] text-[#1A130E]">
                 Items Ordered ({(currentOrder.items || []).length})
               </h3>
-              <span className="text-[12px] text-[#8C8681] font-medium">
-                100% Halal Irish Ingredients
-              </span>
             </div>
 
             <div className="divide-y divide-[#F4F1EC]">
