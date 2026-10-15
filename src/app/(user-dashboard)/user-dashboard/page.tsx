@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
 import { setActiveTrackingOrderId } from '@/redux/slices/orderSlice';
 import { logout } from '@/redux/slices/authSlice';
-import { MOCK_USER, MENU_ITEMS, RESTAURANT_INFO, MenuItem } from '@/Mockdata';
+import { MenuItem } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
 import {
   User,
@@ -18,24 +18,20 @@ import {
   ShoppingBag,
   MapPin,
   CreditCard,
-  HelpCircle,
   Settings,
   LogOut,
   Camera,
   CheckCircle2,
-  ChevronDown,
+  AlertCircle,
   Trash2,
-  RotateCcw,
-  PackageCheck,
   Plus,
   Home,
   Briefcase,
-  ExternalLink,
-  ChevronRight,
-  UtensilsCrossed,
+  ShieldCheck,
+  KeyRound,
 } from 'lucide-react';
 
-type TabType = 'profile' | 'orders' | 'addresses' | 'cards' | 'help' | 'settings' | 'logout';
+type TabType = 'profile' | 'orders' | 'addresses' | 'settings' | 'logout';
 
 interface SavedCardItem {
   id: string;
@@ -52,7 +48,6 @@ interface AddressItem {
   label: string;
   address: string;
   phone: string;
-  eircode?: string;
   isDefault?: boolean;
 }
 
@@ -60,33 +55,41 @@ export default function UserDashboardPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
 
-  // Profile data (matches user state or fallback)
+  // Profile data
   const [profile, setProfile] = useState({
-    name: user?.name || 'Liam O\'Connor',
+    name: user?.name || "Liam O'Connor",
     email: user?.email || 'liam.oc@example.ie',
     phone: user?.phone || '+353 87 555 1234',
     password: '••••••••',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80',
   });
 
-  // 1-Click inline edit state (No popup modals)
+  // Profile Inline Edit State
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editForm, setEditForm] = useState({
-    name: user?.name || 'Liam O\'Connor',
+    name: user?.name || "Liam O'Connor",
     email: user?.email || 'liam.oc@example.ie',
     phone: user?.phone || '+353 87 555 1234',
-    newPassword: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [saveSuccessMsg, setSaveSuccessMsg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Address management state (Matches Screenshot 2 layout)
+  // Password Update State (in Settings)
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+
+  // Address management state
   const [addresses, setAddresses] = useState<AddressItem[]>([
     {
       id: 'addr-1',
@@ -104,9 +107,9 @@ export default function UserDashboardPage() {
     },
     {
       id: 'addr-3',
-      label: 'Smith Jones',
-      address: '13th Street 47 W 13th St, New York, USA-10011',
-      phone: '+33 (907) 555-1235',
+      label: 'Dublin Residence',
+      address: '18 South William St, Dublin 2, D02 HR58, Ireland',
+      phone: '+353 87 555 1234',
       isDefault: false,
     },
   ]);
@@ -119,7 +122,7 @@ export default function UserDashboardPage() {
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [editAddressData, setEditAddressData] = useState({ label: '', address: '', phone: '' });
 
-  // Payment cards state
+  // Payment cards state (housed in Settings)
   const [savedCards, setSavedCards] = useState<SavedCardItem[]>([
     {
       id: 'card-1',
@@ -127,7 +130,7 @@ export default function UserDashboardPage() {
       last4: '4242',
       expMonth: '08',
       expYear: '28',
-      holder: 'Mark Jecno',
+      holder: "Liam O'Connor",
       isDefault: true,
     },
     {
@@ -136,17 +139,18 @@ export default function UserDashboardPage() {
       last4: '8831',
       expMonth: '11',
       expYear: '27',
-      holder: 'Mark Jecno',
+      holder: "Liam O'Connor",
       isDefault: false,
     },
   ]);
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [newCardNumber, setNewCardNumber] = useState('');
-  const [newCardHolder, setNewCardHolder] = useState('Mark Jecno');
+  const [newCardHolder, setNewCardHolder] = useState("Liam O'Connor");
   const [newCardExp, setNewCardExp] = useState('');
   const [newCardCvv, setNewCardCvv] = useState('');
+  const [cardSuccessMsg, setCardSuccessMsg] = useState(false);
 
-  // Sample Dublin Takeaway Orders (Matches Screenshot 1 layout)
+  // Sample Dublin Takeaway Orders
   const [mockOrders] = useState([
     {
       id: 'ord-mcd',
@@ -156,8 +160,6 @@ export default function UserDashboardPage() {
       totalAmount: 40.0,
       currency: '$',
       logo: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=120&q=80',
-      logoColor: 'bg-[#DA291C] text-white',
-      initials: 'M',
       itemsSummary: '2x Big Mac Meal, 1x 9pc McNuggets, 1x Large Fries',
     },
     {
@@ -168,8 +170,6 @@ export default function UserDashboardPage() {
       totalAmount: 100.0,
       currency: '$',
       logo: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80',
-      logoColor: 'bg-[#00704A] text-white',
-      initials: 'S',
       itemsSummary: '3x Caramel Macchiato, 2x Butter Croissant, 1x Cold Brew',
     },
     {
@@ -180,8 +180,6 @@ export default function UserDashboardPage() {
       totalAmount: 60.0,
       currency: '$',
       logo: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=120&q=80',
-      logoColor: 'bg-[#EE3124] text-white',
-      initials: 'P',
       itemsSummary: '1x Stuffed Crust Pepperoni Feast, 1x Garlic Breadsticks',
     },
     {
@@ -192,8 +190,6 @@ export default function UserDashboardPage() {
       totalAmount: 45.0,
       currency: '$',
       logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=120&q=80',
-      logoColor: 'bg-[#D62300] text-white',
-      initials: 'BK',
       itemsSummary: '2x Flame-Grilled Whopper, 1x Onion Rings, 2x Coke Zero',
     },
   ]);
@@ -204,23 +200,15 @@ export default function UserDashboardPage() {
   const [notifications, setNotifications] = useState({
     orderSms: true,
     emailReceipts: true,
-    promotions: false,
     twoFactor: false,
   });
 
-  // Support inquiry state
-  const [supportSubmitted, setSupportSubmitted] = useState(false);
-  const [supportSubject, setSupportSubject] = useState('Order inquiry');
-  const [supportMessage, setSupportMessage] = useState('');
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  // 1-Click inline edit handlers
+  // Profile Edit Handlers
   const handleStartEdit = () => {
     setEditForm({
       name: profile.name,
       email: profile.email,
       phone: profile.phone,
-      newPassword: '',
     });
     setIsEditingProfile(true);
   };
@@ -236,11 +224,10 @@ export default function UserDashboardPage() {
       name: editForm.name.trim() || prev.name,
       email: editForm.email.trim() || prev.email,
       phone: editForm.phone.trim() || prev.phone,
-      password: editForm.newPassword ? '••••••••' : prev.password,
     }));
     setIsEditingProfile(false);
     setSaveSuccessMsg(true);
-    setTimeout(() => setSaveSuccessMsg(false), 4000);
+    setTimeout(() => setSaveSuccessMsg(false), 3500);
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -253,6 +240,33 @@ export default function UserDashboardPage() {
     }
   };
 
+  // Password Change Handler
+  const handlePasswordUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    if (!currentPassword) {
+      setPasswordError('Please enter your current password.');
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      setPasswordError('New password must be at least 6 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New password and confirm password do not match.');
+      return;
+    }
+
+    // Success
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordSuccess(true);
+    setTimeout(() => setPasswordSuccess(false), 4000);
+  };
+
+  // Address Handlers
   const handleAddAddress = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newAddress) return;
@@ -295,6 +309,7 @@ export default function UserDashboardPage() {
     setAddresses(addresses.filter((a) => a.id !== id));
   };
 
+  // Card Handlers (in Settings)
   const handleAddCard = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanNumber = newCardNumber.replace(/\s+/g, '');
@@ -318,17 +333,12 @@ export default function UserDashboardPage() {
     setNewCardExp('');
     setNewCardCvv('');
     setIsAddingCard(false);
+    setCardSuccessMsg(true);
+    setTimeout(() => setCardSuccessMsg(false), 3000);
   };
 
   const handleDeleteCard = (id: string) => {
     setSavedCards(savedCards.filter((c) => c.id !== id));
-  };
-
-  const handleSupportSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!supportMessage) return;
-    setSupportSubmitted(true);
-    setSupportMessage('');
   };
 
   const handleLogout = () => {
@@ -336,31 +346,11 @@ export default function UserDashboardPage() {
     router.push('/');
   };
 
-  const faqs = [
-    {
-      q: 'What are your delivery hours and estimated delivery times?',
-      a: 'We deliver daily across Dublin 1, 2, 4, 6, and 8 from 12:00 PM to 10:30 PM. Average delivery time is 30–35 minutes.',
-    },
-    {
-      q: 'Are all meats 100% Halal certified?',
-      a: 'Yes, 100% of our chicken, lamb, and goat meats are strictly sourced from verified, certified Halal Irish purveyors.',
-    },
-    {
-      q: 'How does doorstep delivery fee calculation work?',
-      a: 'Delivery is €2.00–€3.00 depending on postal district. All orders of €30.00 or higher qualify for free delivery.',
-    },
-    {
-      q: 'Can I request adjustments for nut or dairy allergies?',
-      a: 'Absolutely. You can specify mild/medium/spicy spice levels or allergen exclusions in the order notes.',
-    },
-  ];
-
+  // Navigation Items (Help and Saved Cards removed from sidebar)
   const navigationItems = [
-    { id: 'profile' as TabType, label: 'Change Profile', icon: User },
+    { id: 'profile' as TabType, label: 'Edit Profile', icon: User },
     { id: 'orders' as TabType, label: 'My Order', icon: ShoppingBag },
     { id: 'addresses' as TabType, label: 'Saved Address', icon: MapPin },
-    { id: 'cards' as TabType, label: 'Saved Card', icon: CreditCard },
-    { id: 'help' as TabType, label: 'Help', icon: HelpCircle },
     { id: 'settings' as TabType, label: 'Setting', icon: Settings },
     { id: 'logout' as TabType, label: 'Log Out', icon: LogOut },
   ];
@@ -381,7 +371,6 @@ export default function UserDashboardPage() {
                 <div className="relative inline-block -mt-12 sm:-mt-14 mb-3">
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    title="Click to change photo (no modal)"
                     className="w-22 h-22 sm:w-24 sm:h-24 rounded-full border-[3.5px] border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] overflow-hidden bg-white mx-auto cursor-pointer relative group"
                   >
                     <img
@@ -403,7 +392,7 @@ export default function UserDashboardPage() {
                   />
                 </div>
 
-                {/* User Identity - Clean Modern Typography */}
+                {/* User Identity */}
                 <h2 className="text-[18px] sm:text-[19px] font-bold text-[#1A130E] tracking-tight leading-snug">
                   {profile.name}
                 </h2>
@@ -448,7 +437,7 @@ export default function UserDashboardPage() {
                         <span className="tracking-[-0.01em]">{item.label}</span>
                       </div>
 
-                      {/* Right Indicator (Orange vertical bar for active tab as seen in screenshot) */}
+                      {/* Right Indicator (Orange vertical bar for active tab) */}
                       {isActive && (
                         <div className="w-[3px] h-6 bg-[#F15A24] rounded-full shrink-0" />
                       )}
@@ -465,11 +454,11 @@ export default function UserDashboardPage() {
             {saveSuccessMsg && (
               <div className="mb-5 p-4 rounded-[14px] bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[13px] font-medium flex items-center gap-2.5 shadow-xs animate-in fade-in duration-200">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Profile details have been updated successfully!</span>
+                <span>Profile details updated successfully.</span>
               </div>
             )}
 
-            {/* TAB 1: CHANGE PROFILE (Single unified box with 1-click bulk editing) */}
+            {/* TAB 1: EDIT PROFILE */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 {/* Header Title with Orange Accent Line and Master Edit Button */}
@@ -477,7 +466,7 @@ export default function UserDashboardPage() {
                   <div>
                     <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
                     <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                      Change Profile
+                      Edit Profile
                     </h1>
                   </div>
 
@@ -494,7 +483,7 @@ export default function UserDashboardPage() {
                 {/* Single Unified Profile Box */}
                 <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
                   {!isEditingProfile ? (
-                    /* View Mode: All 4 details in 1 unified container */
+                    /* View Mode */
                     <div className="divide-y divide-[#F2EFEA]">
                       {/* Name */}
                       <div className="pb-5 first:pt-0">
@@ -530,18 +519,27 @@ export default function UserDashboardPage() {
                       </div>
 
                       {/* Password */}
-                      <div className="pt-5 last:pb-0">
-                        <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
-                          <Lock className="w-4 h-4 text-[#F15A24]" />
-                          <span>Password :</span>
+                      <div className="pt-5 last:pb-0 flex items-center justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
+                            <Lock className="w-4 h-4 text-[#F15A24]" />
+                            <span>Password :</span>
+                          </div>
+                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5 tracking-widest">
+                            {profile.password}
+                          </p>
                         </div>
-                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5 tracking-widest">
-                          {profile.password}
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setActiveTab('settings')}
+                          className="text-[12.5px] font-semibold text-[#F15A24] hover:underline cursor-pointer flex items-center gap-1"
+                        >
+                          Change password in Settings →
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    /* Edit Mode: Single unified form to edit all 4 fields at once */
+                    /* Edit Mode: Clean Form */
                     <form onSubmit={handleSaveProfile} className="space-y-6">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         {/* Name Input */}
@@ -581,7 +579,7 @@ export default function UserDashboardPage() {
                         </div>
 
                         {/* Phone Number Input */}
-                        <div>
+                        <div className="sm:col-span-2">
                           <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
                             <Phone className="w-4 h-4 text-[#F15A24]" />
                             <span>Phone Number :</span>
@@ -596,39 +594,6 @@ export default function UserDashboardPage() {
                             required
                             className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
                           />
-                        </div>
-
-                        {/* Password Input */}
-                        <div>
-                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
-                            <Lock className="w-4 h-4 text-[#F15A24]" />
-                            <span>Password :</span>
-                          </label>
-                          <div className="relative">
-                            <input
-                              type={showPassword ? 'text' : 'password'}
-                              value={editForm.newPassword}
-                              onChange={(e) =>
-                                setEditForm({
-                                  ...editForm,
-                                  newPassword: e.target.value,
-                                })
-                              }
-                              placeholder="Enter new password (optional)"
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 pr-11 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer"
-                            >
-                              {showPassword ? (
-                                <EyeOff className="w-4 h-4" />
-                              ) : (
-                                <Eye className="w-4 h-4" />
-                              )}
-                            </button>
-                          </div>
                         </div>
                       </div>
 
@@ -655,7 +620,7 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 2: MY ORDERS (Matches Screenshot 1 Layout with Luxury Brand Badges & Dotted Line) */}
+            {/* TAB 2: MY ORDERS */}
             {activeTab === 'orders' && (
               <div className="space-y-6">
                 <div>
@@ -665,7 +630,7 @@ export default function UserDashboardPage() {
                   </h1>
                 </div>
 
-                {/* Real-time Orders from Redux (if any exist) */}
+                {/* Real-time Orders from Redux */}
                 {orders.length > 0 && (
                   <div className="space-y-4 mb-6">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C8681]">
@@ -703,10 +668,8 @@ export default function UserDashboardPage() {
                           </span>
                         </div>
 
-                        {/* Subtle Dotted Divider Line (Matching Screenshot 1) */}
                         <div className="border-b border-dashed border-[#EAE6E1] my-4" />
 
-                        {/* Bottom Total Amount and Action Button */}
                         <div className="flex items-center justify-between gap-4 pt-1">
                           <p className="text-[14px] text-[#1A130E]">
                             <span className="text-[#666059] font-medium">Total Amount : </span>
@@ -745,7 +708,7 @@ export default function UserDashboardPage() {
                   </div>
                 )}
 
-                {/* List of Orders Matching Screenshot 1 Layout */}
+                {/* List of Orders */}
                 <div className="space-y-4">
                   {mockOrders.map((ord) => {
                     const isExpanded = expandedOrderDetails === ord.id;
@@ -754,7 +717,6 @@ export default function UserDashboardPage() {
                         key={ord.id}
                         className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all"
                       >
-                        {/* Upper Section: Brand Avatar + Name + Transaction Id + Date */}
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-3.5">
                             <div className="w-12 h-12 rounded-full overflow-hidden border border-[#EAE6E1] bg-white flex items-center justify-center p-1 shadow-xs shrink-0">
@@ -782,10 +744,8 @@ export default function UserDashboardPage() {
                           </span>
                         </div>
 
-                        {/* Subtle Dotted Divider Line (Matching Screenshot 1) */}
                         <div className="border-b border-dashed border-[#EAE6E1] my-4" />
 
-                        {/* Lower Section: Total Amount & Details Button */}
                         <div className="flex items-center justify-between gap-4 pt-0.5">
                           <p className="text-[14px] text-[#1A130E]">
                             <span className="text-[#666059] font-medium">Total Amount : </span>
@@ -804,7 +764,6 @@ export default function UserDashboardPage() {
                           </button>
                         </div>
 
-                        {/* Inline Expandable Details (No Modal Popup) */}
                         {isExpanded && (
                           <div className="mt-4 pt-3.5 border-t border-[#F2EFE9] text-[13px] text-[#55504A] bg-[#FAF8F5] p-4 rounded-xl space-y-1.5 animate-in fade-in">
                             <div className="flex items-center justify-between">
@@ -826,7 +785,7 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 3: SAVED ADDRESS (Matches Screenshot 2 Layout with 2-Column Grid & Add New Address Slot) */}
+            {/* TAB 3: SAVED ADDRESS */}
             {activeTab === 'addresses' && (
               <div className="space-y-6">
                 <div>
@@ -836,7 +795,7 @@ export default function UserDashboardPage() {
                   </h1>
                 </div>
 
-                {/* Inline Add Address Form Accordion (If opened) */}
+                {/* Inline Add Address Form Accordion */}
                 {isAddingAddress && (
                   <form
                     onSubmit={handleAddAddress}
@@ -893,7 +852,7 @@ export default function UserDashboardPage() {
                       <input
                         type="tel"
                         required
-                        placeholder="+33 (907) 555-0101"
+                        placeholder="+353 (01) 485 9210"
                         value={newPhone}
                         onChange={(e) => setNewPhone(e.target.value)}
                         className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
@@ -918,7 +877,7 @@ export default function UserDashboardPage() {
                   </form>
                 )}
 
-                {/* 2-Column Grid (Exactly as shown in Screenshot 2) */}
+                {/* 2-Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {addresses.map((addr) => {
                     const isEditingThis = editingAddressId === addr.id;
@@ -931,7 +890,6 @@ export default function UserDashboardPage() {
                         {!isEditingThis ? (
                           <>
                             <div>
-                              {/* Header: Icon + Label in Warm Orange + Edit Button */}
                               <div className="flex items-center justify-between pb-3 border-b border-[#F2EFE9]">
                                 <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[14.5px]">
                                   {addr.label.toLowerCase().includes('home') ? (
@@ -952,13 +910,11 @@ export default function UserDashboardPage() {
                                 </button>
                               </div>
 
-                              {/* Address Text */}
                               <p className="text-[13.5px] text-[#55504A] font-normal leading-relaxed mt-3">
                                 {addr.address}
                               </p>
                             </div>
 
-                            {/* Phone Number */}
                             <div className="pt-3 flex items-center justify-between">
                               <span className="text-[13px] text-[#7A746E] font-medium">
                                 {addr.phone}
@@ -973,14 +929,11 @@ export default function UserDashboardPage() {
                             </div>
                           </>
                         ) : (
-                          /* Inline Edit Mode inside the card (No Modal) */
+                          /* Inline Edit Mode */
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
                               <span className="font-bold text-[13px] text-[#1A130E]">
                                 Edit {addr.label}
-                              </span>
-                              <span className="text-xs text-orange-600 font-semibold">
-                                Inline
                               </span>
                             </div>
 
@@ -1026,13 +979,13 @@ export default function UserDashboardPage() {
                             <div className="flex items-center gap-2 pt-1">
                               <button
                                 onClick={() => handleSaveEditAddress(addr.id)}
-                                className="px-4 py-1 rounded-lg text-xs font-semibold bg-[#F15A24] text-white hover:opacity-90"
+                                className="px-4 py-1 rounded-lg text-xs font-semibold bg-[#F15A24] text-white hover:opacity-90 cursor-pointer"
                               >
                                 Save
                               </button>
                               <button
                                 onClick={() => setEditingAddressId(null)}
-                                className="px-3 py-1 rounded-lg text-xs font-medium text-[#666059]"
+                                className="px-3 py-1 rounded-lg text-xs font-medium text-[#666059] cursor-pointer"
                               >
                                 Cancel
                               </button>
@@ -1043,7 +996,7 @@ export default function UserDashboardPage() {
                     );
                   })}
 
-                  {/* Add New Address Card Slot (Matching Screenshot 2) */}
+                  {/* Add New Address Card Slot */}
                   <div
                     onClick={() => setIsAddingAddress(true)}
                     className="border-2 border-dashed border-[#E5DFD7] bg-[#FCFBF9] hover:bg-orange-50/20 hover:border-orange-300 rounded-[18px] p-6 flex flex-col items-center justify-center min-h-[175px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)]"
@@ -1059,285 +1012,360 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 4: SAVED CARD (Clean 2-Column Grid with Add Card Slot) */}
-            {activeTab === 'cards' && (
-              <div className="space-y-6">
+            {/* TAB 4: SETTING (Houses Password & Security, Saved Cards, and Notification Preferences) */}
+            {activeTab === 'settings' && (
+              <div className="space-y-8">
                 <div>
                   <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
                   <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    Saved Card
+                    Settings
                   </h1>
                 </div>
 
-                {/* Inline Add Card Form */}
-                {isAddingCard && (
-                  <form
-                    onSubmit={handleAddCard}
-                    className="p-6 rounded-[18px] bg-white border border-[#EFEAE4] space-y-4 text-[13px] shadow-[0_4px_20px_rgba(26,19,14,0.03)] animate-in fade-in mb-6"
-                  >
-                    <h4 className="font-bold text-[15px] text-[#1A130E]">
-                      Add New Credit / Debit Card
-                    </h4>
-                    <div>
-                      <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        Cardholder Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={newCardHolder}
-                        onChange={(e) => setNewCardHolder(e.target.value)}
-                        placeholder="Mark Jecno"
-                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        16-Digit Card Number
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        maxLength={19}
-                        value={newCardNumber}
-                        onChange={(e) => setNewCardNumber(e.target.value)}
-                        placeholder="•••• •••• •••• 4242"
-                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                          Expiry (MM/YY)
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          maxLength={5}
-                          value={newCardExp}
-                          onChange={(e) => setNewCardExp(e.target.value)}
-                          placeholder="12/28"
-                          className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
-                        />
+                {/* 1. PASSWORD & SECURITY SECTION */}
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
+                  <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center">
+                        <KeyRound className="w-5 h-5" />
                       </div>
                       <div>
-                        <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                          CVV Code
+                        <h3 className="font-bold text-[16px] text-[#1A130E]">
+                          Change Password
+                        </h3>
+                        <p className="text-[12.5px] text-[#8C8681]">
+                          Update your password to keep your account secure
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {passwordSuccess && (
+                    <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-medium flex items-center gap-2.5 animate-in fade-in">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>Password has been changed successfully!</span>
+                    </div>
+                  )}
+
+                  {passwordError && (
+                    <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[13px] font-medium flex items-center gap-2.5 animate-in fade-in">
+                      <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                      <span>{passwordError}</span>
+                    </div>
+                  )}
+
+                  <form onSubmit={handlePasswordUpdate} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {/* Current Password */}
+                      <div>
+                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                          Current Password
                         </label>
-                        <input
-                          type="password"
-                          required
-                          maxLength={4}
-                          value={newCardCvv}
-                          onChange={(e) => setNewCardCvv(e.target.value)}
-                          placeholder="•••"
-                          className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none"
-                        />
+                        <div className="relative">
+                          <input
+                            type={showCurrentPassword ? 'text' : 'password'}
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            placeholder="Current password"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                          >
+                            {showCurrentPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* New Password */}
+                      <div>
+                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                          New Password
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showNewPassword ? 'text' : 'password'}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Min. 6 characters"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                          >
+                            {showNewPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Confirm New Password */}
+                      <div>
+                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                          Confirm Password
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm password"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 pt-2">
+                    <div className="pt-2 flex justify-end">
                       <button
                         type="submit"
-                        className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
+                        className="px-6 py-2.5 rounded-xl font-bold text-[13px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
                       >
-                        Save Card
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsAddingCard(false)}
-                        className="px-4 py-2 rounded-xl text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
-                      >
-                        Cancel
+                        Update Password
                       </button>
                     </div>
                   </form>
-                )}
 
-                {/* Cards 2-Column Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {savedCards.map((card) => (
-                    <div
-                      key={card.id}
-                      className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all flex flex-col justify-between min-h-[175px]"
-                    >
+                  {/* Two-Factor Authentication */}
+                  <div className="pt-4 border-t border-[#F2EFE9] flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0">
+                        <ShieldCheck className="w-4 h-4" />
+                      </div>
                       <div>
-                        <div className="flex items-center justify-between pb-3 border-b border-[#F2EFE9]">
-                          <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[14px] uppercase tracking-wider">
-                            <CreditCard className="w-4 h-4 text-[#F15A24]" />
-                            <span>{card.cardType}</span>
-                          </div>
-                          {card.isDefault && (
-                            <span className="text-[10px] bg-orange-50 text-[#F15A24] px-2.5 py-0.5 rounded-full font-semibold border border-orange-200">
-                              Default
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="text-[17px] font-bold text-[#1A130E] tracking-widest mt-3.5">
-                          •••• •••• •••• {card.last4}
+                        <h4 className="font-bold text-[13.5px] text-[#1A130E]">
+                          Two-Factor Authentication (2FA)
+                        </h4>
+                        <p className="text-[12.5px] text-[#7A746E]">
+                          Require a verification code on new sign-ins
                         </p>
                       </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={notifications.twoFactor}
+                      onChange={(e) =>
+                        setNotifications({
+                          ...notifications,
+                          twoFactor: e.target.checked,
+                        })
+                      }
+                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
+                    />
+                  </div>
+                </div>
 
-                      <div className="pt-3 flex items-center justify-between text-[12.5px] text-[#7A746E]">
-                        <span>
-                          Expires {card.expMonth}/{card.expYear} · {card.holder}
-                        </span>
+                {/* 2. SAVED CARDS / PAYMENT METHODS (Migrated into Settings) */}
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
+                  <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center">
+                        <CreditCard className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[16px] text-[#1A130E]">
+                          Saved Payment Cards
+                        </h3>
+                        <p className="text-[12.5px] text-[#8C8681]">
+                          Manage your credit and debit cards for fast checkout
+                        </p>
+                      </div>
+                    </div>
+
+                    {!isAddingCard && (
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingCard(true)}
+                        className="px-4 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer flex items-center gap-1 active:scale-95"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add Card</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {cardSuccessMsg && (
+                    <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-[13px] font-medium flex items-center gap-2.5 animate-in fade-in">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>Card added successfully!</span>
+                    </div>
+                  )}
+
+                  {/* Inline Add Card Form */}
+                  {isAddingCard && (
+                    <form
+                      onSubmit={handleAddCard}
+                      className="p-5 sm:p-6 rounded-[18px] bg-[#FAF8F5] border border-[#EFEAE4] space-y-4 text-[13px] shadow-xs animate-in fade-in"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                          Add New Card
+                        </h4>
                         <button
-                          onClick={() => handleDeleteCard(card.id)}
-                          className="text-[#A59F98] hover:text-red-600 transition-colors p-1 cursor-pointer"
+                          type="button"
+                          onClick={() => setIsAddingCard(false)}
+                          className="text-xs text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          Close
                         </button>
                       </div>
-                    </div>
-                  ))}
 
-                  {/* Add New Card Slot */}
-                  <div
-                    onClick={() => setIsAddingCard(true)}
-                    className="border-2 border-dashed border-[#E5DFD7] bg-[#FCFBF9] hover:bg-orange-50/20 hover:border-orange-300 rounded-[18px] p-6 flex flex-col items-center justify-center min-h-[175px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)]"
-                  >
-                    <button
-                      type="button"
-                      className="px-6 py-2 rounded-xl border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold group-hover:bg-[#F15A24] group-hover:text-white transition-all shadow-xs"
-                    >
-                      Add New Card
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* TAB 5: HELP & SUPPORT */}
-            {activeTab === 'help' && (
-              <div className="space-y-6">
-                <div>
-                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
-                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    Help & Support
-                  </h1>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                  <div className="md:col-span-7 space-y-3">
-                    {faqs.map((faq, idx) => {
-                      const isOpen = openFaq === idx;
-                      return (
-                        <div
-                          key={idx}
-                          className="bg-white border border-[#EFEAE4] rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(26,19,14,0.02)]"
-                        >
-                          <button
-                            onClick={() => setOpenFaq(isOpen ? null : idx)}
-                            className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 text-[14px] font-semibold text-[#1A130E] cursor-pointer"
-                          >
-                            <span>{faq.q}</span>
-                            <ChevronDown
-                              className={`w-4 h-4 text-[#7A746E] transition-transform ${
-                                isOpen ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </button>
-                          {isOpen && (
-                            <div className="px-5 pb-5 text-[13.5px] text-[#55504A] leading-relaxed border-t border-[#F2EFE9] pt-3.5">
-                              {faq.a}
-                            </div>
-                          )}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
+                            Cardholder Name
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={newCardHolder}
+                            onChange={(e) => setNewCardHolder(e.target.value)}
+                            placeholder="Liam O'Connor"
+                            className="w-full bg-white border border-[#E6E1DC] focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[13.5px] text-[#1A130E] outline-none"
+                          />
                         </div>
-                      );
-                    })}
-                  </div>
 
-                  <div className="md:col-span-5 space-y-4">
-                    <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-4">
-                      <div className="space-y-1.5 pb-3 border-b border-[#F2EFE9]">
-                        <h4 className="font-bold text-[15px] text-[#1A130E]">
-                          Dublin Supervisor
-                        </h4>
-                        <p className="text-[13px] text-[#7A746E]">
-                          {RESTAURANT_INFO.location}
-                        </p>
-                        <p className="text-[13px] text-[#F15A24] font-semibold">
-                          {RESTAURANT_INFO.phone}
-                        </p>
+                        <div>
+                          <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
+                            16-Digit Card Number
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            maxLength={19}
+                            value={newCardNumber}
+                            onChange={(e) => setNewCardNumber(e.target.value)}
+                            placeholder="•••• •••• •••• 4242"
+                            className="w-full bg-white border border-[#E6E1DC] focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[13.5px] text-[#1A130E] outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
+                            Expiry (MM/YY)
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            maxLength={5}
+                            value={newCardExp}
+                            onChange={(e) => setNewCardExp(e.target.value)}
+                            placeholder="12/28"
+                            className="w-full bg-white border border-[#E6E1DC] focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[13.5px] text-[#1A130E] outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
+                            CVV Code
+                          </label>
+                          <input
+                            type="password"
+                            required
+                            maxLength={4}
+                            value={newCardCvv}
+                            onChange={(e) => setNewCardCvv(e.target.value)}
+                            placeholder="•••"
+                            className="w-full bg-white border border-[#E6E1DC] focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[13.5px] text-[#1A130E] outline-none"
+                          />
+                        </div>
                       </div>
 
-                      {!supportSubmitted ? (
-                        <form onSubmit={handleSupportSubmit} className="space-y-3">
-                          <div>
-                            <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                              Subject
-                            </label>
-                            <select
-                              value={supportSubject}
-                              onChange={(e) => setSupportSubject(e.target.value)}
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 text-[13px] text-[#1A130E] outline-none"
-                            >
-                              <option value="Order inquiry">Active Order Status Inquiry</option>
-                              <option value="Allergen question">Special Dietary / Allergen</option>
-                              <option value="Feedback">Feedback or Suggestion</option>
-                            </select>
+                      <div className="flex items-center gap-2 pt-2">
+                        <button
+                          type="submit"
+                          className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
+                        >
+                          Save Card
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsAddingCard(false)}
+                          className="px-4 py-2 rounded-xl text-[12.5px] font-semibold text-[#666059] hover:text-[#1A130E] cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {savedCards.map((card) => (
+                      <div
+                        key={card.id}
+                        className="bg-[#FAF8F5] border border-[#EFEAE4] rounded-[18px] p-5 hover:border-[#F15A24]/30 transition-all flex flex-col justify-between min-h-[145px]"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between pb-2.5 border-b border-[#F2EFE9]">
+                            <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[13.5px] uppercase tracking-wider">
+                              <CreditCard className="w-4 h-4 text-[#F15A24]" />
+                              <span>{card.cardType}</span>
+                            </div>
+                            {card.isDefault && (
+                              <span className="text-[10px] bg-orange-100/70 text-[#F15A24] px-2 py-0.5 rounded-full font-semibold border border-orange-200">
+                                Default
+                              </span>
+                            )}
                           </div>
 
-                          <div>
-                            <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                              Message
-                            </label>
-                            <textarea
-                              rows={3}
-                              required
-                              value={supportMessage}
-                              onChange={(e) => setSupportMessage(e.target.value)}
-                              placeholder="How can we assist you today?"
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl p-3 text-[13px] text-[#1A130E] outline-none resize-none"
-                            />
-                          </div>
-
-                          <button
-                            type="submit"
-                            className="w-full py-2.5 rounded-xl text-[12.5px] font-bold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
-                          >
-                            Send Inquiry
-                          </button>
-                        </form>
-                      ) : (
-                        <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-center space-y-1">
-                          <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto mb-1" />
-                          <h4 className="font-bold text-[14px] text-emerald-800">
-                            Message Received
-                          </h4>
-                          <p className="text-[12px] text-emerald-700">
-                            Our team will get back to you shortly.
+                          <p className="text-[16px] font-bold text-[#1A130E] tracking-widest mt-3">
+                            •••• •••• •••• {card.last4}
                           </p>
                         </div>
-                      )}
-                    </div>
+
+                        <div className="pt-2 flex items-center justify-between text-[12px] text-[#7A746E]">
+                          <span>
+                            Expires {card.expMonth}/{card.expYear} · {card.holder}
+                          </span>
+                          <button
+                            onClick={() => handleDeleteCard(card.id)}
+                            title="Delete card"
+                            className="text-[#A59F98] hover:text-red-600 transition-colors p-1 cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* TAB 6: SETTING */}
-            {activeTab === 'settings' && (
-              <div className="space-y-6">
-                <div>
-                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
-                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    Setting
-                  </h1>
-                </div>
+                {/* 3. NOTIFICATION PREFERENCES */}
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-5">
+                  <h3 className="font-bold text-[16px] text-[#1A130E] pb-3 border-b border-[#F2EFE9]">
+                    Notification Preferences
+                  </h3>
 
-                <div className="bg-white border border-[#EFEAE4] rounded-[18px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-5">
                   <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
                     <div>
-                      <h4 className="font-bold text-[14px] text-[#1A130E]">
-                        SMS Order Tracking Alerts
+                      <h4 className="font-bold text-[13.5px] text-[#1A130E]">
+                        SMS Order Tracking
                       </h4>
-                      <p className="text-[13px] text-[#7A746E] mt-0.5">
-                        Instant SMS notification when takeaway leaves Dublin kitchen
+                      <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                        Receive text notifications when your meal leaves the kitchen
                       </p>
                     </div>
                     <input
@@ -1353,13 +1381,13 @@ export default function UserDashboardPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <h4 className="font-bold text-[14px] text-[#1A130E]">
-                        Email Delivery Receipts & VAT Invoices
+                      <h4 className="font-bold text-[13.5px] text-[#1A130E]">
+                        Email Delivery Receipts
                       </h4>
-                      <p className="text-[13px] text-[#7A746E] mt-0.5">
-                        Send detailed PDF invoices directly to {profile.email}
+                      <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                        Receive order summary and receipts directly to {profile.email}
                       </p>
                     </div>
                     <input
@@ -1374,55 +1402,11 @@ export default function UserDashboardPage() {
                       className="w-5 h-5 accent-[#F15A24] cursor-pointer"
                     />
                   </div>
-
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
-                    <div>
-                      <h4 className="font-bold text-[14px] text-[#1A130E]">
-                        Chef Tariq’s Tasting Specials & Seasonal Promos
-                      </h4>
-                      <p className="text-[13px] text-[#7A746E] mt-0.5">
-                        Exclusive weekly weekend secret tasting invitations
-                      </p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={notifications.promotions}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          promotions: e.target.checked,
-                        })
-                      }
-                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <h4 className="font-bold text-[14px] text-[#1A130E]">
-                        Two-Factor Authentication (2FA)
-                      </h4>
-                      <p className="text-[13px] text-[#7A746E] mt-0.5">
-                        Require SMS verification code on account login
-                      </p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={notifications.twoFactor}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          twoFactor: e.target.checked,
-                        })
-                      }
-                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
-                    />
-                  </div>
                 </div>
               </div>
             )}
 
-            {/* TAB 7: LOG OUT */}
+            {/* TAB 5: LOG OUT */}
             {activeTab === 'logout' && (
               <div className="space-y-6">
                 <div>

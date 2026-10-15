@@ -46,15 +46,6 @@ const OFFERS_LIST: OfferCard[] = [
     validTill: 'First order only',
     badge: 'New Customer',
   },
-  {
-    code: 'AMBER10',
-    discount: '10% OFF',
-    title: 'Midweek Spice Craving Discount',
-    description: 'Get 10% off anytime Monday through Thursday on hot curry bowls and freshly baked naans.',
-    minOrder: 'Min order €25.00',
-    validTill: 'Mon - Thu',
-    badge: 'Midweek Saver',
-  },
 ];
 
 export default function OffersPage() {
@@ -93,12 +84,12 @@ export default function OffersPage() {
           </p>
         </div>
 
-        {/* Offers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-12">
+        {/* Offers Grid: Clean 3-column layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
           {OFFERS_LIST.map((offer) => (
             <div
               key={offer.code}
-              className={`p-6 sm:p-7 bg-white border rounded-3xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1 ${
+              className={`p-6 bg-white border rounded-3xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1 ${
                 offer.isPopular
                   ? 'border-[#B84A22] ring-2 ring-[#B84A22]/20'
                   : 'border-[#E5E5E5] hover:border-[#B84A22]/50'
@@ -116,15 +107,16 @@ export default function OffersPage() {
 
               {/* Title & Description */}
               <div className="mb-6">
-                <h3 className="font-bold text-[18px] sm:text-[19px] text-[#1A130E] mb-2 leading-snug">
+                <h3 className="font-bold text-[17px] text-[#1A130E] mb-2 leading-snug">
                   {offer.title}
                 </h3>
-                <p className="text-[14px] text-[#555555] leading-relaxed mb-4">
+                <p className="text-[13.5px] text-[#555555] leading-relaxed mb-3">
                   {offer.description}
                 </p>
-                <div className="flex items-center gap-4 text-[12px] text-[#747474] font-medium">
-                  <span>• {offer.minOrder}</span>
-                  <span>• {offer.validTill}</span>
+                <div className="flex items-center gap-3 text-[12px] text-[#747474] font-medium">
+                  <span>{offer.minOrder}</span>
+                  <span>•</span>
+                  <span>{offer.validTill}</span>
                 </div>
               </div>
 

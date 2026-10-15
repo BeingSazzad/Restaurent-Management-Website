@@ -63,7 +63,7 @@ export const cartSlice = createSlice({
       } else if (code === 'FAMILYFEST') {
         state.promoCode = code;
         state.discountPercentage = 15;
-      } else if (code === 'WELCOME10' || code === 'FIRSTBITE' || code === 'AMBER10') {
+      } else if (code === 'WELCOME10' || code === 'FIRSTBITE') {
         state.promoCode = code;
         state.discountPercentage = 10;
       } else {
