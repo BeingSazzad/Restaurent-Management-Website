@@ -25,15 +25,211 @@ export default function OrderDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const orderId = (params?.id as string) || '';
+  const rawId = (params?.id as string) || '';
+  const cleanId = decodeURIComponent(rawId).replace(/^#/, '').trim();
 
   const orders = useAppSelector((state) => state.orders.orders);
-  const foundOrder = orders.find((o) => o.id === orderId || o.orderNumber === orderId);
+  
+  // Intelligent lookup: matches AS-2041, ord-2041, 2041, etc.
+  const foundOrder = orders.find((o) => {
+    const oId = o.id.toLowerCase();
+    const oNum = o.orderNumber.toLowerCase();
+    const cId = cleanId.toLowerCase();
+    return (
+      oId === cId ||
+      oNum === cId ||
+      oNum === `as-${cId}` ||
+      oId === `ord-${cId}` ||
+      (cId.length >= 4 && oNum.replace(/[^0-9]/g, '') === cId.replace(/[^0-9]/g, ''))
+    );
+  });
+
+  // Sample historical Dublin orders map if user clicked a past order
+  const mockOrdersMap: Record<string, any> = {
+    acb12345458: {
+      id: 'ord-mcd',
+      orderNumber: 'ACB12345458',
+      customerName: 'Sarah Ahmed',
+      customerPhone: '+353 87 234 5678',
+      customerEmail: 'sarah.ahmed@gmail.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '42 Baggot St Lower, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'mcd-1',
+          dish: {
+            id: 'mcd-1',
+            name: 'Big Mac Meal',
+            price: 12.50,
+            image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
+            description: 'Double beef patty with special sauce, lettuce, cheese, pickles.',
+            category: 'Burgers',
+            spiceLevel: 0,
+            allergens: ['Gluten', 'Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 2,
+          selectedModifiers: [{ groupName: 'Drink', optionName: 'Coke Large', price: 0 }],
+          specialInstructions: 'Extra napkins please',
+          totalPrice: 25.00,
+        },
+        {
+          cartItemId: 'mcd-2',
+          dish: {
+            id: 'mcd-2',
+            name: 'Crispy McNuggets (9 pcs) & Large Fries',
+            price: 15.00,
+            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+            description: 'Tender crispy chicken bites with golden salted fries and sweet curry dip.',
+            category: 'Sides',
+            spiceLevel: 0,
+            allergens: ['Gluten'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [{ groupName: 'Sauce', optionName: 'Sweet Curry Dip', price: 0 }],
+          totalPrice: 15.00,
+        },
+      ],
+      subtotal: 40.00,
+      deliveryFee: 0,
+      discount: 0,
+      total: 40.00,
+      status: 'completed',
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      estimatedMinutes: 0,
+      specialNotes: 'Leave at apartment reception desk.',
+      paymentMethod: 'apple_pay',
+    },
+    acb12345459: {
+      id: 'ord-sbx',
+      orderNumber: 'ACB12345459',
+      customerName: 'Sarah Ahmed',
+      customerPhone: '+353 87 234 5678',
+      customerEmail: 'sarah.ahmed@gmail.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '42 Baggot St Lower, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'sbx-1',
+          dish: {
+            id: 'sbx-1',
+            name: 'Caramel Macchiato & Butter Croissant',
+            price: 25.00,
+            image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80',
+            description: 'Freshly steamed milk with vanilla-flavored syrup, marked with espresso and caramel drizzle.',
+            category: 'Coffee & Bakery',
+            spiceLevel: 0,
+            allergens: ['Dairy'],
+            isPopular: true,
+            isVeg: true,
+          },
+          quantity: 4,
+          selectedModifiers: [{ groupName: 'Milk Choice', optionName: 'Oat Milk', price: 0 }],
+          totalPrice: 100.00,
+        },
+      ],
+      subtotal: 100.00,
+      deliveryFee: 0,
+      discount: 0,
+      total: 100.00,
+      status: 'completed',
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      estimatedMinutes: 0,
+      specialNotes: 'Contactless delivery requested.',
+      paymentMethod: 'apple_pay',
+    },
+    acb12345678: {
+      id: 'ord-pzh',
+      orderNumber: 'ACB12345678',
+      customerName: 'Sarah Ahmed',
+      customerPhone: '+353 87 234 5678',
+      customerEmail: 'sarah.ahmed@gmail.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '42 Baggot St Lower, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'pzh-1',
+          dish: {
+            id: 'pzh-1',
+            name: 'Stuffed Crust Pepperoni Feast & Garlic Breadsticks',
+            price: 60.00,
+            image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+            description: 'Loaded mozzarella stuffed crust pepperoni pizza with hot garlic breadsticks.',
+            category: 'Pizza',
+            spiceLevel: 1,
+            allergens: ['Gluten', 'Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [],
+          totalPrice: 60.00,
+        },
+      ],
+      subtotal: 60.00,
+      deliveryFee: 0,
+      discount: 0,
+      total: 60.00,
+      status: 'completed',
+      createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+      estimatedMinutes: 0,
+      specialNotes: 'Ring bell twice.',
+      paymentMethod: 'apple_pay',
+    },
+    acb12345679: {
+      id: 'ord-bk',
+      orderNumber: 'ACB12345679',
+      customerName: 'Sarah Ahmed',
+      customerPhone: '+353 87 234 5678',
+      customerEmail: 'sarah.ahmed@gmail.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '42 Baggot St Lower, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'bk-1',
+          dish: {
+            id: 'bk-1',
+            name: 'Flame-Grilled Whopper & Onion Rings',
+            price: 22.50,
+            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+            description: 'Flame-grilled beef burger with crunchy golden onion rings and chilled drinks.',
+            category: 'Burgers',
+            spiceLevel: 1,
+            allergens: ['Gluten'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 2,
+          selectedModifiers: [],
+          totalPrice: 45.00,
+        },
+      ],
+      subtotal: 45.00,
+      deliveryFee: 0,
+      discount: 0,
+      total: 45.00,
+      status: 'completed',
+      createdAt: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
+      estimatedMinutes: 0,
+      specialNotes: 'Leave with concierge.',
+      paymentMethod: 'apple_pay',
+    },
+  };
+
+  const matchedMock = mockOrdersMap[cleanId.toLowerCase()] ||
+    Object.values(mockOrdersMap).find((m) => m.id === cleanId || m.orderNumber.toLowerCase() === cleanId.toLowerCase());
 
   // Fallback realistic Dublin order if direct URL is hit
-  const currentOrder = foundOrder || {
-    id: orderId || 'ord-2041',
-    orderNumber: orderId.replace('ord-', 'AS-') || 'AS-2041',
+  const currentOrder = foundOrder || matchedMock || {
+    id: cleanId || 'ord-2041',
+    orderNumber: cleanId ? (cleanId.startsWith('AS-') ? cleanId : `AS-${cleanId.replace(/[^0-9]/g, '') || '2041'}`) : 'AS-2041',
     customerName: 'Sarah Ahmed',
     customerPhone: '+353 87 234 5678',
     customerEmail: 'sarah.ahmed@gmail.com',
