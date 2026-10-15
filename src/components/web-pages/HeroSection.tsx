@@ -104,7 +104,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative bg-[#FAF6EF]">
+    <section className="relative bg-[rgb(249,249,249)]">
       {/* Full Screen Width (Edge-to-Edge) Cinematic Hero Slider */}
       <div
         onMouseEnter={() => setIsPaused(true)}
@@ -243,15 +243,15 @@ export const HeroSection: React.FC = () => {
               dispatch(setFulfillmentType('delivery'));
               scrollToMenu();
             }}
-            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
+            className="group cursor-pointer bg-white border border-[#E5E5E5] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
           >
             <div className="flex items-center gap-4">
-              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
                 <Bike className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7]">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
                     ~30-35 MINS
                   </span>
                 </div>
@@ -264,7 +264,7 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+            <div className="w-8 h-8 rounded-full bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
               <ArrowRight className="w-4 h-4" />
             </div>
           </div>
@@ -275,15 +275,15 @@ export const HeroSection: React.FC = () => {
               dispatch(setFulfillmentType('collection'));
               scrollToMenu();
             }}
-            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
+            className="group cursor-pointer bg-white border border-[#E5E5E5] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
           >
             <div className="flex items-center gap-4">
-              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
                 <Store className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7]">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
                     ~15-20 MINS
                   </span>
                 </div>
@@ -296,7 +296,7 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+            <div className="w-8 h-8 rounded-full bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
               <ArrowRight className="w-4 h-4" />
             </div>
           </div>
@@ -304,15 +304,15 @@ export const HeroSection: React.FC = () => {
           {/* Prop 3: Open Daily */}
           <div
             onClick={scrollToMenu}
-            className="group cursor-pointer bg-white/95 backdrop-blur-md border border-[#EBE2D7] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(44,34,28,0.08)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.15)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
+            className="group cursor-pointer bg-white border border-[#E5E5E5] hover:border-[#B84A22]/60 rounded-3xl p-5 sm:p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(184,74,34,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex items-center justify-between gap-4"
           >
             <div className="flex items-center gap-4">
-              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 shadow-xs">
                 <Clock className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[#FAF6EF] text-[#0FA958] border border-[#EBE2D7] flex items-center gap-1">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#0FA958] border border-[#E5E5E5] flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#0FA958] animate-pulse" />
                     OPEN 7 DAYS
                   </span>
@@ -326,7 +326,7 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#EBE2D7] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
+            <div className="w-8 h-8 rounded-full bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#E5E5E5] group-hover:border-[#B84A22] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:translate-x-1 shadow-xs hidden sm:flex">
               <ArrowRight className="w-4 h-4" />
             </div>
           </div>

@@ -14,12 +14,12 @@
   /* Colors */
   --color-primary: #B84A22;         /* Signature Amber Spice Terracotta */
   --color-primary-hover: #9E3E1B;   /* Deep Baked Terracotta */
-  --color-primary-light: #FAF6EF;   /* Soft Warm Canvas Cream */
+  --color-primary-light: rgb(249, 249, 249);   /* Main Website Canvas Background */
   --color-dark: #1A130E;            /* Charcoal Earth Black */
   --color-gold: #D49B37;            /* Saffron Royal Accent */
   --color-success: #0FA958;         /* Fresh Dublin Mint Green */
   --color-surface: #FFFFFF;         /* Crisp Card Background */
-  --color-border: #EBE2D7;          /* Fine Warm Neutral Border */
+  --color-border: #E5E5E5;          /* Fine Clean Neutral Border */
   --color-text-title: #1A130E;      /* Primary High-Contrast Text */
   --color-text-body: #3D3D3D;       /* Neutral Reading Text */
   --color-text-muted: #747474;      /* Subtitle / Caption Gray */
@@ -43,7 +43,7 @@
 
 html,
 body {
-  background-color: #FAF6EF;
+  background-color: rgb(249, 249, 249) !important;
   color: #3D3D3D;
   font-family: 'Poppins', sans-serif !important;
   overflow-x: hidden;
@@ -264,19 +264,19 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #FAF6EF;
+  background-color: #FFFFFF;
   color: #1A130E;
   font-family: 'Poppins', sans-serif !important;
   font-weight: 600;
   border-radius: 9999px;
-  border: 1px solid #EBE2D7;
+  border: 1px solid #E5E5E5;
   transition: all 0.22s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover,
 .btn-amber-secondary:hover {
-  background-color: #F3ECE2;
+  background-color: rgb(249, 249, 249);
   border-color: #B84A22;
   color: #B84A22;
   transform: translateY(-1px);
@@ -322,7 +322,7 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
 }
 
 .btn-ghost:hover {
-  background-color: #FAF6EF;
+  background-color: rgb(249, 249, 249);
   color: #1A130E;
 }
 
@@ -343,9 +343,9 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
 }
 
 .badge-terracotta {
-  background-color: #FAF6EF;
+  background-color: #FFFFFF;
   color: #B84A22;
-  border: 1px solid #EBE2D7;
+  border: 1px solid #E5E5E5;
 }
 
 .badge-gold {
@@ -361,9 +361,9 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
 }
 
 .badge-neutral {
-  background-color: #FAF6EF;
+  background-color: #FFFFFF;
   color: #747474;
-  border: 1px solid #EBE2D7;
+  border: 1px solid #E5E5E5;
 }
 
 /* ==========================================================================
@@ -371,14 +371,14 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
    ========================================================================== */
 .amber-card {
   background-color: #FFFFFF;
-  border: 1px solid #EBE2D7;
+  border: 1px solid #E5E5E5;
   border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(44, 34, 28, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .amber-card:hover {
-  box-shadow: 0 14px 36px rgba(44, 34, 28, 0.09);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.07);
   border-color: rgba(184, 74, 34, 0.35);
   transform: translateY(-2px);
 }
@@ -388,8 +388,8 @@ p, span, label, input, textarea, button, a, select, option, table, th, td, div {
    ========================================================================== */
 .amber-input {
   width: 100%;
-  background-color: #FAF6EF;
-  border: 1px solid #EBE2D7;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E5E5;
   border-radius: 14px;
   padding: 10px 14px;
   font-size: 13px;

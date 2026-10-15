@@ -9,18 +9,18 @@ module.exports = {
     extend: {
       colors: {
         amberSpice: {
-          bg: "#FAF6EF",
-          bgLight: "#FDFBF7",
+          bg: "rgb(249, 249, 249)",
+          bgLight: "#FFFFFF",
           primary: "#B84A22",
           primaryHover: "#9E3E1B",
           dark: "#1A130E",
           cardDark: "#231B15",
           charcoal: "#2D241E",
           gold: "#D49B37",
-          cream: "#F4EDE2",
+          cream: "rgb(249, 249, 249)",
           text: "#2C221C",
           muted: "#786960",
-          border: "#E9DFD3",
+          border: "#E5E5E5",
         },
       },
       fontFamily: {

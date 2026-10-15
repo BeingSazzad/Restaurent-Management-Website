@@ -5,7 +5,7 @@ import { ReviewsSection } from '../../components/web-pages/ReviewsSection';
 
 export default function WebsitePage() {
   return (
-    <div className="bg-[#FAF6EF]">
+    <div className="bg-[rgb(249,249,249)]">
       {/* Amber Spice Hero Section */}
       <HeroSection />
 

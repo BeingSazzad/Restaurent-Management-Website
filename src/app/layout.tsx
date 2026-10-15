@@ -31,7 +31,7 @@ export default function RootLayout({
         />
         <meta name="theme-color" content="#B84A22" />
       </head>
-      <body className="bg-[#FAF6EF] text-[#2C221C] min-h-screen flex flex-col font-sans antialiased">
+      <body className="bg-[rgb(249,249,249)] text-[#2C221C] min-h-screen flex flex-col font-sans antialiased">
         <ReduxProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
