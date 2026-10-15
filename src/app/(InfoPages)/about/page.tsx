@@ -36,11 +36,6 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#FBA138] text-[12px] font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Authentic Heritage & Passion</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-['Poppins']">
             About Us
           </h1>
@@ -61,9 +56,7 @@ export default function AboutPage() {
           {/* Left Column: Story & Highlights */}
           <div className="lg:col-span-6 space-y-6">
             <div className="space-y-3">
-              <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
-                Our Story & Heritage
-              </span>
+              <div className="section-decorator mb-1" />
               <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] leading-tight font-['Poppins']">
                 From Royal Heritage Recipes To Your Modern Dining Table
               </h2>
@@ -256,9 +249,7 @@ export default function AboutPage() {
       {/* 4. WHAT WE OFFER / 3 CORE SPECIALTIES (Like "Provide Professional..." in ref) */}
       <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
-            Our Specialties
-          </span>
+          <div className="section-decorator mx-auto mb-2" />
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
             Authentic Recipes Crafted with Royal Precision
           </h2>
@@ -373,9 +364,7 @@ export default function AboutPage() {
       <section className="py-14 sm:py-20 bg-stone-100/60 border-y border-[#EAE5DF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
-            <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
-              How We Create Magic
-            </span>
+            <div className="section-decorator mx-auto mb-2" />
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
               Our 4-Step Culinary Journey
             </h2>
@@ -518,9 +507,7 @@ export default function AboutPage() {
       {/* 7. RECENT STORIES / BLOG SECTION (Like "Our Most Recent..." in ref) */}
       <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <span className="inline-block px-3.5 py-1 rounded-md bg-orange-100/70 border border-orange-200 text-[#B84A22] text-[11px] font-bold uppercase tracking-widest">
-            Behind Our Kitchen
-          </span>
+          <div className="section-decorator mx-auto mb-2" />
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
             Our Latest Culinary Stories
           </h2>
