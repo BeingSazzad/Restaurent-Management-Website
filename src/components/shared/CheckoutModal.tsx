@@ -98,7 +98,7 @@ export const CheckoutModal: React.FC = () => {
         {/* Header */}
         <div className="p-5 border-b border-[#E5E5E5] flex items-center justify-between bg-white">
           <div>
-            <h2 className="text-[18px] sm:text-[20px] font-bold text-[#1A130E]">Fast Checkout</h2>
+            <h2 className="text-[18px] sm:text-[20px] font-bold text-[#1A130E]">Checkout</h2>
             <p className="text-[12px] text-[#747474] flex items-center gap-1.5 mt-0.5">
               {fulfillment.type === 'delivery' ? (
                 <>
