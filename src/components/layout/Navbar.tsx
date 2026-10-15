@@ -9,7 +9,6 @@ import { setCartOpen } from '../../redux/slices/cartSlice';
 import { logout } from '../../redux/slices/authSlice';
 import {
   ShoppingBag,
-  Search,
   User,
   ArrowRight,
   Menu as MenuIcon,
@@ -104,15 +103,6 @@ export const Navbar: React.FC = () => {
 
           {/* Action Icons & Mobile Hamburger */}
           <div className="flex items-center gap-2.5 sm:gap-4">
-            {/* Search Icon */}
-            <button
-              onClick={() => scrollToSection('menu-section')}
-              className="text-[#3D3D3D] hover:text-[#B84A22] p-1.5 transition-colors cursor-pointer"
-              aria-label="Search Dishes"
-            >
-              <Search className="w-4 h-4 stroke-[2]" />
-            </button>
-
             {/* Shopping Cart Icon with Counter Badge */}
             <button
               onClick={() => dispatch(setCartOpen(true))}
