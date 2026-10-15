@@ -78,8 +78,13 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="flex justify-end items-center text-[12px] text-[#7A746E] pt-0.5">
-            <span className="hover:text-[#B84A22] cursor-pointer transition-colors">Forgot password?</span>
+          <div className="flex justify-end items-center text-[12.5px] pt-0.5">
+            <Link
+              href="/forgot-password"
+              className="text-[#8C8681] hover:text-[#B84A22] font-medium transition-colors cursor-pointer"
+            >
+              Forgot password?
+            </Link>
           </div>
 
           <button
