@@ -257,27 +257,28 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Clean Clutter-Free Value Strip (Separated cleanly below the slider) */}
+      {/* Clutter-Free Value Strip */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
-        <div className="bg-white border border-[#EFEAE4] rounded-2xl p-4 sm:p-5 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#F2EFEA]">
+        <div className="bg-white border border-[#EFEAE4] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_4px_20px_rgba(26,19,14,0.03)]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-[#F2EFEA]">
             {/* Prop 1: Fast Doorstep Delivery */}
             <div
               onClick={() => {
                 dispatch(setFulfillmentType('delivery'));
                 scrollToMenu();
               }}
-              className="flex items-center gap-3.5 px-3 py-3 sm:py-1 cursor-pointer hover:opacity-85 transition-opacity"
+              className="flex items-center gap-4 py-1 sm:py-2 md:px-6 cursor-pointer group transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#B84A22] shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
                 <Bike className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-[14.5px] font-bold text-[#1A130E] truncate">Doorstep Delivery</h4>
-                  <span className="text-[10px] font-bold text-[#B84A22] bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100 shrink-0">~30-35m</span>
-                </div>
-                <p className="text-[12px] text-[#78716C] mt-0.5 truncate">Across Dublin Zones 1 to 8 · Free over €30</p>
+                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Doorstep Delivery
+                </h4>
+                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
+                  Dublin Zones 1–8 · Free over €30
+                </p>
               </div>
             </div>
 
@@ -287,37 +288,36 @@ export const HeroSection: React.FC = () => {
                 dispatch(setFulfillmentType('collection'));
                 scrollToMenu();
               }}
-              className="flex items-center gap-3.5 px-3 md:px-5 py-3 sm:py-1 cursor-pointer hover:opacity-85 transition-opacity"
+              className="flex items-center gap-4 pt-4 md:pt-2 pb-1 md:pb-2 md:px-6 cursor-pointer group transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#B84A22] shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
                 <Store className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-[14.5px] font-bold text-[#1A130E] truncate">Counter Takeaway</h4>
-                  <span className="text-[10px] font-bold text-[#B84A22] bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100 shrink-0">~15-20m</span>
-                </div>
-                <p className="text-[12px] text-[#78716C] mt-0.5 truncate">18 South William St · Packaged hot & fresh</p>
+                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Counter Takeaway
+                </h4>
+                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
+                  18 South William St · Ready in 15–20m
+                </p>
               </div>
             </div>
 
             {/* Prop 3: Open Daily */}
             <div
               onClick={scrollToMenu}
-              className="flex items-center gap-3.5 px-3 md:px-5 py-3 sm:py-1 cursor-pointer hover:opacity-85 transition-opacity"
+              className="flex items-center gap-4 pt-4 md:pt-2 pb-1 md:pb-2 md:px-6 cursor-pointer group transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center shrink-0 border border-orange-100/70 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-200 shadow-2xs">
                 <Clock className="w-5 h-5 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-[14.5px] font-bold text-[#1A130E] truncate">Clay Oven Daily</h4>
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 shrink-0 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Open 7 Days
-                  </span>
-                </div>
-                <p className="text-[12px] text-[#78716C] mt-0.5 truncate">11:00 AM – 11:00 PM · 100% Halal</p>
+                <h4 className="text-[15px] font-bold text-[#1A130E] group-hover:text-[#B84A22] transition-colors">
+                  Clay Oven Daily
+                </h4>
+                <p className="text-[12.5px] text-[#78716C] mt-0.5 font-normal">
+                  100% Halal · Open 11:00 AM – 11:00 PM
+                </p>
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
 import { login } from '@/redux/slices/authSlice';
 import { MOCK_USER } from '@/Mockdata';
-import { Lock, Mail, ArrowRight, User, Phone, CheckCircle2 } from 'lucide-react';
+import { Lock, Mail, ArrowRight, User, Phone } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-16 bg-[#FBF9F6]">
       <div className="w-full max-w-md p-8 sm:p-10 rounded-[20px] bg-white border border-[#EFEAE4] shadow-[0_4px_24px_rgba(26,19,14,0.03)]">
-        <div className="text-center mb-6">
+        <div className="text-center mb-7">
           <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] flex items-center justify-center mx-auto mb-3 border border-orange-200/60 shadow-xs">
             <svg viewBox="0 0 100 100" className="w-7 h-7 fill-[#B84A22]">
               <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
@@ -46,26 +46,13 @@ export default function RegisterPage() {
             Create Diner Account
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
-            Join AMBER SPICE to save Dublin delivery addresses, earn tasting perks, and order in 1 click.
+            Join AMBER SPICE to save Dublin delivery addresses and order in 1 click
           </p>
-        </div>
-
-        {/* Tab Switcher */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 bg-[#FAF8F5] border border-[#EAE5DF] rounded-2xl mb-6">
-          <Link
-            href="/login"
-            className="py-2.5 text-[13px] font-semibold rounded-xl text-center text-[#666059] hover:text-[#1A130E] transition-all"
-          >
-            Sign In
-          </Link>
-          <div className="py-2.5 text-[13px] font-bold rounded-xl text-center bg-white text-[#B84A22] shadow-xs border border-[#EAE5DF]">
-            Create Account
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-[13px]">
           <div>
-            <label className="block text-[#1A130E] font-semibold mb-1 text-[13px]">
+            <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
               Full Name
             </label>
             <div className="relative">
@@ -82,7 +69,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-[#1A130E] font-semibold mb-1 text-[13px]">
+            <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
               Email Address
             </label>
             <div className="relative">
@@ -99,7 +86,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-[#1A130E] font-semibold mb-1 text-[13px]">
+            <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
               Mobile Phone (for delivery SMS)
             </label>
             <div className="relative">
@@ -115,7 +102,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-[#1A130E] font-semibold mb-1 text-[13px]">
+            <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
               Password
             </label>
             <div className="relative">
@@ -161,18 +148,11 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-5 border-t border-[#F2EFE9] space-y-2 text-center text-[13px]">
+        <div className="mt-6 pt-5 border-t border-[#F2EFE9] text-center text-[13px]">
           <p className="text-[#7A746E]">
             Already have an account?{' '}
             <Link href="/login" className="text-[#B84A22] font-bold hover:underline">
               Sign In
-            </Link>
-          </p>
-
-          <p className="text-[#9E9790] text-[12px]">
-            <span>Want to order without an account? </span>
-            <Link href="/menu" className="text-[#B84A22] font-semibold hover:underline">
-              Use Guest Checkout
             </Link>
           </p>
         </div>
