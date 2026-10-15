@@ -74,32 +74,34 @@ export const MenuSection: React.FC = () => {
                     setSelectedCategory(isSelected ? 'all' : cat.id)
                   )
                 }
-                className={`amber-card overflow-hidden cursor-pointer group flex flex-col justify-between transition-all duration-300 hover:shadow-md ${
-                  isSelected ? 'ring-2 ring-[#B84A22] shadow-sm' : ''
+                className={`bg-white border rounded-3xl overflow-hidden cursor-pointer group flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+                  isSelected
+                    ? 'border-[#B84A22] ring-2 ring-[#B84A22]/20 shadow-sm'
+                    : 'border-[#E5E5E5] hover:border-[#B84A22]/50'
                 }`}
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F3ECE2]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[rgb(249,249,249)]">
                   <img
                     src={cat.image}
                     alt={cat.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                   />
                 </div>
 
                 <div className="p-3.5 sm:p-4 flex items-center justify-between gap-2">
                   <div>
-                    <h3 className="font-semibold text-[14px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                    <h3 className="font-semibold text-[15px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
                       {cat.name}
                     </h3>
-                    <span className="text-[12px] text-[#747474] block mt-0.5">{cat.count}</span>
+                    <span className="text-[12px] font-medium text-[#747474] block mt-0.5">{cat.count}</span>
                   </div>
 
-                  {/* Circular Terracotta Arrow Button */}
+                  {/* Circular Arrow Button */}
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
                       isSelected
                         ? 'bg-[#B84A22] text-white shadow-sm'
-                        : 'bg-[#FAF6EF] group-hover:bg-[#B84A22] text-[#B84A22] group-hover:text-white border border-[#EBE2D7]'
+                        : 'bg-[rgb(249,249,249)] group-hover:bg-[#B84A22] text-[#747474] group-hover:text-white border border-[#E5E5E5]'
                     }`}
                   >
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -149,69 +151,72 @@ export const MenuSection: React.FC = () => {
       {/* SECTION 3: DUAL PROMOTIONAL BANNERS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Banner 1: Special Offer */}
-        <div className="relative rounded-3xl overflow-hidden bg-[#201813] text-white p-7 sm:p-9 flex flex-col justify-between shadow-xl">
-          <div className="relative z-10 max-w-sm space-y-3">
-            <span className="text-[10px] font-bold tracking-[0.2em] text-[#D49B37] uppercase block">
+        <div className="relative rounded-3xl overflow-hidden border border-[#3A2D24] text-white p-7 sm:p-9 flex flex-col justify-between shadow-xl group min-h-[310px]">
+          {/* Full Cover Food Image with Gradient Scrim */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+            <img
+              src="/images/amber_hero_dish.jpg"
+              alt="Royal Dum Biryani Special Offer"
+              className="w-full h-full object-cover object-right group-hover:scale-105 transition-transform duration-700"
+            />
+            {/* Rich cinematic gradient covering the whole card so text remains super clear */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#140D09] via-[#140D09]/85 sm:via-[#140D09]/75 to-[#140D09]/30" />
+          </div>
+
+          <div className="relative z-10 max-w-sm space-y-3.5">
+            <span className="text-[11px] font-bold tracking-[0.2em] text-[#D49B37] uppercase block">
               SPECIAL OFFER
             </span>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
               Get 20% Off <br /> on Your First Order
             </h3>
-            <p className="text-xs text-[#C4B5A5] leading-relaxed">
-              Use code <span className="font-bold text-[#D49B37]">SPICE20</span> at checkout and
-              enjoy 20% discount on your first online order.
+            <p className="text-[13px] sm:text-[14px] text-[#E0D7CF] leading-relaxed">
+              Use code <span className="font-bold text-[#D49B37] bg-white/10 px-2 py-0.5 rounded-md border border-[#D49B37]/30">SPICE20</span> at checkout and enjoy 20% discount on your first online order.
             </p>
             <div className="pt-2">
               <button
                 onClick={handleApplyPromoAndScroll}
-                className="btn-amber-primary px-6 py-2.5 text-xs font-semibold flex items-center gap-2 shadow-amber"
+                className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Order Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
-
-          {/* Food image floating on right */}
-          <div className="hidden sm:block absolute right-0 bottom-0 top-0 w-1/2 overflow-hidden pointer-events-none">
-            <img
-              src="/images/amber_hero_dish.jpg"
-              alt="Royal Dum Biryani Special Offer"
-              className="w-full h-full object-cover object-left opacity-60 mix-blend-screen scale-110"
-            />
           </div>
         </div>
 
         {/* Banner 2: Weekend Special */}
-        <div className="relative rounded-3xl overflow-hidden bg-[#F4EDE2] border border-[#E9DFD3] p-7 sm:p-9 flex flex-col justify-between shadow-sm">
-          <div className="relative z-10 max-w-xs space-y-3">
-            <span className="text-[10px] font-bold tracking-[0.2em] text-[#B84A22] uppercase block">
+        <div className="relative rounded-3xl overflow-hidden border border-[#44281E] text-white p-7 sm:p-9 flex flex-col justify-between shadow-xl group min-h-[310px]">
+          {/* Full Cover Food Image with Gradient Scrim */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+            <img
+              src="/images/hero_dish.jpg"
+              alt="Family Combo Feast"
+              className="w-full h-full object-cover object-right group-hover:scale-105 transition-transform duration-700"
+            />
+            {/* Rich cinematic gradient covering the whole card so text remains super clear */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#170B07] via-[#170B07]/85 sm:via-[#170B07]/75 to-[#170B07]/30" />
+          </div>
+
+          <div className="relative z-10 max-w-sm space-y-3.5">
+            <span className="text-[11px] font-bold tracking-[0.2em] text-[#FBA138] uppercase block">
               WEEKEND SPECIAL
             </span>
-            <h3 className="text-2xl sm:text-3xl font-bold text-[#1A130E] leading-tight">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
               Family Combo <br /> Meals
             </h3>
-            <p className="text-xs text-[#786960] leading-relaxed">
-              Feed your family with our chef-crafted special combo deals, fresh tandoor sides and drinks.
+            <p className="text-[13px] sm:text-[14px] text-[#E0D7CF] leading-relaxed">
+              Feed your family with our chef-crafted special combo deals, fresh tandoor sides and aromatic curries.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => dispatch(setCartOpen(true))}
-                className="btn-amber-primary px-6 py-2.5 text-xs font-semibold flex items-center gap-2 shadow-amber"
+                className="px-6 py-3 rounded-full bg-white hover:bg-[rgb(249,249,249)] text-[#1A130E] text-[13px] font-semibold flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Order Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4 text-[#F15A24]" />
               </button>
             </div>
-          </div>
-
-          {/* Food image on right */}
-          <div className="hidden sm:block absolute right-3 bottom-3 top-3 w-1/2 overflow-hidden rounded-2xl pointer-events-none">
-            <img
-              src="/images/hero_dish.jpg"
-              alt="Family Combo Feast"
-              className="w-full h-full object-cover object-center rounded-2xl"
-            />
           </div>
         </div>
       </div>

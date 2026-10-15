@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/location" className="hover:text-white transition-colors text-[14px]">
-                  Location / Find Us
+                  Our Location
                 </Link>
               </li>
               <li>
@@ -129,7 +129,7 @@ export const Footer: React.FC = () => {
             <h4 className="font-semibold text-[16px] text-white">
               Subscribe to our newsletter
             </h4>
-            <p className="text-xs text-[#9B8C80]">
+            <p className="text-[13px] text-[#A6998E]">
               Get the latest seasonal offers and royal menu updates.
             </p>
 
@@ -144,11 +144,11 @@ export const Footer: React.FC = () => {
                 type="email"
                 required
                 placeholder="Enter your Email"
-                className="flex-1 bg-transparent px-3.5 py-2 text-xs text-white placeholder:text-[#8C7D72] focus:outline-none"
+                className="flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white placeholder:text-[#8C7D72] focus:outline-none"
               />
               <button
                 type="submit"
-                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-xs font-semibold shrink-0 shadow-sm transition-all active:scale-95"
+                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold shrink-0 shadow-sm transition-all active:scale-95"
               >
                 Subscribe Now
               </button>
@@ -157,7 +157,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Copyright Line */}
-        <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7A6C62]">
+        <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-[#8C7D72]">
           <p>© {new Date().getFullYear()} Amber Spice. All rights reserved.</p>
           <div className="flex items-center gap-4 text-[#8C7D72]">
             <Link href="/privacy-policy" className="hover:text-white transition-colors">

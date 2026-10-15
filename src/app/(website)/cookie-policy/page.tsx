@@ -20,11 +20,11 @@ export default function CookiePolicyPage() {
         </span>
       </div>
 
-      <div className="space-y-8 amber-card p-6 sm:p-10 text-xs text-[#3D3D3D] leading-relaxed">
+      <div className="space-y-8 bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 text-[14px] sm:text-[15px] text-[#444444] leading-[26px] shadow-xs">
         {/* What are cookies */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-[#1A130E] flex items-center gap-2">
-            <Cookie className="w-4 h-4 text-[#B84A22]" /> 1. What Are Cookies?
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
+            <Cookie className="w-4 h-4 text-[#F15A24]" /> 1. What Are Cookies?
           </h2>
           <p>
             Cookies are small text files stored on your computer or mobile device when you browse
@@ -35,40 +35,40 @@ export default function CookiePolicyPage() {
 
         {/* Categories of Cookies We Use */}
         <section className="space-y-4">
-          <h2 className="text-base font-bold text-[#1A130E] flex items-center gap-2">
-            <Settings className="w-4 h-4 text-[#B84A22]" /> 2. Types of Cookies We Use
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
+            <Settings className="w-4 h-4 text-[#F15A24]" /> 2. Types of Cookies We Use
           </h2>
 
           <div className="space-y-3">
-            <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7]">
+            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
               <div className="flex items-center gap-2 mb-1">
                 <span className="badge-base badge-success">STRICTLY ESSENTIAL</span>
                 <span className="font-bold text-[#1A130E]">Session & Cart Persistence</span>
               </div>
-              <p className="text-[#747474]">
+              <p className="text-[#666666]">
                 Necessary for the core operation of our ordering platform. These cookies retain the
                 items in your food basket, your chosen Dublin delivery zone, and your authentication
                 status. The website cannot function properly without them.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7]">
+            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
               <div className="flex items-center gap-2 mb-1">
                 <span className="badge-base badge-gold">FUNCTIONAL</span>
                 <span className="font-bold text-[#1A130E]">Preferences & Customization</span>
               </div>
-              <p className="text-[#747474]">
+              <p className="text-[#666666]">
                 Remember your past delivery notes, spice preference defaults, and saved Dublin delivery
                 addresses for quicker future checkouts.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7]">
+            <div className="p-4 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5]">
               <div className="flex items-center gap-2 mb-1">
                 <span className="badge-base badge-terracotta">PERFORMANCE</span>
                 <span className="font-bold text-[#1A130E]">Anonymous Traffic Analytics</span>
               </div>
-              <p className="text-[#747474]">
+              <p className="text-[#666666]">
                 Help us understand which heritage dishes are most popular and identify any slow-loading
                 pages to continually enhance speed and responsiveness.
               </p>
@@ -78,7 +78,7 @@ export default function CookiePolicyPage() {
 
         {/* How to Manage Cookies */}
         <section className="space-y-2">
-          <h2 className="text-base font-bold text-[#1A130E] flex items-center gap-2">
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E] flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-[#0FA958]" /> 3. Managing Cookie Preferences
           </h2>
           <p>
@@ -89,11 +89,11 @@ export default function CookiePolicyPage() {
         </section>
 
         {/* Contact */}
-        <section className="space-y-2 pt-4 border-t border-[#EBE2D7]">
-          <h2 className="text-base font-bold text-[#1A130E]">4. Questions Regarding Cookies</h2>
+        <section className="space-y-2 pt-4 border-t border-[#E5E5E5]">
+          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">4. Questions Regarding Cookies</h2>
           <p>
             For further information regarding our cookie practices, please contact us at{' '}
-            <strong className="text-[#B84A22]">support@amberspice.ie</strong>.
+            <strong className="text-[#F15A24]">support@amberspice.ie</strong>.
           </p>
         </section>
       </div>
@@ -102,7 +102,7 @@ export default function CookiePolicyPage() {
       <div className="mt-8 text-center">
         <Link
           href="/"
-          className="btn-secondary px-6 py-2.5 text-xs font-semibold inline-flex items-center gap-2"
+          className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] shadow-xs inline-flex items-center gap-2 transition-colors"
         >
           <span>Return to Homepage</span>
           <ArrowRight className="w-3.5 h-3.5" />

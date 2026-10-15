@@ -126,7 +126,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
       <div className="bg-white border border-[#EBEBEB] rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
         {/* Header with Food Image & Close Button */}
-        <div className="relative aspect-[16/9] w-full bg-[#F3ECE2] shrink-0 overflow-hidden">
+        <div className="relative aspect-[16/9] w-full bg-[rgb(249,249,249)] shrink-0 overflow-hidden">
           <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
           <button
             onClick={onClose}
@@ -138,19 +138,19 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
+        <div className="p-6 overflow-y-auto space-y-5 flex-1 text-[13px] sm:text-[14px]">
           {/* Dish Header Info (Title, Price, Description, Badges) */}
-          <div className="border-b border-[#F0E8DE] pb-4">
+          <div className="border-b border-[#E5E5E5] pb-4">
             <div className="flex items-start justify-between gap-3 mb-2">
               <h2 className="text-xl sm:text-2xl font-bold text-[#1A130E] leading-tight">
                 {dish.name}
               </h2>
-              <span className="text-lg font-bold text-[#B84A22] shrink-0">
+              <span className="text-[20px] font-bold text-[#1A130E] shrink-0">
                 €{dish.price.toFixed(2)}
               </span>
             </div>
 
-            <p className="text-xs text-[#747474] leading-relaxed mb-3">
+            <p className="text-[13px] sm:text-[14px] text-[#555555] leading-relaxed mb-3">
               {dish.description}
             </p>
 
@@ -158,12 +158,12 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
               {dish.dietary.map((d) => (
                 <span
                   key={d}
-                  className="px-2.5 py-0.5 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7] font-semibold capitalize"
+                  className="px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5] font-semibold capitalize"
                 >
                   {d}
                 </span>
               ))}
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF6EF] text-[#747474] border border-[#EBE2D7]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#747474] border border-[#E5E5E5]">
                 ⏱ {dish.prepTime}
               </span>
             </div>
@@ -171,7 +171,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
 
           {/* Allergens Notice */}
           {dish.allergens.length > 0 && (
-            <div className="bg-[#FAF6EF] border border-[#E9DFD3] rounded-2xl p-3 flex items-start gap-2.5 text-[#B84A22]">
+            <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3 flex items-start gap-2.5 text-[#B84A22] text-[12px]">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#B84A22]" />
               <div>
                 <span className="font-bold block">Allergen Information:</span>
@@ -184,16 +184,16 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           {dish.modifierGroups?.map((group) => {
             const currentSelected = selectedModifiers[group.id] || [];
             return (
-              <div key={group.id} className="border-b border-[#F1F1F1] pb-4">
+              <div key={group.id} className="border-b border-[#E5E5E5] pb-4">
                 <div className="flex items-center justify-between mb-2.5">
                   <div>
-                    <h3 className="font-bold text-sm text-[#1A130E]">{group.name}</h3>
-                    <p className="text-[11px] text-[#747474]">
+                    <h3 className="font-bold text-[14px] text-[#1A130E]">{group.name}</h3>
+                    <p className="text-[12px] text-[#747474]">
                       {group.maxSelect === 1 ? 'Select 1 option' : `Choose up to ${group.maxSelect} options`}
                     </p>
                   </div>
                   {group.required && (
-                    <span className="text-[10px] bg-[#F3ECE2] text-[#B84A22] px-2 py-0.5 rounded-full font-bold border border-[#E9DFD3]">
+                    <span className="text-[10px] bg-orange-50 text-[#F15A24] px-2.5 py-0.5 rounded-full font-bold border border-orange-200">
                       Required
                     </span>
                   )}
@@ -206,17 +206,17 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
                       <div
                         key={option.id}
                         onClick={() => handleToggleOption(group.id, option, group.maxSelect)}
-                        className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${
+                        className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border text-[13px] ${
                           isSelected
-                            ? 'bg-[#FAF6EF] border-[#B84A22] text-[#1A130E] font-semibold'
-                            : 'bg-white border-[#EBEBEB] hover:border-[#B84A22] text-[#3D3D3D]'
+                            ? 'bg-orange-50/40 border-[#F15A24] text-[#1A130E] font-semibold'
+                            : 'bg-white border-[#E5E5E5] hover:border-[#F15A24] text-[#3D3D3D]'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div
                             className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${
                               isSelected
-                                ? 'bg-[#B84A22] border-[#B84A22] text-white'
+                                ? 'bg-[#F15A24] border-[#F15A24] text-white'
                                 : 'border-[#C0C0C0]'
                             }`}
                           >
@@ -225,7 +225,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
                           <span>{option.name}</span>
                         </div>
                         {option.price > 0 && (
-                          <span className="text-xs font-bold text-[#B84A22]">
+                          <span className="text-[13px] font-bold text-[#F15A24]">
                             +€{option.price.toFixed(2)}
                           </span>
                         )}
@@ -239,29 +239,29 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
 
           {/* Special Instructions */}
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-[#747474] mb-1.5">
-              Cooking Notes / Requests
+            <label className="block text-[12px] font-bold uppercase tracking-wider text-[#747474] mb-1.5">
+              Special Cooking Notes
             </label>
             <textarea
               value={specialInstructions}
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder="e.g. Extra sauce on side, no onions..."
               rows={2}
-              className="w-full bg-[#FAF6EF] border border-[#EBE2D7] rounded-xl p-3 text-xs text-[#3D3D3D] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#B84A22] resize-none"
+              className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-xl p-3 text-[13px] text-[#1A130E] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#F15A24] resize-none"
             />
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t border-[#EBE2D7] bg-white flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 bg-[#FAF6EF] px-3 py-1.5 rounded-full border border-[#EBE2D7]">
+        <div className="p-4 border-t border-[#E5E5E5] bg-white flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 bg-[rgb(249,249,249)] px-3.5 py-1.5 rounded-full border border-[#E5E5E5]">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               className="text-[#747474] hover:text-[#1A130E] p-0.5"
             >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="font-bold text-xs text-[#1A130E] w-4 text-center">{quantity}</span>
+            <span className="font-bold text-[14px] text-[#1A130E] w-4 text-center">{quantity}</span>
             <button onClick={() => setQuantity(quantity + 1)} className="text-[#747474] hover:text-[#1A130E] p-0.5">
               <Plus className="w-4 h-4" />
             </button>
@@ -270,7 +270,7 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
           <button
             onClick={handleAddToCart}
             disabled={!isRequiredSatisfied}
-            className="flex-1 btn-amber-primary py-3 px-5 text-xs font-semibold flex items-center justify-between disabled:opacity-50"
+            className="flex-1 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[14px] font-semibold flex items-center justify-between shadow-md disabled:opacity-50 transition-all hover:scale-[1.01] active:scale-98"
           >
             <span>Add to Cart</span>
             <span>€{grandTotal.toFixed(2)}</span>

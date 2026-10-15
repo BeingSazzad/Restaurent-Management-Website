@@ -97,10 +97,10 @@ export default function GalleryPage() {
           <button
             key={tab.key}
             onClick={() => setActiveFilter(tab.key as any)}
-            className={`px-5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-full text-[13px] sm:text-[14px] font-semibold transition-all ${
               activeFilter === tab.key
-                ? 'bg-[#B84A22] text-white shadow-md'
-                : 'bg-white text-[#747474] hover:text-[#1A130E] border border-[#EBE2D7]'
+                ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md'
+                : 'bg-white text-[#555555] hover:text-[#1A130E] border border-[#E5E5E5]'
             }`}
           >
             {tab.label}
@@ -114,9 +114,9 @@ export default function GalleryPage() {
           <div
             key={item.id}
             onClick={() => setSelectedImage(item)}
-            className="group relative rounded-3xl overflow-hidden bg-white border border-[#EBE2D7] shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+            className="group relative rounded-3xl overflow-hidden bg-white border border-[#E5E5E5] shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
-            <div className="relative h-64 overflow-hidden bg-[#FAF6EF]">
+            <div className="relative h-64 overflow-hidden bg-[rgb(249,249,249)]">
               <img
                 src={item.image}
                 alt={item.title}
@@ -159,7 +159,7 @@ export default function GalleryPage() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full border border-[#EBE2D7] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+            className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full border border-[#E5E5E5] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
           >
             <div className="relative h-80 sm:h-96">
               <img
@@ -174,27 +174,27 @@ export default function GalleryPage() {
                 ✕
               </button>
             </div>
-            <div className="p-6">
+            <div className="p-6 sm:p-8">
               <span className="badge-base badge-terracotta mb-2 inline-block">
                 {selectedImage.tag}
               </span>
-              <h2 className="text-xl font-bold text-[#1A130E] mb-2">{selectedImage.title}</h2>
-              <p className="text-xs text-[#747474] leading-relaxed mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#1A130E] mb-2">{selectedImage.title}</h2>
+              <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
                 {selectedImage.description}
               </p>
-              <div className="flex items-center justify-between gap-4 pt-4 border-t border-[#EBE2D7]">
+              <div className="flex items-center justify-between gap-4 pt-4 border-t border-[#E5E5E5]">
                 <button
                   onClick={() => setSelectedImage(null)}
-                  className="btn-secondary px-5 py-2.5 text-xs font-semibold"
+                  className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
                 >
                   Close Preview
                 </button>
                 <Link
                   href="/menu"
-                  className="btn-amber-primary px-6 py-2.5 text-xs font-semibold flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 flex items-center gap-2 transition-opacity"
                 >
                   <span>Order on Menu</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -203,14 +203,14 @@ export default function GalleryPage() {
       )}
 
       {/* Call to Action Footer */}
-      <div className="text-center p-8 rounded-3xl bg-[#FAF6EF] border border-[#EBE2D7]">
-        <h3 className="font-bold text-lg text-[#1A130E] mb-2">Want to Taste the Difference?</h3>
-        <p className="text-xs text-[#747474] max-w-md mx-auto mb-5">
+      <div className="text-center p-8 sm:p-10 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
+        <h3 className="font-bold text-[20px] text-[#1A130E] mb-2">Want to Taste the Difference?</h3>
+        <p className="text-[14px] text-[#555555] max-w-md mx-auto mb-6">
           Explore our complete online menu with direct doorstep delivery across Dublin zones.
         </p>
         <Link
           href="/menu"
-          className="btn-amber-primary px-7 py-3 text-xs font-semibold inline-flex items-center gap-2 shadow-amber"
+          className="px-8 py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
         >
           <span>View Online Menu</span>
           <ArrowRight className="w-4 h-4" />

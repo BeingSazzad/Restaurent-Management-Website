@@ -12,12 +12,12 @@ export function ReduxProvider({ children }: { children: React.ReactNode }) {
         theme={{
           algorithm: theme.defaultAlgorithm,
           token: {
-            colorPrimary: '#B84A22', // Amber Spice Terracotta
+            colorPrimary: '#F15A24', // Sunset Terracotta
             colorBgBase: '#FFFFFF',
             colorBgContainer: '#FFFFFF',
-            colorBorder: '#E9DFD3',
-            colorText: '#2C221C',
-            colorTextSecondary: '#786960',
+            colorBorder: '#E5E5E5',
+            colorText: '#1A130E',
+            colorTextSecondary: '#555555',
             borderRadius: 14,
             fontFamily: "'Poppins', sans-serif",
           },

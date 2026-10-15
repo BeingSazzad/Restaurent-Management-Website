@@ -28,12 +28,12 @@ export const Logo: React.FC<LogoProps> = ({
       <div className="relative shrink-0 flex items-center justify-center">
         {!imgFailed ? (
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="Amber Spice Logo"
             onError={(e) => {
               const currentSrc = e.currentTarget.getAttribute('src');
-              if (currentSrc === '/images/logo.png') {
-                e.currentTarget.src = '/images/logo.svg';
+              if (currentSrc === '/images/logo.svg') {
+                e.currentTarget.src = '/images/logo.png';
               } else {
                 setImgFailed(true);
               }

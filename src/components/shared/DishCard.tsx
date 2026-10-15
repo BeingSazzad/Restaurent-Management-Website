@@ -24,12 +24,12 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
   return (
     <div
       onClick={() => dish.isAvailable && onSelect(dish)}
-      className={`amber-card overflow-hidden group flex flex-col justify-between bg-white border border-[#EBE2D7] rounded-2xl transition-all duration-300 hover:shadow-lg ${
+      className={`group flex flex-col justify-between bg-white border border-[#E5E5E5] rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
         !dish.isAvailable ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
       }`}
     >
       {/* Food Photo Container */}
-      <div className="relative aspect-[16/11] w-full overflow-hidden bg-[#F3ECE2]">
+      <div className="relative aspect-[16/11] w-full overflow-hidden bg-[rgb(249,249,249)]">
         <img
           src={dish.image}
           alt={dish.name}
@@ -47,7 +47,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
         <button
           onClick={handleToggleFavorite}
           aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-[#EBE2D7] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-sm z-10"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 backdrop-blur-md border border-[#E5E5E5] flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-sm z-10"
         >
           <Heart
             className={`w-4 h-4 transition-colors ${
@@ -71,36 +71,36 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
       {/* Card Body & Info */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          {/* Dish Title: Standard 16px Poppins, 2-line wrapping with min-height for row alignment */}
-          <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-[22px] line-clamp-2 min-h-[44px]">
+          {/* Dish Title: Bold 17px/18px Poppins */}
+          <h3 className="font-semibold text-[16px] sm:text-[17px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-[23px] line-clamp-2 min-h-[46px]">
             {dish.name}
           </h3>
 
-          {/* Dish Description: Standard 13px Poppins, comfortable leading, 2-line clamp */}
-          <p className="text-[13px] text-[#747474] leading-[19px] line-clamp-2 min-h-[38px] mt-1.5 mb-3.5">
+          {/* Dish Description: Clear 13px/14px Poppins with comfortable line height */}
+          <p className="text-[13px] sm:text-[14px] text-[#555555] leading-[20px] sm:leading-[21px] line-clamp-2 min-h-[40px] mt-1.5 mb-3.5">
             {dish.description}
           </p>
         </div>
 
         {/* Price, Star Rating Pill & Add Button Row */}
-        <div className="pt-3 border-t border-[#F0E8DE] flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <span className="font-bold text-[17px] text-[#1A130E] tracking-tight">
+        <div className="pt-3 border-t border-[#EAEAEA] flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[18px] sm:text-[19px] text-[#1A130E] tracking-tight">
               €{dish.price.toFixed(2)}
             </span>
-            <div className="flex items-center gap-1 text-[11px] font-semibold text-[#5A5048] bg-[#FAF6EF] px-2 py-0.5 rounded-full border border-[#EBE2D7]">
-              <Star className="w-3 h-3 fill-[#D49B37] text-[#D49B37]" />
+            <div className="flex items-center gap-1 text-[12px] font-semibold text-[#1A130E] bg-white px-2.5 py-0.5 rounded-full border border-[#E5E5E5] shadow-2xs">
+              <Star className="w-3.5 h-3.5 fill-[#D49B37] text-[#D49B37]" />
               <span>{dish.rating}</span>
             </div>
           </div>
 
-          {/* Circular Terracotta Add Button with Ergonomic Touch Target */}
+          {/* Sunset Orange Gradient Add Button */}
           <button
             disabled={!dish.isAvailable}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
               dish.isAvailable
-                ? 'bg-[#B84A22] hover:bg-[#9E3E1B] text-white shadow-sm hover:scale-110 active:scale-95'
-                : 'bg-[#E0D7CC] text-[#786960] cursor-not-allowed'
+                ? 'bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white shadow-sm hover:scale-105 active:scale-95'
+                : 'bg-[#E5E5E5] text-[#999999] cursor-not-allowed'
             }`}
             aria-label={`Add ${dish.name} to order`}
           >

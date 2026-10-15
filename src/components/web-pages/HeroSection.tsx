@@ -250,15 +250,15 @@ export const HeroSection: React.FC = () => {
                 <Bike className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
                     ~30-35 MINS
                   </span>
                 </div>
-                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                <h3 className="font-semibold text-[17px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
                   Doorstep Delivery
                 </h3>
-                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                <p className="text-[13px] sm:text-[14px] text-[#666666] leading-[20px] mt-0.5">
                   Across Dublin Zones 1 to 8 · Free over €30
                 </p>
               </div>
@@ -282,15 +282,15 @@ export const HeroSection: React.FC = () => {
                 <Store className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#B84A22] border border-[#E5E5E5]">
                     ~15-20 MINS
                   </span>
                 </div>
-                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                <h3 className="font-semibold text-[17px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
                   Counter Takeaway
                 </h3>
-                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                <p className="text-[13px] sm:text-[14px] text-[#666666] leading-[20px] mt-0.5">
                   18 South William St · Packaged hot & fresh
                 </p>
               </div>
@@ -311,16 +311,16 @@ export const HeroSection: React.FC = () => {
                 <Clock className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#0FA958] border border-[#E5E5E5] flex items-center gap-1">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] text-[#0FA958] border border-[#E5E5E5] flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#0FA958] animate-pulse" />
                     OPEN 7 DAYS
                   </span>
                 </div>
-                <h3 className="font-semibold text-[16px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
+                <h3 className="font-semibold text-[17px] text-[#1A130E] group-hover:text-[#B84A22] transition-colors leading-snug">
                   Clay Oven Daily
                 </h3>
-                <p className="text-[13px] text-[#747474] leading-[18px] mt-0.5">
+                <p className="text-[13px] sm:text-[14px] text-[#666666] leading-[20px] mt-0.5">
                   11:00 AM – 11:00 PM · 100% Halal certified
                 </p>
               </div>

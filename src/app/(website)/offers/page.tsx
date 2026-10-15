@@ -71,11 +71,11 @@ export default function OffersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6EF] py-12 sm:py-16">
+    <div className="min-h-screen bg-[rgb(249,249,249)] py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F3ECE2] border border-[#E9DFD3] text-[#B84A22] text-xs font-semibold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E5E5E5] text-[#B84A22] text-[12px] font-semibold uppercase tracking-wider mb-3.5 shadow-2xs">
             <Percent className="w-3.5 h-3.5" />
             <span>Exclusive Promo Codes</span>
           </div>
@@ -92,15 +92,15 @@ export default function OffersPage() {
           {OFFERS_LIST.map((offer) => (
             <div
               key={offer.code}
-              className={`amber-card p-6 sm:p-7 bg-white border rounded-3xl flex flex-col justify-between transition-all relative overflow-hidden ${
+              className={`p-6 sm:p-7 bg-white border rounded-3xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1 ${
                 offer.isPopular
-                  ? 'border-[#B84A22] ring-1 ring-[#B84A22]/20'
-                  : 'border-[#EBE2D7]'
+                  ? 'border-[#B84A22] ring-2 ring-[#B84A22]/20'
+                  : 'border-[#E5E5E5] hover:border-[#B84A22]/50'
               }`}
             >
               {/* Top Accent Pill */}
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#FAF6EF] border border-[#EBE2D7] text-[#B84A22]">
+                <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[rgb(249,249,249)] border border-[#E5E5E5] text-[#B84A22]">
                   {offer.badge}
                 </span>
                 <span className="text-2xl sm:text-3xl font-extrabold text-[#B84A22] tracking-tight">
@@ -110,21 +110,21 @@ export default function OffersPage() {
 
               {/* Title & Description */}
               <div className="mb-6">
-                <h3 className="font-bold text-lg text-[#1A130E] mb-2 leading-snug">
+                <h3 className="font-bold text-[18px] sm:text-[19px] text-[#1A130E] mb-2 leading-snug">
                   {offer.title}
                 </h3>
-                <p className="text-xs text-[#747474] leading-relaxed mb-4">
+                <p className="text-[14px] text-[#555555] leading-relaxed mb-4">
                   {offer.description}
                 </p>
-                <div className="flex items-center gap-4 text-[11px] text-[#9B8C80]">
+                <div className="flex items-center gap-4 text-[12px] text-[#747474] font-medium">
                   <span>• {offer.minOrder}</span>
                   <span>• {offer.validTill}</span>
                 </div>
               </div>
 
               {/* Voucher Code Box & Apply CTA */}
-              <div className="p-3.5 rounded-2xl bg-[#FAF6EF] border border-[#EBE2D7] flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
+              <div className="p-2 sm:p-2.5 rounded-2xl bg-[rgb(249,249,249)] border border-[#E5E5E5] flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 pl-2">
                   <Tag className="w-4 h-4 text-[#B84A22]" />
                   <span className="font-bold text-sm tracking-widest text-[#1A130E]">
                     {offer.code}
@@ -133,7 +133,7 @@ export default function OffersPage() {
 
                 <button
                   onClick={() => handleApplyOffer(offer.code)}
-                  className="btn-amber-primary px-4 py-2 text-xs font-semibold flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95"
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95 transition-all"
                 >
                   {copiedCode === offer.code ? (
                     <>
@@ -153,21 +153,21 @@ export default function OffersPage() {
         </div>
 
         {/* Free Delivery Banner */}
-        <div className="max-w-5xl mx-auto p-8 rounded-3xl bg-[#1A130E] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="max-w-5xl mx-auto p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#1C1510] via-[#241A14] to-[#17110D] border border-[#3A2D24] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
           <div>
-            <div className="text-xs text-[#D49B37] font-semibold uppercase tracking-wider mb-1">
+            <div className="text-[11px] text-[#D49B37] font-bold uppercase tracking-wider mb-2">
               Everyday Dublin Benefit
             </div>
             <h3 className="text-xl sm:text-2xl font-bold mb-2">
               Free Delivery on Orders Over €30.00
             </h3>
-            <p className="text-xs text-[#C4B5A5] max-w-xl">
+            <p className="text-[14px] text-[#D5CBC2] max-w-xl leading-relaxed">
               No promo code needed. Minimum threshold is automatically calculated in your cart for Dublin 1, 2, 4, 6 & 8 postal zones.
             </p>
           </div>
           <Link
             href="/menu"
-            className="btn-amber-primary px-6 py-3 text-xs font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap"
+            className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold flex items-center gap-2 shrink-0 whitespace-nowrap shadow-md hover:scale-105 active:scale-95 transition-all"
           >
             <span>Explore Menu & Order</span>
             <ArrowRight className="w-4 h-4" />

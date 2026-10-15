@@ -109,7 +109,7 @@ export default function FAQPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search questions (e.g. Halal, delivery time, gluten-free)..."
-          className="w-full bg-white rounded-full pl-11 pr-5 py-3 text-xs text-[#1A130E] border border-[#EBE2D7] focus:outline-none focus:border-[#B84A22] shadow-sm transition-all"
+          className="w-full bg-white rounded-full pl-11 pr-5 py-3 text-[14px] text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#B84A22] shadow-xs transition-all"
         />
       </div>
 
@@ -125,10 +125,10 @@ export default function FAQPage() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
-            className={`px-5 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-full text-[13px] font-semibold transition-all ${
               activeTab === tab.key
-                ? 'bg-[#B84A22] text-white shadow-md'
-                : 'bg-white text-[#747474] hover:text-[#1A130E] border border-[#EBE2D7]'
+                ? 'bg-[#B84A22] text-white shadow-sm'
+                : 'bg-white text-[#555555] hover:text-[#1A130E] border border-[#E5E5E5]'
             }`}
           >
             {tab.label}
@@ -139,10 +139,10 @@ export default function FAQPage() {
       {/* Accordion List */}
       <div className="space-y-3.5 mb-14">
         {filtered.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-3xl border border-[#EBE2D7] p-8">
+          <div className="text-center py-12 bg-white rounded-3xl border border-[#E5E5E5] p-8 shadow-xs">
             <HelpCircle className="w-10 h-10 text-[#9B8C80] mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-[#1A130E] mb-1">No questions found</h3>
-            <p className="text-xs text-[#747474]">
+            <h3 className="text-base font-bold text-[#1A130E] mb-1">No questions found</h3>
+            <p className="text-[14px] text-[#747474]">
               Try searching with different keywords or browse all categories.
             </p>
           </div>
@@ -152,16 +152,16 @@ export default function FAQPage() {
             return (
               <div
                 key={item.id}
-                className="amber-card overflow-hidden transition-all duration-200"
+                className="bg-white border border-[#E5E5E5] rounded-3xl overflow-hidden shadow-xs transition-all duration-200"
               >
                 <button
                   onClick={() => toggleAccordion(item.id)}
-                  className="w-full p-5 text-left flex items-center justify-between gap-4 font-semibold text-sm text-[#1A130E] hover:text-[#B84A22] transition-colors"
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[16px] text-[#1A130E] hover:text-[#B84A22] transition-colors"
                 >
                   <span className="leading-snug">{item.question}</span>
                   <div
-                    className={`w-7 h-7 rounded-full bg-[#FAF6EF] text-[#747474] flex items-center justify-center shrink-0 border border-[#EBE2D7] transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-[#B84A22]' : ''
+                    className={`w-8 h-8 rounded-full bg-[rgb(249,249,249)] text-[#747474] flex items-center justify-center shrink-0 border border-[#E5E5E5] transition-transform duration-200 ${
+                      isOpen ? 'rotate-180 text-[#B84A22] bg-white' : ''
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function FAQPage() {
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs text-[#747474] leading-relaxed border-t border-[#FAF6EF]">
+                  <div className="px-5 sm:px-6 pb-6 pt-1 text-[14px] text-[#555555] leading-[23px] border-t border-[#F0F0F0]">
                     {item.answer}
                   </div>
                 )}
@@ -180,14 +180,14 @@ export default function FAQPage() {
       </div>
 
       {/* Still Have Questions Box */}
-      <div className="p-8 rounded-3xl bg-white border border-[#EBE2D7] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      <div className="p-7 sm:p-8 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7] flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
             <MessageCircle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-[#1A130E]">Still have a specific question?</h3>
-            <p className="text-xs text-[#747474]">
+            <h3 className="font-bold text-[17px] text-[#1A130E]">Still have a specific question?</h3>
+            <p className="text-[13px] sm:text-[14px] text-[#666666] mt-0.5">
               Our central Dublin kitchen team is happy to assist with allergies, catering or custom
               orders.
             </p>
@@ -196,10 +196,10 @@ export default function FAQPage() {
 
         <Link
           href="/contact"
-          className="btn-amber-primary px-6 py-2.5 text-xs font-semibold shrink-0 flex items-center gap-2"
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shrink-0 flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all"
         >
           <span>Contact Kitchen</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

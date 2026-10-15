@@ -122,29 +122,29 @@ export default function CustomerReviewsPage() {
       </div>
 
       {/* Rating Summary Card */}
-      <div className="amber-card p-6 sm:p-8 mb-12">
+      <div className="bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-8 mb-12 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           {/* Big Score */}
-          <div className="md:col-span-4 text-center md:border-r border-[#EBE2D7] md:pr-8">
+          <div className="md:col-span-4 text-center md:border-r border-[#EAEAEA] md:pr-8">
             <span className="text-5xl sm:text-6xl font-extrabold text-[#1A130E] block leading-none">
               4.9
             </span>
-            <div className="flex items-center justify-center gap-1 my-2 text-[#D49B37]">
+            <div className="flex items-center justify-center gap-1 my-2.5 text-[#D49B37]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-[#D49B37]" />
               ))}
             </div>
-            <p className="text-xs text-[#747474]">Based on 2,140+ verified customer reviews</p>
+            <p className="text-[13px] text-[#747474]">Based on 2,140+ verified customer reviews</p>
             <button
               onClick={() => setShowReviewModal(true)}
-              className="mt-4 btn-amber-primary px-6 py-2.5 text-xs font-semibold"
+              className="mt-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white text-[13px] font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all"
             >
               Write a Review
             </button>
           </div>
 
           {/* Breakdown Bars */}
-          <div className="md:col-span-8 space-y-3">
+          <div className="md:col-span-8 space-y-3.5">
             {[
               { aspect: 'Food Quality & Taste', score: '99%', val: '4.9/5' },
               { aspect: 'Spice Authenticity & Craft', score: '98%', val: '5.0/5' },
@@ -152,13 +152,13 @@ export default function CustomerReviewsPage() {
               { aspect: 'Packaging & Leakproof Seal', score: '97%', val: '4.9/5' },
             ].map((bar, i) => (
               <div key={i} className="space-y-1">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center justify-between text-[13px]">
                   <span className="font-semibold text-[#1A130E]">{bar.aspect}</span>
                   <span className="text-[#747474] font-medium">{bar.val}</span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-[#FAF6EF] overflow-hidden border border-[#EBE2D7]">
+                <div className="w-full h-2 rounded-full bg-[rgb(249,249,249)] overflow-hidden border border-[#E5E5E5]">
                   <div
-                    className="h-full bg-[#B84A22] rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-[#FBA138] to-[#F15A24] rounded-full transition-all duration-500"
                     style={{ width: bar.score }}
                   />
                 </div>
@@ -173,20 +173,20 @@ export default function CustomerReviewsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setFilterRating('all')}
-            className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors ${
+            className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-colors ${
               filterRating === 'all'
-                ? 'bg-[#B84A22] text-white'
-                : 'bg-white text-[#747474] border border-[#EBE2D7]'
+                ? 'bg-[#B84A22] text-white shadow-sm'
+                : 'bg-white text-[#555555] border border-[#E5E5E5]'
             }`}
           >
             All Reviews ({reviewsList.length})
           </button>
           <button
             onClick={() => setFilterRating(5)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1 ${
+            className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-colors flex items-center gap-1.5 ${
               filterRating === 5
-                ? 'bg-[#B84A22] text-white'
-                : 'bg-white text-[#747474] border border-[#EBE2D7]'
+                ? 'bg-[#B84A22] text-white shadow-sm'
+                : 'bg-white text-[#555555] border border-[#E5E5E5]'
             }`}
           >
             <span>5 Stars Only</span>
@@ -196,7 +196,7 @@ export default function CustomerReviewsPage() {
 
         <button
           onClick={() => setShowReviewModal(true)}
-          className="text-xs text-[#B84A22] font-semibold hover:underline flex items-center gap-1"
+          className="text-[13px] text-[#B84A22] font-semibold hover:underline flex items-center gap-1"
         >
           <MessageSquare className="w-3.5 h-3.5" />
           <span>Add Your Review</span>
@@ -206,44 +206,44 @@ export default function CustomerReviewsPage() {
       {/* Reviews Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
         {filtered.map((rev) => (
-          <div key={rev.id} className="amber-card p-6 flex flex-col justify-between">
+          <div key={rev.id} className="bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex items-start justify-between gap-3 mb-3.5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#FAF6EF] text-[#B84A22] border border-[#EBE2D7] font-bold text-sm flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white font-bold text-sm flex items-center justify-center shadow-xs">
                     {rev.name.charAt(0)}
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-[#1A130E] leading-snug">{rev.name}</h4>
-                    <p className="text-[11px] text-[#747474]">{rev.location}</p>
+                    <h4 className="font-bold text-[15px] text-[#1A130E] leading-snug">{rev.name}</h4>
+                    <p className="text-[12px] text-[#747474]">{rev.location}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-0.5 text-[#D49B37]">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-[#D49B37]" />
+                    <Star key={i} className="w-4 h-4 fill-[#D49B37]" />
                   ))}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-3">
-                <span className="badge-base badge-terracotta text-[10px]">
+              <div className="flex items-center gap-2 mb-3.5">
+                <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[rgb(249,249,249)] border border-[#E5E5E5] text-[#B84A22]">
                   Ordered: {rev.dish}
                 </span>
                 {rev.verified && (
-                  <span className="inline-flex items-center gap-1 text-[11px] text-[#0FA958] font-medium">
-                    <CheckCircle className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1 text-[12px] text-[#0FA958] font-medium">
+                    <CheckCircle className="w-3.5 h-3.5" />
                     Verified Order
                   </span>
                 )}
               </div>
 
-              <p className="text-xs text-[#3D3D3D] leading-relaxed italic mb-4">
+              <p className="text-[14px] sm:text-[15px] text-[#3D3D3D] leading-[24px] font-normal mb-4">
                 &ldquo;{rev.comment}&rdquo;
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#EBE2D7] flex items-center justify-between text-[11px] text-[#747474]">
+            <div className="pt-3.5 border-t border-[#F0F0F0] flex items-center justify-between text-[12px] text-[#747474]">
               <span>{rev.date}</span>
               <button
                 onClick={() => {
@@ -253,7 +253,7 @@ export default function CustomerReviewsPage() {
                     )
                   );
                 }}
-                className="flex items-center gap-1 text-[#747474] hover:text-[#B84A22] transition-colors"
+                className="flex items-center gap-1.5 text-[#747474] hover:text-[#B84A22] transition-colors"
               >
                 <ThumbsUp className="w-3.5 h-3.5" />
                 <span>Helpful ({rev.helpfulCount})</span>
@@ -271,13 +271,13 @@ export default function CustomerReviewsPage() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-[#EBE2D7] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-[#E5E5E5] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-[#1A130E]">Write a Customer Review</h3>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-[18px] sm:text-[20px] font-bold text-[#1A130E]">Write a Customer Review</h3>
               <button
                 onClick={() => setShowReviewModal(false)}
-                className="w-8 h-8 rounded-full bg-[#FAF6EF] text-[#747474] flex items-center justify-center hover:text-[#1A130E]"
+                className="w-9 h-9 rounded-full bg-neutral-100 text-[#555555] hover:text-[#1A130E] hover:bg-neutral-200/70 border border-[#E5E5E5] flex items-center justify-center transition-colors"
               >
                 ✕
               </button>
@@ -285,7 +285,7 @@ export default function CustomerReviewsPage() {
 
             <form onSubmit={handleAddReview} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">Your Name</label>
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Your Name</label>
                 <input
                   type="text"
                   required
@@ -297,7 +297,7 @@ export default function CustomerReviewsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">
                   Dish Enjoyed
                 </label>
                 <input
@@ -310,7 +310,7 @@ export default function CustomerReviewsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">Rating</label>
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Rating</label>
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -323,7 +323,7 @@ export default function CustomerReviewsPage() {
                         className={`w-6 h-6 ${
                           star <= newReview.rating
                             ? 'fill-[#D49B37] text-[#D49B37]'
-                            : 'text-[#EBE2D7]'
+                            : 'text-[#D4D4D4]'
                         }`}
                       />
                     </button>
@@ -332,7 +332,7 @@ export default function CustomerReviewsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">
                   Your Dining Review
                 </label>
                 <textarea
@@ -345,17 +345,17 @@ export default function CustomerReviewsPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="flex items-center justify-end gap-3 pt-3">
                 <button
                   type="button"
                   onClick={() => setShowReviewModal(false)}
-                  className="btn-secondary px-5 py-2 text-xs font-semibold"
+                  className="px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:bg-neutral-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-amber-primary px-6 py-2 text-xs font-semibold"
+                  className="px-6 py-2.5 rounded-full text-[13px] font-semibold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity"
                 >
                   Submit Review
                 </button>
@@ -366,14 +366,14 @@ export default function CustomerReviewsPage() {
       )}
 
       {/* Bottom CTA */}
-      <div className="text-center p-8 rounded-3xl bg-[#FAF6EF] border border-[#EBE2D7]">
-        <h3 className="font-bold text-lg text-[#1A130E] mb-2">Ready to Taste the Best of Dublin?</h3>
-        <p className="text-xs text-[#747474] max-w-md mx-auto mb-5">
+      <div className="text-center p-8 sm:p-10 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
+        <h3 className="font-bold text-[20px] text-[#1A130E] mb-2">Ready to Taste the Best of Dublin?</h3>
+        <p className="text-[14px] text-[#555555] max-w-md mx-auto mb-6">
           Join thousands of satisfied diners enjoying authentic dum cooking and royal curries.
         </p>
         <Link
           href="/menu"
-          className="btn-amber-primary px-7 py-3 text-xs font-semibold inline-flex items-center gap-2 shadow-amber"
+          className="px-8 py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 inline-flex items-center gap-2 transition-all"
         >
           <span>Order From Menu</span>
           <ArrowRight className="w-4 h-4" />

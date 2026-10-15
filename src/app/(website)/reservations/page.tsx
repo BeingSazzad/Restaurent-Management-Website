@@ -183,22 +183,22 @@ export default function ReservationsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
-                  Special Requests / Dietary Notes (Optional)
+                <label className="block text-[13px] font-semibold text-[#1A130E] mb-1.5">
+                  Special Dietary Requests (Optional)
                 </label>
                 <textarea
                   rows={3}
                   value={specialRequest}
                   onChange={(e) => setSpecialRequest(e.target.value)}
-                  placeholder="Seating preferences (booth/window), high chair, allergen precautions..."
-                  className="w-full bg-[rgb(249,249,249)] rounded-2xl p-3.5 text-xs text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#E85D26] resize-none"
+                  placeholder="Seating preferences (booth or window), high chair, allergen precautions..."
+                  className="w-full bg-[rgb(249,249,249)] focus:bg-white rounded-2xl p-3.5 text-[14px] text-[#1A130E] border border-[#E5E5E5] focus:outline-none focus:border-[#F15A24] resize-none transition-colors"
                 />
               </div>
 
               <div className="pt-2 flex justify-end">
                 <button
                   type="submit"
-                  className="btn-amber-primary px-8 py-3 text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-full text-[14px] font-bold bg-gradient-to-r from-[#FBA138] to-[#F15A24] text-white shadow-md hover:scale-[1.01] active:scale-98 transition-all cursor-pointer"
                 >
                   Confirm Table Reservation
                 </button>
