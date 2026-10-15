@@ -1343,18 +1343,18 @@ function DashboardContent() {
                 </div>
 
                 <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
-                  <div className="divide-y divide-[#F2EFE9]">
+                  <div className="divide-y divide-[#F2EFEA]">
                     {/* SMS Live Order Tracking */}
-                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/60">
-                          <Phone className="w-4 h-4" />
+                    <div className="py-6 first:pt-0 last:pb-0 flex items-center justify-between gap-5 sm:gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Phone className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                          <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
                             SMS Order Tracking
                           </h4>
-                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                          <p className="text-[13px] text-[#8C8681] mt-0.5">
                             Real-time text alerts when your order is accepted and out for delivery
                           </p>
                         </div>
@@ -1376,16 +1376,16 @@ function DashboardContent() {
                     </div>
 
                     {/* Email Receipts */}
-                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-amber-50 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100/60">
-                          <Mail className="w-4 h-4" />
+                    <div className="py-6 flex items-center justify-between gap-5 sm:gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100">
+                          <Mail className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                          <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
                             Email Receipts
                           </h4>
-                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                          <p className="text-[13px] text-[#8C8681] mt-0.5">
                             Digital order receipts and VAT invoices sent to {profile.email}
                           </p>
                         </div>
@@ -1407,16 +1407,16 @@ function DashboardContent() {
                     </div>
 
                     {/* Kitchen Status Alerts */}
-                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/60">
-                          <Clock className="w-4 h-4" />
+                    <div className="py-6 flex items-center justify-between gap-5 sm:gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Clock className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                          <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
                             Kitchen Cooking Updates
                           </h4>
-                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                          <p className="text-[13px] text-[#8C8681] mt-0.5">
                             Notifications when the head chef starts preparing and packaging your meal
                           </p>
                         </div>
@@ -1438,16 +1438,16 @@ function DashboardContent() {
                     </div>
 
                     {/* Special Offers & Promotions */}
-                    <div className="py-4.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100/60">
-                          <Sparkles className="w-4 h-4" />
+                    <div className="py-6 last:pb-0 flex items-center justify-between gap-5 sm:gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100">
+                          <Sparkles className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[14.5px] text-[#1A130E]">
+                          <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
                             Special Offers & Dining Specials
                           </h4>
-                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                          <p className="text-[13px] text-[#8C8681] mt-0.5">
                             Exclusive seasonal promotions, weekend specials, and loyalty discounts
                           </p>
                         </div>
