@@ -10,7 +10,7 @@ interface OrderState {
 
 const initialState: OrderState = {
   orders: INITIAL_ORDERS,
-  activeTrackingOrderId: "ord-1042",
+  activeTrackingOrderId: null,
   kitchenSnoozeActive: false,
   kitchenSnoozeMinutes: 0,
 };

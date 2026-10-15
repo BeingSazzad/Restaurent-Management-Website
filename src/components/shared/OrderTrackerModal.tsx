@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setActiveTrackingOrderId, updateOrderStatus } from '../../redux/slices/orderSlice';
 import { addToCart, setCartOpen } from '../../redux/slices/cartSlice';
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 
 export const OrderTrackerModal: React.FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const activeOrderId = useAppSelector((state) => state.orders.activeTrackingOrderId);
   const orders = useAppSelector((state) => state.orders.orders);
@@ -112,12 +114,23 @@ export const OrderTrackerModal: React.FC = () => {
               Order #{currentOrder.orderNumber}
             </h2>
           </div>
-          <button
-            onClick={() => dispatch(setActiveTrackingOrderId(null))}
-            className="w-9 h-9 rounded-full bg-neutral-100 text-[#555555] hover:text-[#1A130E] hover:bg-neutral-200/70 flex items-center justify-center border border-[#E5E5E5] transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                dispatch(setActiveTrackingOrderId(null));
+                router.push(`/order-details/${currentOrder.id}`);
+              }}
+              className="text-[12px] font-semibold text-[#F15A24] hover:text-white hover:bg-[#F15A24] border border-[#F15A24] px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+            >
+              Details Page ➔
+            </button>
+            <button
+              onClick={() => dispatch(setActiveTrackingOrderId(null))}
+              className="w-9 h-9 rounded-full bg-neutral-100 text-[#555555] hover:text-[#1A130E] hover:bg-neutral-200/70 flex items-center justify-center border border-[#E5E5E5] transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Content */}

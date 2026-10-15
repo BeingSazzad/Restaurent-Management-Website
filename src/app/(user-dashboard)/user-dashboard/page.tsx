@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
-import { setActiveTrackingOrderId } from '@/redux/slices/orderSlice';
+import { setActiveTrackingOrderId, updateOrderStatus } from '@/redux/slices/orderSlice';
 import { logout } from '@/redux/slices/authSlice';
 import { MenuItem } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
@@ -29,9 +29,16 @@ import {
   Briefcase,
   ShieldCheck,
   KeyRound,
+  Bell,
+  Sparkles,
+  ArrowLeft,
+  Clock,
+  Bike,
+  FileText,
+  Star,
 } from 'lucide-react';
 
-type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'settings' | 'logout';
+type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'settings' | 'logout';
 
 interface SavedCardItem {
   id: string;
@@ -59,6 +66,7 @@ export default function UserDashboardPage() {
 
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
+  const [selectedOrderDetailsId, setSelectedOrderDetailsId] = useState<string | null>(null);
 
   // Profile data
   const [profile, setProfile] = useState({
@@ -180,10 +188,12 @@ export default function UserDashboardPage() {
 
   const [expandedOrderDetails, setExpandedOrderDetails] = useState<string | null>(null);
 
-  // Settings toggles
+  // Notification Preferences toggles
   const [notifications, setNotifications] = useState({
     orderSms: true,
     emailReceipts: true,
+    kitchenUpdates: true,
+    offers: true,
     twoFactor: false,
   });
 
@@ -335,6 +345,7 @@ export default function UserDashboardPage() {
     { id: 'addresses' as TabType, label: 'Saved Address', icon: MapPin },
     { id: 'payment' as TabType, label: 'Payment Option', icon: CreditCard },
     { id: 'security' as TabType, label: 'Password & Security', icon: Lock },
+    { id: 'notifications' as TabType, label: 'Notification Preferences', icon: Bell },
     { id: 'settings' as TabType, label: 'Setting', icon: Settings },
     { id: 'logout' as TabType, label: 'Log Out', icon: LogOut },
   ];
@@ -584,74 +595,173 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 2: MY ORDERS */}
+            {/* TAB 2: MY ORDERS & ORDER DETAILS PAGE */}
             {activeTab === 'orders' && (
               <div className="space-y-6">
-                <div>
-                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
-                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    My Order
-                  </h1>
-                </div>
+                {selectedOrderDetailsId ? (() => {
+                  const liveOrder = orders.find((o) => o.id === selectedOrderDetailsId);
+                  const mockOrder = mockOrders.find((o) => o.id === selectedOrderDetailsId);
 
-                {/* Real-time Orders from Redux */}
-                {orders.length > 0 && (
-                  <div className="space-y-4 mb-6">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C8681]">
-                      Live Dublin Kitchen Deliveries
-                    </h3>
-                    {orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex items-center gap-3.5">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFA940] to-[#F15A24] text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
-                              AS
+                  const currentOrder = liveOrder || (mockOrder ? {
+                    id: mockOrder.id,
+                    orderNumber: mockOrder.transactionId.replace('#', ''),
+                    customerName: profile.name,
+                    customerPhone: profile.phone,
+                    customerEmail: profile.email,
+                    fulfillmentType: 'delivery' as const,
+                    deliveryAddress: '42 Baggot St Lower, Dublin 2',
+                    eircode: 'D02 P682',
+                    items: [
+                      {
+                        cartItemId: 'm1',
+                        dish: {
+                          id: 'dish-1',
+                          name: 'Flame-Grilled Whopper',
+                          price: 15.00,
+                          image: mockOrder.logo,
+                          description: 'Fresh grilled patty with crisp lettuce and sauce.',
+                          category: 'Burgers',
+                          spiceLevel: 1,
+                          allergens: ['Gluten'],
+                          isPopular: true,
+                          isVeg: false,
+                        },
+                        quantity: 2,
+                        selectedModifiers: [],
+                        totalPrice: 30.00,
+                      },
+                      {
+                        cartItemId: 'm2',
+                        dish: {
+                          id: 'dish-2',
+                          name: 'Onion Rings & Drinks',
+                          price: 15.00,
+                          image: mockOrder.logo,
+                          description: 'Golden fried onion rings with chilled beverage.',
+                          category: 'Sides',
+                          spiceLevel: 0,
+                          allergens: [],
+                          isPopular: false,
+                          isVeg: true,
+                        },
+                        quantity: 1,
+                        selectedModifiers: [],
+                        totalPrice: 15.00,
+                      },
+                    ],
+                    subtotal: mockOrder.totalAmount,
+                    deliveryFee: 0,
+                    discount: 0,
+                    total: mockOrder.totalAmount,
+                    status: 'completed' as ('new' | 'preparing' | 'ready' | 'completed'),
+                    createdAt: new Date().toISOString(),
+                    estimatedMinutes: 0,
+                    specialNotes: 'Leave with concierge.',
+                    paymentMethod: 'card' as const,
+                  } : null);
+
+                  if (!currentOrder) {
+                    return (
+                      <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-8 text-center space-y-4">
+                        <p className="text-[#8C8681]">Order details not found.</p>
+                        <button
+                          onClick={() => setSelectedOrderDetailsId(null)}
+                          className="px-4 py-2 rounded-xl bg-[#F15A24] text-white font-semibold text-xs"
+                        >
+                          Back to Orders
+                        </button>
+                      </div>
+                    );
+                  }
+
+                  const steps = [
+                    {
+                      key: 'new',
+                      label: 'Order Confirmed',
+                      desc: 'Sent to kitchen chefs',
+                      icon: CheckCircle2,
+                    },
+                    {
+                      key: 'preparing',
+                      label: 'Food Preparing',
+                      desc: 'Chefs are grilling & packing',
+                      icon: Sparkles,
+                    },
+                    {
+                      key: 'ready',
+                      label: 'Out for Delivery',
+                      desc: 'Driver is on the way',
+                      icon: Bike,
+                    },
+                    {
+                      key: 'completed',
+                      label: 'Order Delivered',
+                      desc: 'Enjoy your hot delicious meal!',
+                      icon: CheckCircle2,
+                    },
+                  ];
+
+                  const currentIndex = steps.findIndex((s) => s.key === currentOrder.status);
+
+                  const handleAdvanceStatus = () => {
+                    const sequence: ('new' | 'preparing' | 'ready' | 'completed')[] = [
+                      'new',
+                      'preparing',
+                      'ready',
+                      'completed',
+                    ];
+                    const nextIdx = (currentIndex + 1) % sequence.length;
+                    dispatch(updateOrderStatus({ orderId: currentOrder.id, status: sequence[nextIdx] }));
+                  };
+
+                  return (
+                    <div className="space-y-6 animate-in fade-in">
+                      {/* Back Button & Header */}
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOrderDetailsId(null)}
+                          className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#F15A24] hover:text-[#d44715] mb-3 cursor-pointer transition-colors active:scale-95 group"
+                        >
+                          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                          <span>Back to All Orders</span>
+                        </button>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div>
+                            <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                            <div className="flex items-center gap-3">
+                              <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                                Order #{currentOrder.orderNumber}
+                              </h1>
+                              <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-orange-50 text-[#F15A24] border border-orange-200">
+                                {currentOrder.status === 'completed'
+                                  ? 'Delivered'
+                                  : currentOrder.status === 'ready'
+                                  ? 'Out for Delivery'
+                                  : currentOrder.status === 'preparing'
+                                  ? 'Food Preparing'
+                                  : 'Order Confirmed'}
+                              </span>
                             </div>
-                            <div>
-                              <h3 className="text-[16px] font-bold text-[#1A130E]">
-                                AMBER SPICE Dublin
-                              </h3>
-                              <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
-                                Transaction Id :{' '}
-                                <span className="font-semibold text-[#1A130E]">
-                                  #{order.orderNumber}
-                                </span>
-                              </p>
-                            </div>
+                            <p className="text-[12.5px] text-[#8C8681] mt-1">
+                              Placed on{' '}
+                              {new Date(currentOrder.createdAt).toLocaleDateString('en-IE', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}{' '}
+                              · Amber Spice Authentic Kitchen
+                            </p>
                           </div>
-                          <span className="text-[12px] text-[#8C8681] font-medium">
-                            {new Date(order.createdAt).toLocaleDateString('en-IE', {
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                        </div>
 
-                        <div className="border-b border-dashed border-[#EAE6E1] my-4" />
-
-                        <div className="flex items-center justify-between gap-4 pt-1">
-                          <p className="text-[14px] text-[#1A130E]">
-                            <span className="text-[#666059] font-medium">Total Amount : </span>
-                            <span className="font-bold text-[16px]">
-                              € {order.total.toFixed(2)}
-                            </span>
-                          </p>
-
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2.5 self-start sm:self-auto">
                             <button
-                              onClick={() => dispatch(setActiveTrackingOrderId(order.id))}
-                              className="px-5 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                            >
-                              Track
-                            </button>
-                            <button
+                              type="button"
                               onClick={() => {
-                                order.items.forEach((item) => {
+                                currentOrder.items.forEach((item) => {
                                   dispatch(
                                     addToCart({
                                       ...item,
@@ -661,91 +771,396 @@ export default function UserDashboardPage() {
                                 });
                                 dispatch(setCartOpen(true));
                               }}
-                              className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold tracking-wide hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
+                              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
                             >
-                              Re-order
+                              Re-order Items
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleAdvanceStatus}
+                              className="px-4 py-2 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold hover:bg-orange-50 transition-colors cursor-pointer shadow-xs active:scale-95"
+                            >
+                              Simulate Next Status ➔
                             </button>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
 
-                {/* List of Orders */}
-                <div className="space-y-4">
-                  {mockOrders.map((ord) => {
-                    const isExpanded = expandedOrderDetails === ord.id;
-                    return (
-                      <div
-                        key={ord.id}
-                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all"
-                      >
-                        <div className="flex items-start justify-between gap-4">
+                      {/* Live Delivery Status Card with Stepper */}
+                      <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
+                        <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div className="flex items-center gap-3.5">
-                            <div className="w-12 h-12 rounded-full overflow-hidden border border-[#EAE6E1] bg-white flex items-center justify-center p-1 shadow-xs shrink-0">
-                              <img
-                                src={ord.logo}
-                                alt={ord.brand}
-                                className="w-full h-full object-cover rounded-full"
-                              />
+                            <div className="w-12 h-12 rounded-2xl bg-white text-[#F15A24] flex items-center justify-center shadow-xs border border-[#EFEAE4] shrink-0">
+                              <Clock className="w-6 h-6 animate-spin" style={{ animationDuration: '8s' }} />
                             </div>
                             <div>
-                              <h3 className="text-[16px] font-bold text-[#1A130E] tracking-tight">
-                                {ord.brand}
-                              </h3>
-                              <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
-                                Transaction Id :{' '}
-                                <span className="font-semibold text-[#332E29]">
-                                  {ord.transactionId}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-
-                          <span className="text-[12.5px] text-[#8C8681] font-medium">
-                            {ord.date}
-                          </span>
-                        </div>
-
-                        <div className="border-b border-dashed border-[#EAE6E1] my-4" />
-
-                        <div className="flex items-center justify-between gap-4 pt-0.5">
-                          <p className="text-[14px] text-[#1A130E]">
-                            <span className="text-[#666059] font-medium">Total Amount : </span>
-                            <span className="font-bold text-[15.5px]">
-                              {ord.currency} {ord.totalAmount.toFixed(2)}
-                            </span>
-                          </p>
-
-                          <button
-                            onClick={() =>
-                              setExpandedOrderDetails(isExpanded ? null : ord.id)
-                            }
-                            className="px-6 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
-                          >
-                            {isExpanded ? 'Hide' : 'Details'}
-                          </button>
-                        </div>
-
-                        {isExpanded && (
-                          <div className="mt-4 pt-3.5 border-t border-[#F2EFE9] text-[13px] text-[#55504A] bg-[#FAF8F5] p-4 rounded-xl space-y-1.5 animate-in fade-in">
-                            <div className="flex items-center justify-between">
-                              <span className="font-semibold text-[#1A130E]">Ordered Items:</span>
-                              <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md text-xs border border-emerald-200/60">
-                                Delivered
+                              <span className="text-[11.5px] font-bold text-[#F15A24] uppercase tracking-wider block">
+                                Live Kitchen & Delivery Tracker
+                              </span>
+                              <span className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+                                {currentOrder.status === 'completed'
+                                  ? 'Delicious Meal Delivered'
+                                  : `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`}
                               </span>
                             </div>
-                            <p className="text-[#666059]">{ord.itemsSummary}</p>
-                            <p className="text-[12px] text-[#8C8681] pt-1">
-                              Payment: Card ending in •••• 4242 · Dublin Delivery
-                            </p>
                           </div>
-                        )}
+
+                          <div className="text-[12px] text-[#7A746E] bg-white px-3.5 py-1.5 rounded-xl border border-[#EFEAE4] self-start sm:self-auto font-medium">
+                            Fulfillment: {currentOrder.fulfillmentType === 'delivery' ? 'Dublin Express Delivery' : 'Restaurant Collection'}
+                          </div>
+                        </div>
+
+                        {/* 4-Step Stepper */}
+                        <div className="py-2">
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                            {steps.map((step, idx) => {
+                              const isFinished = idx < currentIndex;
+                              const isCurrent = idx === currentIndex;
+                              const Icon = step.icon;
+
+                              return (
+                                <div
+                                  key={step.key}
+                                  className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
+                                    isCurrent
+                                      ? 'bg-orange-50/50 border-[#F15A24] shadow-xs'
+                                      : isFinished
+                                      ? 'bg-emerald-50/40 border-emerald-200'
+                                      : 'bg-[#FAF8F5] border-[#EFEAE4] opacity-75'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-3 mb-2.5">
+                                    <div
+                                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0 transition-all ${
+                                        isFinished
+                                          ? 'bg-[#0FA958] text-white shadow-xs'
+                                          : isCurrent
+                                          ? 'bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white ring-4 ring-orange-200/60 shadow-xs'
+                                          : 'bg-neutral-200 text-[#7A746E]'
+                                      }`}
+                                    >
+                                      {isFinished ? (
+                                        <CheckCircle2 className="w-5 h-5 text-white" />
+                                      ) : (
+                                        <Icon className="w-4 h-4" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C8681] block">
+                                        Step 0{idx + 1}
+                                      </span>
+                                      <h4
+                                        className={`font-bold text-[13.5px] leading-tight ${
+                                          isCurrent
+                                            ? 'text-[#F15A24]'
+                                            : isFinished
+                                            ? 'text-emerald-900'
+                                            : 'text-[#55504A]'
+                                        }`}
+                                      >
+                                        {step.label}
+                                      </h4>
+                                    </div>
+                                  </div>
+                                  <p className="text-[12px] text-[#7A746E] pl-0.5">{step.desc}</p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </div>
-                    );
-                  })}
-                </div>
+
+                      {/* 2-Column: Ordered Items & Delivery Summary */}
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Items Column */}
+                        <div className="lg:col-span-7 bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-7 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-5">
+                          <div className="flex items-center justify-between pb-3.5 border-b border-[#F2EFE9]">
+                            <h3 className="font-bold text-[16px] text-[#1A130E]">
+                              Items Ordered ({currentOrder.items.length})
+                            </h3>
+                            <span className="text-[12px] text-[#8C8681] font-medium">
+                              Authentic Indian & Pakistani Cuisine
+                            </span>
+                          </div>
+
+                          <div className="divide-y divide-[#F4F1EC]">
+                            {currentOrder.items.map((item, i) => (
+                              <div key={i} className="py-3.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
+                                <div className="flex items-start gap-3">
+                                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-[#EAE6E1]">
+                                    <img
+                                      src={item.dish.image}
+                                      alt={item.dish.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div>
+                                    <span className="text-[14px] font-bold text-[#1A130E] block">
+                                      {item.quantity}x {item.dish.name}
+                                    </span>
+
+                                    {item.selectedModifiers && item.selectedModifiers.length > 0 && (
+                                      <div className="text-[11.5px] text-[#7A746E] mt-0.5">
+                                        {item.selectedModifiers.map((m, mIdx) => (
+                                          <span key={mIdx}>
+                                            {m.groupName}: {m.optionName}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+
+                                    {item.specialInstructions && (
+                                      <p className="text-[11.5px] text-[#F15A24] font-medium italic mt-0.5">
+                                        Note: &quot;{item.specialInstructions}&quot;
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <span className="font-bold text-[14.5px] text-[#1A130E] shrink-0">
+                                  €{item.totalPrice.toFixed(2)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Cost Breakdown */}
+                          <div className="pt-4 border-t border-[#F2EFE9] space-y-2 text-[13px] text-[#666059]">
+                            <div className="flex justify-between">
+                              <span>Subtotal</span>
+                              <span className="font-semibold text-[#1A130E]">€{currentOrder.subtotal.toFixed(2)}</span>
+                            </div>
+                            {currentOrder.discount > 0 && (
+                              <div className="flex justify-between text-emerald-700">
+                                <span>Discount</span>
+                                <span className="font-semibold">-€{currentOrder.discount.toFixed(2)}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between">
+                              <span>Delivery Fee</span>
+                              <span className="font-semibold text-[#1A130E]">
+                                {currentOrder.deliveryFee === 0 ? 'FREE' : `€${currentOrder.deliveryFee.toFixed(2)}`}
+                              </span>
+                            </div>
+                            <div className="border-t border-dashed border-[#E5DFD7] pt-3 flex justify-between text-[16px] font-bold text-[#1A130E]">
+                              <span>Total Paid</span>
+                              <span className="text-[#F15A24] text-[18px]">€{currentOrder.total.toFixed(2)}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Delivery Destination & Customer Info Column */}
+                        <div className="lg:col-span-5 space-y-6">
+                          <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-4">
+                            <h3 className="font-bold text-[16px] text-[#1A130E] pb-3 border-b border-[#F2EFE9]">
+                              Delivery Destination
+                            </h3>
+
+                            <div className="flex items-start gap-3 text-[13px] text-[#4A443E]">
+                              <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 mt-0.5">
+                                <MapPin className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <span className="font-bold text-[#1A130E] block">Delivering to:</span>
+                                <p className="mt-0.5">{currentOrder.deliveryAddress || '42 Baggot St Lower, Dublin 2'}</p>
+                                <span className="text-[#8C8681] text-[12px] block mt-0.5 font-mono">
+                                  {currentOrder.eircode || 'D02 P682'}
+                                </span>
+                              </div>
+                            </div>
+
+                            {currentOrder.specialNotes && (
+                              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4] text-[12px] text-[#666059]">
+                                <span className="font-bold text-[#1A130E] block mb-0.5">Driver Instructions:</span>
+                                {currentOrder.specialNotes}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-3.5">
+                            <h3 className="font-bold text-[16px] text-[#1A130E] pb-3 border-b border-[#F2EFE9]">
+                              Customer Details
+                            </h3>
+
+                            <div className="space-y-2.5 text-[13px] text-[#55504A]">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[#8C8681]">Customer Name:</span>
+                                <span className="font-semibold text-[#1A130E]">{currentOrder.customerName || profile.name}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-[#8C8681]">Phone:</span>
+                                <span className="font-semibold text-[#1A130E]">{currentOrder.customerPhone || profile.phone}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-[#8C8681]">Payment Method:</span>
+                                <span className="font-semibold text-[#1A130E] uppercase text-[12px]">
+                                  {currentOrder.paymentMethod ? currentOrder.paymentMethod.replace('_', ' ') : 'Card ending in 4242'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })() : (
+                  <>
+                    <div>
+                      <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                      <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                        My Order
+                      </h1>
+                    </div>
+
+                    {/* Real-time Orders from Redux */}
+                    {orders.length > 0 && (
+                      <div className="space-y-4 mb-6">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8C8681]">
+                          Live Dublin Kitchen Deliveries
+                        </h3>
+                        {orders.map((order) => (
+                          <div
+                            key={order.id}
+                            className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all cursor-pointer"
+                            onClick={() => {
+                              dispatch(setActiveTrackingOrderId(null));
+                              setSelectedOrderDetailsId(order.id);
+                            }}
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex items-center gap-3.5">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FFA940] to-[#F15A24] text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+                                  AS
+                                </div>
+                                <div>
+                                  <h3 className="text-[16px] font-bold text-[#1A130E]">
+                                    AMBER SPICE Dublin
+                                  </h3>
+                                  <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
+                                    Transaction Id :{' '}
+                                    <span className="font-semibold text-[#1A130E]">
+                                      #{order.orderNumber}
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                              <span className="text-[12px] text-[#8C8681] font-medium">
+                                {new Date(order.createdAt).toLocaleDateString('en-IE', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            </div>
+
+                            <div className="border-b border-dashed border-[#EAE6E1] my-4" />
+
+                            <div className="flex items-center justify-between gap-4 pt-1">
+                              <p className="text-[14px] text-[#1A130E]">
+                                <span className="text-[#666059] font-medium">Total Amount : </span>
+                                <span className="font-bold text-[16px]">
+                                  € {order.total.toFixed(2)}
+                                </span>
+                              </p>
+
+                              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                                <button
+                                  onClick={() => {
+                                    dispatch(setActiveTrackingOrderId(null));
+                                    setSelectedOrderDetailsId(order.id);
+                                  }}
+                                  className="px-5 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                                >
+                                  Track & Details
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    order.items.forEach((item) => {
+                                      dispatch(
+                                        addToCart({
+                                          ...item,
+                                          cartItemId: `${item.dish.id}-${Date.now()}-${Math.random()}`,
+                                        })
+                                      );
+                                    });
+                                    dispatch(setCartOpen(true));
+                                  }}
+                                  className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white text-[12.5px] font-semibold tracking-wide hover:opacity-95 transition-opacity cursor-pointer shadow-xs active:scale-95"
+                                >
+                                  Re-order
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* List of Previous Orders */}
+                    <div className="space-y-4">
+                      {mockOrders.map((ord) => (
+                        <div
+                          key={ord.id}
+                          className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all cursor-pointer"
+                          onClick={() => {
+                            dispatch(setActiveTrackingOrderId(null));
+                            setSelectedOrderDetailsId(ord.id);
+                          }}
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-center gap-3.5">
+                              <div className="w-12 h-12 rounded-full overflow-hidden border border-[#EAE6E1] bg-white flex items-center justify-center p-1 shadow-xs shrink-0">
+                                <img
+                                  src={ord.logo}
+                                  alt={ord.brand}
+                                  className="w-full h-full object-cover rounded-full"
+                                />
+                              </div>
+                              <div>
+                                <h3 className="text-[16px] font-bold text-[#1A130E] tracking-tight">
+                                  {ord.brand}
+                                </h3>
+                                <p className="text-[12.5px] text-[#8C8681] font-medium mt-0.5">
+                                  Transaction Id :{' '}
+                                  <span className="font-semibold text-[#332E29]">
+                                    {ord.transactionId}
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+
+                            <span className="text-[12.5px] text-[#8C8681] font-medium">
+                              {ord.date}
+                            </span>
+                          </div>
+
+                          <div className="border-b border-dashed border-[#EAE6E1] my-4" />
+
+                          <div className="flex items-center justify-between gap-4 pt-0.5">
+                            <p className="text-[14px] text-[#1A130E]">
+                              <span className="text-[#666059] font-medium">Total Amount : </span>
+                              <span className="font-bold text-[15.5px]">
+                                {ord.currency} {ord.totalAmount.toFixed(2)}
+                              </span>
+                            </p>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(setActiveTrackingOrderId(null));
+                                setSelectedOrderDetailsId(ord.id);
+                              }}
+                              className="px-6 py-1.5 rounded-xl border border-[#F15A24] text-[#F15A24] text-[12.5px] font-semibold tracking-wide hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+                            >
+                              Details
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
@@ -1322,14 +1737,180 @@ export default function UserDashboardPage() {
               </div>
             )}
 
-            {/* TAB 5: SETTINGS */}
+            {/* TAB: NOTIFICATION PREFERENCES (Dedicated Left Sidebar Section) */}
+            {activeTab === 'notifications' && (
+              <div className="space-y-6">
+                <div>
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    Notification Preferences
+                  </h1>
+                  <p className="text-[13px] text-[#8C8681] mt-1">
+                    Control how Amber Spice keeps you updated on your culinary orders and dining experiences
+                  </p>
+                </div>
+
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
+                  <div className="flex items-center gap-2.5 pb-4 border-b border-[#F2EFE9]">
+                    <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center">
+                      <Bell className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-[16px] text-[#1A130E]">
+                        Alerts & Communication Channels
+                      </h3>
+                      <p className="text-[12.5px] text-[#8C8681]">
+                        Manage real-time notifications for kitchen updates, order receipts, and dining offers
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {/* SMS Live Order Tracking */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3.5">
+                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                          <Phone className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-[14px] text-[#1A130E]">
+                            SMS Live Order Tracking
+                          </h4>
+                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                            Receive instant text messages when your meal is accepted, cooking, and on its way for Dublin delivery
+                          </p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={notifications.orderSms}
+                          onChange={(e) =>
+                            setNotifications({
+                              ...notifications,
+                              orderSms: e.target.checked,
+                            })
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[#E5DFD7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F15A24]"></div>
+                      </label>
+                    </div>
+
+                    {/* Email Delivery Receipts */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3.5">
+                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                          <Mail className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-[14px] text-[#1A130E]">
+                            Email Delivery Receipts & VAT Invoices
+                          </h4>
+                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                            Receive itemized receipts, order confirmations, and VAT breakdowns directly to {profile.email}
+                          </p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={notifications.emailReceipts}
+                          onChange={(e) =>
+                            setNotifications({
+                              ...notifications,
+                              emailReceipts: e.target.checked,
+                            })
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[#E5DFD7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F15A24]"></div>
+                      </label>
+                    </div>
+
+                    {/* Kitchen Status Alerts */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3.5">
+                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                          <Clock className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-[14px] text-[#1A130E]">
+                            Kitchen Status & Live Cooking Updates
+                          </h4>
+                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                            Get notified in real-time when the head chef starts grilling your dishes and when dispatch begins
+                          </p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={notifications.kitchenUpdates}
+                          onChange={(e) =>
+                            setNotifications({
+                              ...notifications,
+                              kitchenUpdates: e.target.checked,
+                            })
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[#E5DFD7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F15A24]"></div>
+                      </label>
+                    </div>
+
+                    {/* Exclusive Seasonal Dining */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EFEAE4] flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3.5">
+                        <div className="w-9 h-9 rounded-xl bg-white text-[#F15A24] flex items-center justify-center shrink-0 border border-[#EFEAE4] mt-0.5 shadow-xs">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-[14px] text-[#1A130E]">
+                            Exclusive Seasonal Dining & Chef Specials
+                          </h4>
+                          <p className="text-[12.5px] text-[#7A746E] mt-0.5">
+                            Be the first to know about seasonal Irish produce specials, weekend chef tables, and dining discounts
+                          </p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={notifications.offers}
+                          onChange={(e) =>
+                            setNotifications({
+                              ...notifications,
+                              offers: e.target.checked,
+                            })
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[#E5DFD7] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F15A24]"></div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <span className="text-[12px] text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3.5 py-1.5 rounded-xl font-medium inline-flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Preferences are saved automatically
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB: SETTINGS */}
             {activeTab === 'settings' && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <div>
                   <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
                   <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
                     Settings
                   </h1>
+                  <p className="text-[13px] text-[#8C8681] mt-1">
+                    Quick shortcuts and general account preferences
+                  </p>
                 </div>
 
                 {/* Password & Security Quick Link Card */}
@@ -1380,55 +1961,28 @@ export default function UserDashboardPage() {
                   </button>
                 </div>
 
-                {/* 3. NOTIFICATION PREFERENCES */}
-                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-5">
-                  <h3 className="font-bold text-[16px] text-[#1A130E] pb-3 border-b border-[#F2EFE9]">
-                    Notification Preferences
-                  </h3>
-
-                  <div className="flex items-center justify-between gap-4 pb-4 border-b border-[#F2EFE9]">
+                {/* Notification Preferences Quick Link Card */}
+                <div className="p-5 sm:p-6 rounded-[22px] bg-white border border-[#EFEAE4] shadow-[0_2px_12px_rgba(26,19,14,0.02)] flex items-center justify-between">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center border border-orange-200/50">
+                      <Bell className="w-5 h-5" />
+                    </div>
                     <div>
-                      <h4 className="font-bold text-[13.5px] text-[#1A130E]">
-                        SMS Order Tracking
-                      </h4>
-                      <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                        Receive text notifications when your meal leaves the kitchen
+                      <h3 className="font-bold text-[15px] text-[#1A130E]">
+                        Notification Preferences
+                      </h3>
+                      <p className="text-[12.5px] text-[#8C8681]">
+                        Control SMS tracking, email receipts, and kitchen alerts
                       </p>
                     </div>
-                    <input
-                      type="checkbox"
-                      checked={notifications.orderSms}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          orderSms: e.target.checked,
-                        })
-                      }
-                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
-                    />
                   </div>
-
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <h4 className="font-bold text-[13.5px] text-[#1A130E]">
-                        Email Delivery Receipts
-                      </h4>
-                      <p className="text-[12.5px] text-[#7A746E] mt-0.5">
-                        Receive order summary and receipts directly to {profile.email}
-                      </p>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={notifications.emailReceipts}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          emailReceipts: e.target.checked,
-                        })
-                      }
-                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('notifications')}
+                    className="px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#F15A24] text-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
+                  >
+                    Manage Alerts →
+                  </button>
                 </div>
               </div>
             )}
