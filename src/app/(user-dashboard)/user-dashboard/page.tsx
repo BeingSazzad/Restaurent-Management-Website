@@ -18,7 +18,6 @@ import {
   ShoppingBag,
   MapPin,
   CreditCard,
-  Settings,
   LogOut,
   Camera,
   CheckCircle2,
@@ -44,7 +43,7 @@ import {
   Copy,
 } from 'lucide-react';
 
-type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'settings' | 'logout';
+type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'logout';
 
 interface SavedCardItem {
   id: string;
@@ -79,7 +78,7 @@ function DashboardContent() {
     const tabParam = searchParams.get('tab') as TabType | null;
     if (
       tabParam &&
-      ['profile', 'orders', 'addresses', 'payment', 'security', 'notifications', 'settings', 'logout'].includes(tabParam)
+      ['profile', 'orders', 'addresses', 'payment', 'security', 'notifications', 'logout'].includes(tabParam)
     ) {
       setActiveTab(tabParam);
     }
@@ -106,7 +105,7 @@ function DashboardContent() {
   const [saveSuccessMsg, setSaveSuccessMsg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Password Update State (in Settings)
+  // Password Update State (in Password & Security Tab)
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -133,7 +132,7 @@ function DashboardContent() {
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [editAddressData, setEditAddressData] = useState({ label: '', address: '' });
 
-  // Payment cards state (housed in Settings)
+  // Payment cards state (in Payment Option Tab)
   const [savedCards, setSavedCards] = useState<SavedCardItem[]>([
     {
       id: 'card-1',
@@ -320,7 +319,7 @@ function DashboardContent() {
     setAddresses(addresses.filter((a) => a.id !== id));
   };
 
-  // Card Handlers (in Settings)
+  // Card Handlers (in Payment Option Tab)
   const handleAddCard = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanNumber = newCardNumber.replace(/\s+/g, '');
@@ -365,7 +364,6 @@ function DashboardContent() {
     { id: 'payment' as TabType, label: 'Payment Option', icon: CreditCard },
     { id: 'security' as TabType, label: 'Password & Security', icon: Lock },
     { id: 'notifications' as TabType, label: 'Notification Preferences', icon: Bell },
-    { id: 'settings' as TabType, label: 'Setting', icon: Settings },
     { id: 'logout' as TabType, label: 'Log Out', icon: LogOut },
   ];
 
@@ -1575,92 +1573,6 @@ function DashboardContent() {
               </div>
             )}
 
-            {/* TAB: SETTINGS */}
-            {activeTab === 'settings' && (
-              <div className="space-y-6">
-                <div>
-                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
-                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    Settings
-                  </h1>
-                  <p className="text-[13px] text-[#8C8681] mt-1">
-                    Quick shortcuts and general account preferences
-                  </p>
-                </div>
-
-                {/* Password & Security Quick Link Card */}
-                <div className="p-5 sm:p-6 rounded-[22px] bg-white border border-[#EFEAE4] shadow-[0_2px_12px_rgba(26,19,14,0.02)] flex items-center justify-between">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center border border-orange-200/50">
-                      <Lock className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[15px] text-[#1A130E]">
-                        Password & Security
-                      </h3>
-                      <p className="text-[12.5px] text-[#8C8681]">
-                        Manage your password and 2-factor authentication
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('security')}
-                    className="px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#F15A24] text-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
-                  >
-                    Manage Password →
-                  </button>
-                </div>
-
-                {/* Payment Option Quick Link Card */}
-                <div className="p-5 sm:p-6 rounded-[22px] bg-white border border-[#EFEAE4] shadow-[0_2px_12px_rgba(26,19,14,0.02)] flex items-center justify-between">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center border border-orange-200/50">
-                      <CreditCard className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[15px] text-[#1A130E]">
-                        Payment Option
-                      </h3>
-                      <p className="text-[12.5px] text-[#8C8681]">
-                        Manage your saved credit & debit cards for fast dining checkout
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('payment')}
-                    className="px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#F15A24] text-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
-                  >
-                    Manage Cards →
-                  </button>
-                </div>
-
-                {/* Notification Preferences Quick Link Card */}
-                <div className="p-5 sm:p-6 rounded-[22px] bg-white border border-[#EFEAE4] shadow-[0_2px_12px_rgba(26,19,14,0.02)] flex items-center justify-between">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center border border-orange-200/50">
-                      <Bell className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[15px] text-[#1A130E]">
-                        Notification Preferences
-                      </h3>
-                      <p className="text-[12.5px] text-[#8C8681]">
-                        Control SMS tracking, email receipts, and kitchen alerts
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('notifications')}
-                    className="px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#F15A24] text-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
-                  >
-                    Manage Alerts →
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* TAB 5: LOG OUT */}
             {activeTab === 'logout' && (
