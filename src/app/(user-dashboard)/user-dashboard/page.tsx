@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
 import { setActiveTrackingOrderId, updateOrderStatus } from '@/redux/slices/orderSlice';
 import { logout } from '@/redux/slices/authSlice';
-import { MenuItem } from '@/Mockdata';
+import { MenuItem, MOCK_USER } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
 import {
   User,
@@ -40,6 +40,8 @@ import {
   UtensilsCrossed,
   FileText,
   Star,
+  Edit3,
+  Copy,
 } from 'lucide-react';
 
 type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'settings' | 'logout';
@@ -51,7 +53,7 @@ interface SavedCardItem {
   expMonth: string;
   expYear: string;
   holder: string;
-  isDefault: boolean;
+  isDefault?: boolean;
 }
 
 interface AddressItem {
@@ -85,19 +87,21 @@ function DashboardContent() {
 
   // Profile data
   const [profile, setProfile] = useState({
-    name: user?.name || "Liam O'Connor",
-    email: user?.email || 'liam.oc@example.ie',
-    phone: user?.phone || '+353 87 555 1234',
+    name: user?.name || MOCK_USER?.name || 'Sarah Ahmed',
+    email: user?.email || MOCK_USER?.email || 'sarah.ahmed@dublin.ie',
+    phone: user?.phone || MOCK_USER?.phone || '+353 87 555 1234',
     password: '••••••••',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80',
   });
 
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
   // Profile Inline Edit State
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editForm, setEditForm] = useState({
-    name: user?.name || "Liam O'Connor",
-    email: user?.email || 'liam.oc@example.ie',
-    phone: user?.phone || '+353 87 555 1234',
+    name: user?.name || MOCK_USER?.name || 'Sarah Ahmed',
+    email: user?.email || MOCK_USER?.email || 'sarah.ahmed@dublin.ie',
+    phone: user?.phone || MOCK_USER?.phone || '+353 87 555 1234',
   });
   const [saveSuccessMsg, setSaveSuccessMsg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -472,118 +476,231 @@ function DashboardContent() {
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 {/* Header Title with Orange Accent Line and Master Edit Button */}
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
                   <div>
-                    <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
-                    <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                      Edit Profile
+                    <div className="w-9 h-[3px] bg-[#F15A24] rounded-full mb-2.5" />
+                    <h1 className="text-[22px] sm:text-[25px] font-extrabold text-[#1A130E] tracking-tight">
+                      Personal Profile
                     </h1>
+                    <p className="text-[13px] text-[#8C8681] mt-0.5 font-normal">
+                      Manage your personal credentials, contact points, and verified account information.
+                    </p>
                   </div>
 
-                  {!isEditingProfile && (
+                  {!isEditingProfile ? (
                     <button
                       onClick={handleStartEdit}
-                      className="px-5 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer active:scale-95"
+                      className="self-start sm:self-auto px-5 py-2.5 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
                     >
-                      <span>Edit Profile</span>
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit Details</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleCancelEdit}
+                      className="self-start sm:self-auto px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#E5DFD7] text-[#666059] hover:bg-[#FAF8F5] transition-all cursor-pointer"
+                    >
+                      Cancel Editing
                     </button>
                   )}
                 </div>
 
-                {/* Single Unified Profile Box */}
-                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)]">
+                {/* Main Profile Container */}
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.02)] space-y-6">
                   {!isEditingProfile ? (
-                    /* View Mode */
-                    <div className="divide-y divide-[#F2EFEA]">
-                      {/* Name */}
-                      <div className="pb-5 first:pt-0">
-                        <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
-                          <User className="w-4 h-4 text-[#F15A24]" />
-                          <span>Name :</span>
+                    /* View Mode: Modern Interactive Cards */
+                    <div className="space-y-4">
+                      {/* Full Name Card */}
+                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-white border border-orange-100 text-[#F15A24] flex items-center justify-center shrink-0 shadow-2xs">
+                            <User className="w-5 h-5 text-[#F15A24]" />
+                          </div>
+                          <div>
+                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                              Full Name
+                            </span>
+                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5">
+                              {profile.name}
+                            </h3>
+                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
+                              Primary registered account identity
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
-                          {profile.name}
-                        </p>
+
+                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Active Identity</span>
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Email */}
-                      <div className="py-5">
-                        <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
-                          <Mail className="w-4 h-4 text-[#F15A24]" />
-                          <span>Email :</span>
+                      {/* Email Address Card */}
+                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-white border border-amber-100 text-[#D49B37] flex items-center justify-center shrink-0 shadow-2xs">
+                            <Mail className="w-5 h-5 text-[#D49B37]" />
+                          </div>
+                          <div>
+                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                              Email Address
+                            </span>
+                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5 break-all">
+                              {profile.email}
+                            </h3>
+                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
+                              Receives digital order invoices & live tracker updates
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
-                          {profile.email}
-                        </p>
+
+                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-semibold bg-orange-50 text-[#F15A24] border border-orange-200/60 shadow-2xs">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#F15A24]" />
+                            <span>Verified Primary</span>
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Phone Number */}
-                      <div className="pt-5 pb-1">
-                        <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
-                          <Phone className="w-4 h-4 text-[#F15A24]" />
-                          <span>Phone Number :</span>
+                      {/* Phone Number Card */}
+                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-100 text-[#0FA958] flex items-center justify-center shrink-0 shadow-2xs">
+                            <Phone className="w-5 h-5 text-[#0FA958]" />
+                          </div>
+                          <div>
+                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                              Phone Number
+                            </span>
+                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5">
+                              {profile.phone}
+                            </h3>
+                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
+                              Used by Dublin drivers for arrival & doorstep calls
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
-                          {profile.phone}
-                        </p>
+
+                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                                navigator.clipboard.writeText(profile.phone);
+                                setCopiedPhone(true);
+                                setTimeout(() => setCopiedPhone(false), 2000);
+                              }
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold bg-white border border-[#E0D9CF] text-[#55504A] hover:bg-[#FAF8F5] hover:border-[#F15A24] hover:text-[#F15A24] transition-all cursor-pointer shadow-2xs active:scale-95"
+                          >
+                            {copiedPhone ? (
+                              <>
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                <span className="text-emerald-700">Copied</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3.5 h-3.5 text-[#8C8681]" />
+                                <span>Copy Number</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Security Trust Footer */}
+                      <div className="pt-4 border-t border-[#F2EFEA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[12.5px] text-[#8C8681]">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Data protected under Irish & EU GDPR standards · Amber Spice Dublin</span>
+                        </div>
+                        <button
+                          onClick={handleStartEdit}
+                          className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#F15A24] hover:text-[#d44715] transition-colors self-start sm:self-auto cursor-pointer"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                          <span>Quick Update</span>
+                        </button>
                       </div>
                     </div>
                   ) : (
                     /* Edit Mode: Clean Form */
                     <form onSubmit={handleSaveProfile} className="space-y-6">
+                      <div className="p-4 rounded-xl bg-orange-50/70 border border-orange-200/60 flex items-center justify-between">
+                        <div>
+                          <h4 className="text-[14px] font-bold text-[#1A130E]">Edit Profile Information</h4>
+                          <p className="text-[12px] text-[#7A746E] mt-0.5">Update your display name, primary email and delivery contact phone.</p>
+                        </div>
+                        <span className="text-[11px] font-bold text-[#F15A24] uppercase tracking-wider bg-white px-2.5 py-1 rounded-md border border-orange-200/50">
+                          Active Form
+                        </span>
+                      </div>
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         {/* Name Input */}
                         <div>
-                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                          <label className="flex items-center gap-2 text-[13px] font-bold text-[#1A130E] mb-2">
                             <User className="w-4 h-4 text-[#F15A24]" />
-                            <span>Name :</span>
+                            <span>Full Name</span>
                           </label>
-                          <input
-                            type="text"
-                            value={editForm.name}
-                            onChange={(e) =>
-                              setEditForm({ ...editForm, name: e.target.value })
-                            }
-                            placeholder="Your full name"
-                            required
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                          />
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={editForm.name}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, name: e.target.value })
+                              }
+                              placeholder="Your full name"
+                              required
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                            />
+                          </div>
+                          <span className="text-[11px] text-[#8C8681] mt-1 block">Displayed on orders and receipts</span>
                         </div>
 
                         {/* Email Input */}
                         <div>
-                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                          <label className="flex items-center gap-2 text-[13px] font-bold text-[#1A130E] mb-2">
                             <Mail className="w-4 h-4 text-[#F15A24]" />
-                            <span>Email :</span>
+                            <span>Email Address</span>
                           </label>
-                          <input
-                            type="email"
-                            value={editForm.email}
-                            onChange={(e) =>
-                              setEditForm({ ...editForm, email: e.target.value })
-                            }
-                            placeholder="Your email address"
-                            required
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                          />
+                          <div className="relative">
+                            <input
+                              type="email"
+                              value={editForm.email}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, email: e.target.value })
+                              }
+                              placeholder="Your email address"
+                              required
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                            />
+                          </div>
+                          <span className="text-[11px] text-[#8C8681] mt-1 block">Receives confirmations & invoices</span>
                         </div>
 
                         {/* Phone Number Input */}
                         <div className="sm:col-span-2">
-                          <label className="flex items-center gap-2 text-[13.5px] font-bold text-[#1A130E] mb-2">
+                          <label className="flex items-center gap-2 text-[13px] font-bold text-[#1A130E] mb-2">
                             <Phone className="w-4 h-4 text-[#F15A24]" />
-                            <span>Phone Number :</span>
+                            <span>Phone Number (Dublin Mobile / Landline)</span>
                           </label>
-                          <input
-                            type="tel"
-                            value={editForm.phone}
-                            onChange={(e) =>
-                              setEditForm({ ...editForm, phone: e.target.value })
-                            }
-                            placeholder="Your phone number"
-                            required
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] font-medium outline-none transition-all"
-                          />
+                          <div className="relative">
+                            <input
+                              type="tel"
+                              value={editForm.phone}
+                              onChange={(e) =>
+                                setEditForm({ ...editForm, phone: e.target.value })
+                              }
+                              placeholder="Your phone number"
+                              required
+                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 text-[14px] text-[#1A130E] font-medium outline-none transition-all shadow-2xs"
+                            />
+                          </div>
+                          <span className="text-[11px] text-[#8C8681] mt-1 block">For delivery coordination & driver arrival</span>
                         </div>
                       </div>
 
