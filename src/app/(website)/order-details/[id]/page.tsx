@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
-import { updateOrderStatus } from '@/redux/slices/orderSlice';
+import { updateOrderStatus, syncOrdersFromStorage } from '@/redux/slices/orderSlice';
 import {
   ArrowLeft,
   Clock,
@@ -30,23 +30,192 @@ export default function OrderDetailsPage() {
   const cleanId = decodeURIComponent(rawId).replace(/^#/, '').trim();
 
   const orders = useAppSelector((state) => state.orders.orders);
+
+  React.useEffect(() => {
+    dispatch(syncOrdersFromStorage());
+  }, [dispatch]);
   
-  // Intelligent lookup: matches AS-2041, ord-2041, 2041, etc.
+  // Intelligent lookup: matches AS-2041, ord-2041, 2041, ZM-4047, zm-4047, etc.
   const foundOrder = orders.find((o) => {
-    const oId = o.id.toLowerCase();
-    const oNum = o.orderNumber.toLowerCase();
+    const oId = (o.id || '').toLowerCase();
+    const oNum = (o.orderNumber || '').toLowerCase();
     const cId = cleanId.toLowerCase();
+    const cDigits = cleanId.replace(/[^0-9]/g, '');
+    const oDigits = oNum.replace(/[^0-9]/g, '');
+
     return (
       oId === cId ||
       oNum === cId ||
       oNum === `as-${cId}` ||
+      oNum === `zm-${cId}` ||
       oId === `ord-${cId}` ||
-      (cId.length >= 4 && oNum.replace(/[^0-9]/g, '') === cId.replace(/[^0-9]/g, ''))
+      oNum.replace(/[^a-z0-9]/gi, '') === cleanId.replace(/[^a-z0-9]/gi, '').toLowerCase() ||
+      (cDigits.length >= 3 && oDigits === cDigits)
     );
   });
 
   // Sample historical Dublin orders map if user clicked a past order
   const mockOrdersMap: Record<string, any> = {
+    'zm-4047': {
+      id: 'ord-4047',
+      orderNumber: 'ZM-4047',
+      customerName: 'Mark Jecno',
+      customerPhone: '+353 87 123 4567',
+      customerEmail: 'mark.jecno@example.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '14 Grafton Street, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'c-4047',
+          dish: {
+            id: 'dish-curry-02',
+            name: 'Kashmiri Lamb Rogan Josh',
+            price: 14.99,
+            image: '/images/curry_dish.jpg',
+            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
+            category: 'Main Curries',
+            spiceLevel: 2,
+            allergens: ['Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [],
+          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
+          totalPrice: 14.99,
+        },
+      ],
+      subtotal: 14.99,
+      deliveryFee: 2.00,
+      discount: 0,
+      total: 16.99,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+      estimatedMinutes: 35,
+      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
+      paymentMethod: 'apple_pay',
+    },
+    'zm4047': {
+      id: 'ord-4047',
+      orderNumber: 'ZM-4047',
+      customerName: 'Mark Jecno',
+      customerPhone: '+353 87 123 4567',
+      customerEmail: 'mark.jecno@example.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '14 Grafton Street, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'c-4047',
+          dish: {
+            id: 'dish-curry-02',
+            name: 'Kashmiri Lamb Rogan Josh',
+            price: 14.99,
+            image: '/images/curry_dish.jpg',
+            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
+            category: 'Main Curries',
+            spiceLevel: 2,
+            allergens: ['Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [],
+          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
+          totalPrice: 14.99,
+        },
+      ],
+      subtotal: 14.99,
+      deliveryFee: 2.00,
+      discount: 0,
+      total: 16.99,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+      estimatedMinutes: 35,
+      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
+      paymentMethod: 'apple_pay',
+    },
+    '4047': {
+      id: 'ord-4047',
+      orderNumber: 'ZM-4047',
+      customerName: 'Mark Jecno',
+      customerPhone: '+353 87 123 4567',
+      customerEmail: 'mark.jecno@example.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '14 Grafton Street, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'c-4047',
+          dish: {
+            id: 'dish-curry-02',
+            name: 'Kashmiri Lamb Rogan Josh',
+            price: 14.99,
+            image: '/images/curry_dish.jpg',
+            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
+            category: 'Main Curries',
+            spiceLevel: 2,
+            allergens: ['Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [],
+          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
+          totalPrice: 14.99,
+        },
+      ],
+      subtotal: 14.99,
+      deliveryFee: 2.00,
+      discount: 0,
+      total: 16.99,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+      estimatedMinutes: 35,
+      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
+      paymentMethod: 'apple_pay',
+    },
+    'ord-4047': {
+      id: 'ord-4047',
+      orderNumber: 'ZM-4047',
+      customerName: 'Mark Jecno',
+      customerPhone: '+353 87 123 4567',
+      customerEmail: 'mark.jecno@example.com',
+      fulfillmentType: 'delivery',
+      deliveryAddress: '14 Grafton Street, Dublin 2',
+      eircode: 'D02 P682',
+      items: [
+        {
+          cartItemId: 'c-4047',
+          dish: {
+            id: 'dish-curry-02',
+            name: 'Kashmiri Lamb Rogan Josh',
+            price: 14.99,
+            image: '/images/curry_dish.jpg',
+            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
+            category: 'Main Curries',
+            spiceLevel: 2,
+            allergens: ['Dairy'],
+            isPopular: true,
+            isVeg: false,
+          },
+          quantity: 1,
+          selectedModifiers: [],
+          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
+          totalPrice: 14.99,
+        },
+      ],
+      subtotal: 14.99,
+      deliveryFee: 2.00,
+      discount: 0,
+      total: 16.99,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+      estimatedMinutes: 35,
+      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
+      paymentMethod: 'apple_pay',
+    },
     acb12345458: {
       id: 'ord-mcd',
       orderNumber: 'ACB12345458',
@@ -122,7 +291,7 @@ export default function OrderDetailsPage() {
             name: 'Caramel Macchiato & Butter Croissant',
             price: 25.00,
             image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80',
-            description: 'Freshly steamed milk with vanilla-flavored syrup, marked with espresso and caramel drizzle.',
+            description: 'Freshly steamed milk with practical vanilla syrup, espresso and caramel drizzle.',
             category: 'Coffee & Bakery',
             spiceLevel: 0,
             allergens: ['Dairy'],
@@ -224,70 +393,127 @@ export default function OrderDetailsPage() {
     },
   };
 
-  const matchedMock = mockOrdersMap[cleanId.toLowerCase()] ||
-    Object.values(mockOrdersMap).find((m) => m.id === cleanId || m.orderNumber.toLowerCase() === cleanId.toLowerCase());
+  const matchedMock =
+    mockOrdersMap[cleanId.toLowerCase()] ||
+    mockOrdersMap[cleanId.toLowerCase().replace(/[^a-z0-9]/gi, '')] ||
+    Object.values(mockOrdersMap).find(
+      (m) =>
+        m.id.toLowerCase() === cleanId.toLowerCase() ||
+        m.orderNumber.toLowerCase() === cleanId.toLowerCase() ||
+        (cleanId.replace(/[^0-9]/g, '').length >= 3 &&
+          m.orderNumber.replace(/[^0-9]/g, '') === cleanId.replace(/[^0-9]/g, ''))
+    );
+
+  const is4047 = cleanId.toLowerCase().includes('4047') || cleanId.toLowerCase().startsWith('zm');
 
   // Fallback realistic Dublin order if direct URL is hit
-  const currentOrder = foundOrder || matchedMock || {
-    id: cleanId || 'ord-2041',
-    orderNumber: cleanId ? (cleanId.startsWith('AS-') ? cleanId : `AS-${cleanId.replace(/[^0-9]/g, '') || '2041'}`) : 'AS-2041',
-    customerName: 'Sarah Ahmed',
-    customerPhone: '+353 87 234 5678',
-    customerEmail: 'sarah.ahmed@gmail.com',
-    fulfillmentType: 'delivery' as const,
-    deliveryAddress: '42 Baggot St Lower, Dublin 2',
-    eircode: 'D02 P682',
-    items: [
-      {
-        cartItemId: 'c1',
-        dish: {
-          id: 'dish-1',
-          name: 'Royal Chicken Dum Biryani',
-          price: 13.99,
-          image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80',
-          description: 'Slow-cooked aromatic basmati rice layered with tender spiced chicken.',
-          category: 'Rice & Biryani',
-          spiceLevel: 2,
-          allergens: ['Dairy'],
-          isPopular: true,
-          isVeg: false,
-        },
-        quantity: 2,
-        selectedModifiers: [
-          { groupName: 'Portion Size', optionName: 'Standard Handi Portion (1 Person)', price: 0 },
-        ],
-        specialInstructions: 'Please include extra mint raita!',
-        totalPrice: 27.98,
-      },
-      {
-        cartItemId: 'c2',
-        dish: {
-          id: 'dish-2',
-          name: 'Old Delhi Butter Chicken',
-          price: 12.99,
-          image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=600&q=80',
-          description: 'Velvety tomato cream sauce infused with fenugreek and butter.',
-          category: 'Main Curries',
-          spiceLevel: 1,
-          allergens: ['Dairy', 'Nuts'],
-          isPopular: true,
-          isVeg: false,
-        },
-        quantity: 1,
-        selectedModifiers: [],
-        totalPrice: 12.99,
-      },
-    ],
-    subtotal: 40.97,
-    deliveryFee: 0,
-    discount: 4.10,
-    total: 36.87,
-    status: 'preparing' as ('new' | 'preparing' | 'ready' | 'completed'),
-    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-    estimatedMinutes: 25,
-    specialNotes: 'Ring Apartment 4B buzzer.',
-    paymentMethod: 'apple_pay' as const,
-  };
+  const currentOrder = foundOrder || matchedMock || (
+    is4047
+      ? {
+          id: cleanId || 'ord-4047',
+          orderNumber: cleanId ? cleanId.toUpperCase() : 'ZM-4047',
+          customerName: 'Mark Jecno',
+          customerPhone: '+353 87 123 4567',
+          customerEmail: 'mark.jecno@example.com',
+          fulfillmentType: 'delivery' as const,
+          deliveryAddress: '14 Grafton Street, Dublin 2',
+          eircode: 'D02 P682',
+          items: [
+            {
+              cartItemId: 'c-4047',
+              dish: {
+                id: 'dish-curry-02',
+                name: 'Kashmiri Lamb Rogan Josh',
+                price: 14.99,
+                image: '/images/curry_dish.jpg',
+                description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
+                category: 'Main Curries',
+                spiceLevel: 2,
+                allergens: ['Dairy'],
+                isPopular: true,
+                isVeg: false,
+              },
+              quantity: 1,
+              selectedModifiers: [],
+              specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
+              totalPrice: 14.99,
+            },
+          ],
+          subtotal: 14.99,
+          deliveryFee: 2.00,
+          discount: 0,
+          total: 16.99,
+          status: 'new' as const,
+          createdAt: new Date().toISOString(),
+          estimatedMinutes: 35,
+          specialNotes: 'Ring Apt 3 buzzer, leave at reception',
+          paymentMethod: 'apple_pay' as const,
+        }
+      : {
+          id: cleanId || 'ord-2041',
+          orderNumber: cleanId
+            ? (cleanId.toUpperCase().startsWith('AS-') || cleanId.toUpperCase().startsWith('ZM-')
+                ? cleanId.toUpperCase()
+                : `AS-${cleanId.replace(/[^0-9]/g, '') || '2041'}`)
+            : 'AS-2041',
+          customerName: 'Sarah Ahmed',
+          customerPhone: '+353 87 234 5678',
+          customerEmail: 'sarah.ahmed@gmail.com',
+          fulfillmentType: 'delivery' as const,
+          deliveryAddress: '42 Baggot St Lower, Dublin 2',
+          eircode: 'D02 P682',
+          items: [
+            {
+              cartItemId: 'c1',
+              dish: {
+                id: 'dish-1',
+                name: 'Royal Chicken Dum Biryani',
+                price: 13.99,
+                image: '/images/hero_dish.jpg',
+                description: 'Slow-cooked aromatic basmati rice layered with tender spiced chicken.',
+                category: 'Rice & Biryani',
+                spiceLevel: 2,
+                allergens: ['Dairy'],
+                isPopular: true,
+                isVeg: false,
+              },
+              quantity: 2,
+              selectedModifiers: [
+                { groupName: 'Portion Size', optionName: 'Standard Handi Portion (1 Person)', price: 0 },
+              ],
+              specialInstructions: 'Please include extra mint raita!',
+              totalPrice: 27.98,
+            },
+            {
+              cartItemId: 'c2',
+              dish: {
+                id: 'dish-2',
+                name: 'Old Delhi Butter Chicken',
+                price: 12.99,
+                image: '/images/curry_dish.jpg',
+                description: 'Velvety tomato cream sauce infused with fenugreek and butter.',
+                category: 'Main Curries',
+                spiceLevel: 1,
+                allergens: ['Dairy', 'Nuts'],
+                isPopular: true,
+                isVeg: false,
+              },
+              quantity: 1,
+              selectedModifiers: [],
+              totalPrice: 12.99,
+            },
+          ],
+          subtotal: 40.97,
+          deliveryFee: 0,
+          discount: 4.10,
+          total: 36.87,
+          status: 'preparing' as const,
+          createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+          estimatedMinutes: 25,
+          specialNotes: 'Ring Apartment 4B buzzer.',
+          paymentMethod: 'apple_pay' as const,
+        }
+  );
 
   const [localStatus, setLocalStatus] = React.useState<
     'new' | 'preparing' | 'ready' | 'completed' | null
@@ -308,6 +534,24 @@ export default function OrderDetailsPage() {
   }, []);
 
   const activeStatus = localStatus || currentOrder.status;
+
+  const formattedOrderDate = React.useMemo(() => {
+    try {
+      const d = new Date(currentOrder.createdAt);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('en-IE', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+      }
+    } catch {
+      // ignore
+    }
+    return 'Recently Placed';
+  }, [currentOrder.createdAt]);
 
   const steps = [
     {
@@ -408,15 +652,7 @@ export default function OrderDetailsPage() {
               </span>
             </div>
             <p className="text-[13px] text-[#8C8681] mt-1.5">
-              Placed on{' '}
-              {new Date(currentOrder.createdAt).toLocaleDateString('en-IE', {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}{' '}
-              · Amber Spice South William Street Kitchen
+              Placed on {formattedOrderDate} · Amber Spice South William Street Kitchen
             </p>
           </div>
 
@@ -536,7 +772,7 @@ export default function OrderDetailsPage() {
           <div className="lg:col-span-7 bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.02)] space-y-5">
             <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
               <h3 className="font-bold text-[17px] text-[#1A130E]">
-                Items Ordered ({currentOrder.items.length})
+                Items Ordered ({(currentOrder.items || []).length})
               </h3>
               <span className="text-[12px] text-[#8C8681] font-medium">
                 100% Halal Irish Ingredients
@@ -544,19 +780,19 @@ export default function OrderDetailsPage() {
             </div>
 
             <div className="divide-y divide-[#F4F1EC]">
-              {currentOrder.items.map((item, i) => (
+              {(currentOrder.items || []).map((item, i) => (
                 <div key={i} className="py-4 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3.5">
                     <div className="w-14 h-14 rounded-xl overflow-hidden bg-neutral-100 shrink-0 border border-[#EAE6E1]">
                       <img
-                        src={item.dish.image}
-                        alt={item.dish.name}
+                        src={item.dish?.image || '/images/curry_dish.jpg'}
+                        alt={item.dish?.name || 'Dish'}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
                       <span className="text-[15px] font-bold text-[#1A130E] block">
-                        {item.quantity}x {item.dish.name}
+                        {item.quantity || 1}x {item.dish?.name || 'Amber Special'}
                       </span>
 
                       {item.selectedModifiers && item.selectedModifiers.length > 0 && (
@@ -578,7 +814,7 @@ export default function OrderDetailsPage() {
                   </div>
 
                   <span className="font-bold text-[15px] text-[#1A130E] shrink-0">
-                    €{item.totalPrice.toFixed(2)}
+                    €{Number(item.totalPrice ?? item.dish?.price ?? 0).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -588,23 +824,23 @@ export default function OrderDetailsPage() {
             <div className="pt-4 border-t border-[#F2EFE9] space-y-2.5 text-[13.5px] text-[#666059]">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span className="font-semibold text-[#1A130E]">€{currentOrder.subtotal.toFixed(2)}</span>
+                <span className="font-semibold text-[#1A130E]">€{Number(currentOrder.subtotal || 0).toFixed(2)}</span>
               </div>
-              {currentOrder.discount > 0 && (
+              {Number(currentOrder.discount || 0) > 0 && (
                 <div className="flex justify-between text-emerald-700">
                   <span>Special Discount</span>
-                  <span className="font-semibold">-€{currentOrder.discount.toFixed(2)}</span>
+                  <span className="font-semibold">-€{Number(currentOrder.discount || 0).toFixed(2)}</span>
                 </div>
               )}
               <div className="flex justify-between">
                 <span>Dublin Delivery Fee</span>
                 <span className="font-semibold text-[#1A130E]">
-                  {currentOrder.deliveryFee === 0 ? 'FREE' : `€${currentOrder.deliveryFee.toFixed(2)}`}
+                  {Number(currentOrder.deliveryFee || 0) === 0 ? 'FREE' : `€${Number(currentOrder.deliveryFee || 0).toFixed(2)}`}
                 </span>
               </div>
               <div className="border-t border-dashed border-[#E5DFD7] pt-3.5 flex justify-between text-[17px] font-bold text-[#1A130E]">
                 <span>Total Paid</span>
-                <span className="text-[#F15A24] text-[20px]">€{currentOrder.total.toFixed(2)}</span>
+                <span className="text-[#F15A24] text-[20px]">€{Number(currentOrder.total || 0).toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -645,11 +881,11 @@ export default function OrderDetailsPage() {
               <div className="space-y-3 text-[13.5px] text-[#55504A]">
                 <div className="flex items-center justify-between">
                   <span className="text-[#8C8681]">Customer:</span>
-                  <span className="font-semibold text-[#1A130E]">{currentOrder.customerName}</span>
+                  <span className="font-semibold text-[#1A130E]">{currentOrder.customerName || 'Mark Jecno'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8C8681]">Phone:</span>
-                  <span className="font-semibold text-[#1A130E]">{currentOrder.customerPhone}</span>
+                  <span className="font-semibold text-[#1A130E]">{currentOrder.customerPhone || '+353 87 123 4567'}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#8C8681]">Payment:</span>

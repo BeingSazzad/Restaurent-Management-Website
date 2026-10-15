@@ -277,6 +277,35 @@ export const MENU_ITEMS: MenuItem[] = [
 
 export const INITIAL_ORDERS: OrderItem[] = [
   {
+    id: "ord-4047",
+    orderNumber: "ZM-4047",
+    customerName: "Mark Jecno",
+    customerPhone: "+353 87 123 4567",
+    customerEmail: "mark.jecno@example.com",
+    fulfillmentType: "delivery",
+    deliveryAddress: "14 Grafton Street, Dublin 2",
+    eircode: "D02 P682",
+    items: [
+      {
+        cartItemId: "c-4047",
+        dish: MENU_ITEMS[2],
+        quantity: 1,
+        selectedModifiers: [],
+        specialInstructions: "Ring Apt 3 buzzer, leave at reception",
+        totalPrice: 14.99,
+      },
+    ],
+    subtotal: 14.99,
+    deliveryFee: 2.00,
+    discount: 0,
+    total: 16.99,
+    status: "new",
+    createdAt: new Date().toISOString(),
+    estimatedMinutes: 35,
+    specialNotes: "Ring Apt 3 buzzer, leave at reception",
+    paymentMethod: "apple_pay",
+  },
+  {
     id: "ord-2041",
     orderNumber: "AS-2041",
     customerName: "Sarah Ahmed",
