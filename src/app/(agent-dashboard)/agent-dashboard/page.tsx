@@ -197,7 +197,7 @@ export default function AgentDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6] text-[#1A130E] p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#FBF9F6] text-[#1A130E] py-6 sm:py-8 lg:py-10">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-24 right-6 z-50 p-4 rounded-xl bg-[#1A130E] text-white text-[13px] font-semibold flex items-center gap-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
@@ -206,201 +206,207 @@ export default function AgentDashboardPage() {
         </div>
       )}
 
-      {/* ================= TOP KITCHEN CONTROLLER BAR ================= */}
-      <div className="bg-white p-5 rounded-[20px] border border-[#EFEAE4] shadow-[0_4px_24px_rgba(26,19,14,0.03)] mb-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          {/* Identity & Status */}
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FFA940] to-[#F15A24] text-white flex items-center justify-center font-bold shadow-xs shrink-0">
-              <ChefHat className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E] tracking-tight">
-                  Kitchen Display System (KDS)
-                </h1>
-                <span className="bg-[#0FA958]/10 text-[#0FA958] border border-[#0FA958]/30 text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#0FA958] animate-ping inline-block" />
-                  Live Order Dispatch
-                </span>
-                {kitchenSnooze && (
-                  <span className="bg-red-50 text-red-600 border border-red-200 text-[11px] px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    Rush Mode Active (+{kitchenSnoozeMinutes}m)
-                  </span>
-                )}
+      <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        {/* ================= TOP STAFF CONTROLLER DECK ================= */}
+        <div className="bg-white rounded-2xl border border-[#EFEAE4] shadow-xs p-5 sm:p-6 space-y-5">
+          {/* Row 1: Brand & Identity + Global Quick Controls */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-5 border-b border-[#F2EFE9]">
+            {/* Identity & Status */}
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-[#FFF4EC] border border-[#F15A24]/20 text-[#F15A24] flex items-center justify-center font-bold shadow-xs shrink-0">
+                <ChefHat className="w-6 h-6" />
               </div>
-              <p className="text-[13px] text-[#7A746E] mt-0.5">
-                Head Chef: <strong className="text-[#1A130E]">Tariq Al-Mansoor</strong> · 18 South William St, Dublin 2
-              </p>
+              <div>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E] tracking-tight">
+                    Staff Operations & Kitchen Display
+                  </h1>
+                  <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[11px] px-2.5 py-0.5 rounded-full font-semibold inline-flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Live System Active
+                  </span>
+                  {kitchenSnooze && (
+                    <span className="bg-rose-50 text-rose-700 border border-rose-200 text-[11px] px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      Rush Mode Active (+{kitchenSnoozeMinutes}m)
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs sm:text-[13px] text-[#7A746E] mt-0.5">
+                  Executive Chef: <strong className="text-[#1A130E]">Tariq Al-Mansoor</strong> · 18 South William St, Dublin 2
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Actions (Audio, Rush Mode, Fire Ticket) */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                onClick={() => {
+                  if (!soundEnabled) playChime();
+                  setSoundEnabled(!soundEnabled);
+                  showToast(soundEnabled ? 'Chime muted' : 'Kitchen Chime sound enabled');
+                }}
+                className={`h-10 px-3.5 rounded-xl text-xs sm:text-[12.5px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
+                  soundEnabled
+                    ? 'bg-white border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
+                    : 'bg-neutral-100 border-neutral-200 text-[#9E9790]'
+                }`}
+                title="Toggle Web Audio Chime"
+              >
+                {soundEnabled ? (
+                  <>
+                    <Volume2 className="w-4 h-4 text-[#F15A24]" />
+                    <span>Sound On</span>
+                  </>
+                ) : (
+                  <>
+                    <VolumeX className="w-4 h-4" />
+                    <span>Sound Muted</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  dispatch(toggleKitchenSnooze(20));
+                  showToast(kitchenSnooze ? 'Rush mode deactivated' : 'Rush Mode (+20m delay) activated for dines');
+                }}
+                className={`h-10 px-4 rounded-xl text-xs sm:text-[12.5px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                  kitchenSnooze
+                    ? 'bg-rose-600 text-white hover:bg-rose-700'
+                    : 'bg-white border border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
+                }`}
+              >
+                <Clock className="w-4 h-4" />
+                <span>{kitchenSnooze ? 'Exit Rush Mode' : 'Rush Mode (+20m)'}</span>
+              </button>
+
+              <button
+                onClick={() => setIsManualModalOpen(true)}
+                className="h-10 px-4 rounded-xl text-xs sm:text-[12.5px] font-semibold bg-[#F15A24] hover:bg-[#D94E1C] text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Fire Manual Ticket</span>
+              </button>
             </div>
           </div>
 
-          {/* Quick Global Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Audio Toggle */}
-            <button
-              onClick={() => {
-                if (!soundEnabled) playChime();
-                setSoundEnabled(!soundEnabled);
-                showToast(soundEnabled ? 'Chime muted' : 'Kitchen Chime sound enabled');
-              }}
-              className={`px-3.5 py-2 rounded-xl text-[12.5px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
-                soundEnabled
-                  ? 'bg-white border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
-                  : 'bg-neutral-100 border-neutral-200 text-[#9E9790]'
-              }`}
-              title="Toggle Web Audio Chime"
-            >
-              {soundEnabled ? (
-                <>
-                  <Volume2 className="w-4 h-4 text-[#F15A24]" />
-                  <span>Sound On</span>
-                </>
-              ) : (
-                <>
-                  <VolumeX className="w-4 h-4" />
-                  <span>Sound Muted</span>
-                </>
-              )}
-            </button>
-
-            {/* Rush Mode Selector */}
-            <button
-              onClick={() => {
-                dispatch(toggleKitchenSnooze(20));
-                showToast(kitchenSnooze ? 'Rush mode deactivated' : 'Rush Mode (+20m delay) activated for dines');
-              }}
-              className={`px-4 py-2 rounded-xl text-[12.5px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
-                kitchenSnooze
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-white border border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
-              }`}
-            >
-              <Clock className="w-4 h-4 text-inherit" />
-              <span>{kitchenSnooze ? 'Exit Rush Mode' : 'Rush Mode (+20m)'}</span>
-            </button>
-
-            {/* Quick Fire Manual Order Button */}
-            <button
-              onClick={() => setIsManualModalOpen(true)}
-              className="px-4 py-2 rounded-xl text-[12.5px] font-semibold bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white hover:opacity-95 shadow-xs flex items-center gap-1.5 cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Fire Manual Ticket</span>
-            </button>
-
-            {/* Tab Pill Switcher */}
-            <div className="flex bg-[#F2ECE5] p-1 rounded-2xl border border-[#E8E2D9]">
+          {/* Row 2: Standard Segmented Tab Navigation Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="inline-flex bg-[#F4EFEA] p-1 rounded-xl border border-[#EAE5DF]">
               <button
                 onClick={() => setSelectedTab('kds')}
-                className={`px-3.5 py-1.5 rounded-xl text-[12.5px] font-semibold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer flex items-center gap-2 ${
                   selectedTab === 'kds'
                     ? 'bg-white text-[#F15A24] shadow-xs'
                     : 'text-[#666059] hover:text-[#1A130E]'
                 }`}
               >
-                KDS Screen ({orders.length})
+                <span>KDS Pipeline</span>
+                <span className={`px-2 py-0.2 rounded-full text-[11px] font-bold ${selectedTab === 'kds' ? 'bg-orange-50 text-[#F15A24]' : 'bg-[#EAE5DF] text-[#7A746E]'}`}>
+                  {orders.length}
+                </span>
               </button>
               <button
                 onClick={() => setSelectedTab('menu-86')}
-                className={`px-3.5 py-1.5 rounded-xl text-[12.5px] font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer flex items-center gap-2 ${
                   selectedTab === 'menu-86'
                     ? 'bg-white text-[#F15A24] shadow-xs'
                     : 'text-[#666059] hover:text-[#1A130E]'
                 }`}
               >
-                <span>86 Sold-Out</span>
-                {soldOutCount > 0 && (
-                  <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+                <span>86 Stock Manager</span>
+                {soldOutCount > 0 ? (
+                  <span className="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
                     {soldOutCount}
                   </span>
+                ) : (
+                  <span className="text-[11px] text-emerald-600 font-bold">All In</span>
                 )}
               </button>
               <button
                 onClick={() => setSelectedTab('sales')}
-                className={`px-3.5 py-1.5 rounded-xl text-[12.5px] font-semibold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${
                   selectedTab === 'sales'
                     ? 'bg-white text-[#F15A24] shadow-xs'
                     : 'text-[#666059] hover:text-[#1A130E]'
                 }`}
               >
-                Z-Report (Shift)
+                Shift Z-Report & Analytics
               </button>
             </div>
           </div>
+
+          {/* Row 3 (KDS Active): Secondary Filter & Search Toolbar */}
+          {selectedTab === 'kds' && (
+            <div className="pt-4 border-t border-[#F2EFE9] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+              {/* Search Bar */}
+              <div className="relative flex-1 max-w-sm">
+                <Search className="w-4 h-4 text-[#9E9790] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search ticket # or diner name..."
+                  value={orderSearchQuery}
+                  onChange={(e) => setOrderSearchQuery(e.target.value)}
+                  className="w-full h-10 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-8 text-sm outline-none transition-all placeholder:text-[#9E9790]"
+                />
+                {orderSearchQuery && (
+                  <button
+                    onClick={() => setOrderSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#9E9790] hover:text-[#1A130E]"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Station Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                <span className="text-xs font-semibold text-[#8C8681] mr-1 shrink-0">Station:</span>
+                {[
+                  { id: 'all', label: 'All Stations' },
+                  { id: 'biryani', label: '🍚 Biryani' },
+                  { id: 'curries', label: '🥘 Karahi' },
+                  { id: 'grill', label: '🍢 Tandoor' },
+                  { id: 'breads', label: '🫓 Breads' },
+                ].map((st) => (
+                  <button
+                    key={st.id}
+                    onClick={() => setStationFilter(st.id as StationFilter)}
+                    className={`h-9 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer shrink-0 ${
+                      stationFilter === st.id
+                        ? 'bg-[#1A130E] text-white shadow-xs'
+                        : 'bg-[#FAF8F5] text-[#55504A] hover:bg-white border border-[#EAE5DF]'
+                    }`}
+                  >
+                    {st.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Fulfillment Type Segment */}
+              <div className="h-9 bg-[#FAF8F5] p-1 rounded-xl border border-[#EAE5DF] flex items-center gap-1 shrink-0">
+                {[
+                  { id: 'all', label: 'All Orders' },
+                  { id: 'delivery', label: '🛵 Delivery' },
+                  { id: 'collection', label: '🛍 Pickup' },
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      fulfillmentFilter === f.id
+                        ? 'bg-white text-[#F15A24] shadow-xs'
+                        : 'text-[#666059] hover:text-[#1A130E]'
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* ================= TAB 1 SECONDARY TOOLBAR: STATION & TYPE FILTERS ================= */}
-        {selectedTab === 'kds' && (
-          <div className="mt-5 pt-4 border-t border-[#F2EFE9] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-            {/* Search by Order Number or Diner */}
-            <div className="relative flex-1 max-w-xs">
-              <Search className="w-3.5 h-3.5 text-[#9E9790] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search ticket # or diner name..."
-                value={orderSearchQuery}
-                onChange={(e) => setOrderSearchQuery(e.target.value)}
-                className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl pl-9 pr-3 py-1.5 text-[13px] outline-none transition-all placeholder:text-[#9E9790]"
-              />
-              {orderSearchQuery && (
-                <button
-                  onClick={() => setOrderSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#9E9790] hover:text-[#1A130E]"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-
-            {/* Station Filter Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-              <span className="text-[12px] font-semibold text-[#8C8681] mr-1">Station:</span>
-              {[
-                { id: 'all', label: 'All Stations' },
-                { id: 'biryani', label: '🍚 Biryani' },
-                { id: 'curries', label: '🥘 Karahi' },
-                { id: 'grill', label: '🍢 Tandoor' },
-                { id: 'breads', label: '🫓 Breads' },
-              ].map((st) => (
-                <button
-                  key={st.id}
-                  onClick={() => setStationFilter(st.id as StationFilter)}
-                  className={`px-3 py-1 rounded-full text-[12px] font-semibold transition-all cursor-pointer ${
-                    stationFilter === st.id
-                      ? 'bg-[#1A130E] text-white shadow-xs'
-                      : 'bg-[#FAF8F5] text-[#55504A] hover:bg-white border border-[#EAE5DF]'
-                  }`}
-                >
-                  {st.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Fulfillment Type Segment */}
-            <div className="flex items-center gap-1.5 bg-[#FAF8F5] p-1 rounded-xl border border-[#EAE5DF]">
-              {[
-                { id: 'all', label: 'All Orders' },
-                { id: 'delivery', label: '🛵 Delivery' },
-                { id: 'collection', label: '🛍 Pickup' },
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
-                  className={`px-2.5 py-1 rounded-lg text-[11.5px] font-semibold transition-all cursor-pointer ${
-                    fulfillmentFilter === f.id
-                      ? 'bg-white text-[#F15A24] shadow-xs'
-                      : 'text-[#666059] hover:text-[#1A130E]'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* ================= TAB 1: KDS COLUMNS PIPELINE ================= */}
       {selectedTab === 'kds' && (
@@ -523,9 +529,9 @@ export default function AgentDashboardPage() {
 
       {/* ================= TAB 2: 86 STOCK MANAGER ================= */}
       {selectedTab === 'menu-86' && (
-        <div className="max-w-5xl mx-auto space-y-6">
+        <div className="space-y-6">
           {/* Header Banner */}
-          <div className="bg-white p-6 rounded-[20px] border border-[#EFEAE4] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-[#1A130E] tracking-tight">
                 Instant Kitchen Stock Manager (86ing)
@@ -538,7 +544,7 @@ export default function AgentDashboardPage() {
               <span className="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
                 ✓ {menuItems.length - soldOutCount} In Stock
               </span>
-              <span className="px-3.5 py-1.5 rounded-xl bg-red-50 text-red-600 border border-red-200 text-xs font-bold">
+              <span className="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
                 ✕ {soldOutCount} 86&apos;d Sold Out
               </span>
             </div>
@@ -553,7 +559,7 @@ export default function AgentDashboardPage() {
                 placeholder="Search dish by name, ingredients, or ID..."
                 value={stockSearchQuery}
                 onChange={(e) => setStockSearchQuery(e.target.value)}
-                className="w-full bg-white border border-[#EAE5DF] focus:border-[#F15A24] rounded-xl pl-10 pr-4 py-2.5 text-[14px] outline-none shadow-xs"
+                className="w-full h-11 bg-white border border-[#EAE5DF] focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-4 text-sm outline-none shadow-xs"
               />
             </div>
 
@@ -570,7 +576,7 @@ export default function AgentDashboardPage() {
                 <button
                   key={c.id}
                   onClick={() => setStockCategoryFilter(c.id)}
-                  className={`px-3.5 py-2 rounded-xl text-[12.5px] font-semibold transition-all cursor-pointer shrink-0 ${
+                  className={`h-11 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer shrink-0 ${
                     stockCategoryFilter === c.id
                       ? 'bg-[#F15A24] text-white shadow-xs'
                       : 'bg-white text-[#55504A] hover:bg-[#FAF8F5] border border-[#EAE5DF]'
@@ -583,36 +589,36 @@ export default function AgentDashboardPage() {
           </div>
 
           {/* Stock Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5">
             {filteredStockItems.map((dish) => {
               const inStock = dish.isAvailable;
 
               return (
                 <div
                   key={dish.id}
-                  className={`p-4 rounded-[18px] border transition-all flex items-center justify-between gap-3 shadow-xs ${
+                  className={`p-4 sm:p-4.5 rounded-2xl border transition-all flex items-center justify-between gap-3.5 shadow-xs ${
                     inStock
                       ? 'bg-white border-[#EFEAE4] hover:border-[#F15A24]/40'
-                      : 'bg-[#FFF8F8] border-red-200/80 opacity-90'
+                      : 'bg-[#FFF8F8] border-rose-200/80 opacity-90'
                   }`}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3.5 min-w-0">
                     <img
                       src={dish.image}
                       alt={dish.name}
-                      className={`w-13 h-13 rounded-xl object-cover shrink-0 border ${
-                        inStock ? 'border-[#EAE5DF]' : 'border-red-200 filter grayscale-[40%]'
+                      className={`w-14 h-14 rounded-xl object-cover shrink-0 border ${
+                        inStock ? 'border-[#EAE5DF]' : 'border-rose-200 filter grayscale-[40%]'
                       }`}
                     />
                     <div className="min-w-0">
                       <h4
-                        className={`font-bold text-[13.5px] truncate ${
-                          inStock ? 'text-[#1A130E]' : 'text-red-950 line-through'
+                        className={`font-semibold text-sm truncate ${
+                          inStock ? 'text-[#1A130E]' : 'text-rose-950 line-through'
                         }`}
                       >
                         {dish.name}
                       </h4>
-                      <p className="text-[12px] text-[#7A746E]">
+                      <p className="text-xs text-[#7A746E] mt-0.5">
                         €{dish.price.toFixed(2)} · {dish.categoryLabel}
                       </p>
                     </div>
@@ -627,10 +633,10 @@ export default function AgentDashboardPage() {
                           : `Restocked: "${dish.name}" marked as Available`
                       );
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs active:scale-95 ${
+                    className={`h-9 px-3.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs active:scale-95 ${
                       inStock
-                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200'
-                        : 'bg-red-600 text-white hover:bg-emerald-600'
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200'
+                        : 'bg-rose-600 text-white hover:bg-emerald-600'
                     }`}
                   >
                     {inStock ? '✓ In Stock' : '✕ 86 Sold Out'}
@@ -644,8 +650,8 @@ export default function AgentDashboardPage() {
 
       {/* ================= TAB 3: SHIFT Z-REPORT & KITCHEN ANALYTICS ================= */}
       {selectedTab === 'sales' && (
-        <div className="max-w-5xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
+        <div className="space-y-6">
+          <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-[#1A130E] tracking-tight">
                 Kitchen Shift Closeout & Performance (Z-Report)
@@ -656,7 +662,7 @@ export default function AgentDashboardPage() {
             </div>
             <button
               onClick={() => window.print()}
-              className="px-4 py-2 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[13px] font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="h-10 px-4 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors shrink-0"
             >
               <Printer className="w-4 h-4" />
               <span>Print Shift Report</span>
@@ -665,38 +671,38 @@ export default function AgentDashboardPage() {
 
           {/* Top 3 KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="p-6 rounded-[20px] bg-white border border-[#EFEAE4] shadow-xs">
-              <span className="text-[12px] text-[#7A746E] uppercase font-bold tracking-wider">
+            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
                 Shift Gross Revenue
               </span>
-              <div className="text-3xl font-extrabold text-[#F15A24] mt-2">
+              <div className="text-3xl font-extrabold text-[#F15A24]">
                 €{totalRevenue.toFixed(2)}
               </div>
-              <span className="text-xs text-emerald-600 flex items-center gap-1 mt-1 font-semibold">
+              <span className="text-xs text-emerald-600 flex items-center gap-1 font-semibold">
                 <TrendingUp className="w-3.5 h-3.5" /> Live Kitchen Orders Total
               </span>
             </div>
 
-            <div className="p-6 rounded-[20px] bg-white border border-[#EFEAE4] shadow-xs">
-              <span className="text-[12px] text-[#7A746E] uppercase font-bold tracking-wider">
+            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
                 Orders Volume
               </span>
-              <div className="text-3xl font-extrabold text-[#1A130E] mt-2">
+              <div className="text-3xl font-extrabold text-[#1A130E]">
                 {orders.length} Tickets
               </div>
-              <span className="text-xs text-[#7A746E] mt-1 block">
-                {deliveryCount} Delivery ({Math.round((deliveryCount / (orders.length || 1)) * 100)}%) · {collectionCount} Counter Collection
+              <span className="text-xs text-[#7A746E] block">
+                {deliveryCount} Delivery ({Math.round((deliveryCount / (orders.length || 1)) * 100)}%) · {collectionCount} Counter Pickup
               </span>
             </div>
 
-            <div className="p-6 rounded-[20px] bg-white border border-[#EFEAE4] shadow-xs">
-              <span className="text-[12px] text-[#7A746E] uppercase font-bold tracking-wider">
+            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
                 Average Prep Time
               </span>
-              <div className="text-3xl font-extrabold text-emerald-600 mt-2">
+              <div className="text-3xl font-extrabold text-emerald-600">
                 17.4 Mins
               </div>
-              <span className="text-xs text-[#7A746E] mt-1 block">
+              <span className="text-xs text-[#7A746E] block">
                 Target: 20 mins · 96.8% On-Time Pacing
               </span>
             </div>
@@ -704,31 +710,31 @@ export default function AgentDashboardPage() {
 
           {/* Station Breakdown & Shift Staffing */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-[20px] border border-[#EFEAE4] shadow-xs space-y-4">
+            <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-4">
               <h3 className="font-bold text-[15px] text-[#1A130E] flex items-center gap-2">
                 <Flame className="w-4 h-4 text-[#F15A24]" />
                 <span>Station Output Breakdown</span>
               </h3>
-              <div className="space-y-3 text-[13px]">
-                <div className="flex items-center justify-between pb-2 border-b border-[#F2EFE9]">
+              <div className="space-y-1 text-sm divide-y divide-[#F2EFE9]">
+                <div className="flex items-center justify-between py-3">
                   <span className="font-medium text-[#55504A]">🥘 Karahi & Curries Station</span>
                   <span className="font-bold text-[#1A130E]">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'curries').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between pb-2 border-b border-[#F2EFE9]">
+                <div className="flex items-center justify-between py-3">
                   <span className="font-medium text-[#55504A]">🍚 Dum Biryani & Rice Station</span>
                   <span className="font-bold text-[#1A130E]">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'biryani').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between pb-2 border-b border-[#F2EFE9]">
+                <div className="flex items-center justify-between py-3">
                   <span className="font-medium text-[#55504A]">🍢 Clay Oven Tandoor Grills</span>
                   <span className="font-bold text-[#1A130E]">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'grill').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between py-3">
                   <span className="font-medium text-[#55504A]">🫓 Naan & Bread Bakery</span>
                   <span className="font-bold text-[#1A130E]">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'breads').length} Breads
@@ -737,36 +743,36 @@ export default function AgentDashboardPage() {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-[20px] border border-[#EFEAE4] shadow-xs space-y-4">
+            <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-4">
               <h3 className="font-bold text-[15px] text-[#1A130E] flex items-center gap-2">
                 <ChefHat className="w-4 h-4 text-[#F15A24]" />
                 <span>Active Shift Staff & Stations</span>
               </h3>
-              <div className="space-y-3 text-[13px]">
-                <div className="flex items-center justify-between pb-2 border-b border-[#F2EFE9]">
+              <div className="space-y-1 text-sm divide-y divide-[#F2EFE9]">
+                <div className="flex items-center justify-between py-3">
                   <div>
                     <span className="font-bold text-[#1A130E] block">Chef Tariq Al-Mansoor</span>
                     <span className="text-xs text-[#7A746E]">Executive Head Chef · Expediter</span>
                   </div>
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                     On Duty
                   </span>
                 </div>
-                <div className="flex items-center justify-between pb-2 border-b border-[#F2EFE9]">
+                <div className="flex items-center justify-between py-3">
                   <div>
                     <span className="font-bold text-[#1A130E] block">Sous Chef Imran Malik</span>
                     <span className="text-xs text-[#7A746E]">Karahi & Slow-Braised Curries</span>
                   </div>
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                     On Duty
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between py-3">
                   <div>
                     <span className="font-bold text-[#1A130E] block">Master Tandoor Ustad Javed</span>
                     <span className="text-xs text-[#7A746E]">Clay Oven Grills & Dum Handi</span>
                   </div>
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                     On Duty
                   </span>
                 </div>
@@ -1080,25 +1086,27 @@ export default function AgentDashboardPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
           <form
             onSubmit={handleCreateManualOrder}
-            className="bg-white rounded-[20px] max-w-md w-full p-6 shadow-2xl border border-[#EAE5DF] space-y-4"
+            className="bg-white rounded-[24px] max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-[#EAE5DF] space-y-5"
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[#EAE5DF]">
-              <div className="flex items-center gap-2">
-                <ChefHat className="w-5 h-5 text-[#F15A24]" />
+            <div className="flex items-center justify-between pb-3 border-b border-[#EAE5DF]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FFF4EC] border border-[#F15A24]/20 flex items-center justify-center text-[#F15A24]">
+                  <ChefHat className="w-4 h-4" />
+                </div>
                 <h3 className="font-bold text-base text-[#1A130E]">Fire Manual Kitchen Ticket</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsManualModalOpen(false)}
-                className="text-[#9E9790] hover:text-[#1A130E] cursor-pointer"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[#9E9790] hover:text-[#1A130E] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3 text-[13px]">
+            <div className="space-y-4 text-sm">
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
                   Customer / Table Identifier
                 </label>
                 <input
@@ -1107,26 +1115,26 @@ export default function AgentDashboardPage() {
                   value={manualCustomer}
                   onChange={(e) => setManualCustomer(e.target.value)}
                   placeholder="e.g. Table 4 / Walk-in / Phone order"
-                  className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3.5 py-2 outline-none text-[#1A130E]"
+                  className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3.5 outline-none transition-all text-[#1A130E]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                  <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
                     Order Type
                   </label>
                   <select
                     value={manualType}
                     onChange={(e) => setManualType(e.target.value as any)}
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 outline-none text-[#1A130E]"
+                    className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3 outline-none transition-all text-[#1A130E]"
                   >
                     <option value="collection">🛍 Counter Collection</option>
                     <option value="delivery">🛵 Dublin Delivery</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                  <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
                     Contact Phone
                   </label>
                   <input
@@ -1134,19 +1142,19 @@ export default function AgentDashboardPage() {
                     value={manualPhone}
                     onChange={(e) => setManualPhone(e.target.value)}
                     placeholder="+353 87 000 0000"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 outline-none text-[#1A130E]"
+                    className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3.5 outline-none transition-all text-[#1A130E]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
                   Select Culinary Dish
                 </label>
                 <select
                   value={manualDishId}
                   onChange={(e) => setManualDishId(e.target.value)}
-                  className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 outline-none text-[#1A130E]"
+                  className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3 outline-none transition-all text-[#1A130E]"
                 >
                   {menuItems.map((dish) => (
                     <option key={dish.id} value={dish.id}>
@@ -1156,20 +1164,20 @@ export default function AgentDashboardPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-3.5">
                 <div className="col-span-1">
-                  <label className="block text-xs font-semibold text-[#1A130E] mb-1">Quantity</label>
+                  <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">Quantity</label>
                   <input
                     type="number"
                     min={1}
                     max={20}
                     value={manualQty}
                     onChange={(e) => setManualQty(Number(e.target.value) || 1)}
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 outline-none text-[#1A130E]"
+                    className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3.5 outline-none transition-all text-[#1A130E]"
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-[#1A130E] mb-1">
+                  <label className="block text-xs font-semibold text-[#1A130E] mb-1.5">
                     Kitchen Notes / Allergen
                   </label>
                   <input
@@ -1177,23 +1185,24 @@ export default function AgentDashboardPage() {
                     value={manualNote}
                     onChange={(e) => setManualNote(e.target.value)}
                     placeholder="e.g. Extra spicy, mild raita"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-xl px-3 py-2 outline-none text-[#1A130E]"
+                    className="w-full h-11 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl px-3.5 outline-none transition-all text-[#1A130E]"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-2">
+            <div className="flex items-center gap-3 pt-3 border-t border-[#EAE5DF]">
               <button
                 type="submit"
-                className="flex-1 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 cursor-pointer"
+                className="flex-1 h-11 rounded-xl font-semibold text-sm bg-[#F15A24] text-white hover:bg-[#D94E1C] transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
               >
-                Fire Ticket Immediately
+                <Flame className="w-4 h-4" />
+                <span>Fire Ticket Immediately</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsManualModalOpen(false)}
-                className="px-4 py-2.5 rounded-xl font-semibold text-xs border border-[#EAE5DF] text-[#666059] hover:bg-neutral-50 cursor-pointer"
+                className="h-11 px-5 rounded-xl font-semibold text-sm border border-[#EAE5DF] text-[#666059] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -1201,6 +1210,7 @@ export default function AgentDashboardPage() {
           </form>
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -1240,13 +1250,13 @@ function KdsOrderCard({
   return (
     <div className="bg-white rounded-2xl border border-[#EFEAE4] hover:border-[#DFD7CE] shadow-[0_1px_3px_rgba(26,19,14,0.04)] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between group">
       {/* Top Header: Order Number, Type, Elapsed Timer & Slip Action */}
-      <div className="px-4 py-3 bg-[#FAF8F5] border-b border-[#EFEAE4] flex items-center justify-between gap-2">
+      <div className="px-4.5 py-3.5 bg-[#FAF8F5] border-b border-[#EFEAE4] flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="font-bold text-[15px] text-[#1A130E] tracking-tight">
             #{order.orderNumber}
           </span>
           <span
-            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1 ${
+            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1 ${
               isDelivery
                 ? 'bg-[#FFF4EC] text-[#F15A24] border border-[#F15A24]/20'
                 : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
@@ -1260,7 +1270,7 @@ function KdsOrderCard({
         {/* Live Elapsed Badge & Slip Inspector Button */}
         <div className="flex items-center gap-1.5 shrink-0">
           <span
-            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold flex items-center gap-1 ${
+            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold flex items-center gap-1 ${
               isDelayed
                 ? 'bg-rose-50 text-rose-700 border border-rose-200/80'
                 : isWarning
@@ -1276,7 +1286,7 @@ function KdsOrderCard({
           <button
             onClick={onPrint}
             title="View Full Ticket Details & Slip"
-            className="w-7 h-7 rounded-lg bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#666059] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer"
+            className="w-7.5 h-7.5 rounded-lg bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#666059] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
           </button>
@@ -1284,7 +1294,7 @@ function KdsOrderCard({
       </div>
 
       {/* Diner & Count Row (Clutter-free: phone & price moved to details slip) */}
-      <div className="px-4 py-2 border-b border-[#F4EFEA] flex items-center justify-between text-xs text-[#7A746E] bg-white">
+      <div className="px-4.5 py-2.5 border-b border-[#F4EFEA] flex items-center justify-between text-xs text-[#7A746E] bg-white">
         <span className="font-medium text-[#1A130E] truncate">{order.customerName}</span>
         <span className="shrink-0 text-[11.5px] font-medium">
           {totalItemCount} {totalItemCount === 1 ? 'item' : 'items'}
@@ -1292,7 +1302,7 @@ function KdsOrderCard({
       </div>
 
       {/* Itemized Order Content (Clean Chef-Focused Layout) */}
-      <div className="p-4 space-y-3.5 flex-1">
+      <div className="p-4.5 space-y-3.5 flex-1">
         {order.items.map((item, idx) => {
           const hasInstruction =
             item.specialInstructions &&
@@ -1338,7 +1348,7 @@ function KdsOrderCard({
           <div
             onClick={onPrint}
             title="Click to view full ticket details"
-            className="mt-2 p-2 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4] text-[11.5px] text-[#55504A] flex items-start gap-1.5 cursor-pointer hover:bg-[#F5EFE8] transition-colors"
+            className="mt-2 px-3 py-2 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4] text-[11.5px] text-[#55504A] flex items-start gap-2 cursor-pointer hover:bg-[#F5EFE8] transition-colors"
           >
             <FileText className="w-3.5 h-3.5 text-[#9E9790] shrink-0 mt-0.5" />
             <div className="min-w-0 flex-1">
@@ -1350,11 +1360,11 @@ function KdsOrderCard({
       </div>
 
       {/* Footer Forward Action & Accidental Recall */}
-      <div className="p-3 bg-[#FAF8F5] border-t border-[#EFEAE4] flex items-center gap-2">
+      <div className="p-3.5 bg-[#FAF8F5] border-t border-[#EFEAE4] flex items-center gap-2">
         {order.status === 'new' && (
           <button
             onClick={() => onStatusChange('preparing')}
-            className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#F15A24] hover:bg-[#D94E1C] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+            className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#F15A24] hover:bg-[#D94E1C] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
           >
             <Flame className="w-4 h-4" />
             <span>Fire Ticket (Start Cooking)</span>
@@ -1365,7 +1375,7 @@ function KdsOrderCard({
           <>
             <button
               onClick={() => onStatusChange('ready')}
-              className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#0FA958] hover:bg-[#0D914B] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#0FA958] hover:bg-[#0D914B] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>Mark Ready for Pickup</span>
@@ -1373,7 +1383,7 @@ function KdsOrderCard({
             <button
               onClick={() => onStatusChange('new')}
               title="Recall to Incoming Tickets"
-              className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-10.5 h-10.5 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
             >
               <Undo2 className="w-3.5 h-3.5" />
             </button>
@@ -1384,7 +1394,7 @@ function KdsOrderCard({
           <>
             <button
               onClick={() => onStatusChange('completed')}
-              className="flex-1 py-2.5 rounded-xl font-semibold text-[13px] bg-[#1A130E] hover:bg-black text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#1A130E] hover:bg-black text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             >
               <CheckCheck className="w-4 h-4 text-[#FFA940]" />
               <span>Handover & Complete</span>
@@ -1392,7 +1402,7 @@ function KdsOrderCard({
             <button
               onClick={() => onStatusChange('preparing')}
               title="Return to Cooking"
-              className="w-9 h-9 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-10.5 h-10.5 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
             >
               <Undo2 className="w-3.5 h-3.5" />
             </button>
