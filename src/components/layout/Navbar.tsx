@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Logo } from '../shared/Logo';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setCartOpen } from '../../redux/slices/cartSlice';
@@ -24,12 +24,22 @@ import {
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
+
+  const handleSignOut = () => {
+    dispatch(logout());
+    setIsAccountMenuOpen(false);
+    setIsMobileMenuOpen(false);
+    if (pathname.startsWith('/user-dashboard')) {
+      router.push('/');
+    }
+  };
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -152,7 +162,7 @@ export const Navbar: React.FC = () => {
 
                   {/* Dropdown Card */}
                   {isAccountMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
                       <div className="space-y-2">
                         <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4]">
                           <p className="text-[13px] font-bold text-[#1A130E] truncate">
@@ -163,18 +173,18 @@ export const Navbar: React.FC = () => {
                           </p>
                           <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200/60">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>Active Diner Account</span>
+                            <span>Active Account</span>
                           </div>
                         </div>
 
-                        <div className="space-y-1 pt-1 text-[13px]">
+                        <div className="space-y-0.5 pt-1 text-[13px]">
                           <Link
                             href="/user-dashboard"
                             onClick={() => setIsAccountMenuOpen(false)}
                             className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
                           >
                             <User className="w-4 h-4 text-[#B84A22]" />
-                            <span>My Profile & Dashboard</span>
+                            <span>Dashboard</span>
                           </Link>
                           <Link
                             href="/user-dashboard"
@@ -182,7 +192,7 @@ export const Navbar: React.FC = () => {
                             className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
                           >
                             <ShoppingBag className="w-4 h-4 text-[#B84A22]" />
-                            <span>Order History & Tracking</span>
+                            <span>Orders</span>
                           </Link>
                           <Link
                             href="/reservations"
@@ -190,16 +200,13 @@ export const Navbar: React.FC = () => {
                             className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
                           >
                             <Calendar className="w-4 h-4 text-[#B84A22]" />
-                            <span>Book Table Reservation</span>
+                            <span>Reservations</span>
                           </Link>
                         </div>
 
-                        <div className="pt-2 border-t border-[#F0ECE7]">
+                        <div className="pt-1.5 border-t border-[#F0ECE7]">
                           <button
-                            onClick={() => {
-                              dispatch(logout());
-                              setIsAccountMenuOpen(false);
-                            }}
+                            onClick={handleSignOut}
                             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-[13px] font-semibold transition-colors cursor-pointer"
                           >
                             <LogOut className="w-4 h-4" />
@@ -283,10 +290,7 @@ export const Navbar: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => {
-                    dispatch(logout());
-                    setIsMobileMenuOpen(false);
-                  }}
+                  onClick={handleSignOut}
                   className="text-xs text-rose-600 hover:text-rose-700 font-semibold px-2.5 py-1 rounded-lg hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
                 >
                   Sign Out
@@ -297,7 +301,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block px-4 py-2.5 rounded-xl text-xs font-medium text-[#3D3D3D] hover:bg-neutral-50 transition-colors"
               >
-                My Profile & Orders
+                Dashboard & Orders
               </Link>
             </div>
           ) : (
