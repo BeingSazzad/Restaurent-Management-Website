@@ -31,7 +31,7 @@ import {
   KeyRound,
 } from 'lucide-react';
 
-type TabType = 'profile' | 'orders' | 'addresses' | 'settings' | 'logout';
+type TabType = 'profile' | 'orders' | 'addresses' | 'security' | 'settings' | 'logout';
 
 interface SavedCardItem {
   id: string;
@@ -47,7 +47,7 @@ interface AddressItem {
   id: string;
   label: string;
   address: string;
-  phone: string;
+  phone?: string;
   isDefault?: boolean;
 }
 
@@ -89,38 +89,22 @@ export default function UserDashboardPage() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
-  // Address management state
+  // Address management state - 1 Default Dublin Address
   const [addresses, setAddresses] = useState<AddressItem[]>([
     {
       id: 'addr-1',
       label: 'Home',
-      address: '93, Songbird Cir, Blackville, South Carolina, USA-29817',
-      phone: '+33 (907) 555-0101',
-      isDefault: true,
-    },
-    {
-      id: 'addr-2',
-      label: 'Office',
-      address: '703 Elizabeth Barcus Way, USA-95540',
-      phone: '+33 (907) 555-3456',
-      isDefault: false,
-    },
-    {
-      id: 'addr-3',
-      label: 'Dublin Residence',
       address: '18 South William St, Dublin 2, D02 HR58, Ireland',
-      phone: '+353 87 555 1234',
-      isDefault: false,
+      isDefault: true,
     },
   ]);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [newLabel, setNewLabel] = useState('Home');
   const [newAddress, setNewAddress] = useState('');
-  const [newPhone, setNewPhone] = useState('+353 (01) 485 9210');
 
   // Editing single address inline
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
-  const [editAddressData, setEditAddressData] = useState({ label: '', address: '', phone: '' });
+  const [editAddressData, setEditAddressData] = useState({ label: '', address: '' });
 
   // Payment cards state (housed in Settings)
   const [savedCards, setSavedCards] = useState<SavedCardItem[]>([
@@ -275,7 +259,6 @@ export default function UserDashboardPage() {
       id: `addr-${Date.now()}`,
       label: newLabel,
       address: newAddress,
-      phone: newPhone || '+353 (01) 485 9210',
       isDefault: addresses.length === 0,
     };
 
@@ -286,7 +269,7 @@ export default function UserDashboardPage() {
 
   const handleStartEditAddress = (addr: AddressItem) => {
     setEditingAddressId(addr.id);
-    setEditAddressData({ label: addr.label, address: addr.address, phone: addr.phone });
+    setEditAddressData({ label: addr.label, address: addr.address });
   };
 
   const handleSaveEditAddress = (id: string) => {
@@ -297,7 +280,6 @@ export default function UserDashboardPage() {
               ...a,
               label: editAddressData.label.trim() || a.label,
               address: editAddressData.address.trim() || a.address,
-              phone: editAddressData.phone.trim() || a.phone,
             }
           : a
       )
@@ -351,6 +333,7 @@ export default function UserDashboardPage() {
     { id: 'profile' as TabType, label: 'Edit Profile', icon: User },
     { id: 'orders' as TabType, label: 'My Order', icon: ShoppingBag },
     { id: 'addresses' as TabType, label: 'Saved Address', icon: MapPin },
+    { id: 'security' as TabType, label: 'Password & Security', icon: Lock },
     { id: 'settings' as TabType, label: 'Setting', icon: Settings },
     { id: 'logout' as TabType, label: 'Log Out', icon: LogOut },
   ];
@@ -508,7 +491,7 @@ export default function UserDashboardPage() {
                       </div>
 
                       {/* Phone Number */}
-                      <div className="py-5">
+                      <div className="pt-5 pb-1">
                         <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
                           <Phone className="w-4 h-4 text-[#F15A24]" />
                           <span>Phone Number :</span>
@@ -516,26 +499,6 @@ export default function UserDashboardPage() {
                         <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5">
                           {profile.phone}
                         </p>
-                      </div>
-
-                      {/* Password */}
-                      <div className="pt-5 last:pb-0 flex items-center justify-between">
-                        <div>
-                          <div className="flex items-center gap-2 text-[14px] font-bold text-[#1A130E]">
-                            <Lock className="w-4 h-4 text-[#F15A24]" />
-                            <span>Password :</span>
-                          </div>
-                          <p className="text-[14px] text-[#55504A] font-medium pl-6 mt-1.5 tracking-widest">
-                            {profile.password}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setActiveTab('settings')}
-                          className="text-[12.5px] font-semibold text-[#F15A24] hover:underline cursor-pointer flex items-center gap-1"
-                        >
-                          Change password in Settings →
-                        </button>
                       </div>
                     </div>
                   ) : (
@@ -845,20 +808,6 @@ export default function UserDashboardPage() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[12px] font-semibold text-[#1A130E] mb-1">
-                        Contact Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+353 (01) 485 9210"
-                        value={newPhone}
-                        onChange={(e) => setNewPhone(e.target.value)}
-                        className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-4 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all"
-                      />
-                    </div>
-
                     <div className="flex items-center gap-2 pt-2">
                       <button
                         type="submit"
@@ -877,7 +826,7 @@ export default function UserDashboardPage() {
                   </form>
                 )}
 
-                {/* 2-Column Grid */}
+                {/* 2-Column Standard Grid: 1 Address Card + 1 Add Card */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {addresses.map((addr) => {
                     const isEditingThis = editingAddressId === addr.id;
@@ -885,47 +834,50 @@ export default function UserDashboardPage() {
                     return (
                       <div
                         key={addr.id}
-                        className="bg-white border border-[#EFEAE4] rounded-[18px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all flex flex-col justify-between min-h-[175px]"
+                        className="bg-white border border-[#EFEAE4] rounded-[20px] p-6 shadow-[0_2px_12px_rgba(26,19,14,0.02)] hover:border-[#F15A24]/30 hover:shadow-[0_4px_20px_rgba(241,90,36,0.05)] transition-all flex flex-col justify-between min-h-[170px]"
                       >
                         {!isEditingThis ? (
                           <>
                             <div>
-                              <div className="flex items-center justify-between pb-3 border-b border-[#F2EFE9]">
+                              <div className="flex items-center justify-between pb-3.5 border-b border-[#F2EFE9]">
                                 <div className="flex items-center gap-2 text-[#F15A24] font-bold text-[14.5px]">
                                   {addr.label.toLowerCase().includes('home') ? (
                                     <Home className="w-4 h-4 text-[#F15A24]" />
                                   ) : addr.label.toLowerCase().includes('office') ? (
                                     <Briefcase className="w-4 h-4 text-[#F15A24]" />
                                   ) : (
-                                    <User className="w-4 h-4 text-[#F15A24]" />
+                                    <MapPin className="w-4 h-4 text-[#F15A24]" />
                                   )}
                                   <span>{addr.label}</span>
+                                  {addr.isDefault && (
+                                    <span className="ml-1.5 px-2 py-0.5 rounded-full bg-orange-100/70 text-[#B84A22] text-[10.5px] font-semibold">
+                                      Default
+                                    </span>
+                                  )}
                                 </div>
 
-                                <button
-                                  onClick={() => handleStartEditAddress(addr)}
-                                  className="px-4 py-1 rounded-lg bg-orange-50/70 border border-orange-200/60 text-[#F15A24] text-[11.5px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
-                                >
-                                  Edit
-                                </button>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    onClick={() => handleStartEditAddress(addr)}
+                                    className="px-3.5 py-1 rounded-lg bg-orange-50/70 border border-orange-200/60 text-[#F15A24] text-[12px] font-semibold hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
+                                  >
+                                    Edit
+                                  </button>
+                                  {addresses.length > 1 && (
+                                    <button
+                                      onClick={() => handleDeleteAddress(addr.id)}
+                                      title="Delete address"
+                                      className="text-[#A59F98] hover:text-red-600 transition-colors p-1.5 cursor-pointer rounded-lg hover:bg-neutral-50"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  )}
+                                </div>
                               </div>
 
-                              <p className="text-[13.5px] text-[#55504A] font-normal leading-relaxed mt-3">
+                              <p className="text-[14px] text-[#55504A] font-medium leading-relaxed mt-4">
                                 {addr.address}
                               </p>
-                            </div>
-
-                            <div className="pt-3 flex items-center justify-between">
-                              <span className="text-[13px] text-[#7A746E] font-medium">
-                                {addr.phone}
-                              </span>
-                              <button
-                                onClick={() => handleDeleteAddress(addr.id)}
-                                title="Delete address"
-                                className="text-[#A59F98] hover:text-red-600 transition-colors p-1 cursor-pointer"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
                             </div>
                           </>
                         ) : (
@@ -963,19 +915,6 @@ export default function UserDashboardPage() {
                               placeholder="Address"
                             />
 
-                            <input
-                              type="text"
-                              value={editAddressData.phone}
-                              onChange={(e) =>
-                                setEditAddressData({
-                                  ...editAddressData,
-                                  phone: e.target.value,
-                                })
-                              }
-                              className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white rounded-lg px-3 py-1.5 text-[13px] outline-none"
-                              placeholder="Phone"
-                            />
-
                             <div className="flex items-center gap-2 pt-1">
                               <button
                                 onClick={() => handleSaveEditAddress(addr.id)}
@@ -996,33 +935,39 @@ export default function UserDashboardPage() {
                     );
                   })}
 
-                  {/* Add New Address Card Slot */}
+                  {/* Add New Address Card Slot - Standard Design */}
                   <div
                     onClick={() => setIsAddingAddress(true)}
-                    className="border-2 border-dashed border-[#E5DFD7] bg-[#FCFBF9] hover:bg-orange-50/20 hover:border-orange-300 rounded-[18px] p-6 flex flex-col items-center justify-center min-h-[175px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)]"
+                    className="border-2 border-dashed border-[#E5DFD7] hover:border-[#F15A24]/60 bg-[#FCFBF9] hover:bg-orange-50/20 rounded-[20px] p-6 flex flex-col items-center justify-center min-h-[170px] transition-all cursor-pointer group shadow-[0_2px_12px_rgba(26,19,14,0.01)] text-center"
                   >
-                    <button
-                      type="button"
-                      className="px-6 py-2 rounded-xl border border-[#F15A24] text-[#F15A24] text-[13px] font-semibold group-hover:bg-[#F15A24] group-hover:text-white transition-all shadow-xs"
-                    >
+                    <div className="w-11 h-11 rounded-2xl bg-orange-50 text-[#F15A24] group-hover:bg-[#F15A24] group-hover:text-white border border-orange-200/60 flex items-center justify-center mb-2.5 transition-all shadow-xs group-hover:scale-105">
+                      <Plus className="w-5 h-5 stroke-[2.5]" />
+                    </div>
+                    <span className="text-[14px] font-bold text-[#1A130E] group-hover:text-[#F15A24] transition-colors">
                       Add New Address
-                    </button>
+                    </span>
+                    <p className="text-[12px] text-[#8C8681] mt-0.5">
+                      Save another delivery location
+                    </p>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* TAB 4: SETTING (Houses Password & Security, Saved Cards, and Notification Preferences) */}
-            {activeTab === 'settings' && (
-              <div className="space-y-8">
+            {/* TAB 4: PASSWORD & SECURITY (Dedicated Section) */}
+            {activeTab === 'security' && (
+              <div className="space-y-6">
                 <div>
                   <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
                   <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
-                    Settings
+                    Password & Security
                   </h1>
+                  <p className="text-[13px] text-[#8C8681] mt-1">
+                    Manage your credentials and secure your Amber Spice diner account
+                  </p>
                 </div>
 
-                {/* 1. PASSWORD & SECURITY SECTION */}
+                {/* Password Change Card */}
                 <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_2px_12px_rgba(26,19,14,0.02)] space-y-6">
                   <div className="flex items-center justify-between pb-4 border-b border-[#F2EFE9]">
                     <div className="flex items-center gap-2.5">
@@ -1175,6 +1120,42 @@ export default function UserDashboardPage() {
                       className="w-5 h-5 accent-[#F15A24] cursor-pointer"
                     />
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: SETTINGS */}
+            {activeTab === 'settings' && (
+              <div className="space-y-8">
+                <div>
+                  <div className="w-8 h-[2.5px] bg-[#F15A24] rounded-full mb-2.5" />
+                  <h1 className="text-[22px] sm:text-[24px] font-bold text-[#1A130E] tracking-tight">
+                    Settings
+                  </h1>
+                </div>
+
+                {/* Password & Security Quick Link Card */}
+                <div className="p-5 sm:p-6 rounded-[22px] bg-white border border-[#EFEAE4] shadow-[0_2px_12px_rgba(26,19,14,0.02)] flex items-center justify-between">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center border border-orange-200/50">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-[15px] text-[#1A130E]">
+                        Password & Security
+                      </h3>
+                      <p className="text-[12.5px] text-[#8C8681]">
+                        Manage your password and 2-factor authentication
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('security')}
+                    className="px-4 py-2 rounded-xl text-[12.5px] font-semibold border border-[#F15A24] text-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all cursor-pointer active:scale-95"
+                  >
+                    Manage Password →
+                  </button>
                 </div>
 
                 {/* 2. SAVED CARDS / PAYMENT METHODS (Migrated into Settings) */}
