@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Logo } from '../shared/Logo';
 
 export const Footer: React.FC = () => {
+  const [isSubscribed, setIsSubscribed] = React.useState(false);
+
   return (
     <footer className="bg-[#1A130E] text-[#C4B5A5] pt-16 pb-10 border-t border-[#2D241E]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -133,26 +135,32 @@ export const Footer: React.FC = () => {
               Get the latest seasonal offers and royal menu updates.
             </p>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert('Thank you for subscribing to Amber Spice!');
-              }}
-              className="flex items-center bg-gradient-to-r from-[#29221C] to-[#302821] border border-[#3E342B] rounded-xl p-1.5 focus-within:border-[#FBA138]/60 transition-colors shadow-inner max-w-md pt-1"
-            >
-              <input
-                type="email"
-                required
-                placeholder="Enter your Email"
-                className="flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white placeholder:text-[#8C7D72] focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold shrink-0 shadow-sm transition-all active:scale-95"
+            {!isSubscribed ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setIsSubscribed(true);
+                }}
+                className="flex items-center bg-gradient-to-r from-[#29221C] to-[#302821] border border-[#3E342B] rounded-xl p-1.5 focus-within:border-[#FBA138]/60 transition-colors shadow-inner max-w-md pt-1"
               >
-                Subscribe Now
-              </button>
-            </form>
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your Email"
+                  className="flex-1 bg-transparent px-3.5 py-2 text-[13px] text-white placeholder:text-[#8C7D72] focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#FBA138] to-[#F15A24] hover:from-[#F59828] hover:to-[#E54E18] text-white text-[13px] font-semibold shrink-0 shadow-sm transition-all active:scale-95 cursor-pointer"
+                >
+                  Subscribe Now
+                </button>
+              </form>
+            ) : (
+              <div className="p-3.5 rounded-xl bg-[#29221C] border border-[#0FA958]/40 text-[#0FA958] text-xs font-semibold flex items-center gap-2">
+                <span>✓ Thank you for subscribing to Amber Spice specials!</span>
+              </div>
+            )}
           </div>
         </div>
 
