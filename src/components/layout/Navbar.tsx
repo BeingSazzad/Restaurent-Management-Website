@@ -162,22 +162,18 @@ export const Navbar: React.FC = () => {
 
                   {/* Dropdown Card */}
                   {isAccountMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4]">
-                          <p className="text-[13px] font-bold text-[#1A130E] truncate">
-                            {user?.name || 'Amber Spice Diner'}
-                          </p>
-                          <p className="text-[11px] text-[#7A746E] truncate mt-0.5">
-                            {user?.email || 'diner@example.com'}
-                          </p>
-                          <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200/60">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>Active Account</span>
-                          </div>
-                        </div>
+                    <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#EAE5DF] shadow-[0_12px_36px_rgba(26,19,14,0.12)] p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                      {/* Clean User Info Header */}
+                      <div className="px-3 py-2.5 mb-1 border-b border-[#F0ECE7]">
+                        <p className="text-[13.5px] font-bold text-[#1A130E] truncate">
+                          {user?.name || 'Sarah Ahmed'}
+                        </p>
+                        <p className="text-[11.5px] text-[#7A746E] truncate mt-0.5">
+                          {user?.email || 'sarah.ahmed@dublin.ie'}
+                        </p>
+                      </div>
 
-                        <div className="space-y-0.5 pt-1 text-[13px]">
+                        <div className="space-y-0.5 pt-1.5 text-[13px]">
                           <Link
                             href="/user-dashboard"
                             onClick={() => setIsAccountMenuOpen(false)}
@@ -213,7 +209,6 @@ export const Navbar: React.FC = () => {
                             <span>Sign Out</span>
                           </button>
                         </div>
-                      </div>
                     </div>
                   )}
                 </div>
