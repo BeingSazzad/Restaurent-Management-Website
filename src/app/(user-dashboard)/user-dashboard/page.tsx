@@ -1335,11 +1335,11 @@ function DashboardContent() {
                     </div>
                   )}
 
-                  <form onSubmit={handlePasswordUpdate} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <form onSubmit={handlePasswordUpdate} className="space-y-5 max-w-xl">
+                    <div className="flex flex-col gap-4.5">
                       {/* Current Password */}
                       <div>
-                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
                           Current Password
                         </label>
                         <div className="relative">
@@ -1347,13 +1347,13 @@ function DashboardContent() {
                             type={showCurrentPassword ? 'text' : 'password'}
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
-                            placeholder="Current password"
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                            placeholder="Enter current account password"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
                             type="button"
                             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer transition-colors"
                           >
                             {showCurrentPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -1366,7 +1366,7 @@ function DashboardContent() {
 
                       {/* New Password */}
                       <div>
-                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
                           New Password
                         </label>
                         <div className="relative">
@@ -1374,13 +1374,13 @@ function DashboardContent() {
                             type={showNewPassword ? 'text' : 'password'}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="Min. 6 characters"
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                            placeholder="Enter new password (min. 6 characters)"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer transition-colors"
                           >
                             {showNewPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -1393,7 +1393,7 @@ function DashboardContent() {
 
                       {/* Confirm New Password */}
                       <div>
-                        <label className="block text-[12.5px] font-semibold text-[#1A130E] mb-1.5">
+                        <label className="block text-[13px] font-bold text-[#1A130E] mb-1.5">
                           Confirm Password
                         </label>
                         <div className="relative">
@@ -1401,13 +1401,13 @@ function DashboardContent() {
                             type={showConfirmPassword ? 'text' : 'password'}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="Confirm password"
-                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] rounded-xl px-3.5 py-2.5 pr-10 text-[13.5px] text-[#1A130E] outline-none transition-all"
+                            placeholder="Confirm new password"
+                            className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10 rounded-xl px-4 py-3 pr-11 text-[14px] text-[#1A130E] outline-none transition-all shadow-2xs"
                           />
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] cursor-pointer"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8C8681] hover:text-[#1A130E] p-1 cursor-pointer transition-colors"
                           >
                             {showConfirmPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -1419,7 +1419,7 @@ function DashboardContent() {
                       </div>
                     </div>
 
-                    <div className="pt-2 flex justify-end">
+                    <div className="pt-2 flex justify-start">
                       <button
                         type="submit"
                         className="px-6 py-2.5 rounded-xl font-bold text-[13px] bg-gradient-to-r from-[#FFA940] to-[#F15A24] text-white shadow-xs hover:opacity-95 transition-opacity cursor-pointer active:scale-95"
@@ -1428,34 +1428,6 @@ function DashboardContent() {
                       </button>
                     </div>
                   </form>
-
-                  {/* Two-Factor Authentication */}
-                  <div className="pt-4 border-t border-[#F2EFE9] flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0">
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-[13.5px] text-[#1A130E]">
-                          Two-Factor Authentication (2FA)
-                        </h4>
-                        <p className="text-[12.5px] text-[#7A746E]">
-                          Require a verification code on new sign-ins
-                        </p>
-                      </div>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={notifications.twoFactor}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          twoFactor: e.target.checked,
-                        })
-                      }
-                      className="w-5 h-5 accent-[#F15A24] cursor-pointer"
-                    />
-                  </div>
                 </div>
               </div>
             )}
