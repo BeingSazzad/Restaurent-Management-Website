@@ -41,7 +41,7 @@ export default function LoginPage() {
             Welcome Back
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
-            Sign in to access saved addresses and 1-click re-orders
+            Sign in to manage your orders and account
           </p>
         </div>
 

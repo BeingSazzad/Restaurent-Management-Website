@@ -46,7 +46,7 @@ export default function RegisterPage() {
             Create Account
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
-            Sign up to save delivery addresses and 1-click re-orders
+            Create an account to track your orders and enjoy faster checkout
           </p>
         </div>
 
