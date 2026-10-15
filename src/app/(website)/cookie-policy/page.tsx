@@ -15,7 +15,7 @@ export default function CookiePolicyPage() {
           How Amber Spice uses cookies to deliver a smooth and secure ordering experience.
         </p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
-          Compliant with EU ePrivacy Directive & Irish Data Protection Commission guidelines
+          Last Updated: October 2026
         </span>
       </div>
 

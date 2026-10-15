@@ -15,7 +15,7 @@ export default function TermsPage() {
           Customer terms and conditions for ordering, delivery, and dining services.
         </p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
-          Effective as of October 2026 · Governing Law: Republic of Ireland
+          Last Updated: October 2026
         </span>
       </div>
 

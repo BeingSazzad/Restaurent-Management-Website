@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
           How Amber Spice handles and protects your personal data under GDPR.
         </p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
-          Last Updated: October 2026 · Effective Immediately
+          Last Updated: October 2026
         </span>
       </div>
 
