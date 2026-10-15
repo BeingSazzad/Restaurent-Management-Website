@@ -187,7 +187,7 @@ export const Navbar: React.FC = () => {
                             <span>Dashboard</span>
                           </Link>
                           <Link
-                            href="/user-dashboard"
+                            href="/user-dashboard?tab=orders"
                             onClick={() => setIsAccountMenuOpen(false)}
                             className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
                           >

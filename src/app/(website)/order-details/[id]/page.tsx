@@ -288,6 +288,12 @@ export default function OrderDetailsPage() {
     paymentMethod: 'apple_pay' as const,
   };
 
+  const [localStatus, setLocalStatus] = React.useState<
+    'new' | 'preparing' | 'ready' | 'completed' | null
+  >(null);
+
+  const activeStatus = localStatus || currentOrder.status;
+
   const steps = [
     {
       key: 'new',
@@ -315,7 +321,7 @@ export default function OrderDetailsPage() {
     },
   ];
 
-  const currentIndex = steps.findIndex((s) => s.key === currentOrder.status);
+  const currentIndex = steps.findIndex((s) => s.key === activeStatus);
 
   const handleAdvanceStatus = () => {
     const sequence: ('new' | 'preparing' | 'ready' | 'completed')[] = [
@@ -325,7 +331,9 @@ export default function OrderDetailsPage() {
       'completed',
     ];
     const nextIdx = (currentIndex + 1) % sequence.length;
-    dispatch(updateOrderStatus({ orderId: currentOrder.id, status: sequence[nextIdx] }));
+    const nextStatus = sequence[nextIdx];
+    setLocalStatus(nextStatus);
+    dispatch(updateOrderStatus({ orderId: currentOrder.id, status: nextStatus }));
   };
 
   return (
@@ -334,11 +342,11 @@ export default function OrderDetailsPage() {
         {/* Top Navigation */}
         <div className="flex items-center justify-between">
           <Link
-            href="/user-dashboard"
+            href="/user-dashboard?tab=orders"
             className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-[#F15A24] hover:text-[#d44715] transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            <span>Back to Dashboard</span>
+            <span>Back to Orders</span>
           </Link>
 
           <button
@@ -366,11 +374,11 @@ export default function OrderDetailsPage() {
                 Order #{currentOrder.orderNumber}
               </h1>
               <span className="text-[11.5px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-orange-50 text-[#F15A24] border border-orange-200">
-                {currentOrder.status === 'completed'
+                {activeStatus === 'completed'
                   ? 'Delivered'
-                  : currentOrder.status === 'ready'
+                  : activeStatus === 'ready'
                   ? 'Out for Delivery'
-                  : currentOrder.status === 'preparing'
+                  : activeStatus === 'preparing'
                   ? 'Food Preparing'
                   : 'Order Confirmed'}
               </span>
@@ -426,7 +434,7 @@ export default function OrderDetailsPage() {
                   Live Dublin Delivery Status
                 </span>
                 <span className="text-lg sm:text-xl font-bold text-[#1A130E]">
-                  {currentOrder.status === 'completed'
+                  {activeStatus === 'completed'
                     ? 'Delicious Meal Delivered'
                     : `Estimated Arrival: ~${currentOrder.estimatedMinutes} Minutes`}
                 </span>

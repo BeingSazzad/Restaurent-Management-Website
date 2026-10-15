@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
 import { setActiveTrackingOrderId, updateOrderStatus } from '@/redux/slices/orderSlice';
@@ -62,14 +62,26 @@ interface AddressItem {
   isDefault?: boolean;
 }
 
-export default function UserDashboardPage() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
   const { user } = useAppSelector((state) => state.auth);
 
-  const [activeTab, setActiveTab] = useState<TabType>('profile');
+  const initialTab = (searchParams.get('tab') as TabType) || 'profile';
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
+
+  useEffect(() => {
+    const tabParam = searchParams.get('tab') as TabType | null;
+    if (
+      tabParam &&
+      ['profile', 'orders', 'addresses', 'payment', 'security', 'notifications', 'settings', 'logout'].includes(tabParam)
+    ) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
 
   // Profile data
   const [profile, setProfile] = useState({
@@ -1630,5 +1642,19 @@ export default function UserDashboardPage() {
         onClose={() => setSelectedDishForCustomize(null)}
       />
     </div>
+  );
+}
+
+export default function UserDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FBF9F6] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full border-2 border-[#F15A24] border-t-transparent animate-spin" />
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
