@@ -40,7 +40,6 @@ import {
   FileText,
   Star,
   Edit3,
-  Copy,
 } from 'lucide-react';
 
 type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'logout';
@@ -92,8 +91,6 @@ function DashboardContent() {
     password: '••••••••',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80',
   });
-
-  const [copiedPhone, setCopiedPhone] = useState(false);
 
   // Profile Inline Edit State
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -505,123 +502,53 @@ function DashboardContent() {
                 </div>
 
                 {/* Main Profile Container */}
-                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.02)] space-y-6">
+                <div className="bg-white border border-[#EFEAE4] rounded-[24px] p-6 sm:p-8 shadow-[0_4px_24px_rgba(26,19,14,0.02)]">
                   {!isEditingProfile ? (
-                    /* View Mode: Modern Interactive Cards */
-                    <div className="space-y-4">
-                      {/* Full Name Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-white border border-orange-100 text-[#F15A24] flex items-center justify-center shrink-0 shadow-2xs">
-                            <User className="w-5 h-5 text-[#F15A24]" />
-                          </div>
-                          <div>
-                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
-                              Full Name
-                            </span>
-                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5">
-                              {profile.name}
-                            </h3>
-                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
-                              Primary registered account identity
-                            </p>
-                          </div>
+                    /* View Mode: Single Unified Container with Standard Spacing */
+                    <div className="divide-y divide-[#F2EFEA]">
+                      {/* Full Name */}
+                      <div className="py-5 first:pt-0 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50/80 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/80">
+                          <User className="w-5 h-5 text-[#F15A24]" />
                         </div>
-
-                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-2xs">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Active Identity</span>
+                        <div>
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                            Full Name
+                          </span>
+                          <span className="text-[16px] sm:text-[17px] font-bold text-[#1A130E] mt-0.5 block">
+                            {profile.name}
                           </span>
                         </div>
                       </div>
 
-                      {/* Email Address Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-white border border-amber-100 text-[#D49B37] flex items-center justify-center shrink-0 shadow-2xs">
-                            <Mail className="w-5 h-5 text-[#D49B37]" />
-                          </div>
-                          <div>
-                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
-                              Email Address
-                            </span>
-                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5 break-all">
-                              {profile.email}
-                            </h3>
-                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
-                              Receives digital order invoices & live tracker updates
-                            </p>
-                          </div>
+                      {/* Email Address */}
+                      <div className="py-5 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-50/80 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100/80">
+                          <Mail className="w-5 h-5 text-[#D49B37]" />
                         </div>
-
-                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11.5px] font-semibold bg-orange-50 text-[#F15A24] border border-orange-200/60 shadow-2xs">
-                            <ShieldCheck className="w-3.5 h-3.5 text-[#F15A24]" />
-                            <span>Verified Primary</span>
+                        <div>
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                            Email Address
+                          </span>
+                          <span className="text-[16px] sm:text-[17px] font-bold text-[#1A130E] mt-0.5 block break-all">
+                            {profile.email}
                           </span>
                         </div>
                       </div>
 
-                      {/* Phone Number Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5]/70 hover:bg-white border border-[#EFEAE4] hover:border-orange-200 hover:shadow-xs transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-white border border-emerald-100 text-[#0FA958] flex items-center justify-center shrink-0 shadow-2xs">
-                            <Phone className="w-5 h-5 text-[#0FA958]" />
-                          </div>
-                          <div>
-                            <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E968F] block">
-                              Phone Number
-                            </span>
-                            <h3 className="text-[16px] sm:text-[17px] font-extrabold text-[#1A130E] tracking-tight mt-0.5">
-                              {profile.phone}
-                            </h3>
-                            <p className="text-[12px] text-[#7A746E] mt-0.5 font-normal">
-                              Used by delivery drivers for arrival & doorstep calls
-                            </p>
-                          </div>
+                      {/* Phone Number */}
+                      <div className="py-5 last:pb-0 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50/80 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100/80">
+                          <Phone className="w-5 h-5 text-[#0FA958]" />
                         </div>
-
-                        <div className="flex items-center gap-2 self-start sm:self-auto pl-16 sm:pl-0">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (typeof navigator !== 'undefined' && navigator.clipboard) {
-                                navigator.clipboard.writeText(profile.phone);
-                                setCopiedPhone(true);
-                                setTimeout(() => setCopiedPhone(false), 2000);
-                              }
-                            }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold bg-white border border-[#E0D9CF] text-[#55504A] hover:bg-[#FAF8F5] hover:border-[#F15A24] hover:text-[#F15A24] transition-all cursor-pointer shadow-2xs active:scale-95"
-                          >
-                            {copiedPhone ? (
-                              <>
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-emerald-700">Copied</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5 text-[#8C8681]" />
-                                <span>Copy Number</span>
-                              </>
-                            )}
-                          </button>
+                        <div>
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E968F] block">
+                            Phone Number
+                          </span>
+                          <span className="text-[16px] sm:text-[17px] font-bold text-[#1A130E] mt-0.5 block">
+                            {profile.phone}
+                          </span>
                         </div>
-                      </div>
-
-                      {/* Security Trust Footer */}
-                      <div className="pt-4 border-t border-[#F2EFEA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[12.5px] text-[#8C8681]">
-                        <div className="flex items-center gap-2">
-                          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>Data protected under GDPR standards · Amber Spice</span>
-                        </div>
-                        <button
-                          onClick={handleStartEdit}
-                          className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#F15A24] hover:text-[#d44715] transition-colors self-start sm:self-auto cursor-pointer"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>Quick Update</span>
-                        </button>
                       </div>
                     </div>
                   ) : (
