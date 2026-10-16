@@ -197,7 +197,6 @@ export function AnalyticsPage() {
 
   // Filter states
   const [salesYear, setSalesYear] = useState<'2026' | '2025' | '2024'>('2026');
-  const [salesPeriod, setSalesPeriod] = useState<'12' | '6'>('12');
   const [hoveredSalesIdx, setHoveredSalesIdx] = useState<number | null>(null);
 
   const [incomeYear, setIncomeYear] = useState<'2026' | '2025' | '2024'>('2026');
@@ -208,22 +207,22 @@ export function AnalyticsPage() {
   const totalWastageLoss = (wastageHistory || []).reduce((sum, w) => sum + (w.costLost || 0), 0);
   const grossMarginPercent = 74.2;
 
-  // Chart 1: Sales Growth calculations
+  // Chart 1: Sales Growth calculations (Full 12 Months)
   const rawSalesData = SALES_DATA_BY_YEAR[salesYear] || SALES_DATA_BY_YEAR['2026'];
-  const activeSalesData = salesPeriod === '6' ? rawSalesData.slice(6) : rawSalesData;
+  const activeSalesData = rawSalesData;
 
   const totalYearSales = activeSalesData.reduce((acc, d) => acc + d.sales, 0);
   const avgMonthlyGrowth = (
     activeSalesData.reduce((acc, d) => acc + d.growth, 0) / activeSalesData.length
   ).toFixed(1);
 
-  // SVG Chart 1 dimensions
-  const c1Width = 580;
-  const c1Height = 210;
-  const c1PadLeft = 46;
-  const c1PadRight = 20;
-  const c1PadTop = 20;
-  const c1PadBottom = 34;
+  // SVG Chart 1 dimensions (Edge-to-edge standard width)
+  const c1Width = 760;
+  const c1Height = 220;
+  const c1PadLeft = 40;
+  const c1PadRight = 14;
+  const c1PadTop = 18;
+  const c1PadBottom = 30;
   const c1PlotW = c1Width - c1PadLeft - c1PadRight;
   const c1PlotH = c1Height - c1PadTop - c1PadBottom;
 
@@ -247,19 +246,19 @@ export function AnalyticsPage() {
   const totalYearNet = activeIncomeData.reduce((acc, d) => acc + d.net, 0);
   const netMarginAvg = ((totalYearNet / totalYearGross) * 100).toFixed(1);
 
-  // SVG Chart 2 dimensions
-  const c2Width = 580;
-  const c2Height = 210;
-  const c2PadLeft = 46;
-  const c2PadRight = 16;
-  const c2PadTop = 20;
-  const c2PadBottom = 34;
+  // SVG Chart 2 dimensions (Edge-to-edge standard width)
+  const c2Width = 760;
+  const c2Height = 220;
+  const c2PadLeft = 40;
+  const c2PadRight = 14;
+  const c2PadTop = 18;
+  const c2PadBottom = 30;
   const c2PlotW = c2Width - c2PadLeft - c2PadRight;
   const c2PlotH = c2Height - c2PadTop - c2PadBottom;
 
   const maxIncomeVal = Math.max(...activeIncomeData.map((d) => d.gross)) * 1.15;
   const colWidth = c2PlotW / activeIncomeData.length;
-  const barWidth = Math.max(7, Math.min(14, colWidth * 0.28));
+  const barWidth = Math.max(9, Math.min(15, colWidth * 0.26));
 
   return (
     <div className="space-y-4">
@@ -381,42 +380,26 @@ export function AnalyticsPage() {
                 </div>
               </div>
 
-              {/* Filters */}
-              <div className="flex items-center gap-2 self-start sm:self-auto">
-                {/* Period Selector (12 Months vs 6 Months) */}
-                <div className="relative">
-                  <select
-                    value={salesPeriod}
-                    onChange={(e) => setSalesPeriod(e.target.value as '12' | '6')}
-                    aria-label="Filter sales period range"
-                    className="text-xs font-semibold bg-stone-50 hover:bg-stone-100 border border-stone-200/90 rounded-xl px-2.5 py-1.5 text-stone-700 outline-none cursor-pointer transition-colors"
-                  >
-                    <option value="12">12 Months</option>
-                    <option value="6">Last 6 Months</option>
-                  </select>
-                </div>
-
-                {/* Year Dropdown Filter */}
-                <div className="relative">
-                  <select
-                    value={salesYear}
-                    onChange={(e) => setSalesYear(e.target.value as '2026' | '2025' | '2024')}
-                    aria-label="Filter sales year"
-                    className="text-xs font-bold bg-[#F15A24]/10 hover:bg-[#F15A24]/15 border border-[#F15A24]/20 rounded-xl px-2.5 py-1.5 text-[#F15A24] outline-none cursor-pointer transition-colors"
-                  >
-                    <option value="2026">Year 2026</option>
-                    <option value="2025">Year 2025</option>
-                    <option value="2024">Year 2024</option>
-                  </select>
-                </div>
+              {/* Year Dropdown Filter */}
+              <div className="relative self-start sm:self-auto">
+                <select
+                  value={salesYear}
+                  onChange={(e) => setSalesYear(e.target.value as '2026' | '2025' | '2024')}
+                  aria-label="Filter sales year"
+                  className="text-xs font-bold bg-[#F15A24]/10 hover:bg-[#F15A24]/15 border border-[#F15A24]/20 rounded-xl px-2.5 py-1.5 text-[#F15A24] outline-none cursor-pointer transition-colors"
+                >
+                  <option value="2026">Year 2026</option>
+                  <option value="2025">Year 2025</option>
+                  <option value="2024">Year 2024</option>
+                </select>
               </div>
             </div>
 
             {/* SVG Visual Area Chart */}
-            <div className="relative mt-4">
+            <div className="relative mt-3 w-full">
               <svg
                 viewBox={`0 0 ${c1Width} ${c1Height}`}
-                className="w-full h-48 sm:h-56 select-none overflow-visible"
+                className="w-full h-auto select-none overflow-visible"
               >
                 <defs>
                   {/* Glowing Orange-Amber Area Gradient */}
@@ -614,10 +597,10 @@ export function AnalyticsPage() {
             </div>
 
             {/* SVG Visual Bar Chart */}
-            <div className="relative mt-4">
+            <div className="relative mt-3 w-full">
               <svg
                 viewBox={`0 0 ${c2Width} ${c2Height}`}
-                className="w-full h-48 sm:h-56 select-none overflow-visible"
+                className="w-full h-auto select-none overflow-visible"
               >
                 {/* Horizontal Guide Lines */}
                 {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
