@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { INITIAL_STAFF_USERS } from '../../lib/constants';
 import { StaffUser, UserRole } from '../../types/common.types';
 import { PageHeader } from '../layout/PageHeader';
@@ -50,14 +50,6 @@ export function StaffManager() {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const counts = useMemo(() => {
-    const total = users.length;
-    const admins = users.filter((u) => u.role === 'admin').length;
-    const chefs = users.filter((u) => u.role === 'chef').length;
-    const expo = users.filter((u) => u.role === 'expo').length;
-    const staff = users.filter((u) => u.role === 'staff').length;
-    return { total, admins, chefs, expo, staff };
-  }, [users]);
 
   const handleOpenEdit = (staff: StaffUser) => {
     setEditingStaff(staff);
@@ -160,48 +152,6 @@ export function StaffManager() {
         }
       />
 
-      {/* Staff Summary Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Total Staff
-          </span>
-          <span className="text-xl font-bold text-stone-900 mt-1 block">{counts.total}</span>
-          <span className="text-[10.5px] text-stone-400">Registered staff</span>
-        </div>
-
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Admins
-          </span>
-          <span className="text-xl font-bold text-purple-700 mt-1 block">{counts.admins}</span>
-          <span className="text-[10.5px] text-stone-400">Full access</span>
-        </div>
-
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Chefs
-          </span>
-          <span className="text-xl font-bold text-amber-700 mt-1 block">{counts.chefs}</span>
-          <span className="text-[10.5px] text-stone-400">Kitchen leads</span>
-        </div>
-
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Expo
-          </span>
-          <span className="text-xl font-bold text-blue-700 mt-1 block">{counts.expo}</span>
-          <span className="text-[10.5px] text-stone-400">Packaging</span>
-        </div>
-
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Line Staff
-          </span>
-          <span className="text-xl font-bold text-stone-700 mt-1 block">{counts.staff}</span>
-          <span className="text-[10.5px] text-stone-400">Cooks &amp; prep</span>
-        </div>
-      </div>
 
       {/* Toolbar & Filters */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
