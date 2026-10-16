@@ -213,7 +213,7 @@ export default function AgentDashboardPage() {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="w-full px-6 lg:px-8 space-y-6">
         {/* ================= TOP STAFF HEADER & CONTROLS ================= */}
         <div className="space-y-4">
           {/* Row 1: Brand & Identity + Global Quick Controls */}
@@ -655,7 +655,7 @@ export default function AgentDashboardPage() {
           )}
 
           {/* Clean Operational Stock Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">
             {filteredStockItems.map((dish) => {
               const inStock = dish.isAvailable;
 
