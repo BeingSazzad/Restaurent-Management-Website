@@ -52,8 +52,8 @@ export interface GalleryItem {
   title: string;
   category: 'interior' | 'exterior' | 'kitchen' | 'promotion' | 'dining' | 'private' | 'bar_kitchen';
   image: string;
-  tag: string;
-  description: string;
+  tag?: string;
+  description?: string;
 }
 
 export interface CmsDatabase {

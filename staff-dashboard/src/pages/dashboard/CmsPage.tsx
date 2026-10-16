@@ -57,8 +57,8 @@ export interface GalleryItem {
   title: string;
   category: 'interior' | 'exterior' | 'kitchen' | 'promotion' | 'dining' | 'private' | 'bar_kitchen';
   image: string;
-  tag: string;
-  description: string;
+  tag?: string;
+  description?: string;
 }
 
 export interface CmsStoreInfo {
@@ -634,10 +634,8 @@ export function CmsPage() {
                 setEditingGalleryItem({
                   id: `space-${Date.now()}`,
                   title: '',
-                  category: 'dining',
+                  category: 'interior',
                   image: '/images/interior/main_dining_hall.jpg',
-                  tag: 'Historic Archway',
-                  description: '',
                 });
                 setIsGalleryModalOpen(true);
               }}
@@ -661,24 +659,22 @@ export function CmsPage() {
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-semibold text-white">
-                      {item.tag || 'Interior Space'}
-                    </div>
-                    <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-[#B84A22] text-[10px] font-bold text-white uppercase tracking-wider">
-                      {item.category === 'dining'
-                        ? 'Dining Hall'
+                    <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-md bg-[#B84A22] text-[10px] font-bold text-white uppercase tracking-wider shadow-xs">
+                      {item.category === 'dining' || item.category === 'interior'
+                        ? 'Restaurant Interior'
                         : item.category === 'private'
                         ? 'Private Room'
-                        : item.category === 'bar_kitchen'
-                        ? 'Bar & Kitchen'
-                        : 'Exterior'}
+                        : item.category === 'kitchen' || item.category === 'bar_kitchen'
+                        ? 'Kitchen & Tandoor'
+                        : item.category === 'promotion'
+                        ? 'Promotions'
+                        : 'Exterior & Patio'}
                     </div>
                   </div>
 
-                  <div className="p-4 space-y-1.5">
+                  <div className="p-4 space-y-1">
                     <h4 className="font-bold text-sm text-[#1A130E] leading-snug">{item.title}</h4>
-                    <p className="text-xs text-stone-500 line-clamp-2 leading-relaxed">{item.description}</p>
-                    <p className="text-[11px] text-stone-400 truncate pt-1 font-mono">
+                    <p className="text-[11px] text-stone-400 truncate font-mono">
                       {item.image}
                     </p>
                   </div>
@@ -1317,38 +1313,23 @@ export function CmsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
-                  <select
-                    value={editingGalleryItem.category}
-                    onChange={(e) =>
-                      setEditingGalleryItem({
-                        ...editingGalleryItem,
-                        category: e.target.value as any,
-                      })
-                    }
-                    className="w-full h-9 px-2.5 bg-white border border-stone-200 rounded-xl text-xs font-medium text-[#1A130E] outline-none focus:border-[#B84A22]"
-                  >
-                    <option value="interior">Restaurant Interior</option>
-                    <option value="exterior">Dublin Facade &amp; Exterior</option>
-                    <option value="kitchen">Kitchen &amp; Tandoor</option>
-                    <option value="promotion">Promotions &amp; Events</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Architectural Tag</label>
-                  <input
-                    type="text"
-                    value={editingGalleryItem.tag}
-                    onChange={(e) =>
-                      setEditingGalleryItem({ ...editingGalleryItem, tag: e.target.value })
-                    }
-                    placeholder="e.g. Exposed Brick Arches"
-                    className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
+                <select
+                  value={editingGalleryItem.category}
+                  onChange={(e) =>
+                    setEditingGalleryItem({
+                      ...editingGalleryItem,
+                      category: e.target.value as any,
+                    })
+                  }
+                  className="w-full h-9 px-2.5 bg-white border border-stone-200 rounded-xl text-xs font-medium text-[#1A130E] outline-none focus:border-[#B84A22]"
+                >
+                  <option value="interior">Restaurant Interior</option>
+                  <option value="exterior">Dublin Facade &amp; Exterior</option>
+                  <option value="kitchen">Kitchen &amp; Tandoor</option>
+                  <option value="promotion">Promotions &amp; Events</option>
+                </select>
               </div>
 
               <div>
@@ -1392,19 +1373,6 @@ export function CmsPage() {
                     ))}
                   </div>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  value={editingGalleryItem.description}
-                  onChange={(e) =>
-                    setEditingGalleryItem({ ...editingGalleryItem, description: e.target.value })
-                  }
-                  placeholder="Describe the atmosphere, architectural features, velvet booths, or seating capacity..."
-                  className="w-full p-2.5 bg-white border border-stone-200 rounded-xl text-xs text-stone-700 outline-none focus:border-[#B84A22] leading-relaxed"
-                />
               </div>
 
               {editingGalleryItem.image && (

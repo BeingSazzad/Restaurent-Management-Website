@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Eye, UtensilsCrossed } from 'lucide-react';
+import { ArrowRight, Eye, UtensilsCrossed } from 'lucide-react';
 import { getFullCmsData, GalleryItem, DEFAULT_GALLERY_ITEMS } from '@/services/cmsService';
 
 export default function GalleryPage() {
@@ -119,29 +119,18 @@ export default function GalleryPage() {
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-85 group-hover:opacity-95 transition-opacity" />
-
-              {/* Tag Badge */}
-              <div className="absolute top-4 left-4">
-                <span className="badge-base badge-gold backdrop-blur-md">
-                  <Sparkles className="w-3 h-3" />
-                  <span>{item.tag}</span>
-                </span>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-95 transition-opacity" />
 
               {/* Hover Zoom Icon */}
               <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <Eye className="w-4 h-4" />
               </div>
 
-              {/* Bottom Caption */}
+              {/* Bottom Caption - Title Only */}
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-base font-bold text-white mb-1 leading-snug drop-shadow-sm">
+                <h3 className="text-base sm:text-lg font-bold text-white leading-snug drop-shadow-md">
                   {item.title}
                 </h3>
-                <p className="text-xs text-[#E2D8CE] line-clamp-2 font-normal leading-relaxed">
-                  {item.description}
-                </p>
               </div>
             </div>
           </div>
@@ -172,13 +161,7 @@ export default function GalleryPage() {
               </button>
             </div>
             <div className="p-6 sm:p-8">
-              <span className="badge-base badge-terracotta mb-2 inline-block">
-                {selectedImage.tag}
-              </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#1A130E] mb-2">{selectedImage.title}</h2>
-              <p className="text-[14px] text-[#555555] leading-relaxed mb-6">
-                {selectedImage.description}
-              </p>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#1A130E] mb-6">{selectedImage.title}</h2>
               <div className="flex items-center justify-between gap-4 pt-4 border-t border-[#E5E5E5]">
                 <button
                   onClick={() => setSelectedImage(null)}
