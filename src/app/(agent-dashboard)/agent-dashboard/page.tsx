@@ -492,7 +492,7 @@ export default function AgentDashboardPage() {
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                <span>CMS & Policies</span>
+                <span>CMS</span>
               </button>
 
               <button

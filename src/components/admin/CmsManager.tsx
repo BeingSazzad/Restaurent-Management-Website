@@ -307,7 +307,7 @@ export const CmsManager: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Subtitle / Summary</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Subtitle</label>
               <input
                 type="text"
                 value={cmsData[activeTab].subtitle}

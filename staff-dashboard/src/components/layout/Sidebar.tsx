@@ -77,7 +77,7 @@ export function Sidebar() {
       allowedRoles: ['admin'],
     },
     {
-      name: 'CMS & Policies',
+      name: 'CMS',
       path: ROUTES.DASHBOARD.CMS,
       icon: FileText,
       allowedRoles: ['admin'],
