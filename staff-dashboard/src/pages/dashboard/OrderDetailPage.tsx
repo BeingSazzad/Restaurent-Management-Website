@@ -315,7 +315,7 @@ export function OrderDetailPage() {
 
                     {/* Quantity Badge */}
                     <div className="mt-2.5 flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-md bg-stone-900 text-white font-extrabold text-xs">
+                      <span className="px-2.5 py-0.5 rounded-md bg-stone-100 text-stone-800 font-extrabold text-xs border border-stone-200">
                         Qty: {item.quantity}
                       </span>
                     </div>

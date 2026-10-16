@@ -231,7 +231,7 @@ export function ProductsPage() {
                   }}
                 />
                 <div className="absolute top-2.5 left-2.5">
-                  <span className="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-xs text-white text-[11px] font-bold">
+                  <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
                     €{dish.price.toFixed(2)}
                   </span>
                 </div>
