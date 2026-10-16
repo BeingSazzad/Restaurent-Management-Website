@@ -9,7 +9,6 @@ import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
-import ChangePasswordPage from '../pages/dashboard/ChangePasswordPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import AnalyticsPage from '../pages/dashboard/AnalyticsPage';
 import Stock86Page from '../pages/dashboard/Stock86Page';
@@ -88,10 +87,6 @@ export const router = createBrowserRouter([
           {
             path: 'staff-users',
             element: <StaffUsersPage />,
-          },
-          {
-            path: 'change-password',
-            element: <ChangePasswordPage />,
           },
         ],
       },

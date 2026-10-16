@@ -14,7 +14,6 @@ import {
   FileText,
   UserCheck,
   Receipt,
-  KeyRound,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../hooks/useAuth';
@@ -81,12 +80,6 @@ export function Sidebar() {
       path: ROUTES.DASHBOARD.CMS,
       icon: FileText,
       allowedRoles: ['admin'],
-    },
-    {
-      name: 'Security & PIN',
-      path: ROUTES.DASHBOARD.CHANGE_PASSWORD,
-      icon: KeyRound,
-      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
   ].filter((item) => item.allowedRoles.includes(currentRole));
 
@@ -195,17 +188,6 @@ export function Sidebar() {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <NavLink
-              to={ROUTES.DASHBOARD.CHANGE_PASSWORD}
-              title="Change Password & Station PIN"
-              className={({ isActive }) =>
-                `p-1.5 rounded-lg transition-colors cursor-pointer ${
-                  isActive ? 'text-[#F15A24] bg-white/10' : 'text-stone-400 hover:text-white hover:bg-white/5'
-                }`
-              }
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-            </NavLink>
             <button
               onClick={logout}
               title="Log Out Staff Console"

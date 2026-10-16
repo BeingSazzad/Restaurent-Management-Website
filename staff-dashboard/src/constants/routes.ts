@@ -17,7 +17,6 @@ export const ROUTES = {
     STOCK_86: '/stock-86',
     ANALYTICS: '/analytics',
     USERS: '/staff-users',
-    CHANGE_PASSWORD: '/change-password',
   },
 } as const;
 
