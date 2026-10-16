@@ -14,7 +14,6 @@ import {
   FileText,
   UserCheck,
   Receipt,
-  Bell,
   User,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
@@ -37,12 +36,6 @@ export function Sidebar() {
       path: ROUTES.DASHBOARD.ORDERS,
       icon: ClipboardList,
       allowedRoles: ['admin', 'expo'],
-    },
-    {
-      name: 'Notifications',
-      path: ROUTES.DASHBOARD.NOTIFICATIONS,
-      icon: Bell,
-      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
       name: 'Inventory & 86',
