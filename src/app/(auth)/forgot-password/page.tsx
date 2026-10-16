@@ -15,7 +15,6 @@ import {
   CheckCircle2,
   RefreshCw,
   AlertCircle,
-  Sparkles,
 } from 'lucide-react';
 
 type Step = 'request' | 'verify' | 'reset' | 'success';
@@ -45,16 +44,11 @@ export default function ForgotPasswordPage() {
   const handleRequestCode = (e: React.FormEvent) => {
     e.preventDefault();
     setEmailError('');
-    if (!email || !email.includes('@')) {
-      setEmailError('Please enter a valid email address.');
-      return;
-    }
     setStep('verify');
   };
 
   // Step 2 OTP Handlers
   const handleOtpChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
     setOtp(newOtp);
@@ -72,18 +66,9 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  const handleFillDemoCode = () => {
-    setOtp(['4', '8', '2', '9', '1', '0']);
-    setOtpError('');
-  };
-
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
-    const fullCode = otp.join('');
-    if (fullCode.length < 6) {
-      setOtpError('Please enter the complete 6-digit verification code.');
-      return;
-    }
+    setOtpError('');
     setStep('reset');
   };
 
@@ -93,23 +78,13 @@ export default function ForgotPasswordPage() {
     setTimeout(() => {
       setIsResending(false);
       otpInputsRef.current[0]?.focus();
-    }, 1000);
+    }, 800);
   };
 
   // Step 3 Handler: Set New Password
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordError('');
-
-    if (newPassword.length < 6) {
-      setPasswordError('Password must be at least 6 characters.');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError('Passwords do not match. Please re-enter.');
-      return;
-    }
-
     setStep('success');
   };
 
@@ -117,7 +92,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 sm:py-24">
       <div className="w-full max-w-md p-7 sm:p-9 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
         {/* Step Progression Indicators */}
-        <div className="flex items-center justify-center gap-2 mb-7">
+        <div className="flex items-center justify-center gap-2 mb-8">
           <div
             className={`h-1.5 rounded-full transition-all duration-300 ${
               step === 'request' ? 'w-8 bg-[#B84A22]' : 'w-2 bg-[#E6E1DC]'
@@ -144,9 +119,9 @@ export default function ForgotPasswordPage() {
         {step === 'request' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <KeyRound className="w-7 h-7 stroke-[2.2]" />
+              <div className="flex justify-center mb-5">
+                <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(184,74,34,0.22)] shrink-0">
+                  <KeyRound className="w-8 h-8 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -172,8 +147,7 @@ export default function ForgotPasswordPage() {
                 <div className="relative flex items-center">
                   <Mail className="w-4.5 h-4.5 absolute left-3.5 text-[#9E9790] pointer-events-none" />
                   <input
-                    type="email"
-                    required
+                    type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@dublin.ie"
@@ -207,16 +181,16 @@ export default function ForgotPasswordPage() {
         {step === 'verify' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <ShieldCheck className="w-7 h-7 stroke-[2.2]" />
+              <div className="flex justify-center mb-5">
+                <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(184,74,34,0.22)] shrink-0">
+                  <ShieldCheck className="w-8 h-8 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
                 Verify Your Email
               </h1>
               <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed max-w-xs mx-auto">
-                We sent a 6-digit code to <strong className="text-[#1A130E]">{email}</strong>
+                We sent a 6-digit code to <strong className="text-[#1A130E]">{email || 'your email'}</strong>
               </p>
             </div>
 
@@ -252,25 +226,17 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
 
-              {/* Demo Helper Button & Resend */}
-              <div className="flex items-center justify-between text-xs pt-1">
-                <button
-                  type="button"
-                  onClick={handleFillDemoCode}
-                  className="px-2.5 py-1.5 rounded-lg bg-orange-50 text-[#B84A22] font-semibold hover:bg-orange-100 transition-colors cursor-pointer border border-orange-200/60 inline-flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Auto-fill Demo (482910)</span>
-                </button>
-
+              {/* Resend Link */}
+              <div className="flex items-center justify-center text-[13px] pt-1">
+                <span className="text-[#7A746E]">Didn&apos;t receive code?</span>
                 <button
                   type="button"
                   onClick={handleResendCode}
                   disabled={isResending}
-                  className="text-[#7A746E] hover:text-[#B84A22] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                  className="ml-1.5 text-[#B84A22] hover:text-[#9E3E1B] font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors disabled:opacity-50"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
-                  <span>{isResending ? 'Sending...' : 'Resend'}</span>
+                  <span>{isResending ? 'Sending...' : 'Resend Code'}</span>
                 </button>
               </div>
 
@@ -300,9 +266,9 @@ export default function ForgotPasswordPage() {
         {step === 'reset' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <Lock className="w-7 h-7 stroke-[2.2]" />
+              <div className="flex justify-center mb-5">
+                <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(184,74,34,0.22)] shrink-0">
+                  <Lock className="w-8 h-8 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -328,7 +294,6 @@ export default function ForgotPasswordPage() {
                 <div className="relative flex items-center">
                   <input
                     type={showNewPassword ? 'text' : 'password'}
-                    required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password"
@@ -351,7 +316,6 @@ export default function ForgotPasswordPage() {
                 <div className="relative flex items-center">
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
-                    required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
@@ -395,9 +359,9 @@ export default function ForgotPasswordPage() {
         {/* ================= STEP 4: SUCCESS ================= */}
         {step === 'success' && (
           <div className="animate-in fade-in zoom-in-95 duration-200 text-center py-4">
-            <div className="flex justify-center mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0FA958] to-[#2ecc71] text-white flex items-center justify-center shadow-xs shrink-0">
-                <CheckCircle2 className="w-7 h-7 stroke-[2.5]" />
+            <div className="flex justify-center mb-5">
+              <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-[#0FA958] to-[#2ecc71] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(15,169,88,0.22)] shrink-0">
+                <CheckCircle2 className="w-8 h-8 stroke-[2.4]" />
               </div>
             </div>
 
@@ -424,3 +388,4 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
+

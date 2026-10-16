@@ -46,9 +46,9 @@ export default function RegisterPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 sm:py-24">
       <div className="w-full max-w-md p-7 sm:p-9 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
         <div className="text-center mb-6">
-          <div className="flex justify-center mb-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-              <svg viewBox="0 0 100 100" className="w-7 h-7 fill-white">
+          <div className="flex justify-center mb-5">
+            <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(184,74,34,0.22)] shrink-0">
+              <svg viewBox="0 0 100 100" className="w-8 h-8 fill-white">
                 <path d="M50 0 C45 25 25 45 0 50 C25 55 45 75 50 100 C55 75 75 55 100 50 C75 45 55 25 50 0 Z" />
                 <circle cx="50" cy="50" r="10" fill="#FFE2C4" />
               </svg>
