@@ -67,13 +67,13 @@ export default function ContactPage() {
 
   return (
     <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
-      {/* Page Header - Perfectly Left-Aligned */}
-      <div className="text-left max-w-3xl mb-8">
-        <div className="section-decorator mb-3.5" />
+      {/* Page Header - Centered */}
+      <div className="text-center max-w-3xl mx-auto mb-8">
+        <div className="section-decorator mx-auto mb-3.5" />
         <h1 className="section-title mb-2.5">
           Get in Touch With Us
         </h1>
-        <p className="section-subtitle !ml-0 text-[#666666]">
+        <p className="section-subtitle text-[#666666]">
           Have queries regarding table reservations, catering feasts, allergen guidance, or custom orders? Reach out directly to our Dublin team.
         </p>
       </div>
