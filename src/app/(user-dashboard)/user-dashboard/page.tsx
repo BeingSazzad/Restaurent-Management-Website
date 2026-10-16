@@ -489,7 +489,7 @@ function DashboardContent() {
                     <div className="divide-y divide-[#F2EFEA]">
                       {/* Full Name */}
                       <div className="py-5 first:pt-0 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-orange-50/80 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100/80">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
                           <User className="w-5 h-5 text-[#F15A24]" />
                         </div>
                         <div>
@@ -504,8 +504,8 @@ function DashboardContent() {
 
                       {/* Email Address */}
                       <div className="py-5 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-amber-50/80 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100/80">
-                          <Mail className="w-5 h-5 text-[#D49B37]" />
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Mail className="w-5 h-5 text-[#F15A24]" />
                         </div>
                         <div>
                           <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E968F] block">
@@ -519,8 +519,8 @@ function DashboardContent() {
 
                       {/* Phone Number */}
                       <div className="py-5 last:pb-0 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-50/80 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100/80">
-                          <Phone className="w-5 h-5 text-[#0FA958]" />
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Phone className="w-5 h-5 text-[#F15A24]" />
                         </div>
                         <div>
                           <span className="text-[11px] font-bold uppercase tracking-wider text-[#9E968F] block">
