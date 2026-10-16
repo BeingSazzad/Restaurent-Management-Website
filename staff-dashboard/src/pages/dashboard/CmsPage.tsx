@@ -26,6 +26,7 @@ import {
   ExternalLink,
   X,
   Sparkles,
+  Upload,
 } from 'lucide-react';
 import { PolicyPreview } from '../../components/cms/PolicyPreview';
 
@@ -561,6 +562,20 @@ export function CmsPage() {
   // Gallery Add/Edit modal state
   const [editingGalleryItem, setEditingGalleryItem] = useState<GalleryItem | null>(null);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const galleryFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleGalleryFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editingGalleryItem) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setEditingGalleryItem({
+        ...editingGalleryItem,
+        image: reader.result as string,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSave = () => {
     if (typeof window !== 'undefined') {
@@ -1713,7 +1728,7 @@ export function CmsPage() {
 
             <div className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Space Name / Title</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Title</label>
                 <input
                   type="text"
                   value={editingGalleryItem.title}
@@ -1745,63 +1760,46 @@ export function CmsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Image URL or Local Path</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-stone-700">Photo</label>
+                  <button
+                    type="button"
+                    onClick={() => galleryFileInputRef.current?.click()}
+                    className="text-xs font-semibold text-[#B84A22] hover:text-[#9E3E1B] flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Photo</span>
+                  </button>
+                </div>
                 <input
-                  type="text"
-                  value={editingGalleryItem.image}
-                  onChange={(e) =>
-                    setEditingGalleryItem({ ...editingGalleryItem, image: e.target.value })
-                  }
-                  placeholder="/images/interior/main_dining_hall.jpg"
-                  className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs font-mono text-[#1A130E] outline-none focus:border-[#B84A22]"
+                  type="file"
+                  accept="image/*"
+                  ref={galleryFileInputRef}
+                  onChange={handleGalleryFileUpload}
+                  className="hidden"
                 />
 
-                {/* Preset suggestions */}
-                <div className="mt-2 space-y-1">
-                  <span className="text-[10px] text-stone-400 font-medium">Quick Dublin Interior Presets:</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      { label: 'Main Hall', path: '/images/interior/main_dining_hall.jpg' },
-                      { label: 'Private Alcove', path: '/images/interior/private_dining_alcove.jpg' },
-                      { label: 'Spice Lounge Bar', path: '/images/interior/spice_lounge_bar.jpg' },
-                      { label: 'Tandoor Kitchen', path: '/images/interior/live_tandoor_kitchen.jpg' },
-                      { label: 'Storefront Facade', path: '/images/interior/dublin_storefront_facade.jpg' },
-                      { label: 'Conservatory', path: '/images/interior/conservatory_courtyard.jpg' },
-                    ].map((preset) => (
-                      <button
-                        key={preset.path}
-                        type="button"
-                        onClick={() =>
-                          setEditingGalleryItem({ ...editingGalleryItem, image: preset.path })
-                        }
-                        className={`text-[10px] px-2 py-0.5 rounded-md border cursor-pointer transition-colors ${
-                          editingGalleryItem.image === preset.path
-                            ? 'bg-[#B84A22] text-white border-[#B84A22]'
-                            : 'bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100'
-                        }`}
-                      >
-                        {preset.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {editingGalleryItem.image && (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-stone-200 bg-stone-100">
+                <div
+                  onClick={() => galleryFileInputRef.current?.click()}
+                  className="relative aspect-video rounded-xl overflow-hidden border border-stone-200 bg-stone-100 group cursor-pointer"
+                >
                   <img
                     src={editingGalleryItem.image}
                     alt="Preview"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src = '/images/interior/main_dining_hall.jpg';
                     }}
                   />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-semibold text-xs">
+                    <Upload className="w-4 h-4" />
+                    <span>Click to change photo</span>
+                  </div>
                   <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[10px] backdrop-blur-xs font-medium">
                     Live Photo Preview
                   </div>
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="pt-3 border-t border-stone-100 flex items-center justify-end gap-2.5">
