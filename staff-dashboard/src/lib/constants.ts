@@ -67,6 +67,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 13.99,
     image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80',
     isAvailable: true,
+    stockCount: 18,
+    lowStockThreshold: 5,
   },
   {
     id: 'dish-curry-01',
@@ -76,6 +78,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 12.99,
     image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=300&q=80',
     isAvailable: true,
+    stockCount: 14,
+    lowStockThreshold: 5,
   },
   {
     id: 'dish-curry-02',
@@ -85,6 +89,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 14.99,
     image: 'https://images.unsplash.com/photo-1545247181-516773cae754?w=300&q=80',
     isAvailable: true,
+    stockCount: 3,
+    lowStockThreshold: 5,
   },
   {
     id: 'dish-grill-01',
@@ -94,6 +100,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 13.50,
     image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=300&q=80',
     isAvailable: true,
+    stockCount: 12,
+    lowStockThreshold: 4,
   },
   {
     id: 'dish-veg-01',
@@ -103,6 +111,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 11.99,
     image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=300&q=80',
     isAvailable: true,
+    stockCount: 9,
+    lowStockThreshold: 4,
   },
   {
     id: 'dish-bread-01',
@@ -112,6 +122,8 @@ export const INITIAL_DISHES: DishItem[] = [
     price: 4.50,
     image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=300&q=80',
     isAvailable: true,
+    stockCount: 35,
+    lowStockThreshold: 10,
   },
 ];
 

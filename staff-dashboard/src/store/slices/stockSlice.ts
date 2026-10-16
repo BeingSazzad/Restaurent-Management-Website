@@ -11,7 +11,14 @@ const getInitialDishes = (): DishItem[] => {
     const raw = localStorage.getItem(MENU_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Ensure stockCount and lowStockThreshold exist on stored items
+        return parsed.map((item: DishItem) => ({
+          ...item,
+          stockCount: item.stockCount !== undefined ? item.stockCount : 12,
+          lowStockThreshold: item.lowStockThreshold !== undefined ? item.lowStockThreshold : 5,
+        }));
+      }
     }
   } catch {
     // fallback
@@ -75,12 +82,59 @@ export const stockSlice = createSlice({
       const dish = state.dishes.find((d) => d.id === action.payload);
       if (dish) {
         dish.isAvailable = !dish.isAvailable;
+        if (!dish.isAvailable) {
+          dish.stockCount = 0;
+        } else if ((dish.stockCount || 0) <= 0) {
+          dish.stockCount = 12; // default restock batch
+        }
+        persistDishes(state.dishes);
+      }
+    },
+    adjustDishPortions: (state, action: PayloadAction<{ id: string; delta: number }>) => {
+      const dish = state.dishes.find((d) => d.id === action.payload.id);
+      if (dish) {
+        const current = dish.stockCount !== undefined ? dish.stockCount : 10;
+        const updated = Math.max(0, current + action.payload.delta);
+        dish.stockCount = updated;
+        if (updated === 0) {
+          dish.isAvailable = false; // Auto-86 when stock reaches 0!
+        } else {
+          dish.isAvailable = true;
+        }
+        persistDishes(state.dishes);
+      }
+    },
+    setDishPortions: (state, action: PayloadAction<{ id: string; count: number }>) => {
+      const dish = state.dishes.find((d) => d.id === action.payload.id);
+      if (dish) {
+        const count = Math.max(0, action.payload.count);
+        dish.stockCount = count;
+        dish.isAvailable = count > 0;
+        persistDishes(state.dishes);
+      }
+    },
+    deductOrderedDishes: (state, action: PayloadAction<{ dishId: string; quantity: number }[]>) => {
+      let changed = false;
+      action.payload.forEach(({ dishId, quantity }) => {
+        const dish = state.dishes.find((d) => d.id === dishId);
+        if (dish && dish.stockCount !== undefined) {
+          dish.stockCount = Math.max(0, dish.stockCount - quantity);
+          if (dish.stockCount === 0) {
+            dish.isAvailable = false; // Automatically 86 if depleted!
+          }
+          changed = true;
+        }
+      });
+      if (changed) {
         persistDishes(state.dishes);
       }
     },
     restockAllDishes: (state) => {
       state.dishes.forEach((d) => {
         d.isAvailable = true;
+        if ((d.stockCount || 0) <= 0) {
+          d.stockCount = 15;
+        }
       });
       persistDishes(state.dishes);
     },
@@ -121,6 +175,9 @@ export const stockSlice = createSlice({
 export const {
   syncStockFromStorage,
   toggleDishAvailability,
+  adjustDishPortions,
+  setDishPortions,
+  deductOrderedDishes,
   restockAllDishes,
   adjustRawStock,
   restockRawToPar,
