@@ -12,6 +12,7 @@ import AnalyticsPage from '../pages/dashboard/AnalyticsPage';
 import Stock86Page from '../pages/dashboard/Stock86Page';
 import StaffUsersPage from '../pages/dashboard/StaffUsersPage';
 import OrdersPage from '../pages/dashboard/OrdersPage';
+import OrderDetailPage from '../pages/dashboard/OrderDetailPage';
 import ProductsPage from '../pages/dashboard/ProductsPage';
 import CmsPage from '../pages/dashboard/CmsPage';
 import NotFoundPage from '../pages/NotFoundPage';
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
           {
             path: 'all-orders',
             element: <OrdersPage />,
+          },
+          {
+            path: 'all-orders/:orderId',
+            element: <OrderDetailPage />,
           },
           {
             path: 'products',

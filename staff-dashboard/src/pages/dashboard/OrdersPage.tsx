@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { updateOrderStatus } from '../../store/slices/orderSlice';
 import { KdsOrder, OrderStatus } from '../../types/common.types';
@@ -12,6 +13,7 @@ import {
   AlertCircle,
   TrendingUp,
   Phone,
+  Eye,
 } from 'lucide-react';
 import { TicketSlipModal } from '../../components/dashboard/TicketSlipModal';
 
@@ -183,14 +185,26 @@ export function OrdersPage() {
               {filteredOrders.map((order: KdsOrder) => (
                 <tr key={order.id} className="hover:bg-stone-50/70 transition-colors">
                   <td className="py-3.5 px-4 font-bold whitespace-nowrap">
-                    <div className="text-[13px] font-extrabold text-[#B84A22]">{order.orderNumber}</div>
+                    <Link
+                      to={`/all-orders/${order.id}`}
+                      className="text-[13px] font-extrabold text-[#B84A22] hover:underline inline-flex items-center gap-1 group"
+                      title="View full order details"
+                    >
+                      <span>{order.orderNumber}</span>
+                      <Eye className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#B84A22]" />
+                    </Link>
                     <div className="text-[10px] text-stone-400 font-normal mt-0.5">
                       {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </td>
 
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-[#1A130E]">{order.customerName}</div>
+                    <Link
+                      to={`/all-orders/${order.id}`}
+                      className="font-bold text-[#1A130E] hover:text-[#B84A22] transition-colors block"
+                    >
+                      {order.customerName}
+                    </Link>
                     <div className="text-[11px] text-stone-500 flex items-center gap-1 mt-0.5">
                       <Phone className="w-3 h-3 text-stone-400" />
                       <span>{order.customerPhone || '+353 (01) 485 9210'}</span>
@@ -235,6 +249,15 @@ export function OrdersPage() {
 
                   <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1.5">
+                      <Link
+                        to={`/all-orders/${order.id}`}
+                        className="h-8 px-2.5 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs bg-white"
+                        title="View Full Order Details"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-stone-500" />
+                        <span className="hidden sm:inline">Details</span>
+                      </Link>
+
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}

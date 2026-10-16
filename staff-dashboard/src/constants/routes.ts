@@ -7,6 +7,7 @@ export const ROUTES = {
     ROOT: '/',
     KDS: '/',
     ORDERS: '/all-orders',
+    ORDER_DETAILS: '/all-orders/:orderId',
     PRODUCTS: '/products',
     CMS: '/cms',
     STOCK_86: '/stock-86',
