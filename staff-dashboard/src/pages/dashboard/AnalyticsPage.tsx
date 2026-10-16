@@ -87,14 +87,6 @@ export function AnalyticsPage() {
             Real-time revenue, gross kitchen food margin, and stock wastage performance.
           </p>
         </div>
-
-        <Link
-          to={ROUTES.DASHBOARD.SHIFT_REPORT}
-          className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200/80 text-stone-700 transition-colors inline-flex items-center gap-1.5 self-start sm:self-auto border border-stone-200/60"
-        >
-          <FileText className="w-3.5 h-3.5 text-stone-500" />
-          <span>View Shift Report &rarr;</span>
-        </Link>
       </div>
 
       <div className="space-y-4">

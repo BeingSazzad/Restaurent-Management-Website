@@ -15,7 +15,6 @@ export const ROUTES = {
     TRANSACTIONS: '/transactions',
     CMS: '/cms',
     STOCK_86: '/stock-86',
-    SHIFT_REPORT: '/shift-report',
     ANALYTICS: '/analytics',
     USERS: '/staff-users',
     CHANGE_PASSWORD: '/change-password',

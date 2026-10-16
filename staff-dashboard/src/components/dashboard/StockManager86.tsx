@@ -16,15 +16,12 @@ import {
   AlertOctagon,
   RefreshCw,
   Clock,
-  Minus,
   ChevronDown,
   Utensils,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   toggleDishAvailability,
-  adjustDishPortions,
-  setDishPortions,
   restockAllDishes,
   adjustRawStock,
   restockRawToPar,
@@ -152,6 +149,7 @@ export function StockManager86() {
   const [newIngSupplier, setNewIngSupplier] = useState('');
 
   // Counts
+  const totalDishesCount = dishes.length;
   const soldOutCount = dishes.filter((d) => !d.isAvailable || (d.stockCount || 0) <= 0).length;
   const lowPortionDishesCount = dishes.filter(
     (d) => d.isAvailable && (d.stockCount || 0) > 0 && (d.stockCount || 0) <= (d.lowStockThreshold || 5)
@@ -163,11 +161,9 @@ export function StockManager86() {
   // Filtered Dishes
   const filteredDishes = dishes.filter((dish) => {
     const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
-    const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
 
     if (categoryFilter !== 'all' && dish.category !== categoryFilter) return false;
-    if (statusFilter === 'in_stock' && (isOut || isLow)) return false;
-    if (statusFilter === 'low_stock' && !isLow) return false;
+    if (statusFilter === 'in_stock' && isOut) return false;
     if (statusFilter === 'sold_out' && !isOut) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -566,17 +562,7 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  Healthy Batch
-                </button>
-                <button
-                  onClick={() => setStatusFilter('low_stock')}
-                  className={`h-8 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                    statusFilter === 'low_stock'
-                      ? 'bg-white text-amber-700 font-semibold shadow-xs border border-stone-200/60'
-                      : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
-                  }`}
-                >
-                  Low ({lowPortionDishesCount})
+                  In Stock ({totalDishesCount - soldOutCount})
                 </button>
                 <button
                   onClick={() => setStatusFilter('sold_out')}
@@ -628,7 +614,6 @@ export function StockManager86() {
                       <th className="py-3.5 px-4 font-semibold">Dish &amp; Station</th>
                       <th className="py-3.5 px-4 font-semibold">Prep Station</th>
                       <th className="py-3.5 px-4 font-semibold">Price</th>
-                      <th className="py-3.5 px-4 font-semibold">Live Stock &amp; Prep Batch</th>
                       <th className="py-3.5 px-4 font-semibold">Stock Status</th>
                       <th className="py-3.5 px-4 font-semibold text-right">Instant 86 Kill-Switch</th>
                     </tr>
@@ -636,7 +621,6 @@ export function StockManager86() {
                   <tbody className="divide-y divide-stone-100 text-xs">
                     {paginatedDishes.map((dish) => {
                       const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
-                      const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                       const station = getStationBadge(dish.category);
 
                       return (
@@ -696,141 +680,6 @@ export function StockManager86() {
                             </span>
                           </td>
 
-                          {/* Live Stock & Batch Prep Control */}
-                          <td className="py-3 px-4 whitespace-nowrap">
-                            <div className="flex items-center gap-3">
-                              {/* Quantity Stepper with Editable Box */}
-                              <div className="inline-flex items-center bg-stone-50 border border-stone-200/90 rounded-xl p-0.5 shadow-2xs">
-                                <button
-                                  type="button"
-                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
-                                  disabled={!dish.stockCount || dish.stockCount <= 0}
-                                  className="w-7 h-7 rounded-lg bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-100 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
-                                  title="Deduct 1 portion"
-                                >
-                                  <Minus className="w-3.5 h-3.5" />
-                                </button>
-
-                                <div className="px-1.5 flex items-center gap-1">
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    value={dish.stockCount ?? 0}
-                                    onChange={(e) => {
-                                      const val = parseInt(e.target.value, 10);
-                                      if (!isNaN(val)) {
-                                        dispatch(setDishPortions({ id: dish.id, count: val }));
-                                      }
-                                    }}
-                                    className={`w-11 text-center text-xs font-bold outline-none bg-transparent ${
-                                      isOut ? 'text-rose-600 font-extrabold' : isLow ? 'text-amber-600 font-extrabold' : 'text-stone-900'
-                                    }`}
-                                    title="Click to type exact portion count"
-                                  />
-                                  <span className="text-[10px] text-stone-400 font-medium">pts</span>
-                                </div>
-
-                                <button
-                                  type="button"
-                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
-                                  className="w-7 h-7 rounded-lg bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-100 text-stone-700 flex items-center justify-center cursor-pointer transition-colors"
-                                  title="Add 1 portion"
-                                >
-                                  <Plus className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-
-                              {/* Quick Batch Popover Trigger */}
-                              <div className="relative">
-                                <button
-                                  type="button"
-                                  onClick={() => setActiveBatchDropdownId(activeBatchDropdownId === dish.id ? null : dish.id)}
-                                  className="h-8 px-2.5 rounded-xl bg-white border border-stone-200 hover:border-[#B84A22]/50 hover:bg-orange-50/40 text-stone-700 hover:text-[#B84A22] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
-                                  title="Quick Batch Actions"
-                                >
-                                  <Utensils className="w-3.5 h-3.5 text-[#B84A22]" />
-                                  <span>+ Batch</span>
-                                  <ChevronDown className="w-3 h-3 text-stone-400" />
-                                </button>
-
-                                {activeBatchDropdownId === dish.id && (
-                                  <>
-                                    <div
-                                      className="fixed inset-0 z-40"
-                                      onClick={() => setActiveBatchDropdownId(null)}
-                                    />
-                                    <div className="absolute left-0 mt-1.5 w-52 bg-white border border-stone-200 rounded-xl shadow-lg p-1.5 z-50 text-xs animate-in fade-in zoom-in-95">
-                                      <div className="px-2 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
-                                        Log Kitchen Batch
-                                      </div>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          dispatch(adjustDishPortions({ id: dish.id, delta: 5 }));
-                                          setActiveBatchDropdownId(null);
-                                        }}
-                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
-                                      >
-                                        <span>+5 Half Batch</span>
-                                        <span className="font-bold text-[#B84A22]">+5</span>
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          dispatch(adjustDishPortions({ id: dish.id, delta: 10 }));
-                                          setActiveBatchDropdownId(null);
-                                        }}
-                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
-                                      >
-                                        <span>+10 Standard Pot Cook</span>
-                                        <span className="font-bold text-[#B84A22]">+10</span>
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          dispatch(adjustDishPortions({ id: dish.id, delta: 20 }));
-                                          setActiveBatchDropdownId(null);
-                                        }}
-                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
-                                      >
-                                        <span>+20 Royal Degh (Rush)</span>
-                                        <span className="font-bold text-[#B84A22]">+20</span>
-                                      </button>
-                                      <div className="border-t border-stone-100 my-1" />
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          dispatch(setDishPortions({ id: dish.id, count: dish.lowStockThreshold || 5 }));
-                                          setActiveBatchDropdownId(null);
-                                        }}
-                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 text-stone-600 flex items-center justify-between cursor-pointer"
-                                      >
-                                        <span>Reset to Min Par ({dish.lowStockThreshold || 5})</span>
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          dispatch(adjustDishPortions({ id: dish.id, delta: -1 }));
-                                          setActiveBatchDropdownId(null);
-                                        }}
-                                        disabled={!dish.stockCount || dish.stockCount <= 0}
-                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-rose-50 hover:text-rose-700 text-rose-600 flex items-center justify-between cursor-pointer disabled:opacity-40"
-                                      >
-                                        <span>Record Spoilage / Waste</span>
-                                        <span className="font-bold">-1</span>
-                                      </button>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-
-                              {/* Par status info */}
-                              <div className="text-[11px] text-stone-400">
-                                <span>Par: {dish.lowStockThreshold || 5}</span>
-                              </div>
-                            </div>
-                          </td>
-
                           {/* Stock Status Badge */}
                           <td className="py-3 px-4 whitespace-nowrap">
                             {isOut ? (
@@ -838,15 +687,10 @@ export function StockManager86() {
                                 <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
                                 86&apos;d / Sold Out
                               </span>
-                            ) : isLow ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
-                                <TrendingDown className="w-3.5 h-3.5 text-amber-600" />
-                                Low ({dish.stockCount} left)
-                              </span>
                             ) : (
                               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                Healthy Batch
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                In Stock
                               </span>
                             )}
                           </td>
@@ -854,22 +698,23 @@ export function StockManager86() {
                           {/* Instant 86 Action */}
                           <td className="py-3 px-4 text-right whitespace-nowrap">
                             <button
+                              type="button"
                               onClick={() => dispatch(toggleDishAvailability(dish.id))}
-                              className={`h-9 px-3.5 rounded-xl text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                              className={`h-9 px-4 rounded-xl text-xs font-bold transition-all inline-flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs ${
                                 !isOut
-                                  ? 'bg-stone-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-stone-700 border border-stone-200/90'
-                                  : 'bg-rose-600 hover:bg-emerald-600 text-white shadow-2xs'
+                                  ? 'bg-white hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-stone-700 border border-stone-200/90'
+                                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
                               }`}
                             >
                               {!isOut ? (
                                 <>
-                                  <AlertOctagon className="w-3.5 h-3.5 text-stone-500" />
+                                  <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
                                   <span>Mark 86 (Sold Out)</span>
                                 </>
                               ) : (
                                 <>
-                                  <Check className="w-3.5 h-3.5" />
-                                  <span>Restock Batch</span>
+                                  <Check className="w-3.5 h-3.5 text-white" />
+                                  <span>Restore to Menu</span>
                                 </>
                               )}
                             </button>
@@ -888,7 +733,6 @@ export function StockManager86() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {paginatedDishes.map((dish) => {
                 const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
-                const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                 const station = getStationBadge(dish.category);
 
                 return (
@@ -924,63 +768,43 @@ export function StockManager86() {
                       </div>
                     </div>
 
-                    {/* Portions & Actions Row */}
-                    <div className="pt-2 border-t border-stone-100 flex items-center justify-between gap-2">
-                      <div className="text-xs">
-                        {!isOut ? (
-                          <span className={isLow ? 'text-amber-600 font-bold' : 'text-stone-800 font-bold'}>
-                            {dish.stockCount} portions left
+                    {/* Actions Row */}
+                    <div className="pt-2.5 border-t border-stone-100 flex items-center justify-between gap-2">
+                      <div>
+                        {isOut ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-600">
+                            <AlertOctagon className="w-3.5 h-3.5" />
+                            86&apos;d (Out)
                           </span>
                         ) : (
-                          <span className="text-rose-600 font-bold">86&apos;d (Out)</span>
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            In Stock
+                          </span>
                         )}
                       </div>
 
-                      <div className="flex items-center gap-1.5">
-                        <div className="inline-flex items-center bg-stone-50 border border-stone-200/90 rounded-lg p-0.5 shadow-2xs">
-                          <button
-                            type="button"
-                            onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
-                            disabled={!dish.stockCount || dish.stockCount <= 0}
-                            className="w-6 h-6 rounded bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                            title="Deduct 1"
-                          >
-                            <Minus className="w-3 h-3" />
-                          </button>
-                          <input
-                            type="number"
-                            min="0"
-                            value={dish.stockCount ?? 0}
-                            onChange={(e) => {
-                              const val = parseInt(e.target.value, 10);
-                              if (!isNaN(val)) {
-                                dispatch(setDishPortions({ id: dish.id, count: val }));
-                              }
-                            }}
-                            className="w-10 text-center text-xs font-bold outline-none bg-transparent"
-                            title="Click to type exact count"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
-                            className="w-6 h-6 rounded bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 flex items-center justify-center cursor-pointer"
-                            title="Add 1"
-                          >
-                            <Plus className="w-3 h-3" />
-                          </button>
-                        </div>
-
-                        <button
-                          onClick={() => dispatch(toggleDishAvailability(dish.id))}
-                          className={`h-7 px-2.5 rounded-lg text-xs font-semibold cursor-pointer active:scale-95 transition-all ${
-                            !isOut
-                              ? 'bg-stone-100 hover:bg-rose-50 text-stone-700 border border-stone-200'
-                              : 'bg-rose-600 text-white'
-                          }`}
-                        >
-                          {!isOut ? '86' : 'Restock'}
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => dispatch(toggleDishAvailability(dish.id))}
+                        className={`h-8 px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-2xs ${
+                          !isOut
+                            ? 'bg-stone-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-stone-700 border border-stone-200/90'
+                            : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        }`}
+                      >
+                        {!isOut ? (
+                          <>
+                            <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
+                            <span>Mark 86</span>
+                          </>
+                        ) : (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-white" />
+                            <span>Restore</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
                 );
