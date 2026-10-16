@@ -274,20 +274,18 @@ export function CustomersPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
-                <th className="py-3.5 px-4">Customer</th>
-                <th className="py-3.5 px-4">Contact</th>
-                <th className="py-3.5 px-4">Joined</th>
-                <th className="py-3.5 px-4 text-center">Orders</th>
-                <th className="py-3.5 px-4">Spent</th>
-                <th className="py-3.5 px-4">Favorite Dish</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Action</th>
+                <th className="py-3 px-4">Customer</th>
+                <th className="py-3 px-4">Phone</th>
+                <th className="py-3 px-4 text-center">Orders</th>
+                <th className="py-3 px-4">Total Spent</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 text-[13px]">
               {filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-stone-400">
+                  <td colSpan={6} className="py-12 text-center text-stone-400">
                     <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                     No customers found matching your criteria.
                   </td>
@@ -295,10 +293,10 @@ export function CustomersPage() {
               ) : (
                 filteredCustomers.map((c) => (
                   <tr key={c.id} className="hover:bg-stone-50/70 transition-colors">
-                    {/* Diner Details */}
-                    <td className="py-3.5 px-4">
+                    {/* Customer */}
+                    <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-stone-100 text-stone-800 font-bold flex items-center justify-center shrink-0 border border-stone-200/60">
+                        <div className="w-8 h-8 rounded-lg bg-stone-100 text-stone-700 font-bold text-xs flex items-center justify-center shrink-0 border border-stone-200/60">
                           {c.name
                             .split(' ')
                             .map((n) => n[0])
@@ -308,91 +306,56 @@ export function CustomersPage() {
                         </div>
                         <div>
                           <p className="font-semibold text-stone-900 leading-tight">{c.name}</p>
-                          <p className="text-xs text-stone-500 mt-0.5 flex items-center gap-1">
-                            <Mail className="w-3 h-3 text-stone-400" />
-                            {c.email}
-                          </p>
+                          <p className="text-xs text-stone-500 mt-0.5">{c.email}</p>
                         </div>
                       </div>
                     </td>
 
-                    {/* Contact & Eircode */}
-                    <td className="py-3.5 px-4">
-                      <p className="text-stone-800 font-medium text-xs flex items-center gap-1">
-                        <Phone className="w-3 h-3 text-stone-400" />
-                        {c.phone}
-                      </p>
-                      <p className="text-[11.5px] text-stone-500 mt-0.5 flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-stone-400" />
-                        {c.eircode} · {c.deliveryAddress.split(',')[0]}
-                      </p>
-                    </td>
-
-                    {/* Registered Date */}
-                    <td className="py-3.5 px-4">
-                      <div className="text-stone-600 text-xs flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-stone-400 shrink-0" />
-                        <span>
-                          {new Date(c.registeredAt).toLocaleDateString('en-IE', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
-                        </span>
-                      </div>
-                      <span className="text-[10.5px] text-stone-400 mt-0.5 block">
-                        Last order: {new Date(c.lastOrderDate).toLocaleDateString('en-IE', { month: 'short', day: 'numeric' })}
-                      </span>
+                    {/* Phone */}
+                    <td className="py-3 px-4">
+                      <span className="text-stone-700 text-xs font-medium">{c.phone}</span>
                     </td>
 
                     {/* Orders */}
-                    <td className="py-3.5 px-4 text-center">
-                      <span className="inline-flex items-center justify-center min-w-7 h-7 px-2 rounded-lg bg-stone-100 text-stone-900 font-bold text-xs">
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-md bg-stone-100 text-stone-800 font-bold text-xs">
                         {c.totalOrders}
                       </span>
                     </td>
 
                     {/* Total Spent */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-bold text-stone-900">
+                    <td className="py-3 px-4">
+                      <span className="font-bold text-stone-900 text-xs">
                         {formatCurrency(c.totalSpent)}
                       </span>
                     </td>
 
-                    {/* Favorite Dish */}
-                    <td className="py-3.5 px-4">
-                      <span className="text-xs text-stone-700 bg-stone-50 border border-stone-200/70 px-2.5 py-1 rounded-lg inline-flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-[#F15A24]" />
-                        {c.favoriteDish}
-                      </span>
-                    </td>
-
                     {/* Status */}
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 px-4">
                       {c.status === 'vip' && (
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200 inline-flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200 inline-flex items-center gap-1">
                           <Crown className="w-3 h-3" />
-                          VIP Diner
+                          VIP
                         </span>
                       )}
                       {c.status === 'active' && (
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           Active
                         </span>
                       )}
                       {c.status === 'new' && (
-                        <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
                           New
                         </span>
                       )}
                     </td>
 
-                    {/* Actions */}
-                    <td className="py-3.5 px-4 text-right">
+                    {/* Action */}
+                    <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => setSelectedCustomer(c)}
-                        className="px-3 py-1.5 text-xs font-semibold text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                        className="px-2.5 py-1 text-xs font-semibold text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer border border-stone-200/60"
                       >
                         View Profile
                       </button>
@@ -405,13 +368,13 @@ export function CustomersPage() {
         </div>
       </div>
 
-      {/* Customer Profile Quick Modal */}
+      {/* Customer Profile Modal */}
       {selectedCustomer && (
         <Modal
           isOpen={!!selectedCustomer}
           onClose={() => setSelectedCustomer(null)}
-          title={`Diner Profile: ${selectedCustomer.name}`}
-          subtitle="Account details, order history summary, and delivery location"
+          title={`Customer: ${selectedCustomer.name}`}
+          subtitle="Customer account details and order summary."
           maxWidth="md"
         >
           <div className="space-y-4">
@@ -429,21 +392,29 @@ export function CustomersPage() {
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Registered Since</span>
+                <span className="text-stone-400 block mb-1">Registered</span>
                 <span className="font-semibold text-stone-800">
                   {new Date(selectedCustomer.registeredAt).toLocaleDateString('en-IE', {
                     day: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     year: 'numeric',
                   })}
                 </span>
               </div>
               <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Orders Count</span>
-                <span className="font-semibold text-stone-800">{selectedCustomer.totalOrders} Completed Orders</span>
+                <span className="text-stone-400 block mb-1">Orders</span>
+                <span className="font-semibold text-stone-800">{selectedCustomer.totalOrders} completed</span>
+              </div>
+              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
+                <span className="text-stone-400 block mb-1">Favorite Dish</span>
+                <span className="font-semibold text-stone-800">{selectedCustomer.favoriteDish}</span>
+              </div>
+              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
+                <span className="text-stone-400 block mb-1">Status</span>
+                <span className="font-semibold text-stone-800 uppercase">{selectedCustomer.status}</span>
               </div>
               <div className="p-3 rounded-xl border border-stone-200/80 bg-white col-span-2">
-                <span className="text-stone-400 block mb-1">Delivery Address &amp; Eircode</span>
+                <span className="text-stone-400 block mb-1">Delivery Address</span>
                 <span className="font-semibold text-stone-800">
                   {selectedCustomer.deliveryAddress} ({selectedCustomer.eircode})
                 </span>
@@ -456,7 +427,7 @@ export function CustomersPage() {
                 size="sm"
                 onClick={() => setSelectedCustomer(null)}
               >
-                Close Profile
+                Close
               </Button>
             </div>
           </div>
