@@ -153,18 +153,18 @@ export function StaffManager() {
       )}
 
       {/* Top Banner: Explanation & RBAC Concept */}
-      <div className="bg-gradient-to-r from-[#1A130E] via-[#2A1D16] to-[#1A130E] text-white rounded-2xl p-6 sm:p-7 border border-[#3E2D22] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div className="bg-white text-[#1A130E] rounded-2xl p-6 sm:p-7 border border-stone-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div className="space-y-1.5 max-w-2xl">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#F15A24]/20 text-[#F15A24] border border-[#F15A24]/30 uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#F15A24]/10 text-[#F15A24] border border-[#F15A24]/20 uppercase tracking-wider">
               Role-Based Access Control (RBAC)
             </span>
-            <span className="text-xs text-stone-400">Enterprise Restaurant Security</span>
+            <span className="text-xs text-stone-500 font-medium">Enterprise Restaurant Security</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#1A130E]">
             Staff &amp; Role Permissions Management
           </h2>
-          <p className="text-[13px] text-stone-300 leading-relaxed">
+          <p className="text-[13px] text-stone-600 leading-relaxed">
             Public website signups are restricted to <strong>Customer / Diner</strong> accounts only.
             Kitchen staff, chefs, and shift managers must be granted access here by the Administrator by email.
           </p>
@@ -304,10 +304,10 @@ export function StaffManager() {
           <div className="sm:col-span-2">
             <button
               type="submit"
-              className="w-full h-11 rounded-xl bg-[#1A130E] hover:bg-black text-white text-xs sm:text-[13px] font-bold shadow-xs hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full h-11 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs sm:text-[13px] font-bold shadow-xs hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>Grant Access</span>
-              <Sparkles className="w-3.5 h-3.5 text-[#FBA138]" />
+              <Sparkles className="w-3.5 h-3.5 text-white" />
             </button>
           </div>
         </form>

@@ -407,7 +407,7 @@ export const ProductManager: React.FC = () => {
             onClick={() => setSelectedCategory('all')}
             className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer border ${
               selectedCategory === 'all'
-                ? 'bg-[#1A130E] text-white border-[#1A130E]'
+                ? 'bg-[#F15A24] text-white border-[#F15A24] shadow-xs'
                 : 'bg-white border-stone-200 text-stone-600 hover:border-stone-300'
             }`}
           >

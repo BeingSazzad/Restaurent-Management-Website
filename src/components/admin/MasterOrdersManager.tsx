@@ -146,7 +146,7 @@ export const MasterOrdersManager: React.FC<MasterOrdersManagerProps> = ({ onOpen
               onClick={() => setStatusFilter(tab.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer border ${
                 statusFilter === tab.id
-                  ? 'bg-[#1A130E] text-white border-[#1A130E]'
+                  ? 'bg-[#F15A24] text-white border-[#F15A24] shadow-xs'
                   : 'bg-white border-stone-200 text-stone-600 hover:border-stone-300'
               }`}
             >

@@ -151,11 +151,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('terms')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'terms'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <FileText className="w-3.5 h-3.5 text-[#F15A24]" />
+          <FileText className={`w-3.5 h-3.5 ${activeTab === 'terms' ? 'text-white' : 'text-[#F15A24]'}`} />
           <span>Terms & Conditions</span>
         </button>
 
@@ -163,11 +163,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('privacy')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'privacy'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Shield className="w-3.5 h-3.5 text-emerald-500" />
+          <Shield className={`w-3.5 h-3.5 ${activeTab === 'privacy' ? 'text-white' : 'text-emerald-500'}`} />
           <span>Privacy Policy</span>
         </button>
 
@@ -175,11 +175,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('cookie')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'cookie'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Cookie className="w-3.5 h-3.5 text-amber-500" />
+          <Cookie className={`w-3.5 h-3.5 ${activeTab === 'cookie' ? 'text-white' : 'text-amber-500'}`} />
           <span>Cookie Policy</span>
         </button>
 
@@ -187,11 +187,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('about')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'about'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Info className="w-3.5 h-3.5 text-blue-500" />
+          <Info className={`w-3.5 h-3.5 ${activeTab === 'about' ? 'text-white' : 'text-blue-500'}`} />
           <span>About Page Story</span>
         </button>
 
@@ -199,11 +199,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('faq')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'faq'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <HelpCircle className="w-3.5 h-3.5 text-purple-500" />
+          <HelpCircle className={`w-3.5 h-3.5 ${activeTab === 'faq' ? 'text-white' : 'text-purple-500'}`} />
           <span>FAQ Questions ({cmsData.faq.items.length})</span>
         </button>
 
@@ -211,11 +211,11 @@ export const CmsManager: React.FC = () => {
           onClick={() => setActiveTab('storeInfo')}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'storeInfo'
-              ? 'bg-[#1A130E] text-white shadow-xs'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
               : 'bg-white border border-stone-200 text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Store className="w-3.5 h-3.5 text-orange-500" />
+          <Store className={`w-3.5 h-3.5 ${activeTab === 'storeInfo' ? 'text-white' : 'text-orange-500'}`} />
           <span>Store & Contact Info</span>
         </button>
       </div>
