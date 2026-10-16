@@ -144,9 +144,9 @@ export default function ForgotPasswordPage() {
         {step === 'request' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-3.5">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <KeyRound className="w-6 h-6 stroke-[2.2]" />
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <KeyRound className="w-7 h-7 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -207,9 +207,9 @@ export default function ForgotPasswordPage() {
         {step === 'verify' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-3.5">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <ShieldCheck className="w-7 h-7 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -300,9 +300,9 @@ export default function ForgotPasswordPage() {
         {step === 'reset' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="flex justify-center mb-3.5">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
-                  <Lock className="w-6 h-6 stroke-[2.2]" />
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <Lock className="w-7 h-7 stroke-[2.2]" />
                 </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
