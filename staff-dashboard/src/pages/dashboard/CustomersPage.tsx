@@ -125,7 +125,7 @@ export function CustomersPage() {
       {/* Header */}
       <PageHeader
         title="Customers"
-        description="Registered customer list and order history."
+        description="Diner accounts and order history."
         action={
           <Button
             size="sm"
@@ -133,18 +133,18 @@ export function CustomersPage() {
             leftIcon={<Plus className="w-3.5 h-3.5" />}
             onClick={() => setIsAddModalOpen(true)}
           >
-            Add Diner Account
+            Add Customer
           </Button>
         }
       />
 
-      {/* Executive KPI Cards */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Registered Diners */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Registered Diners
+              Total Diners
             </span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 text-[#F15A24] flex items-center justify-center shrink-0">
               <Users className="w-4 h-4" />
@@ -154,17 +154,17 @@ export function CustomersPage() {
             <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{kpis.total}</span>
             <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
-              +23.5% Growth
+              +23.5%
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Verified Dublin accounts</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">Registered accounts</p>
         </div>
 
         {/* VIP Loyalty Diners */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              VIP Loyalty Diners
+              VIP Diners
             </span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
               <Crown className="w-4 h-4" />
@@ -173,17 +173,17 @@ export function CustomersPage() {
           <div className="mt-3 flex items-baseline gap-2.5">
             <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{kpis.vips}</span>
             <span className="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
-              3+ Repeat Orders
+              3+ orders
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">High retention diner tier</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">High retention</p>
         </div>
 
         {/* Avg Lifetime Spend */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Avg Lifetime Spend
+              Avg Spend
             </span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <ShoppingBag className="w-4 h-4" />
@@ -192,17 +192,17 @@ export function CustomersPage() {
           <div className="mt-3 flex items-baseline gap-2.5">
             <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{formatCurrency(kpis.avgSpend)}</span>
             <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              +14.2% LTV
+              +14.2%
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Net customer value</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">Per customer</p>
         </div>
 
         {/* Dublin Delivery Zones */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Delivery Coverage
+              Zones
             </span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
               <MapPin className="w-4 h-4" />
@@ -211,7 +211,7 @@ export function CustomersPage() {
           <div className="mt-3 flex items-baseline gap-2.5">
             <span className="text-2xl font-extrabold text-stone-900 tracking-tight">6 Zones</span>
             <span className="text-xs font-medium text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full">
-              D1 · D2 · D4 · D6 · D8
+              Dublin
             </span>
           </div>
           <p className="text-[11.5px] text-stone-400 mt-1">Active delivery radius</p>
@@ -225,7 +225,7 @@ export function CustomersPage() {
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by diner name, email, phone, or address..."
+            placeholder="Search customers by name, phone, or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-stone-50 hover:bg-stone-100/70 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13.5px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
@@ -243,10 +243,10 @@ export function CustomersPage() {
         {/* Filter Pills */}
         <div className="flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto">
           {[
-            { id: 'all', label: 'All Diners', count: customers.length },
-            { id: 'vip', label: 'VIP Loyalty', count: customers.filter((c) => c.status === 'vip').length },
+            { id: 'all', label: 'All', count: customers.length },
+            { id: 'vip', label: 'VIP', count: customers.filter((c) => c.status === 'vip').length },
             { id: 'active', label: 'Active', count: customers.filter((c) => c.status === 'active').length },
-            { id: 'new', label: 'New Signups', count: customers.filter((c) => c.status === 'new').length },
+            { id: 'new', label: 'New', count: customers.filter((c) => c.status === 'new').length },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -274,14 +274,14 @@ export function CustomersPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
-                <th className="py-3.5 px-4">Diner Details</th>
-                <th className="py-3.5 px-4">Contact &amp; Eircode</th>
-                <th className="py-3.5 px-4">Registered Date</th>
+                <th className="py-3.5 px-4">Customer</th>
+                <th className="py-3.5 px-4">Contact</th>
+                <th className="py-3.5 px-4">Joined</th>
                 <th className="py-3.5 px-4 text-center">Orders</th>
-                <th className="py-3.5 px-4">Total Spent</th>
+                <th className="py-3.5 px-4">Spent</th>
                 <th className="py-3.5 px-4">Favorite Dish</th>
                 <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 text-[13px]">
@@ -463,12 +463,12 @@ export function CustomersPage() {
         </Modal>
       )}
 
-      {/* Add Diner Account Modal */}
+      {/* Add Customer Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="Add Customer Account"
-        subtitle="Register a new customer account in the Amber Spice directory"
+        title="Add Customer"
+        subtitle="Enter customer details."
         maxWidth="md"
       >
         <form onSubmit={handleAddSubmit} className="space-y-3.5">

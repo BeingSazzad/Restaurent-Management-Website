@@ -77,7 +77,7 @@ export function TransactionsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Transactions"
-        description="Payment records and settled revenue."
+        description="Payment records and revenue."
         action={
           <Button
             size="sm"
@@ -85,7 +85,7 @@ export function TransactionsPage() {
             leftIcon={<Printer className="w-3.5 h-3.5" />}
             onClick={() => window.print()}
           >
-            Export Ledger
+            Export
           </Button>
         }
       />
@@ -96,7 +96,7 @@ export function TransactionsPage() {
         <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Settled Volume
+              Total Revenue
             </span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <Receipt className="w-4 h-4" />
@@ -111,14 +111,14 @@ export function TransactionsPage() {
               +18.4%
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Reconciled restaurant takings</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">Settled payments</p>
         </div>
 
         {/* Digital / Card Settlements */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Card &amp; Digital Wallets
+              Card &amp; Digital
             </span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
               <CreditCard className="w-4 h-4" />
@@ -129,17 +129,17 @@ export function TransactionsPage() {
               {formatCurrency(kpis.digitalVolume)}
             </span>
             <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-              {kpis.digitalPct}% Cashless
+              {kpis.digitalPct}% Digital
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Stripe &amp; Apple Pay gateway</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">Online payments</p>
         </div>
 
         {/* Cash Settlements */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Cash on Delivery/Till
+              Cash
             </span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
               <Banknote className="w-4 h-4" />
@@ -153,14 +153,14 @@ export function TransactionsPage() {
               {100 - kpis.digitalPct}% Cash
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">In-person &amp; driver drop-off</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">Cash payments</p>
         </div>
 
         {/* Settlement Health */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Settlement Rate
+              Settlement
             </span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
               <ShieldCheck className="w-4 h-4" />
@@ -172,7 +172,7 @@ export function TransactionsPage() {
               0 Disputes
             </span>
           </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Zero chargeback risk</p>
+          <p className="text-[11.5px] text-stone-400 mt-1">No disputes</p>
         </div>
       </div>
 
@@ -183,7 +183,7 @@ export function TransactionsPage() {
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by TXN reference, Order #, or diner name..."
+            placeholder="Search transactions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-stone-50 hover:bg-stone-100/70 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13.5px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
@@ -201,10 +201,10 @@ export function TransactionsPage() {
         {/* Tender Method Filters */}
         <div className="flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto">
           {[
-            { id: 'all', label: 'All Payments' },
+            { id: 'all', label: 'All' },
             { id: 'apple_pay', label: 'Apple Pay' },
-            { id: 'card', label: 'Credit/Debit Card' },
-            { id: 'cash', label: 'Cash Tender' },
+            { id: 'card', label: 'Card' },
+            { id: 'cash', label: 'Cash' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -227,13 +227,13 @@ export function TransactionsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
-                <th className="py-3.5 px-4">Transaction Ref</th>
-                <th className="py-3.5 px-4">Order Ref</th>
-                <th className="py-3.5 px-4">Customer Name</th>
-                <th className="py-3.5 px-4">Payment Method</th>
+                <th className="py-3.5 px-4">TXN ID</th>
+                <th className="py-3.5 px-4">Order #</th>
+                <th className="py-3.5 px-4">Customer</th>
+                <th className="py-3.5 px-4">Method</th>
                 <th className="py-3.5 px-4">Amount</th>
-                <th className="py-3.5 px-4">Settlement Status</th>
-                <th className="py-3.5 px-4">Timestamp</th>
+                <th className="py-3.5 px-4">Status</th>
+                <th className="py-3.5 px-4">Time</th>
                 <th className="py-3.5 px-4 text-right">Receipt</th>
               </tr>
             </thead>
@@ -348,8 +348,8 @@ export function TransactionsPage() {
         <Modal
           isOpen={!!activeSlipTxn}
           onClose={() => setActiveSlipTxn(null)}
-          title={`Payment Receipt: ${activeSlipTxn.id}`}
-          subtitle="Dublin Point of Sale reconciled transaction proof"
+          title={`Receipt: ${activeSlipTxn.id}`}
+          subtitle="Transaction payment details."
           maxWidth="md"
         >
           <div className="space-y-4">

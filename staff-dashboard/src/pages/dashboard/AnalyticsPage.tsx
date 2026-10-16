@@ -79,7 +79,7 @@ export function AnalyticsPage() {
             Analytics
           </h1>
           <p className="text-xs text-stone-500 mt-0.5">
-            Revenue, orders, customer growth, and bestsellers.
+            Revenue, orders, and top dishes.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export function AnalyticsPage() {
             }`}
           >
             <Printer className="w-3.5 h-3.5 text-stone-600" />
-            <span>Shift Z-Report</span>
+            <span>Shift Report</span>
           </button>
         </div>
       </div>
@@ -120,7 +120,7 @@ export function AnalyticsPage() {
             <div className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-                  Total Income
+                  Revenue
                 </span>
                 <CreditCard className="w-4 h-4 text-emerald-600" />
               </div>
@@ -139,7 +139,7 @@ export function AnalyticsPage() {
             <div className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-                  Total Orders
+                  Orders
                 </span>
                 <ShoppingBag className="w-4 h-4 text-[#F15A24]" />
               </div>
@@ -154,11 +154,11 @@ export function AnalyticsPage() {
               </div>
             </div>
 
-            {/* Registered Diners */}
+            {/* Diners */}
             <div className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-                  Registered Diners
+                  Customers
                 </span>
                 <Users className="w-4 h-4 text-purple-600" />
               </div>
@@ -191,7 +191,7 @@ export function AnalyticsPage() {
                     <th className="py-2 px-3 w-10 text-center">#</th>
                     <th className="py-2 px-3">Dish</th>
                     <th className="py-2 px-3">Category</th>
-                    <th className="py-2 px-3 text-center">Portions Sold</th>
+                    <th className="py-2 px-3 text-center">Sold</th>
                     <th className="py-2 px-3 text-right">Revenue</th>
                   </tr>
                 </thead>

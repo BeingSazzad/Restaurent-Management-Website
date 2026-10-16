@@ -114,7 +114,7 @@ export function StaffManager() {
       {/* Page Header with Invite Admin Button */}
       <PageHeader
         title="Staff & Roles"
-        description="Kitchen team, shift status, and admin invites."
+        description="Team members, roles, and shift status."
         action={
           <Button
             size="sm"
@@ -122,19 +122,19 @@ export function StaffManager() {
             leftIcon={<UserPlus className="w-3.5 h-3.5" />}
             onClick={() => setIsInviteModalOpen(true)}
           >
-            Invite Admin / Staff
+            Invite Staff
           </Button>
         }
       />
 
-      {/* Executive Staff Summary Bar ("staff koyjon") */}
+      {/* Staff Summary Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
             Total Staff
           </span>
-          <span className="text-xl font-bold text-stone-900 mt-1 block">{counts.total} Members</span>
-          <span className="text-[10.5px] text-stone-400">Dublin brigade</span>
+          <span className="text-xl font-bold text-stone-900 mt-1 block">{counts.total}</span>
+          <span className="text-[10.5px] text-stone-400">Registered staff</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
@@ -143,41 +143,41 @@ export function StaffManager() {
           </span>
           <div className="flex items-center gap-1.5 mt-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xl font-bold text-emerald-600">{counts.onDuty} Active</span>
+            <span className="text-xl font-bold text-emerald-600">{counts.onDuty}</span>
           </div>
-          <span className="text-[10.5px] text-stone-400">Current shift</span>
+          <span className="text-[10.5px] text-stone-400">Active today</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
             Admins
           </span>
-          <span className="text-xl font-bold text-purple-700 mt-1 block">{counts.admins} Admins</span>
-          <span className="text-[10.5px] text-stone-400">Full platform access</span>
+          <span className="text-xl font-bold text-purple-700 mt-1 block">{counts.admins}</span>
+          <span className="text-[10.5px] text-stone-400">Full access</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Kitchen Chefs
+            Chefs
           </span>
-          <span className="text-xl font-bold text-amber-700 mt-1 block">{counts.chefs} Chefs</span>
-          <span className="text-[10.5px] text-stone-400">KDS station leads</span>
+          <span className="text-xl font-bold text-amber-700 mt-1 block">{counts.chefs}</span>
+          <span className="text-[10.5px] text-stone-400">Kitchen leads</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            Expo Dispatch
+            Expo
           </span>
-          <span className="text-xl font-bold text-blue-700 mt-1 block">{counts.expo} Expo</span>
-          <span className="text-[10.5px] text-stone-400">Packaging &amp; drivers</span>
+          <span className="text-xl font-bold text-blue-700 mt-1 block">{counts.expo}</span>
+          <span className="text-[10.5px] text-stone-400">Packaging</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
             Line Staff
           </span>
-          <span className="text-xl font-bold text-stone-700 mt-1 block">{counts.staff} Staff</span>
-          <span className="text-[10.5px] text-stone-400">Food prep &amp; grill</span>
+          <span className="text-xl font-bold text-stone-700 mt-1 block">{counts.staff}</span>
+          <span className="text-[10.5px] text-stone-400">Cooks &amp; prep</span>
         </div>
       </div>
 
@@ -314,12 +314,12 @@ export function StaffManager() {
         ))}
       </div>
 
-      {/* Invite Admin & Staff Modal */}
+      {/* Invite Staff Modal */}
       <Modal
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
-        title="Invite Admin or Kitchen Staff"
-        subtitle="Issue an invitation link with secure temporary access credentials"
+        title="Invite Team Member"
+        subtitle="Send invitation and assign role."
         maxWidth="md"
       >
         <form onSubmit={handleInviteStaff} className="space-y-4">
@@ -331,7 +331,7 @@ export function StaffManager() {
             required
           />
           <Input
-            label="Official Staff Email"
+            label="Email Address"
             type="email"
             placeholder="e.g. liam@amberspice.ie"
             value={newEmail}
@@ -339,14 +339,14 @@ export function StaffManager() {
             required
           />
           <Input
-            label="Contact Mobile (Optional)"
+            label="Phone (Optional)"
             placeholder="e.g. +353 87 234 5678"
             value={newPhone}
             onChange={(e) => setNewPhone(e.target.value)}
           />
 
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-stone-700">Access Tier / Role</label>
+            <label className="block text-xs font-semibold text-stone-700">Role</label>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <label
                 className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${

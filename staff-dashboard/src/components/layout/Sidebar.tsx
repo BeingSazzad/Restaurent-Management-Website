@@ -38,7 +38,7 @@ export function Sidebar() {
       allowedRoles: ['admin', 'expo'],
     },
     {
-      name: '86 Inventory',
+      name: 'Inventory & 86',
       path: ROUTES.DASHBOARD.STOCK_86,
       icon: PackageX,
       allowedRoles: ['admin', 'chef', 'expo', 'staff'],
@@ -65,7 +65,7 @@ export function Sidebar() {
       allowedRoles: ['admin'],
     },
     {
-      name: 'Products',
+      name: 'Menu & Products',
       path: ROUTES.DASHBOARD.PRODUCTS,
       icon: Utensils,
       allowedRoles: ['admin'],

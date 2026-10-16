@@ -53,9 +53,9 @@ export function OrdersPage() {
   const getStatusBadge = (status: OrderStatus) => {
     switch (status) {
       case 'new':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-700">New Order</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-700">New</span>;
       case 'preparing':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-orange-100 text-[#B84A22]">Kitchen Prep</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-orange-100 text-[#B84A22]">Preparing</span>;
       case 'ready':
         return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">Ready</span>;
       case 'completed':
@@ -73,40 +73,40 @@ export function OrdersPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
           <div className="flex items-center justify-between text-stone-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Total Revenue</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Revenue</span>
             <div className="w-8 h-8 rounded-xl bg-orange-50 text-[#B84A22] font-bold flex items-center justify-center text-xs shrink-0">
               €
             </div>
           </div>
           <div className="text-2xl font-extrabold tracking-tight">€{totalRevenue.toFixed(2)}</div>
-          <div className="text-[11px] text-stone-500 mt-1">Confirmed orders volume</div>
+          <div className="text-[11px] text-stone-500 mt-1">Total sales</div>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
           <div className="flex items-center justify-between text-stone-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Active Pipeline</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Active Orders</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="text-2xl font-extrabold text-blue-600 tracking-tight">{activeOrders.length}</div>
-          <div className="text-[11px] text-stone-500 mt-1">Live in prep or handover</div>
+          <div className="text-[11px] text-stone-500 mt-1">Kitchen &amp; dispatch</div>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
           <div className="flex items-center justify-between text-stone-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Completed Tickets</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Completed</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="text-2xl font-extrabold text-emerald-600 tracking-tight">{completedOrders.length}</div>
-          <div className="text-[11px] text-stone-500 mt-1">Successfully fulfilled</div>
+          <div className="text-[11px] text-stone-500 mt-1">Fulfilled orders</div>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
           <div className="flex items-center justify-between text-stone-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Average Ticket</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Avg Order</span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
               <TrendingUp className="w-4 h-4" />
             </div>
@@ -114,7 +114,7 @@ export function OrdersPage() {
           <div className="text-2xl font-extrabold tracking-tight">
             €{orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : '0.00'}
           </div>
-          <div className="text-[11px] text-stone-500 mt-1">Average order value (AOV)</div>
+          <div className="text-[11px] text-stone-500 mt-1">Average per ticket</div>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ export function OrdersPage() {
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search Order #, customer name, phone, Eircode..."
+            placeholder="Search orders..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-xl pl-10 pr-4 text-xs text-[#1A130E] placeholder:text-stone-400 outline-none transition-colors"
@@ -135,7 +135,7 @@ export function OrdersPage() {
         {/* Status Filter */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
           {[
-            { id: 'all', label: 'All Orders' },
+            { id: 'all', label: 'All' },
             { id: 'new', label: 'New' },
             { id: 'preparing', label: 'Prep' },
             { id: 'ready', label: 'Ready' },

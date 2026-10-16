@@ -52,6 +52,15 @@ export function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDish, setEditingDish] = useState<DishItem | null>(null);
 
+  // Sync menu state when updated from Inventory & 86 kill-switch or other tabs
+  React.useEffect(() => {
+    const handleSync = () => {
+      setDishes(getStoredMenu());
+    };
+    window.addEventListener('amber_spice_menu_updated', handleSync);
+    return () => window.removeEventListener('amber_spice_menu_updated', handleSync);
+  }, []);
+
   // Form State
   const [formName, setFormName] = useState('');
   const [formCategory, setFormCategory] = useState<DishItem['category']>('biryani');
@@ -164,13 +173,13 @@ export function ProductsPage() {
       <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold flex items-center gap-2 text-[#1A130E]">
-            <span>Menu & Product Management</span>
+            <span>Menu &amp; Products</span>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-50 text-[#B84A22] font-semibold border border-orange-200/60">
               {dishes.length} Items
             </span>
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
-            Add new menu items, upload food photography, adjust prices, and manage live stock.
+            Customer-facing menu dishes, pricing, categories, and live availability.
           </p>
         </div>
 
@@ -179,7 +188,7 @@ export function ProductsPage() {
           className="h-10 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>Add New Product</span>
+          <span>Add Product</span>
         </button>
       </div>
 
@@ -189,7 +198,7 @@ export function ProductsPage() {
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search dish by name or category..."
+            placeholder="Search dishes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-white border border-stone-200 focus:border-[#B84A22] rounded-xl pl-10 pr-4 text-xs text-[#1A130E] placeholder:text-stone-400 outline-none shadow-2xs transition-colors"
@@ -292,7 +301,7 @@ export function ProductsPage() {
           <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-stone-200 shadow-2xl text-[#1A130E]">
             <div className="p-5 border-b border-stone-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-xs z-10">
               <h3 className="font-bold text-base text-[#1A130E]">
-                {editingDish ? 'Edit Dish & Media' : 'Add New Restaurant Dish'}
+                {editingDish ? 'Edit Dish' : 'Add Dish'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -306,7 +315,7 @@ export function ProductsPage() {
               {/* Photo Upload */}
               <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-600">
-                  Dish Photography
+                  Dish Image
                 </label>
                 <div className="flex items-center gap-4">
                   <div className="w-24 h-24 rounded-xl overflow-hidden bg-white border border-stone-200 shrink-0 shadow-2xs">

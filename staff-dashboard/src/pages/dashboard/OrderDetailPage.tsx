@@ -73,31 +73,31 @@ export function OrderDetailPage() {
     switch (status) {
       case 'new':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700 border border-blue-200">
-            ● New Order (Pending Prep)
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+            New
           </span>
         );
       case 'preparing':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-orange-100 text-[#B84A22] border border-orange-200 flex items-center gap-1.5">
-            <Flame className="w-3.5 h-3.5 animate-pulse" /> Kitchen Cooking
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-[#B84A22] border border-orange-200 flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5" /> Preparing
           </span>
         );
       case 'ready':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" /> Ready for Dispatch
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5" /> Ready
           </span>
         );
       case 'completed':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" /> Fulfilled & Closed
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5" /> Completed
           </span>
         );
       case 'cancelled':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
             Cancelled
           </span>
         );
@@ -118,10 +118,10 @@ export function OrderDetailPage() {
 
   // Calculate timeline states
   const stages: { key: OrderStatus; label: string; desc: string }[] = [
-    { key: 'new', label: 'Order Received', desc: 'Sent to KDS line' },
-    { key: 'preparing', label: 'Kitchen Prep', desc: 'Cooking at station' },
-    { key: 'ready', label: 'Ready / Packaged', desc: 'Awaiting courier / pickup' },
-    { key: 'completed', label: 'Completed', desc: 'Handed to diner' },
+    { key: 'new', label: 'Received', desc: 'Order placed' },
+    { key: 'preparing', label: 'Preparing', desc: 'In kitchen' },
+    { key: 'ready', label: 'Ready', desc: 'For dispatch' },
+    { key: 'completed', label: 'Completed', desc: 'Fulfilled' },
   ];
 
   const currentStageIndex = stages.findIndex((s) => s.key === order.status);
@@ -237,16 +237,16 @@ export function OrderDetailPage() {
 
       {/* 3. THREE SIDE-BY-SIDE CARDS: Customer Profile | Fulfillment Details | Financial Ledger */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
-        {/* Customer Profile Card */}
+        {/* Customer Card */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
               <h3 className="font-bold text-sm text-[#1A130E] flex items-center gap-2">
                 <User className="w-4 h-4 text-stone-500" />
-                <span>Customer Profile</span>
+                <span>Customer</span>
               </h3>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Verified Diner
+                Verified
               </span>
             </div>
 
@@ -281,7 +281,7 @@ export function OrderDetailPage() {
           </div>
         </div>
 
-        {/* Fulfillment & Delivery Destination Card */}
+        {/* Fulfillment Card */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
@@ -291,7 +291,7 @@ export function OrderDetailPage() {
                 ) : (
                   <Store className="w-4 h-4 text-emerald-600" />
                 )}
-                <span>Fulfillment Details</span>
+                <span>Fulfillment</span>
               </h3>
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-100 text-stone-700">
                 {order.fulfillmentType}
@@ -349,16 +349,16 @@ export function OrderDetailPage() {
           )}
         </div>
 
-        {/* Payment & Financial Ledger Card */}
+        {/* Payment Card */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
               <h3 className="font-bold text-sm text-[#1A130E] flex items-center gap-2">
                 <Receipt className="w-4 h-4 text-emerald-600" />
-                <span>Financial Ledger</span>
+                <span>Payment</span>
               </h3>
               <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Settled / Confirmed
+                Settled
               </span>
             </div>
 
@@ -411,14 +411,14 @@ export function OrderDetailPage() {
             <div>
               <h2 className="font-bold text-base text-[#1A130E] flex items-center gap-2">
                 <UtensilsCrossed className="w-4 h-4 text-[#B84A22]" />
-                <span>Ordered Dishes ({order.items.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                <span>Items ({order.items.reduce((s, i) => s + i.quantity, 0)})</span>
               </h2>
               <p className="text-xs text-stone-500 mt-0.5">
-                Itemized dishes, selected modifiers, accompaniments and kitchen notes
+                Dishes and notes.
               </p>
             </div>
             <span className="px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 text-xs font-bold">
-              EST. Prep: {order.estimatedMinutes || 20}m
+              EST. {order.estimatedMinutes || 20}m
             </span>
           </div>
 

@@ -60,3 +60,17 @@ export interface KdsOrder {
   specialNotes?: string;
   paymentMethod: string;
 }
+
+export interface RawIngredientItem {
+  id: string;
+  name: string;
+  category: 'protein' | 'dairy' | 'grain' | 'spice_produce' | 'packaging' | 'beverage';
+  categoryLabel: string;
+  currentStock: number;
+  parLevel: number;
+  unit: string;
+  unitCost: number;
+  supplier: string;
+  lastRestocked: string;
+  status: 'healthy' | 'low_stock' | 'out_of_stock';
+}

@@ -175,7 +175,7 @@ export const CmsManager: React.FC = () => {
             Content Management System
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
-            Manage website policies, legal documentation, and customer FAQs.
+            Website policies and FAQs.
           </p>
         </div>
 
