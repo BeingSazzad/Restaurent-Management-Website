@@ -114,10 +114,10 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-4 py-14 sm:py-20 bg-[#FBF9F6]">
-      <div className="w-full max-w-md p-8 sm:p-10 rounded-[20px] bg-white border border-[#EFEAE4] shadow-[0_4px_24px_rgba(26,19,14,0.03)]">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 sm:py-24">
+      <div className="w-full max-w-md p-7 sm:p-9 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs">
         {/* Step Progression Indicators */}
-        <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex items-center justify-center gap-2 mb-7">
           <div
             className={`h-1.5 rounded-full transition-all duration-300 ${
               step === 'request' ? 'w-8 bg-[#B84A22]' : 'w-2 bg-[#E6E1DC]'
@@ -144,13 +144,15 @@ export default function ForgotPasswordPage() {
         {step === 'request' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] border border-orange-200/60 flex items-center justify-center mx-auto mb-3.5 shadow-2xs">
-                <KeyRound className="w-6 h-6 stroke-[2]" />
+              <div className="flex justify-center mb-3.5">
+                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <KeyRound className="w-6 h-6 stroke-[2.2]" />
+                </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
                 Forgot Password?
               </h1>
-              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
+              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed max-w-xs mx-auto">
                 Enter your registered email address and we&apos;ll send you a 6-digit verification code.
               </p>
             </div>
@@ -162,27 +164,27 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            <form onSubmit={handleRequestCode} className="space-y-4">
+            <form onSubmit={handleRequestCode} className="flex flex-col gap-4">
               <div>
                 <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#9E9790]" />
+                <div className="relative flex items-center">
+                  <Mail className="w-4.5 h-4.5 absolute left-3.5 text-[#9E9790] pointer-events-none" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@dublin.ie"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-10 pr-3.5 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
+                    className="w-full h-12 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-11 pr-4 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-2"
+                className="w-full h-12 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-1"
               >
                 <span>Send Verification Code</span>
                 <ArrowRight className="w-4 h-4" />
@@ -205,13 +207,15 @@ export default function ForgotPasswordPage() {
         {step === 'verify' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] border border-orange-200/60 flex items-center justify-center mx-auto mb-3.5 shadow-2xs">
-                <ShieldCheck className="w-6 h-6 stroke-[2]" />
+              <div className="flex justify-center mb-3.5">
+                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
+                </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
                 Verify Your Email
               </h1>
-              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
+              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed max-w-xs mx-auto">
                 We sent a 6-digit code to <strong className="text-[#1A130E]">{email}</strong>
               </p>
             </div>
@@ -223,13 +227,13 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            <form onSubmit={handleVerifyCode} className="space-y-4">
+            <form onSubmit={handleVerifyCode} className="flex flex-col gap-4">
               {/* 6 Digit OTP Inputs */}
               <div>
                 <label className="block text-center text-[#1A130E] font-semibold mb-2 text-[13px]">
                   Enter 6-Digit Code
                 </label>
-                <div className="flex justify-between gap-2 sm:gap-2.5">
+                <div className="flex justify-between gap-1.5 sm:gap-2">
                   {otp.map((digit, idx) => (
                     <input
                       key={idx}
@@ -242,7 +246,7 @@ export default function ForgotPasswordPage() {
                       value={digit}
                       onChange={(e) => handleOtpChange(idx, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                      className="w-11 sm:w-12 h-12 sm:h-13 text-center text-xl font-bold bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl outline-none transition-all shadow-2xs text-[#1A130E]"
+                      className="w-11 sm:w-12 h-12 sm:h-13 text-center text-xl font-bold bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl outline-none transition-all shadow-xs text-[#1A130E]"
                     />
                   ))}
                 </div>
@@ -253,10 +257,10 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={handleFillDemoCode}
-                  className="px-2.5 py-1.5 rounded-lg bg-orange-50 text-[#B84A22] font-semibold hover:bg-orange-100 transition-colors cursor-pointer border border-orange-200/60 inline-flex items-center gap-1"
+                  className="px-2.5 py-1.5 rounded-lg bg-orange-50 text-[#B84A22] font-semibold hover:bg-orange-100 transition-colors cursor-pointer border border-orange-200/60 inline-flex items-center gap-1.5"
                 >
-                  <Sparkles className="w-3 h-3" />
-                  <span>Auto-fill Demo Code (482910)</span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Auto-fill Demo (482910)</span>
                 </button>
 
                 <button
@@ -265,14 +269,14 @@ export default function ForgotPasswordPage() {
                   disabled={isResending}
                   className="text-[#7A746E] hover:text-[#B84A22] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                 >
-                  <RefreshCw className={`w-3 h-3 ${isResending ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
                   <span>{isResending ? 'Sending...' : 'Resend'}</span>
                 </button>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-2"
+                className="w-full h-12 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-1"
               >
                 <span>Verify Code</span>
                 <ArrowRight className="w-4 h-4" />
@@ -296,13 +300,15 @@ export default function ForgotPasswordPage() {
         {step === 'reset' && (
           <div className="animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#B84A22] border border-orange-200/60 flex items-center justify-center mx-auto mb-3.5 shadow-2xs">
-                <Lock className="w-6 h-6 stroke-[2]" />
+              <div className="flex justify-center mb-3.5">
+                <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shadow-xs shrink-0">
+                  <Lock className="w-6 h-6 stroke-[2.2]" />
+                </div>
               </div>
               <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
                 Create New Password
               </h1>
-              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed">
+              <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed max-w-xs mx-auto">
                 Choose a new, strong password with at least 6 characters for your account.
               </p>
             </div>
@@ -314,24 +320,24 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            <form onSubmit={handleResetPassword} className="space-y-4">
+            <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
               <div>
                 <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
                   New Password
                 </label>
-                <div className="relative">
+                <div className="relative flex items-center">
                   <input
                     type={showNewPassword ? 'text' : 'password'}
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-4 pr-11 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
+                    className="w-full h-12 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-4 pr-11 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9E9790] hover:text-[#1A130E] p-1 cursor-pointer transition-colors"
+                    className="absolute right-3 text-[#9E9790] hover:text-[#1A130E] p-1.5 cursor-pointer transition-colors"
                   >
                     {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -342,45 +348,57 @@ export default function ForgotPasswordPage() {
                 <label className="block text-[#1A130E] font-semibold mb-1.5 text-[13px]">
                   Confirm New Password
                 </label>
-                <div className="relative">
+                <div className="relative flex items-center">
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
-                    className="w-full bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-4 pr-11 py-2.5 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
+                    className="w-full h-12 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-4 pr-11 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9E9790] hover:text-[#1A130E] p-1 cursor-pointer transition-colors"
+                    className="absolute right-3 text-[#9E9790] hover:text-[#1A130E] p-1.5 cursor-pointer transition-colors"
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              <div className="text-[12px] text-[#8C8681] pt-0.5">
+              <div className="text-[12px] text-[#8C8681]">
                 <span>Must be at least 6 characters long</span>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-2"
+                className="w-full h-12 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-1"
               >
                 <span>Reset Password</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
+
+            <div className="mt-6 pt-5 border-t border-[#F2EFE9] text-center">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#7A746E] hover:text-[#1A130E] transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Cancel and Back to Sign In</span>
+              </Link>
+            </div>
           </div>
         )}
 
         {/* ================= STEP 4: SUCCESS ================= */}
         {step === 'success' && (
           <div className="animate-in fade-in zoom-in-95 duration-200 text-center py-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto mb-4 shadow-xs">
-              <CheckCircle2 className="w-6 h-6 stroke-[2]" />
+            <div className="flex justify-center mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0FA958] to-[#2ecc71] text-white flex items-center justify-center shadow-xs shrink-0">
+                <CheckCircle2 className="w-7 h-7 stroke-[2.5]" />
+              </div>
             </div>
 
             <h1 className="text-2xl font-bold text-[#1A130E] tracking-tight">
@@ -394,7 +412,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="button"
                 onClick={() => router.push('/login')}
-                className="w-full py-3.5 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+                className="w-full h-12 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
               >
                 <span>Proceed to Sign In</span>
                 <ArrowRight className="w-4 h-4" />
