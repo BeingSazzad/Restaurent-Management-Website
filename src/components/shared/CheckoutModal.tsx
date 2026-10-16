@@ -179,8 +179,8 @@ export const CheckoutModal: React.FC = () => {
                 <MapPin className="w-4 h-4" /> 2. Delivery Address
               </h3>
               <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="col-span-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2">
                     <label className="block text-[13px] font-semibold text-[#1A130E] mb-1">Street Address</label>
                     <input
                       type="text"
