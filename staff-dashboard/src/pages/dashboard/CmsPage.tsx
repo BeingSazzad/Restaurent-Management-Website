@@ -87,6 +87,7 @@ export interface CmsSocialLinks {
   tripadvisor?: string;
   googleMaps?: string;
   whatsapp?: string;
+  phone?: string;
 }
 
 export interface CmsData {
@@ -196,6 +197,7 @@ const DEFAULT_SOCIAL_LINKS: CmsSocialLinks = {
   tripadvisor: 'https://tripadvisor.com/Restaurant_Review-Dublin_Amber_Spice',
   googleMaps: 'https://maps.google.com/?q=Amber+Spice+18+South+William+St+Dublin',
   whatsapp: '+35314859210',
+  phone: '+353 (01) 485 9210',
 };
 
 const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
@@ -391,6 +393,85 @@ const contentToSections = (content: string): CmsSection[] => {
     };
   });
 };
+
+// Authentic Official Brand Visual Icons for Social & Online Profiles
+const FacebookOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 rounded-full shadow-2xs" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="#1877F2" />
+    <path
+      fill="#FFFFFF"
+      d="M15.14 12.07h-2.25v8.38c-.37.05-.75.08-1.13.08s-.76-.03-1.13-.08v-8.38H8.5v-3.02h2.13V6.85c0-2.11 1.29-3.26 3.17-3.26.9 0 1.68.07 1.9.1v2.2h-1.3c-1.02 0-1.22.49-1.22 1.2v1.96h2.44l-.48 3.02z"
+    />
+  </svg>
+);
+
+const InstagramOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 rounded-[6px] overflow-hidden shadow-2xs" viewBox="0 0 24 24">
+    <defs>
+      <radialGradient id="cms-ig-grad" cx="20%" cy="105%" r="130%">
+        <stop offset="0%" stopColor="#fdf497" />
+        <stop offset="5%" stopColor="#fdf497" />
+        <stop offset="45%" stopColor="#fd5949" />
+        <stop offset="60%" stopColor="#d6249f" />
+        <stop offset="90%" stopColor="#285AEB" />
+      </radialGradient>
+    </defs>
+    <rect width="24" height="24" rx="5.5" fill="url(#cms-ig-grad)" />
+    <rect x="4.5" y="4.5" width="15" height="15" rx="4.2" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+    <circle cx="12" cy="12" r="3.4" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+    <circle cx="16.3" cy="7.7" r="1" fill="#FFFFFF" />
+  </svg>
+);
+
+const YouTubeOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 rounded-[5px] overflow-hidden shadow-2xs" viewBox="0 0 24 24">
+    <rect width="24" height="24" rx="5" fill="#FF0000" />
+    <polygon points="9.5,7 16.5,12 9.5,17" fill="#FFFFFF" />
+  </svg>
+);
+
+const TripAdvisorOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 rounded-full shadow-2xs" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="#00AF87" />
+    <circle cx="7.5" cy="12.5" r="3" fill="#FFFFFF" />
+    <circle cx="7.5" cy="12.5" r="1.3" fill="#003D2E" />
+    <circle cx="7.5" cy="12.5" r="0.45" fill="#FFFFFF" />
+    <circle cx="16.5" cy="12.5" r="3" fill="#FFFFFF" />
+    <circle cx="16.5" cy="12.5" r="1.3" fill="#003D2E" />
+    <circle cx="16.5" cy="12.5" r="0.45" fill="#FFFFFF" />
+    <polygon points="12,11.5 10.3,9 13.7,9" fill="#FFFFFF" />
+    <polygon points="12,14.5 10.5,11.8 13.5,11.8" fill="#FFFFFF" />
+    <path d="M5.5 9.2C7.3 7.8 9.5 7.2 12 7.2s4.7.6 6.5 2" stroke="#FFFFFF" strokeWidth="1.3" strokeLinecap="round" fill="none" />
+  </svg>
+);
+
+const GoogleMapsOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 drop-shadow-xs" viewBox="0 0 24 24">
+    <path fill="#EA4335" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+    <circle cx="12" cy="9" r="3" fill="#FFFFFF" />
+    <path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.25.25 2.44.7 3.52L12 9V2z" />
+    <path fill="#34A853" d="M12 22s4.8-5.32 6.3-9.52L12 9v13z" />
+    <path fill="#FBBC04" d="M12 9l-6.3 3.48c.95 2.3 2.5 4.72 6.3 9.52V9z" />
+    <circle cx="12" cy="9" r="2.8" fill="#FFFFFF" />
+    <circle cx="12" cy="9" r="1.3" fill="#EA4335" />
+  </svg>
+);
+
+const WhatsAppOfficialIcon = () => (
+  <svg className="w-5 h-5 shrink-0 rounded-full shadow-2xs" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="12" fill="#25D366" />
+    <path
+      fill="#FFFFFF"
+      d="M12.01 4.5a7.5 7.5 0 00-6.4 11.41L4.5 20l4.22-1.1a7.49 7.49 0 0010.79-6.9 7.5 7.5 0 00-7.5-7.5zm4.4 10.6c-.18.51-.91.95-1.47 1.07-.38.08-.88.15-2.58-.55a9.28 9.28 0 01-3.67-3.24c-.11-.14-.88-1.16-.88-2.22 0-1.07.56-1.59.75-1.8.2-.22.43-.27.58-.27.14 0 .28 0 .4.01.14 0 .32-.05.5.37.18.44.62 1.52.68 1.63.05.12.09.25.02.39-.08.15-.11.24-.22.36-.11.13-.23.29-.33.38-.11.11-.22.23-.09.45.12.21.55.91 1.19 1.48.82.74 1.52.97 1.74 1.07.21.11.34.09.47-.05.12-.15.53-.63.68-.85.14-.21.28-.18.48-.1.2.07 1.25.59 1.46.7.22.1.36.16.42.25.05.09.05.52-.13 1.03z"
+    />
+  </svg>
+);
+
+const ContactPhoneOfficialIcon = () => (
+  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#B84A22] to-[#FBA138] flex items-center justify-center text-white shadow-2xs">
+    <Phone className="w-3 h-3 fill-current" />
+  </div>
+);
 
 export function CmsPage() {
   const [data, setData] = useState<CmsData>(() => getStoredCms());
@@ -920,108 +1001,169 @@ export function CmsPage() {
       {/* ================= 3. SOCIAL MEDIA & LINKS TAB ================= */}
       {activeTab === 'social' && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-6">
-          <div className="pb-3 border-b border-stone-100">
-            <h3 className="font-bold text-sm text-[#1A130E]">Social Media Profiles &amp; Online Links</h3>
-            <p className="text-xs text-stone-500 mt-0.5">
-              Control social profiles, TripAdvisor links, Google Maps coordinates, and WhatsApp direct messaging.
-            </p>
+          <div className="pb-3 border-b border-stone-100 flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-sm text-[#1A130E]">Social Media Profiles &amp; Online Links</h3>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Control social profiles, TripAdvisor links, Google Maps coordinates, official contact numbers, and WhatsApp messaging.
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Facebook */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Facebook Page URL</label>
-              <input
-                type="url"
-                value={data.social?.facebook || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, facebook: e.target.value },
-                  }))
-                }
-                placeholder="https://facebook.com/amberspicedublin"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Facebook Page URL</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <FacebookOfficialIcon />
+                </div>
+                <input
+                  type="url"
+                  value={data.social?.facebook || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, facebook: e.target.value },
+                    }))
+                  }
+                  placeholder="https://facebook.com/amberspicedublin"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
+            {/* Instagram */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Instagram Profile URL</label>
-              <input
-                type="url"
-                value={data.social?.instagram || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, instagram: e.target.value },
-                  }))
-                }
-                placeholder="https://instagram.com/amberspicedublin"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Instagram Profile URL</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <InstagramOfficialIcon />
+                </div>
+                <input
+                  type="url"
+                  value={data.social?.instagram || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, instagram: e.target.value },
+                    }))
+                  }
+                  placeholder="https://instagram.com/amberspicedublin"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#E4405F] focus:ring-2 focus:ring-[#E4405F]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
+            {/* YouTube */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">YouTube Channel URL</label>
-              <input
-                type="url"
-                value={data.social?.youtube || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, youtube: e.target.value },
-                  }))
-                }
-                placeholder="https://youtube.com/@amberspicedublin"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">YouTube Channel URL</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <YouTubeOfficialIcon />
+                </div>
+                <input
+                  type="url"
+                  value={data.social?.youtube || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, youtube: e.target.value },
+                    }))
+                  }
+                  placeholder="https://youtube.com/@amberspicedublin"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#FF0000] focus:ring-2 focus:ring-[#FF0000]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
+            {/* TripAdvisor */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">TripAdvisor Review Page</label>
-              <input
-                type="url"
-                value={data.social?.tripadvisor || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, tripadvisor: e.target.value },
-                  }))
-                }
-                placeholder="https://tripadvisor.com/Restaurant_Review..."
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">TripAdvisor Review Page</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <TripAdvisorOfficialIcon />
+                </div>
+                <input
+                  type="url"
+                  value={data.social?.tripadvisor || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, tripadvisor: e.target.value },
+                    }))
+                  }
+                  placeholder="https://tripadvisor.com/Restaurant_Review..."
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#00AF87] focus:ring-2 focus:ring-[#00AF87]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
+            {/* WhatsApp Business */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Google Maps Location Link</label>
-              <input
-                type="url"
-                value={data.social?.googleMaps || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, googleMaps: e.target.value },
-                  }))
-                }
-                placeholder="https://maps.google.com/?q=Amber+Spice+18+South+William+St+Dublin"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">WhatsApp Business Direct Number</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <WhatsAppOfficialIcon />
+                </div>
+                <input
+                  type="text"
+                  value={data.social?.whatsapp || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, whatsapp: e.target.value },
+                    }))
+                  }
+                  placeholder="+35314859210"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
 
+            {/* Primary Restaurant Contact Number */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">WhatsApp Business Direct Number</label>
-              <input
-                type="text"
-                value={data.social?.whatsapp || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    social: { ...prev.social, whatsapp: e.target.value },
-                  }))
-                }
-                placeholder="+35314859210"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Official Restaurant Contact Number</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <ContactPhoneOfficialIcon />
+                </div>
+                <input
+                  type="text"
+                  value={data.social?.phone ?? data.storeInfo?.phone ?? ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, phone: e.target.value },
+                      storeInfo: { ...prev.storeInfo, phone: e.target.value },
+                    }))
+                  }
+                  placeholder="+353 (01) 485 9210"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
+            </div>
+
+            {/* Google Maps Location Link (Spans both columns) */}
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Google Maps Location Link</label>
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <GoogleMapsOfficialIcon />
+                </div>
+                <input
+                  type="url"
+                  value={data.social?.googleMaps || ''}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      social: { ...prev.social, googleMaps: e.target.value },
+                    }))
+                  }
+                  placeholder="https://maps.google.com/?q=Amber+Spice+18+South+William+St+Dublin"
+                  className="w-full h-10 pl-10 pr-3.5 bg-white border border-stone-200 hover:border-stone-300 focus:border-[#4285F4] focus:ring-2 focus:ring-[#4285F4]/10 rounded-xl text-xs font-medium text-[#1A130E] outline-none transition-all shadow-2xs"
+                />
+              </div>
             </div>
           </div>
         </div>

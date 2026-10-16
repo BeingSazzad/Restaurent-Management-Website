@@ -45,6 +45,7 @@ export interface CmsSocialLinks {
   tripadvisor?: string;
   googleMaps?: string;
   whatsapp?: string;
+  phone?: string;
 }
 
 export interface GalleryItem {
@@ -155,6 +156,7 @@ export const DEFAULT_SOCIAL_LINKS: CmsSocialLinks = {
   tripadvisor: 'https://tripadvisor.com/Restaurant_Review-Dublin_Amber_Spice',
   googleMaps: 'https://maps.google.com/?q=Amber+Spice+18+South+William+St+Dublin',
   whatsapp: '+35314859210',
+  phone: '+353 (01) 485 9210',
 };
 
 export const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
