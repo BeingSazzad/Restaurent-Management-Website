@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Send,
   RotateCcw,
-  Navigation,
   ArrowRight,
 } from 'lucide-react';
 
@@ -272,34 +271,16 @@ export default function ContactPage() {
         </div>
 
         {/* Right: Map (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col">
+        <div className="lg:col-span-5 h-full min-h-[380px]">
           {/* Live Google Map Card */}
-          <div className="bg-white rounded-3xl border border-[#E5E5E5] overflow-hidden shadow-xs flex flex-col h-full">
-            <div className="p-5 sm:p-6 border-b border-[#EAEAEA] flex items-center justify-between shrink-0">
-              <div>
-                <h3 className="font-bold text-[16px] text-[#1A130E]">Central Dublin Location</h3>
-                <p className="text-[12.5px] text-[#666666] mt-0.5">18 South William Street · Dublin 2</p>
-              </div>
-              <a
-                href="https://maps.google.com/?q=18+South+William+Street+Dublin+2"
-                target="_blank"
-                rel="noreferrer"
-                className="px-3.5 py-1.5 rounded-xl bg-[rgb(249,249,249)] hover:bg-[#F0ECE7] border border-[#E5E5E5] text-[12px] font-semibold text-[#1A130E] inline-flex items-center gap-1.5 transition-colors shrink-0"
-              >
-                <Navigation className="w-3.5 h-3.5 text-[#B84A22]" />
-                <span>Open Maps</span>
-              </a>
-            </div>
-
-            <div className="relative flex-1 min-h-[320px] w-full bg-[#E8E4DF]">
-              <iframe
-                title="Amber Spice Dublin Location"
-                src="https://maps.google.com/maps?q=18+South+William+Street,+Dublin+2,+Ireland&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                className="w-full h-full border-0 absolute inset-0"
-                loading="lazy"
-                allowFullScreen
-              />
-            </div>
+          <div className="bg-white rounded-3xl border border-[#E5E5E5] overflow-hidden shadow-xs relative h-full w-full min-h-[380px]">
+            <iframe
+              title="Amber Spice Dublin Location"
+              src="https://maps.google.com/maps?q=18+South+William+Street,+Dublin+2,+Ireland&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-full border-0 absolute inset-0 rounded-3xl"
+              loading="lazy"
+              allowFullScreen
+            />
           </div>
         </div>
       </div>
