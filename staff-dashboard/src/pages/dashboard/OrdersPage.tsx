@@ -51,17 +51,17 @@ export function OrdersPage() {
   const getStatusBadge = (status: OrderStatus) => {
     switch (status) {
       case 'new':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-blue-500/10 text-blue-400 border border-blue-500/20">New Order</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-blue-100 text-blue-700">New Order</span>;
       case 'preparing':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-orange-500/10 text-[#F15A24] border border-orange-500/20">Kitchen Prep</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-orange-100 text-[#B84A22]">Kitchen Prep</span>;
       case 'ready':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-500/10 text-amber-400 border border-amber-500/20">Ready</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">Ready</span>;
       case 'completed':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Completed</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800">Completed</span>;
       case 'cancelled':
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-rose-500/10 text-rose-400 border border-rose-500/20">Cancelled</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-800">Cancelled</span>;
       default:
-        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-stone-500/10 text-stone-400">{status}</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-stone-100 text-stone-700">{status}</span>;
     }
   };
 
@@ -69,47 +69,47 @@ export function OrdersPage() {
     <div className="space-y-6">
       {/* Financial Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4.5 shadow-xs text-white">
-          <div className="flex items-center justify-between text-stone-400 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
+          <div className="flex items-center justify-between text-stone-500 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Total Revenue</span>
-            <span className="p-2 rounded-xl bg-[#F15A24]/10 text-[#F15A24] font-bold">€</span>
+            <span className="p-2 rounded-xl bg-orange-50 text-[#B84A22] font-bold">€</span>
           </div>
           <div className="text-2xl font-extrabold">€{totalRevenue.toFixed(2)}</div>
-          <div className="text-[11px] text-stone-400 mt-1">Confirmed orders volume</div>
+          <div className="text-[11px] text-stone-500 mt-1">Confirmed orders volume</div>
         </div>
 
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4.5 shadow-xs text-white">
-          <div className="flex items-center justify-between text-stone-400 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
+          <div className="flex items-center justify-between text-stone-500 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Active Pipeline</span>
-            <Clock className="w-4 h-4 text-blue-400" />
+            <Clock className="w-4 h-4 text-blue-500" />
           </div>
-          <div className="text-2xl font-extrabold text-blue-400">{activeOrders.length}</div>
-          <div className="text-[11px] text-stone-400 mt-1">Live in prep or handover</div>
+          <div className="text-2xl font-extrabold text-blue-600">{activeOrders.length}</div>
+          <div className="text-[11px] text-stone-500 mt-1">Live in prep or handover</div>
         </div>
 
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4.5 shadow-xs text-white">
-          <div className="flex items-center justify-between text-stone-400 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
+          <div className="flex items-center justify-between text-stone-500 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Completed Tickets</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-2xl font-extrabold text-emerald-400">{completedOrders.length}</div>
-          <div className="text-[11px] text-stone-400 mt-1">Successfully fulfilled</div>
+          <div className="text-2xl font-extrabold text-emerald-600">{completedOrders.length}</div>
+          <div className="text-[11px] text-stone-500 mt-1">Successfully fulfilled</div>
         </div>
 
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4.5 shadow-xs text-white">
-          <div className="flex items-center justify-between text-stone-400 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
+          <div className="flex items-center justify-between text-stone-500 mb-1">
             <span className="text-xs font-bold uppercase tracking-wider">Average Ticket</span>
-            <TrendingUp className="w-4 h-4 text-purple-400" />
+            <TrendingUp className="w-4 h-4 text-purple-600" />
           </div>
           <div className="text-2xl font-extrabold">
             €{orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : '0.00'}
           </div>
-          <div className="text-[11px] text-stone-400 mt-1">Average order value (AOV)</div>
+          <div className="text-[11px] text-stone-500 mt-1">Average order value (AOV)</div>
         </div>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-white">
+      <div className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-stone-800">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -118,7 +118,7 @@ export function OrdersPage() {
             placeholder="Search Order #, customer name, phone, Eircode..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-10 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-xl pl-10 pr-4 text-xs text-white placeholder:text-stone-400 outline-none"
+            className="w-full h-10 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-xl pl-10 pr-4 text-xs text-[#1A130E] placeholder:text-stone-400 outline-none transition-colors"
           />
         </div>
 
@@ -137,8 +137,8 @@ export function OrdersPage() {
               onClick={() => setStatusFilter(tab.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors border ${
                 statusFilter === tab.id
-                  ? 'bg-[#F15A24] text-white border-[#F15A24]'
-                  : 'bg-stone-900 border-stone-800 text-stone-300 hover:border-stone-700'
+                  ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
               }`}
             >
               {tab.label}
@@ -152,10 +152,10 @@ export function OrdersPage() {
             <button
               key={type}
               onClick={() => setFulfillmentFilter(type)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium capitalize cursor-pointer border ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold capitalize cursor-pointer border transition-colors ${
                 fulfillmentFilter === type
-                  ? 'bg-[#F15A24]/20 text-[#F15A24] border-[#F15A24]/40 font-bold'
-                  : 'bg-stone-900 border-stone-800 text-stone-400'
+                  ? 'bg-orange-50 text-[#B84A22] border-orange-200'
+                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
               }`}
             >
               {type}
@@ -165,11 +165,11 @@ export function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl shadow-xs overflow-hidden text-white">
+      <div className="bg-white border border-stone-200/90 rounded-2xl shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-stone-900/80 border-b border-stone-800 text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+              <tr className="bg-stone-50 border-b border-stone-200 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
                 <th className="py-3 px-4">Ticket #</th>
                 <th className="py-3 px-4">Customer</th>
                 <th className="py-3 px-4">Type</th>
@@ -179,55 +179,55 @@ export function OrdersPage() {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-850 text-xs text-stone-300">
+            <tbody className="divide-y divide-stone-100 text-xs text-stone-700">
               {filteredOrders.map((order: KdsOrder) => (
-                <tr key={order.id} className="hover:bg-white/5 transition-colors">
+                <tr key={order.id} className="hover:bg-stone-50/70 transition-colors">
                   <td className="py-3.5 px-4 font-bold whitespace-nowrap">
-                    <div className="text-[13px] font-extrabold text-[#F15A24]">{order.orderNumber}</div>
+                    <div className="text-[13px] font-extrabold text-[#B84A22]">{order.orderNumber}</div>
                     <div className="text-[10px] text-stone-400 font-normal mt-0.5">
                       {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </td>
 
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-white">{order.customerName}</div>
-                    <div className="text-[11px] text-stone-400 flex items-center gap-1 mt-0.5">
-                      <Phone className="w-3 h-3 text-stone-500" />
+                    <div className="font-bold text-[#1A130E]">{order.customerName}</div>
+                    <div className="text-[11px] text-stone-500 flex items-center gap-1 mt-0.5">
+                      <Phone className="w-3 h-3 text-stone-400" />
                       <span>{order.customerPhone || '+353 (01) 485 9210'}</span>
                     </div>
                   </td>
 
                   <td className="py-3.5 px-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1.5 font-semibold text-white">
+                    <div className="flex items-center gap-1.5 font-semibold text-[#1A130E]">
                       {order.fulfillmentType === 'delivery' ? (
                         <>
-                          <Bike className="w-3.5 h-3.5 text-blue-400" />
+                          <Bike className="w-3.5 h-3.5 text-blue-600" />
                           <span>Delivery</span>
                         </>
                       ) : (
                         <>
-                          <Store className="w-3.5 h-3.5 text-emerald-400" />
+                          <Store className="w-3.5 h-3.5 text-emerald-600" />
                           <span>Collection</span>
                         </>
                       )}
                     </div>
                     {order.deliveryAddress && (
-                      <div className="text-[10px] text-stone-400 max-w-[170px] truncate mt-0.5" title={order.deliveryAddress}>
+                      <div className="text-[10px] text-stone-500 max-w-[170px] truncate mt-0.5" title={order.deliveryAddress}>
                         {order.deliveryAddress}
                       </div>
                     )}
                   </td>
 
-                  <td className="py-3.5 px-4 text-stone-300">
-                    <div className="line-clamp-1">
+                  <td className="py-3.5 px-4 text-stone-600">
+                    <div className="line-clamp-1 font-medium">
                       {order.items.map((i: any) => `${i.quantity}x ${i.dish.name}`).join(', ')}
                     </div>
                     {order.specialNotes && (
-                      <div className="text-[10px] text-amber-400 italic mt-0.5">Note: {order.specialNotes}</div>
+                      <div className="text-[10px] text-amber-700 italic mt-0.5">Note: {order.specialNotes}</div>
                     )}
                   </td>
 
-                  <td className="py-3.5 px-4 font-extrabold text-[13px] text-white whitespace-nowrap">
+                  <td className="py-3.5 px-4 font-extrabold text-[13px] text-[#1A130E] whitespace-nowrap">
                     €{order.total.toFixed(2)}
                   </td>
 
@@ -238,7 +238,7 @@ export function OrdersPage() {
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
-                        className="h-8 px-2 bg-stone-900 border border-stone-750 text-white rounded-lg text-xs font-semibold outline-none cursor-pointer"
+                        className="h-8 px-2 bg-stone-50 border border-stone-200 text-[#1A130E] rounded-lg text-xs font-semibold outline-none cursor-pointer focus:border-[#B84A22]"
                       >
                         <option value="new">New</option>
                         <option value="preparing">Prep</option>
@@ -250,7 +250,7 @@ export function OrdersPage() {
                       <button
                         type="button"
                         onClick={() => setActiveSlipOrder(order)}
-                        className="h-8 w-8 rounded-lg border border-stone-750 hover:bg-stone-800 text-stone-300 flex items-center justify-center cursor-pointer transition-colors"
+                        className="h-8 w-8 rounded-lg border border-stone-200 hover:bg-stone-100 text-stone-600 flex items-center justify-center cursor-pointer transition-colors"
                         title="Print Kitchen Docket / Slip"
                       >
                         <Printer className="w-3.5 h-3.5" />
@@ -264,10 +264,10 @@ export function OrdersPage() {
         </div>
 
         {filteredOrders.length === 0 && (
-          <div className="p-12 text-center text-stone-400">
-            <AlertCircle className="w-8 h-8 text-stone-500 mx-auto mb-2" />
-            <h4 className="font-bold text-sm text-white">No orders found</h4>
-            <p className="text-xs text-stone-500 mt-1">Try another search keyword or reset filters.</p>
+          <div className="p-12 text-center text-stone-500">
+            <AlertCircle className="w-8 h-8 text-stone-400 mx-auto mb-2" />
+            <h4 className="font-bold text-sm text-[#1A130E]">No orders found</h4>
+            <p className="text-xs text-stone-400 mt-1">Try another search keyword or reset filters.</p>
           </div>
         )}
       </div>

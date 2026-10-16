@@ -176,26 +176,26 @@ export function CmsPage() {
   };
 
   return (
-    <div className="space-y-6 text-white">
+    <div className="space-y-6 text-[#1A130E]">
       {/* Header */}
-      <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold flex items-center gap-2">
+          <h2 className="text-lg font-bold flex items-center gap-2 text-[#1A130E]">
             <span>Dynamic CMS Policy & Content Editor</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
               Live Sync
             </span>
           </h2>
-          <p className="text-xs text-stone-400 mt-0.5">
+          <p className="text-xs text-stone-500 mt-0.5">
             Modify Terms & Conditions, Privacy Policy, Cookie Policy and FAQs in real time.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {notice && <span className="text-xs font-bold text-emerald-400 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />{notice}</span>}
+          {notice && <span className="text-xs font-bold text-emerald-600 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />{notice}</span>}
           <button
             onClick={handleSave}
-            className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#F15A24] to-[#FBA138] hover:from-[#d94e1c] hover:to-[#e89228] text-white text-xs font-bold shadow-md shadow-[#F15A24]/20 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0"
+            className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all shrink-0"
           >
             <Save className="w-4 h-4" />
             <span>Publish Changes</span>
@@ -204,13 +204,13 @@ export function CmsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-stone-800 pb-2">
+      <div className="flex items-center gap-2 border-b border-stone-200 pb-2">
         <button
           onClick={() => setActiveTab('terms')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border transition-colors ${
             activeTab === 'terms'
-              ? 'bg-[#F15A24] text-white border-[#F15A24]'
-              : 'bg-[#1C1612] border-stone-800 text-stone-400 hover:border-stone-700'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+              : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -219,10 +219,10 @@ export function CmsPage() {
 
         <button
           onClick={() => setActiveTab('privacy')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border transition-colors ${
             activeTab === 'privacy'
-              ? 'bg-[#F15A24] text-white border-[#F15A24]'
-              : 'bg-[#1C1612] border-stone-800 text-stone-400 hover:border-stone-700'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+              : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
           }`}
         >
           <Shield className="w-3.5 h-3.5" />
@@ -231,10 +231,10 @@ export function CmsPage() {
 
         <button
           onClick={() => setActiveTab('cookie')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border transition-colors ${
             activeTab === 'cookie'
-              ? 'bg-[#F15A24] text-white border-[#F15A24]'
-              : 'bg-[#1C1612] border-stone-800 text-stone-400 hover:border-stone-700'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+              : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
           }`}
         >
           <Cookie className="w-3.5 h-3.5" />
@@ -243,10 +243,10 @@ export function CmsPage() {
 
         <button
           onClick={() => setActiveTab('faq')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border ${
+          className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer border transition-colors ${
             activeTab === 'faq'
-              ? 'bg-[#F15A24] text-white border-[#F15A24]'
-              : 'bg-[#1C1612] border-stone-800 text-stone-400 hover:border-stone-700'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+              : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'
           }`}
         >
           <HelpCircle className="w-3.5 h-3.5" />
@@ -256,10 +256,10 @@ export function CmsPage() {
 
       {/* Editor Body */}
       {(activeTab === 'terms' || activeTab === 'privacy' || activeTab === 'cookie') && (
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-5 shadow-xs space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-4 border-b border-stone-800">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-4 border-b border-stone-100">
             <div>
-              <label className="block text-xs font-bold text-stone-300 mb-1">Title</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Title</label>
               <input
                 type="text"
                 value={data[activeTab].title}
@@ -269,11 +269,11 @@ export function CmsPage() {
                     [activeTab]: { ...prev[activeTab], title: e.target.value },
                   }))
                 }
-                className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none font-bold"
+                className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-stone-300 mb-1">Subtitle</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Subtitle</label>
               <input
                 type="text"
                 value={data[activeTab].subtitle}
@@ -283,11 +283,11 @@ export function CmsPage() {
                     [activeTab]: { ...prev[activeTab], subtitle: e.target.value },
                   }))
                 }
-                className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none"
+                className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-stone-300 mb-1">Last Updated Stamp</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Last Updated Stamp</label>
               <input
                 type="text"
                 value={data[activeTab].lastUpdated}
@@ -297,18 +297,18 @@ export function CmsPage() {
                     [activeTab]: { ...prev[activeTab], lastUpdated: e.target.value },
                   }))
                 }
-                className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none"
+                className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
               />
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-sm text-white">Sections & Clauses</h3>
+              <h3 className="font-bold text-sm text-[#1A130E]">Sections & Clauses</h3>
               <button
                 type="button"
                 onClick={() => addSection(activeTab)}
-                className="h-8 px-3 rounded-lg bg-[#F15A24]/10 hover:bg-[#F15A24]/20 text-[#F15A24] text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="h-8 px-3 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#B84A22] text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-orange-200/60 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Section</span>
@@ -316,18 +316,18 @@ export function CmsPage() {
             </div>
 
             {data[activeTab].sections.map((sec, idx) => (
-              <div key={sec.id || idx} className="p-4 rounded-xl border border-stone-800 bg-stone-900/60 space-y-2">
+              <div key={sec.id || idx} className="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
                 <div className="flex items-center justify-between gap-3">
                   <input
                     type="text"
                     value={sec.title}
                     onChange={(e) => updateSection(activeTab, idx, 'title', e.target.value)}
-                    className="flex-1 h-8 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs font-bold text-white outline-none"
+                    className="flex-1 h-8 px-3 bg-white border border-stone-200 focus:border-[#B84A22] rounded-lg text-xs font-bold text-[#1A130E] outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => removeSection(activeTab, idx)}
-                    className="w-8 h-8 rounded-lg border border-stone-750 hover:border-rose-500 hover:text-rose-400 text-stone-400 flex items-center justify-center cursor-pointer"
+                    className="w-8 h-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -336,7 +336,7 @@ export function CmsPage() {
                   rows={3}
                   value={sec.content}
                   onChange={(e) => updateSection(activeTab, idx, 'content', e.target.value)}
-                  className="w-full p-2.5 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-stone-300 outline-none leading-relaxed"
+                  className="w-full p-2.5 bg-white border border-stone-200 focus:border-[#B84A22] rounded-lg text-xs text-stone-700 outline-none leading-relaxed"
                 />
               </div>
             ))}
@@ -346,10 +346,10 @@ export function CmsPage() {
 
       {/* FAQ Tab */}
       {activeTab === 'faq' && (
-        <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-5 shadow-xs space-y-4">
-          <h3 className="font-bold text-sm text-white">FAQ List</h3>
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-4">
+          <h3 className="font-bold text-sm text-[#1A130E]">FAQ List</h3>
           {data.faq.items.map((item, idx) => (
-            <div key={item.id || idx} className="p-4 rounded-xl border border-stone-800 bg-stone-900/60 space-y-2">
+            <div key={item.id || idx} className="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
               <input
                 type="text"
                 value={item.question}
@@ -358,7 +358,7 @@ export function CmsPage() {
                   items[idx] = { ...items[idx], question: e.target.value };
                   setData((prev) => ({ ...prev, faq: { ...prev.faq, items } }));
                 }}
-                className="w-full h-8 px-3 bg-stone-900 border border-stone-750 rounded-lg text-xs font-bold text-white outline-none"
+                className="w-full h-8 px-3 bg-white border border-stone-200 rounded-lg text-xs font-bold text-[#1A130E] outline-none focus:border-[#B84A22]"
               />
               <textarea
                 rows={2}
@@ -368,7 +368,7 @@ export function CmsPage() {
                   items[idx] = { ...items[idx], answer: e.target.value };
                   setData((prev) => ({ ...prev, faq: { ...prev.faq, items } }));
                 }}
-                className="w-full p-2.5 bg-stone-900 border border-stone-750 rounded-lg text-xs text-stone-300 outline-none"
+                className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-xs text-stone-700 outline-none focus:border-[#B84A22]"
               />
             </div>
           ))}

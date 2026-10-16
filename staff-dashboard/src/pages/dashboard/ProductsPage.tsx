@@ -159,24 +159,24 @@ export function ProductsPage() {
   });
 
   return (
-    <div className="space-y-6 text-white">
+    <div className="space-y-6 text-[#1A130E]">
       {/* Header */}
-      <div className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold flex items-center gap-2">
+          <h2 className="text-lg font-bold flex items-center gap-2 text-[#1A130E]">
             <span>Menu & Product Management</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F15A24]/10 text-[#F15A24] font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-50 text-[#B84A22] font-semibold border border-orange-200/60">
               {dishes.length} Items
             </span>
           </h2>
-          <p className="text-xs text-stone-400 mt-0.5">
+          <p className="text-xs text-stone-500 mt-0.5">
             Add new menu items, upload food photography, adjust prices, and manage live stock.
           </p>
         </div>
 
         <button
           onClick={openAddModal}
-          className="h-10 px-4 rounded-xl bg-gradient-to-r from-[#F15A24] to-[#FBA138] hover:from-[#d94e1c] hover:to-[#e89228] text-white text-xs font-bold shadow-md shadow-[#F15A24]/20 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0"
+          className="h-10 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Product</span>
@@ -192,7 +192,7 @@ export function ProductsPage() {
             placeholder="Search dish by name or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-10 bg-[#1C1612] border border-stone-800 focus:border-[#F15A24] rounded-xl pl-10 pr-4 text-xs text-white placeholder:text-stone-400 outline-none"
+            className="w-full h-10 bg-white border border-stone-200 focus:border-[#B84A22] rounded-xl pl-10 pr-4 text-xs text-[#1A130E] placeholder:text-stone-400 outline-none shadow-2xs transition-colors"
           />
         </div>
 
@@ -203,8 +203,8 @@ export function ProductsPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors capitalize border ${
                 selectedCategory === cat
-                  ? 'bg-[#F15A24] text-white border-[#F15A24]'
-                  : 'bg-[#1C1612] border-stone-800 text-stone-400 hover:border-stone-700'
+                  ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+                  : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 shadow-2xs'
               }`}
             >
               {cat}
@@ -218,10 +218,10 @@ export function ProductsPage() {
         {filteredDishes.map((dish) => (
           <div
             key={dish.id}
-            className="bg-[#1C1612] border border-stone-800/90 rounded-2xl p-4 shadow-xs flex flex-col justify-between group hover:border-stone-700 transition-all"
+            className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
           >
             <div>
-              <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-900 border border-stone-800">
+              <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
                 <img
                   src={dish.image}
                   alt={dish.name}
@@ -231,7 +231,7 @@ export function ProductsPage() {
                   }}
                 />
                 <div className="absolute top-2.5 left-2.5">
-                  <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-xs text-white text-[11px] font-bold">
+                  <span className="px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-xs text-white text-[11px] font-bold">
                     €{dish.price.toFixed(2)}
                   </span>
                 </div>
@@ -250,25 +250,25 @@ export function ProductsPage() {
               </div>
 
               <div className="space-y-1 mb-2">
-                <span className="text-[11px] font-bold text-[#F15A24] uppercase tracking-wider block">
+                <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
                   {dish.category}
                 </span>
-                <h3 className="font-bold text-sm text-white line-clamp-1">{dish.name}</h3>
-                <p className="text-xs text-stone-400 line-clamp-2">{dish.description}</p>
+                <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
+                <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
               </div>
             </div>
 
-            <div className="pt-3.5 mt-3 border-t border-stone-800/80 flex items-center justify-end gap-2">
+            <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-end gap-2">
               <button
                 onClick={() => openEditModal(dish)}
-                className="h-8 px-3 rounded-lg border border-stone-750 hover:border-[#F15A24] hover:text-[#F15A24] text-stone-300 text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors"
+                className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
               >
                 <Edit2 className="w-3.5 h-3.5" />
                 <span>Edit</span>
               </button>
               <button
                 onClick={() => handleDelete(dish.id, dish.name)}
-                className="h-8 w-8 rounded-lg border border-stone-750 hover:border-rose-500 hover:text-rose-400 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
+                className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
                 title="Remove dish"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -279,24 +279,24 @@ export function ProductsPage() {
       </div>
 
       {filteredDishes.length === 0 && (
-        <div className="bg-[#1C1612] border border-stone-800 rounded-2xl p-12 text-center text-stone-400">
-          <AlertCircle className="w-8 h-8 text-stone-500 mx-auto mb-2" />
-          <h4 className="font-bold text-sm text-white">No dishes match your filter criteria</h4>
-          <p className="text-xs text-stone-500 mt-1">Try another search keyword.</p>
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-12 text-center text-stone-500 shadow-2xs">
+          <AlertCircle className="w-8 h-8 text-stone-400 mx-auto mb-2" />
+          <h4 className="font-bold text-sm text-[#1A130E]">No dishes match your filter criteria</h4>
+          <p className="text-xs text-stone-400 mt-1">Try another search keyword.</p>
         </div>
       )}
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#1C1612] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-stone-750 shadow-2xl text-white">
-            <div className="p-5 border-b border-stone-800 flex items-center justify-between sticky top-0 bg-[#1C1612]/95 backdrop-blur-xs z-10">
-              <h3 className="font-bold text-base">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-stone-200 shadow-2xl text-[#1A130E]">
+            <div className="p-5 border-b border-stone-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-xs z-10">
+              <h3 className="font-bold text-base text-[#1A130E]">
                 {editingDish ? 'Edit Dish & Media' : 'Add New Restaurant Dish'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center cursor-pointer"
+                className="w-8 h-8 rounded-full bg-stone-100 text-stone-500 hover:text-stone-900 flex items-center justify-center cursor-pointer transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -304,12 +304,12 @@ export function ProductsPage() {
 
             <form onSubmit={handleSave} className="p-5 space-y-4">
               {/* Photo Upload */}
-              <div className="p-4 rounded-xl bg-stone-900 border border-stone-800 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-stone-300">
+              <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+                <label className="block text-xs font-bold uppercase tracking-wider text-stone-600">
                   Dish Photography
                 </label>
                 <div className="flex items-center gap-4">
-                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-stone-800 border border-stone-750 shrink-0">
+                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-white border border-stone-200 shrink-0 shadow-2xs">
                     <img
                       src={formImage}
                       alt="Preview"
@@ -331,9 +331,9 @@ export function ProductsPage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="h-8 px-3 rounded-lg bg-stone-800 hover:bg-stone-700 text-xs font-semibold text-white flex items-center gap-1.5 cursor-pointer"
+                      className="h-8 px-3 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-xs font-semibold text-stone-800 flex items-center gap-1.5 cursor-pointer shadow-2xs"
                     >
-                      <Upload className="w-3.5 h-3.5 text-[#F15A24]" />
+                      <Upload className="w-3.5 h-3.5 text-[#B84A22]" />
                       <span>Upload from Device</span>
                     </button>
                     <input
@@ -341,23 +341,23 @@ export function ProductsPage() {
                       placeholder="Or enter image URL..."
                       value={formImage}
                       onChange={(e) => setFormImage(e.target.value)}
-                      className="w-full h-8 px-2.5 bg-stone-800 border border-stone-700 rounded-lg text-xs text-white outline-none"
+                      className="w-full h-8 px-2.5 bg-white border border-stone-200 rounded-lg text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
                     />
                     {uploadNotice && (
-                      <span className="text-[11px] text-emerald-400 block">{uploadNotice}</span>
+                      <span className="text-[11px] text-emerald-600 font-semibold block">{uploadNotice}</span>
                     )}
                   </div>
                 </div>
 
                 <div className="pt-1">
-                  <span className="text-[10px] text-stone-400 block mb-1">Preset image shortcuts:</span>
+                  <span className="text-[10px] text-stone-500 block mb-1">Preset image shortcuts:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {PRESET_IMAGES.map((p) => (
                       <button
                         key={p.label}
                         type="button"
                         onClick={() => setFormImage(p.url)}
-                        className="px-2 py-0.5 rounded text-[10px] bg-stone-800 hover:bg-stone-700 text-stone-300 cursor-pointer"
+                        className="px-2 py-0.5 rounded text-[10px] bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 cursor-pointer shadow-2xs"
                       >
                         {p.label}
                       </button>
@@ -369,21 +369,21 @@ export function ProductsPage() {
               {/* Name & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">Name</label>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">Name</label>
                   <input
                     type="text"
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none"
+                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">Category</label>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value as any)}
-                    className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none cursor-pointer"
+                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none cursor-pointer"
                   >
                     <option value="biryani">Dum Biryani</option>
                     <option value="curries">Curries</option>
@@ -397,7 +397,7 @@ export function ProductsPage() {
 
               {/* Price & Description */}
               <div>
-                <label className="block text-xs font-bold text-stone-300 mb-1">Price (€)</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Price (€)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -405,31 +405,31 @@ export function ProductsPage() {
                   required
                   value={formPrice}
                   onChange={(e) => setFormPrice(parseFloat(e.target.value) || 0)}
-                  className="w-full h-9 px-3 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none"
+                  className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-300 mb-1">Description</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full p-2.5 bg-stone-900 border border-stone-750 focus:border-[#F15A24] rounded-lg text-xs text-white outline-none"
+                  className="w-full p-2.5 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-800">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-stone-750 hover:bg-stone-800 text-xs text-stone-300 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-600 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-[#F15A24] hover:bg-[#d94e1c] text-white text-xs font-bold shadow-md shadow-[#F15A24]/20 cursor-pointer transition-colors"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs cursor-pointer transition-all"
                 >
                   Save Product
                 </button>
