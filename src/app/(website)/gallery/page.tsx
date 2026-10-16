@@ -28,52 +28,58 @@ export default function GalleryPage() {
     };
   }, []);
 
-  const [activeFilter, setActiveFilter] = useState<'all' | 'dining' | 'private' | 'bar_kitchen' | 'exterior'>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'interior' | 'exterior' | 'kitchen' | 'promotion'>('all');
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
-  const filteredItems =
-    activeFilter === 'all'
-      ? items
-      : items.filter((item) => item.category === activeFilter);
+  const isMatchingCategory = (category: string, filter: typeof activeFilter) => {
+    if (filter === 'all') return true;
+    if (filter === 'interior') return category === 'interior' || category === 'dining' || category === 'private';
+    if (filter === 'kitchen') return category === 'kitchen' || category === 'bar_kitchen';
+    return category === filter;
+  };
+
+  const filteredItems = items.filter((item) => isMatchingCategory(item.category, activeFilter));
+
+  const filterTabs = [
+    { key: 'all', label: 'All Photos', count: items.length },
+    {
+      key: 'interior',
+      label: 'Restaurant Interior',
+      count: items.filter((i) => isMatchingCategory(i.category, 'interior')).length,
+    },
+    {
+      key: 'exterior',
+      label: 'Exterior & Patio',
+      count: items.filter((i) => isMatchingCategory(i.category, 'exterior')).length,
+    },
+    {
+      key: 'kitchen',
+      label: 'Kitchen & Tandoor',
+      count: items.filter((i) => isMatchingCategory(i.category, 'kitchen')).length,
+    },
+    {
+      key: 'promotion',
+      label: 'Promotions & Events',
+      count: items.filter((i) => isMatchingCategory(i.category, 'promotion')).length,
+    },
+  ];
 
   return (
     <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
         <div className="section-decorator mx-auto" />
-        <h1 className="section-title mb-3">Restaurant Spaces &amp; Ambiance</h1>
+        <h1 className="section-title mb-3">Restaurant Spaces &amp; Events</h1>
         <p className="section-subtitle">
-          Step inside Amber Spice on South William Street: historic Dublin brick arches,
-          intimate candlelit private alcoves, live clay tandoor theater, and our ambient cocktail lounge.
+          Explore Amber Spice on South William Street: historic Georgian interior dining,
+          twilight outdoor terrace, live copper tandoor kitchen theater, and exclusive promotional gala events.
         </p>
       </div>
 
       {/* Modern Segmented Control Filter Bar */}
       <div className="flex justify-center mb-12">
         <div className="bg-white border border-[#E5E5E5] p-1.5 rounded-2xl shadow-xs inline-flex items-center gap-1.5 max-w-full overflow-x-auto overflow-y-hidden scrollbar-none">
-          {[
-            { key: 'all', label: 'All Spaces', count: items.length },
-            {
-              key: 'dining',
-              label: 'Dining Halls',
-              count: items.filter((i) => i.category === 'dining').length,
-            },
-            {
-              key: 'private',
-              label: 'Private Dining Rooms',
-              count: items.filter((i) => i.category === 'private').length,
-            },
-            {
-              key: 'bar_kitchen',
-              label: 'Bar & Open Kitchen',
-              count: items.filter((i) => i.category === 'bar_kitchen').length,
-            },
-            {
-              key: 'exterior',
-              label: 'Dublin Facade',
-              count: items.filter((i) => i.category === 'exterior').length,
-            },
-          ].map((tab) => {
+          {filterTabs.map((tab) => {
             const isActive = activeFilter === tab.key;
             return (
               <button

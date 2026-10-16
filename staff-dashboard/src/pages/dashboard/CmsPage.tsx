@@ -55,7 +55,7 @@ export interface CmsFaqItem {
 export interface GalleryItem {
   id: number | string;
   title: string;
-  category: 'dining' | 'private' | 'bar_kitchen' | 'exterior';
+  category: 'interior' | 'exterior' | 'kitchen' | 'promotion' | 'dining' | 'private' | 'bar_kitchen';
   image: string;
   tag: string;
   description: string;
@@ -202,7 +202,7 @@ const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 1,
     title: 'Main Heritage Dining Hall',
-    category: 'dining',
+    category: 'interior',
     image: '/images/interior/main_dining_hall.jpg',
     tag: 'Historic Brick Arches',
     description: 'Exposed Georgian Dublin brick arches, warm amber brass chandeliers, and plush terracotta velvet booths.',
@@ -210,26 +210,26 @@ const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 2,
     title: 'Maharaja Private Dining Alcove',
-    category: 'private',
+    category: 'interior',
     image: '/images/interior/private_dining_alcove.jpg',
     tag: 'Exclusive Private Room',
-    description: 'Intimate banquet dining with hand-carved mahogany jali fretwork, candlelit table settings, and bespoke royal feasts.',
+    description: 'Intimate banquet dining with hand-carved mahogany jali fretwork, candlelit table settings, and bespoke royal ambiance.',
   },
   {
     id: 3,
     title: 'The Spice Lounge & Cocktail Bar',
-    category: 'bar_kitchen',
+    category: 'interior',
     image: '/images/interior/spice_lounge_bar.jpg',
     tag: 'Artisanal Cocktail Bar',
     description: 'Dark marble bar counter with backlit apothecary whole spice jars, signature saffron botanical cocktails, and velvet seating.',
   },
   {
     id: 4,
-    title: 'Live Copper Tandoor Kitchen Theater',
-    category: 'bar_kitchen',
-    image: '/images/interior/live_tandoor_kitchen.jpg',
-    tag: 'Live Culinary Pass',
-    description: 'Theatrical open kitchen where master chefs bake blistered artisan naans and char-grill skewers over 480°C clay embers.',
+    title: 'Starlight Conservatory Courtyard',
+    category: 'interior',
+    image: '/images/interior/conservatory_courtyard.jpg',
+    tag: 'Glass Atrium Patio',
+    description: 'Romantic glass-roof courtyard dining surrounded by botanical greenery, terracotta tiles, and hanging Moorish brass lanterns.',
   },
   {
     id: 5,
@@ -241,27 +241,43 @@ const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
   },
   {
     id: 6,
-    title: 'Starlight Conservatory Courtyard',
-    category: 'dining',
-    image: '/images/interior/conservatory_courtyard.jpg',
-    tag: 'Glass Atrium Patio',
-    description: 'Romantic glass-roof courtyard dining surrounded by botanical greenery, terracotta tiles, and hanging Moorish brass lanterns.',
+    title: 'Twilight Outdoor Dining Terrace',
+    category: 'exterior',
+    image: '/images/interior/outdoor_terrace.jpg',
+    tag: 'Al Fresco Dublin Patio',
+    description: 'Heated outdoor dining terrace illuminated with warm fairy canopies, brass fire lanterns, and Dublin evening streetscape.',
   },
   {
     id: 7,
-    title: 'Grand Royal Banqueting Suite',
-    category: 'private',
-    image: '/images/about_banner.jpg',
-    tag: 'Group Feasts & Events',
-    description: 'Spacious celebratory group dining space accommodating anniversary dinners, private parties, and corporate receptions.',
+    title: 'Live Copper Tandoor Kitchen Theater',
+    category: 'kitchen',
+    image: '/images/interior/live_tandoor_kitchen.jpg',
+    tag: 'Live Tandoor Embers',
+    description: 'Theatrical open kitchen where master chefs bake blistered artisan naans and char-grill skewers over 480°C clay embers.',
   },
   {
     id: 8,
-    title: 'Master Chef Service & Plating Pass',
-    category: 'bar_kitchen',
-    image: '/images/chef_master.jpg',
-    tag: 'Culinary Craftsmanship',
-    description: 'Our culinary team meticulously garnishing royal Awadhi copper handi pots with saffron threads and fresh coriander.',
+    title: 'Master Chef Open Kitchen Brigade',
+    category: 'kitchen',
+    image: '/images/interior/kitchen_brigade.jpg',
+    tag: 'Kitchen Brigade in Action',
+    description: 'Our culinary kitchen team operating the flame tandoor stations, copper degh pots, and active artisan plating line.',
+  },
+  {
+    id: 9,
+    title: 'Amber Spice Gala & Live Lounge Night',
+    category: 'promotion',
+    image: '/images/interior/promotion_event.jpg',
+    tag: 'Promotional Gala Event',
+    description: 'Exclusive celebration gala night featuring live acoustic melodies, festive banquet candelabras, and signature mixology.',
+  },
+  {
+    id: 10,
+    title: 'Royal Spice Masterclass & Tasting Session',
+    category: 'promotion',
+    image: '/images/interior/spice_tasting_event.jpg',
+    tag: 'Promotional Masterclass',
+    description: 'Interactive culinary spice journey with our executive chef exploring single-origin saffron, green cardamom, and royal heritage aromas.',
   },
 ];
 
@@ -1314,10 +1330,10 @@ export function CmsPage() {
                     }
                     className="w-full h-9 px-2.5 bg-white border border-stone-200 rounded-xl text-xs font-medium text-[#1A130E] outline-none focus:border-[#B84A22]"
                   >
-                    <option value="dining">Dining Halls</option>
-                    <option value="private">Private Dining</option>
-                    <option value="bar_kitchen">Bar &amp; Open Kitchen</option>
-                    <option value="exterior">Dublin Facade / Exterior</option>
+                    <option value="interior">Restaurant Interior</option>
+                    <option value="exterior">Dublin Facade &amp; Exterior</option>
+                    <option value="kitchen">Kitchen &amp; Tandoor</option>
+                    <option value="promotion">Promotions &amp; Events</option>
                   </select>
                 </div>
 
