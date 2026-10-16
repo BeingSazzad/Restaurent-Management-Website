@@ -105,24 +105,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/offers" className="hover:text-[#FBA138] transition-colors text-[14px] font-medium flex items-center gap-1.5">
-                  <span>Special Offers</span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-[#B84A22]/30 text-[#FBA138] border border-[#B84A22]/40">Hot</span>
-                </Link>
-              </li>
-              <li>
                 <Link href="/about" className="hover:text-white transition-colors text-[14px]">
                   About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/login" className="hover:text-white transition-colors text-[14px]">
-                  Sign In / Register
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-white transition-colors text-[14px]">
-                  Contact
                 </Link>
               </li>
             </ul>
