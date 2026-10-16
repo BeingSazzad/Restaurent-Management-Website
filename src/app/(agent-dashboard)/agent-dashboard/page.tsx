@@ -235,7 +235,7 @@ export default function AgentDashboardPage() {
                 )}
               </div>
               <p className="text-xs text-stone-500 mt-1">
-                Dublin Kitchen Operations Console · Shift Orders &amp; Expo
+                Live kitchen order management and station dispatch.
               </p>
             </div>
 
@@ -287,7 +287,7 @@ export default function AgentDashboardPage() {
                 className="h-9 px-3.5 rounded-lg text-xs font-medium bg-[#1A130E] hover:bg-black text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Fire Ticket</span>
+                <span>New Ticket</span>
               </button>
             </div>
           </div>
@@ -303,7 +303,7 @@ export default function AgentDashboardPage() {
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                <span>KDS Pipeline</span>
+                <span>Kitchen Orders</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'kds' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {orders.length}
                 </span>
@@ -316,7 +316,7 @@ export default function AgentDashboardPage() {
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                <span>86 Stock Manager</span>
+                <span>86 Inventory</span>
                 {soldOutCount > 0 ? (
                   <span className="bg-rose-100 text-rose-700 text-[11px] px-2 py-0.5 rounded-full font-semibold">
                     {soldOutCount}
@@ -333,7 +333,7 @@ export default function AgentDashboardPage() {
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                Shift Analytics
+                Shift Report
               </button>
             </div>
           </div>
@@ -414,26 +414,26 @@ export default function AgentDashboardPage() {
       {/* ================= TAB 1: KDS COLUMNS PIPELINE ================= */}
       {selectedTab === 'kds' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          {/* COLUMN 1: NEW INCOMING ORDERS */}
+          {/* COLUMN 1: INCOMING */}
           <div className="space-y-3.5">
             <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500 ring-4 ring-rose-100" />
                 <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
-                  Incoming Tickets
+                  Incoming
                 </h2>
                 <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">
                   {newOrders.length}
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-stone-400">Needs fire</span>
+              <span className="text-[11px] font-medium text-stone-400">To Prepare</span>
             </div>
 
             {newOrders.length === 0 ? (
               <div className="text-center py-12 px-4 text-stone-400">
                 <UtensilsCrossed className="w-6 h-6 text-stone-300 mx-auto mb-2" />
-                <p className="font-medium text-xs text-stone-600">No New Tickets</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">Incoming orders will appear here.</p>
+                <p className="font-medium text-xs text-stone-600">No Incoming Orders</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">New orders will appear here.</p>
               </div>
             ) : (
               newOrders.map((order) => (
@@ -450,26 +450,26 @@ export default function AgentDashboardPage() {
             )}
           </div>
 
-          {/* COLUMN 2: PREPARING IN KITCHEN (COOKING / TANDOOR) */}
+          {/* COLUMN 2: IN PROGRESS */}
           <div className="space-y-3.5">
             <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24] ring-4 ring-orange-100" />
                 <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
-                  Cooking / Grilling
+                  In Progress
                 </h2>
                 <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-50 text-[#F15A24] border border-orange-200/60">
                   {preparingOrders.length}
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-stone-400">In kitchen</span>
+              <span className="text-[11px] font-medium text-stone-400">Cooking</span>
             </div>
 
             {preparingOrders.length === 0 ? (
               <div className="text-center py-12 px-4 text-stone-400">
                 <Flame className="w-6 h-6 text-stone-300 mx-auto mb-2" />
                 <p className="font-medium text-xs text-stone-600">Kitchen Clear</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">Fire new tickets to start cooking.</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">Orders being prepared will show here.</p>
               </div>
             ) : (
               preparingOrders.map((order) => (
@@ -486,26 +486,26 @@ export default function AgentDashboardPage() {
             )}
           </div>
 
-          {/* COLUMN 3: READY FOR DISPATCH / PICKUP */}
+          {/* COLUMN 3: READY */}
           <div className="space-y-3.5">
             <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100" />
                 <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
-                  Ready / Out for Delivery
+                  Ready
                 </h2>
                 <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                   {readyOrders.length}
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-stone-400">For pickup</span>
+              <span className="text-[11px] font-medium text-stone-400">For Handover</span>
             </div>
 
             {readyOrders.length === 0 ? (
               <div className="text-center py-12 px-4 text-stone-400">
                 <CheckCircle2 className="w-6 h-6 text-stone-300 mx-auto mb-2" />
                 <p className="font-medium text-xs text-stone-600">No Ready Orders</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">Orders ready for customer or rider show here.</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">Orders ready for handover will show here.</p>
               </div>
             ) : (
               readyOrders.map((order) => (
@@ -1221,7 +1221,7 @@ export default function AgentDashboardPage() {
                 <div className="w-8 h-8 rounded-lg bg-[#FFF4EC] border border-[#F15A24]/20 flex items-center justify-center text-[#F15A24]">
                   <ChefHat className="w-4 h-4" />
                 </div>
-                <h3 className="font-bold text-base text-[#1A130E]">Fire Manual Kitchen Ticket</h3>
+                <h3 className="font-bold text-base text-[#1A130E]">New Order Ticket</h3>
               </div>
               <button
                 type="button"
@@ -1325,7 +1325,7 @@ export default function AgentDashboardPage() {
                 className="flex-1 h-11 rounded-xl font-semibold text-sm bg-[#F15A24] text-white hover:bg-[#D94E1C] transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
               >
                 <Flame className="w-4 h-4" />
-                <span>Fire Ticket Immediately</span>
+                <span>Send to Kitchen</span>
               </button>
               <button
                 type="button"
