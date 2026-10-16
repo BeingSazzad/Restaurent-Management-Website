@@ -43,13 +43,6 @@ const saveStoredMenu = (items: DishItem[]) => {
   }
 };
 
-const PRESET_IMAGES = [
-  { label: 'Royal Biryani', url: '/images/amber_hero_dish.jpg' },
-  { label: 'Heritage Curry', url: '/images/curry_dish.jpg' },
-  { label: 'Tandoori Grill', url: '/images/grill_dish.jpg' },
-  { label: 'Lamb Rogan Josh', url: '/images/curry_dish.jpg' },
-  { label: 'Kebab Platter', url: '/images/grill_dish.jpg' },
-];
 
 export function ProductsPage() {
   const { rawIngredients } = useAppSelector((state) => state.stock);
@@ -592,23 +585,29 @@ export function ProductsPage() {
 
             <form onSubmit={handleSave} className="p-5 space-y-4">
               {/* Photo Upload */}
-              <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-stone-600">
+              <div className="p-4 rounded-xl bg-stone-50 border border-stone-200">
+                <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5">
                   Dish Image
                 </label>
                 <div className="flex items-center gap-4">
-                  <div className="w-24 h-24 rounded-xl overflow-hidden bg-white border border-stone-200 shrink-0 shadow-2xs">
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-20 h-20 rounded-xl overflow-hidden bg-white border border-stone-200 shrink-0 shadow-2xs group relative cursor-pointer"
+                  >
                     <img
                       src={formImage}
                       alt="Preview"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
                       }}
                     />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                      <Upload className="w-4 h-4" />
+                    </div>
                   </div>
 
-                  <div className="flex-1 space-y-2">
+                  <div className="space-y-1.5">
                     <input
                       type="file"
                       accept="image/*"
@@ -619,37 +618,14 @@ export function ProductsPage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="h-8 px-3 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-xs font-semibold text-stone-800 flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                      className="h-8 px-3.5 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-xs font-semibold text-stone-800 flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5 text-[#B84A22]" />
                       <span>Upload from Device</span>
                     </button>
-                    <input
-                      type="text"
-                      placeholder="Or enter image URL..."
-                      value={formImage}
-                      onChange={(e) => setFormImage(e.target.value)}
-                      className="w-full h-8 px-2.5 bg-white border border-stone-200 rounded-lg text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-                    />
                     {uploadNotice && (
                       <span className="text-[11px] text-emerald-600 font-semibold block">{uploadNotice}</span>
                     )}
-                  </div>
-                </div>
-
-                <div className="pt-1">
-                  <span className="text-[10px] text-stone-500 block mb-1">Preset image shortcuts:</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {PRESET_IMAGES.map((p) => (
-                      <button
-                        key={p.label}
-                        type="button"
-                        onClick={() => setFormImage(p.url)}
-                        className="px-2 py-0.5 rounded text-[10px] bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 cursor-pointer shadow-2xs"
-                      >
-                        {p.label}
-                      </button>
-                    ))}
                   </div>
                 </div>
               </div>
