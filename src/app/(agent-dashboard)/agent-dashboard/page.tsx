@@ -558,75 +558,78 @@ export default function AgentDashboardPage() {
             )}
           </div>
 
-          {/* Search & Category Filter Toolbar */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+          {/* Standard Unified Search & Category Filter Toolbar */}
+          <div className="bg-stone-50/80 border border-stone-200/90 rounded-2xl p-2.5 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 mt-1">
             {/* Search */}
-            <div className="relative flex-1 max-w-sm">
-              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <div className="relative flex-1 max-w-md">
+              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search dish by name..."
                 value={stockSearchQuery}
                 onChange={(e) => setStockSearchQuery(e.target.value)}
-                className="w-full h-8.5 bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/20 rounded-lg pl-8 pr-7 text-xs outline-none transition-colors placeholder:text-stone-400 text-stone-800"
+                className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-10 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
               />
               {stockSearchQuery && (
                 <button
                   onClick={() => setStockSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 cursor-pointer"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-0.5 rounded-md hover:bg-stone-100 transition-colors cursor-pointer"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
 
-            {/* Category Chips */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none flex-wrap">
-              {[
-                { id: 'all', label: 'All' },
-                { id: 'biryani', label: 'Biryani' },
-                { id: 'curries', label: 'Curries' },
-                { id: 'grill', label: 'Grill' },
-                { id: 'vegetarian', label: 'Vegetarian' },
-                { id: 'breads', label: 'Breads' },
-                { id: 'desserts', label: 'Desserts' },
-              ].map((c) => (
+            {/* Segmented Controls: Categories & Status */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Category Segmented Control */}
+              <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto scrollbar-none">
+                {[
+                  { id: 'all', label: 'All' },
+                  { id: 'biryani', label: 'Biryani' },
+                  { id: 'curries', label: 'Curries' },
+                  { id: 'grill', label: 'Grill' },
+                  { id: 'vegetarian', label: 'Vegetarian' },
+                  { id: 'breads', label: 'Breads' },
+                  { id: 'desserts', label: 'Desserts' },
+                ].map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setStockCategoryFilter(c.id)}
+                    className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                      stockCategoryFilter === c.id
+                        ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Status Segmented Control */}
+              <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
                 <button
-                  key={c.id}
-                  onClick={() => setStockCategoryFilter(c.id)}
-                  className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer shrink-0 ${
-                    stockCategoryFilter === c.id
-                      ? 'bg-stone-900 text-white'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  onClick={() => setStockStatusFilter('all')}
+                  className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                    stockStatusFilter === 'all'
+                      ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
                   }`}
                 >
-                  {c.label}
+                  All Items
                 </button>
-              ))}
-
-              <span className="w-px h-4 bg-stone-200 mx-1 hidden sm:block" />
-
-              {/* Status Quick Filter */}
-              <button
-                onClick={() => setStockStatusFilter('all')}
-                className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-                  stockStatusFilter === 'all'
-                    ? 'bg-[#F15A24] text-white'
-                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setStockStatusFilter('sold_out')}
-                className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-                  stockStatusFilter === 'sold_out'
-                    ? 'bg-rose-600 text-white'
-                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                }`}
-              >
-                86&apos;d ({soldOutCount})
-              </button>
+                <button
+                  onClick={() => setStockStatusFilter('sold_out')}
+                  className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                    stockStatusFilter === 'sold_out'
+                      ? 'bg-white text-rose-700 font-semibold shadow-xs border border-stone-200/60'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                  }`}
+                >
+                  86&apos;d ({soldOutCount})
+                </button>
+              </div>
             </div>
           </div>
 
