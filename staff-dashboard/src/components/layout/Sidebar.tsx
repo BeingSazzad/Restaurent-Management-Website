@@ -47,7 +47,7 @@ export function Sidebar() {
 
   const managementItems = [
     {
-      name: 'Business Analytics',
+      name: 'Analytics',
       path: ROUTES.DASHBOARD.ANALYTICS,
       icon: BarChart3,
       allowedRoles: ['admin', 'expo'],
@@ -65,7 +65,7 @@ export function Sidebar() {
       allowedRoles: ['admin'],
     },
     {
-      name: 'Menu & Products',
+      name: 'Products',
       path: ROUTES.DASHBOARD.PRODUCTS,
       icon: Utensils,
       allowedRoles: ['admin'],

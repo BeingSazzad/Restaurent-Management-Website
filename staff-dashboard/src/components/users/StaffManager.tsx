@@ -113,8 +113,8 @@ export function StaffManager() {
 
       {/* Page Header with Invite Admin Button */}
       <PageHeader
-        title="Staff & Roles Management"
-        description="Monitor kitchen brigade count, active shifts, permission tiers, and invite new administrators or cooks."
+        title="Staff & Roles"
+        description="Kitchen team, shift status, and admin invites."
         action={
           <Button
             size="sm"

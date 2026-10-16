@@ -76,8 +76,8 @@ export function TransactionsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Transactions & Payments"
-        description="Reconciled financial logs, payment methods, digital wallets, and revenue audit trail."
+        title="Transactions"
+        description="Payment records and settled revenue."
         action={
           <Button
             size="sm"

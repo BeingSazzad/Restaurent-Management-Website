@@ -124,8 +124,8 @@ export function CustomersPage() {
 
       {/* Header */}
       <PageHeader
-        title="Customers & Diners"
-        description="Directory of registered diners, customer accounts, orders placed, and lifetime spend."
+        title="Customers"
+        description="Registered customer list and order history."
         action={
           <Button
             size="sm"
