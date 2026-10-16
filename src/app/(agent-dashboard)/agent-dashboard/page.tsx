@@ -338,71 +338,74 @@ export default function AgentDashboardPage() {
             </div>
           </div>
 
-          {/* Row 3 (KDS Active): Clean Filter & Search Toolbar */}
+          {/* Row 3 (KDS Active): Standard Unified Filter & Search Toolbar */}
           {selectedTab === 'kds' && (
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+            <div className="bg-stone-50/80 border border-stone-200/90 rounded-2xl p-2.5 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 mt-1">
               {/* Search Bar */}
-              <div className="relative flex-1 max-w-sm">
-                <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Filter ticket # or customer..."
+                  placeholder="Search ticket # or customer..."
                   value={orderSearchQuery}
                   onChange={(e) => setOrderSearchQuery(e.target.value)}
-                  className="w-full h-8.5 bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/20 rounded-lg pl-8 pr-7 text-xs outline-none transition-colors placeholder:text-stone-400 text-stone-800"
+                  className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-9.5 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
                 />
                 {orderSearchQuery && (
                   <button
                     onClick={() => setOrderSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 cursor-pointer"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-0.5 rounded-md hover:bg-stone-100 transition-colors cursor-pointer"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
 
-              {/* Station Filter Chips */}
-              <div className="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none flex-wrap">
-                {[
-                  { id: 'all', label: 'All Stations' },
-                  { id: 'biryani', label: 'Biryani' },
-                  { id: 'curries', label: 'Curries' },
-                  { id: 'grill', label: 'Grill' },
-                  { id: 'breads', label: 'Breads' },
-                ].map((st) => (
-                  <button
-                    key={st.id}
-                    onClick={() => setStationFilter(st.id as StationFilter)}
-                    className={`h-7.5 px-3 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
-                      stationFilter === st.id
-                        ? 'bg-stone-900 text-white'
-                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                    }`}
-                  >
-                    {st.label}
-                  </button>
-                ))}
+              {/* Segmented Controls */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Station Filter */}
+                <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto scrollbar-none">
+                  {[
+                    { id: 'all', label: 'All Stations' },
+                    { id: 'biryani', label: 'Biryani' },
+                    { id: 'curries', label: 'Curries' },
+                    { id: 'grill', label: 'Grill' },
+                    { id: 'breads', label: 'Breads' },
+                  ].map((st) => (
+                    <button
+                      key={st.id}
+                      onClick={() => setStationFilter(st.id as StationFilter)}
+                      className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                        stationFilter === st.id
+                          ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                      }`}
+                    >
+                      {st.label}
+                    </button>
+                  ))}
+                </div>
 
-                <span className="w-px h-4 bg-stone-200 mx-1 hidden sm:block" />
-
-                {/* Fulfillment Type */}
-                {[
-                  { id: 'all', label: 'All Orders' },
-                  { id: 'delivery', label: 'Delivery' },
-                  { id: 'collection', label: 'Pickup' },
-                ].map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
-                    className={`h-7.5 px-3 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
-                      fulfillmentFilter === f.id
-                        ? 'bg-[#F15A24] text-white'
-                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
+                {/* Fulfillment Filter */}
+                <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
+                  {[
+                    { id: 'all', label: 'All Orders' },
+                    { id: 'delivery', label: 'Delivery' },
+                    { id: 'collection', label: 'Pickup' },
+                  ].map((f) => (
+                    <button
+                      key={f.id}
+                      onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
+                      className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                        fulfillmentFilter === f.id
+                          ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -413,15 +416,17 @@ export default function AgentDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* COLUMN 1: NEW INCOMING ORDERS */}
           <div className="space-y-3.5">
-            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+            <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
-                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 ring-4 ring-rose-100" />
+                <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
                   Incoming Tickets
                 </h2>
-                <span className="text-xs font-medium text-stone-400">({newOrders.length})</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">
+                  {newOrders.length}
+                </span>
               </div>
-              <span className="text-[11px] text-stone-400">Needs fire</span>
+              <span className="text-[11px] font-medium text-stone-400">Needs fire</span>
             </div>
 
             {newOrders.length === 0 ? (
@@ -447,15 +452,17 @@ export default function AgentDashboardPage() {
 
           {/* COLUMN 2: PREPARING IN KITCHEN (COOKING / TANDOOR) */}
           <div className="space-y-3.5">
-            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+            <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#F15A24]" />
-                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24] ring-4 ring-orange-100" />
+                <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
                   Cooking / Grilling
                 </h2>
-                <span className="text-xs font-medium text-stone-400">({preparingOrders.length})</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-50 text-[#F15A24] border border-orange-200/60">
+                  {preparingOrders.length}
+                </span>
               </div>
-              <span className="text-[11px] text-stone-400">In kitchen</span>
+              <span className="text-[11px] font-medium text-stone-400">In kitchen</span>
             </div>
 
             {preparingOrders.length === 0 ? (
@@ -481,15 +488,17 @@ export default function AgentDashboardPage() {
 
           {/* COLUMN 3: READY FOR DISPATCH / PICKUP */}
           <div className="space-y-3.5">
-            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+            <div className="bg-white border border-stone-200/90 rounded-xl px-3.5 py-2.5 shadow-2xs flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100" />
+                <h2 className="font-bold text-xs uppercase tracking-wider text-stone-900">
                   Ready / Out for Delivery
                 </h2>
-                <span className="text-xs font-medium text-stone-400">({readyOrders.length})</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  {readyOrders.length}
+                </span>
               </div>
-              <span className="text-[11px] text-stone-400">For pickup</span>
+              <span className="text-[11px] font-medium text-stone-400">For pickup</span>
             </div>
 
             {readyOrders.length === 0 ? (
