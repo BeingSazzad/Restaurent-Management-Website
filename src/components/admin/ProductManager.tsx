@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
+  syncMenuFromStorage,
   addMenuItem,
   updateMenuItem,
   deleteMenuItem,
   toggleItemAvailability,
 } from '@/redux/slices/menuSlice';
-import { MenuItem } from '@/Mockdata';
+import { MenuItem, DishModifierGroup } from '@/Mockdata';
 import {
   Plus,
   Search,
@@ -19,6 +20,7 @@ import {
   Flame,
   AlertCircle,
   Sparkles,
+  UtensilsCrossed,
 } from 'lucide-react';
 
 const PRESET_IMAGES = [
@@ -47,9 +49,19 @@ const DIETARY_OPTIONS: ('halal' | 'vegetarian' | 'vegan' | 'gluten-free')[] = [
   'gluten-free',
 ];
 
+interface ModifierOptionItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export const ProductManager: React.FC = () => {
   const dispatch = useAppDispatch();
   const menuItems = useAppSelector((state) => state.menu.items);
+
+  useEffect(() => {
+    dispatch(syncMenuFromStorage());
+  }, [dispatch]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -69,9 +81,73 @@ export const ProductManager: React.FC = () => {
   const [formIsBestSeller, setFormIsBestSeller] = useState(false);
   const [formIsAvailable, setFormIsAvailable] = useState(true);
 
+  // Portion Sizes & Accompaniments State (Modifier Groups)
+  const [formPortionGroupName, setFormPortionGroupName] = useState('Portion Size');
+  const [formPortions, setFormPortions] = useState<ModifierOptionItem[]>([
+    { id: 'opt-reg', name: 'Standard Handi Portion (1 Person)', price: 0 },
+    { id: 'opt-large', name: 'Large Handi Feast (with extra drumstick)', price: 3.5 },
+  ]);
+  const [formAccompanimentsGroupName, setFormAccompanimentsGroupName] = useState('Complimentary Accompaniments');
+  const [formMaxAccompaniments, setFormMaxAccompaniments] = useState<number>(3);
+  const [formAccompaniments, setFormAccompaniments] = useState<ModifierOptionItem[]>([
+    { id: 'opt-raita', name: 'Pomegranate Mint Raita', price: 1.5 },
+    { id: 'opt-salan', name: 'Spiced Mirchi Salan Gravy', price: 2.0 },
+    { id: 'opt-egg', name: 'Boiled Spiced Egg Topping', price: 1.2 },
+  ]);
+
   // File Upload State
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadNotice, setUploadNotice] = useState<string | null>(null);
+
+  const handleAddPortion = () => {
+    setFormPortions((prev) => [
+      ...prev,
+      { id: `opt-portion-${Date.now()}`, name: '', price: 0 },
+    ]);
+  };
+
+  const handleUpdatePortion = (index: number, field: 'name' | 'price', value: string | number) => {
+    setFormPortions((prev) => {
+      const copy = [...prev];
+      if (field === 'name') {
+        copy[index] = { ...copy[index], name: value as string };
+      } else {
+        copy[index] = { ...copy[index], price: parseFloat(value as string) || 0 };
+      }
+      return copy;
+    });
+  };
+
+  const handleRemovePortion = (index: number) => {
+    if (formPortions.length <= 1) {
+      alert('A dish must have at least one portion size option (e.g. Standard Portion).');
+      return;
+    }
+    setFormPortions((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAddAccompaniment = () => {
+    setFormAccompaniments((prev) => [
+      ...prev,
+      { id: `opt-acc-${Date.now()}`, name: '', price: 1.5 },
+    ]);
+  };
+
+  const handleUpdateAccompaniment = (index: number, field: 'name' | 'price', value: string | number) => {
+    setFormAccompaniments((prev) => {
+      const copy = [...prev];
+      if (field === 'name') {
+        copy[index] = { ...copy[index], name: value as string };
+      } else {
+        copy[index] = { ...copy[index], price: parseFloat(value as string) || 0 };
+      }
+      return copy;
+    });
+  };
+
+  const handleRemoveAccompaniment = (index: number) => {
+    setFormAccompaniments((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const openAddModal = () => {
     setEditingDish(null);
@@ -87,6 +163,19 @@ export const ProductManager: React.FC = () => {
     setFormIsBestSeller(false);
     setFormIsAvailable(true);
     setUploadNotice(null);
+
+    setFormPortionGroupName('Portion Size');
+    setFormPortions([
+      { id: 'opt-reg', name: 'Standard Handi Portion (1 Person)', price: 0 },
+      { id: 'opt-large', name: 'Large Handi Feast (with extra drumstick)', price: 3.5 },
+    ]);
+    setFormAccompanimentsGroupName('Complimentary Accompaniments');
+    setFormMaxAccompaniments(3);
+    setFormAccompaniments([
+      { id: 'opt-raita', name: 'Pomegranate Mint Raita', price: 1.5 },
+      { id: 'opt-salan', name: 'Spiced Mirchi Salan Gravy', price: 2.0 },
+      { id: 'opt-egg', name: 'Boiled Spiced Egg Topping', price: 1.2 },
+    ]);
     setIsModalOpen(true);
   };
 
@@ -104,6 +193,62 @@ export const ProductManager: React.FC = () => {
     setFormIsBestSeller(!!dish.isBestSeller);
     setFormIsAvailable(dish.isAvailable);
     setUploadNotice(null);
+
+    // Extract Portion Size group
+    const portionGroup = dish.modifierGroups?.find(
+      (g) =>
+        g.id.toLowerCase().includes('portion') ||
+        g.name.toLowerCase().includes('portion') ||
+        g.maxSelect === 1
+    );
+
+    if (portionGroup && portionGroup.options && portionGroup.options.length > 0) {
+      setFormPortionGroupName(portionGroup.name || 'Portion Size');
+      setFormPortions(
+        portionGroup.options.map((opt) => ({
+          id: opt.id,
+          name: opt.name,
+          price: opt.price,
+        }))
+      );
+    } else {
+      setFormPortionGroupName('Portion Size');
+      setFormPortions([
+        { id: 'opt-reg', name: 'Standard Handi Portion (1 Person)', price: 0 },
+        { id: 'opt-large', name: 'Large Handi Feast (with extra drumstick)', price: 3.5 },
+      ]);
+    }
+
+    // Extract Accompaniments group
+    const sidesGroup = dish.modifierGroups?.find(
+      (g) =>
+        g !== portionGroup &&
+        (g.id.toLowerCase().includes('side') ||
+          g.name.toLowerCase().includes('accompaniment') ||
+          g.name.toLowerCase().includes('sides') ||
+          g.maxSelect > 1)
+    );
+
+    if (sidesGroup && sidesGroup.options && sidesGroup.options.length > 0) {
+      setFormAccompanimentsGroupName(sidesGroup.name || 'Complimentary Accompaniments');
+      setFormMaxAccompaniments(sidesGroup.maxSelect || 3);
+      setFormAccompaniments(
+        sidesGroup.options.map((opt) => ({
+          id: opt.id,
+          name: opt.name,
+          price: opt.price,
+        }))
+      );
+    } else {
+      setFormAccompanimentsGroupName('Complimentary Accompaniments');
+      setFormMaxAccompaniments(3);
+      setFormAccompaniments([
+        { id: 'opt-raita', name: 'Pomegranate Mint Raita', price: 1.5 },
+        { id: 'opt-salan', name: 'Spiced Mirchi Salan Gravy', price: 2.0 },
+        { id: 'opt-egg', name: 'Boiled Spiced Egg Topping', price: 1.2 },
+      ]);
+    }
+
     setIsModalOpen(true);
   };
 
@@ -136,6 +281,45 @@ export const ProductManager: React.FC = () => {
     const categoryObj = CATEGORIES_LIST.find((c) => c.id === formCategory);
     const categoryLabel = categoryObj ? categoryObj.label : 'Specialties';
 
+    // Build Modifier Groups
+    const cleanedPortions = formPortions
+      .filter((p) => p.name.trim().length > 0)
+      .map((p, idx) => ({
+        id: p.id || `portion-${Date.now()}-${idx}`,
+        name: p.name.trim(),
+        price: Number(p.price) || 0,
+      }));
+
+    const cleanedAccompaniments = formAccompaniments
+      .filter((a) => a.name.trim().length > 0)
+      .map((a, idx) => ({
+        id: a.id || `acc-${Date.now()}-${idx}`,
+        name: a.name.trim(),
+        price: Number(a.price) || 0,
+      }));
+
+    const modifierGroups: DishModifierGroup[] = [];
+
+    if (cleanedPortions.length > 0) {
+      modifierGroups.push({
+        id: 'portion',
+        name: formPortionGroupName.trim() || 'Portion Size',
+        required: true,
+        maxSelect: 1,
+        options: cleanedPortions,
+      });
+    }
+
+    if (cleanedAccompaniments.length > 0) {
+      modifierGroups.push({
+        id: 'sides',
+        name: formAccompanimentsGroupName.trim() || 'Complimentary Accompaniments',
+        required: false,
+        maxSelect: Number(formMaxAccompaniments) || 3,
+        options: cleanedAccompaniments,
+      });
+    }
+
     const dishPayload: MenuItem = {
       id: editingDish ? editingDish.id : `dish-${Date.now()}`,
       name: formName.trim(),
@@ -151,18 +335,7 @@ export const ProductManager: React.FC = () => {
       dietary: formDietary,
       isBestSeller: formIsBestSeller,
       isAvailable: formIsAvailable,
-      modifierGroups: editingDish?.modifierGroups || [
-        {
-          id: 'mod-portion',
-          name: 'Portion Size',
-          required: true,
-          maxSelect: 1,
-          options: [
-            { id: 'opt-reg', name: 'Standard Handi Portion (1 Person)', price: 0 },
-            { id: 'opt-large', name: 'Royal Feast Portion (2-3 Persons)', price: 8.5 },
-          ],
-        },
-      ],
+      modifierGroups,
     };
 
     if (editingDish) {
@@ -328,6 +501,19 @@ export const ProductManager: React.FC = () => {
                   </span>
                 )}
               </div>
+
+              {/* Portions & Addons Customization Badges */}
+              <div className="flex items-center gap-1.5 pt-2 text-[10.5px] text-stone-500 font-medium flex-wrap">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-orange-50 text-[#F15A24] border border-orange-100 font-semibold">
+                  <UtensilsCrossed className="w-3 h-3" />
+                  {dish.modifierGroups?.[0]?.options?.length || 1} Portion Sizes
+                </span>
+                {dish.modifierGroups && dish.modifierGroups.length > 1 && dish.modifierGroups[1]?.options?.length > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-stone-100 text-stone-600">
+                    +{dish.modifierGroups[1].options.length} Accompaniments
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Row Actions */}
@@ -373,7 +559,7 @@ export const ProductManager: React.FC = () => {
       {/* ================= ADD / EDIT DISH MODAL ================= */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-stone-200">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-stone-200">
             {/* Modal Header */}
             <div className="p-5 sm:p-6 border-b border-stone-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-xs z-10">
               <div>
@@ -381,7 +567,7 @@ export const ProductManager: React.FC = () => {
                   {editingDish ? 'Edit Dish & Media' : 'Add New Restaurant Dish'}
                 </h3>
                 <p className="text-xs text-stone-500 mt-0.5">
-                  Update photo, name, category, pricing, and allergen badges.
+                  Update photo, name, category, pricing, portions, and accompaniments.
                 </p>
               </div>
               <button
@@ -556,6 +742,194 @@ export const ProductManager: React.FC = () => {
                   onChange={(e) => setFormDescription(e.target.value)}
                   className="w-full p-3 bg-white border border-stone-200 focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none"
                 />
+              </div>
+
+              {/* ================= SECTION: PORTION SIZES & ACCOMPANIMENTS ================= */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-stone-50 to-white border border-stone-200 space-y-5">
+                <div className="flex items-center justify-between pb-2.5 border-b border-stone-200/80">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                      <UtensilsCrossed className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs sm:text-sm text-[#1A130E]">
+                        Portion Sizes & Customization Add-ons
+                      </h4>
+                      <p className="text-[11px] text-stone-500">
+                        Configure the exact options, serving sizes, and add-on prices displayed in the customer ordering modal.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* --- 1. Portion Sizes Group (Required · Single Selection) --- */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <label className="text-xs font-bold text-stone-800">
+                        Portion Size Variations
+                      </label>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-[#F15A24]">
+                        Required · Select 1
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddPortion}
+                      className="text-[11px] font-bold text-[#F15A24] hover:text-[#d94e1c] flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Portion Tier</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {formPortions.map((portion, index) => (
+                      <div
+                        key={portion.id || index}
+                        className="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-stone-200 shadow-2xs"
+                      >
+                        <span className="text-[11px] font-bold text-stone-400 w-5 text-center">
+                          #{index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Standard Handi Portion (1 Person)"
+                            value={portion.name}
+                            onChange={(e) => handleUpdatePortion(index, 'name', e.target.value)}
+                            className="w-full h-8 px-2.5 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-lg text-xs text-stone-800 outline-none"
+                          />
+                        </div>
+                        <div className="w-28 relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-stone-400">
+                            +€
+                          </span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            required
+                            placeholder="0.00"
+                            value={portion.price}
+                            onChange={(e) => handleUpdatePortion(index, 'price', e.target.value)}
+                            className="w-full h-8 pl-8 pr-2 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-lg text-xs text-stone-800 font-bold outline-none text-right"
+                          />
+                        </div>
+                        {formPortions.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePortion(index)}
+                            className="w-8 h-8 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center cursor-pointer transition-colors"
+                            title="Remove portion option"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10.5px] text-stone-400 italic">
+                    💡 Tip: Set the first option to €0.00 for the base serving. Larger feasts or upgraded portions add the extra charge to the dish price.
+                  </p>
+                </div>
+
+                {/* --- 2. Complimentary Accompaniments & Add-ons Group (Optional · Multi-Selection) --- */}
+                <div className="space-y-3 pt-3 border-t border-stone-200/80">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <label className="text-xs font-bold text-stone-800">
+                        Complimentary Accompaniments & Add-ons
+                      </label>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">
+                        Optional · Multi-Select
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5 text-xs text-stone-600">
+                        <span className="text-[11px] font-medium">Max select:</span>
+                        <select
+                          value={formMaxAccompaniments}
+                          onChange={(e) => setFormMaxAccompaniments(parseInt(e.target.value) || 3)}
+                          className="h-7 px-2 bg-white border border-stone-200 rounded-lg text-xs font-semibold text-stone-800 outline-none cursor-pointer"
+                        >
+                          <option value={1}>1 option</option>
+                          <option value={2}>2 options</option>
+                          <option value={3}>3 options</option>
+                          <option value={4}>4 options</option>
+                          <option value={5}>5 options</option>
+                        </select>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleAddAccompaniment}
+                        className="text-[11px] font-bold text-[#F15A24] hover:text-[#d94e1c] flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add Side/Accompaniment</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    {formAccompaniments.map((acc, index) => (
+                      <div
+                        key={acc.id || index}
+                        className="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-stone-200 shadow-2xs"
+                      >
+                        <span className="text-[11px] font-bold text-stone-400 w-5 text-center">
+                          #{index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Pomegranate Mint Raita, Spiced Mirchi Salan Gravy"
+                            value={acc.name}
+                            onChange={(e) => handleUpdateAccompaniment(index, 'name', e.target.value)}
+                            className="w-full h-8 px-2.5 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-lg text-xs text-stone-800 outline-none"
+                          />
+                        </div>
+                        <div className="w-28 relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-stone-400">
+                            +€
+                          </span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            required
+                            placeholder="0.00"
+                            value={acc.price}
+                            onChange={(e) => handleUpdateAccompaniment(index, 'price', e.target.value)}
+                            className="w-full h-8 pl-8 pr-2 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-lg text-xs text-stone-800 font-bold outline-none text-right"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveAccompaniment(index)}
+                          className="w-8 h-8 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center cursor-pointer transition-colors"
+                          title="Remove accompaniment"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Summary / Calculation Box */}
+                  <div className="mt-3 p-3 rounded-xl bg-orange-50/60 border border-orange-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <span className="text-stone-600 font-medium">
+                      Customer Modal Live Price Calculation:
+                    </span>
+                    <span className="font-bold text-[#1A130E]">
+                      Base €{(Number(formPrice) || 0).toFixed(2)} + Portions (+€0 to +€{(Math.max(0, ...formPortions.map((p) => p.price || 0))).toFixed(2)}) + Add-ons
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Dietary Tags Checkboxes */}
