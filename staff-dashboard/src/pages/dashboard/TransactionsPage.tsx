@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  CreditCard,
   Search,
   X,
   CheckCircle2,
-  TrendingUp,
   Receipt,
-  Smartphone,
-  Banknote,
-  Calendar,
-  ExternalLink,
   Printer,
-  ShieldCheck,
 } from 'lucide-react';
 import {
   getTransactionsList,
@@ -28,7 +21,6 @@ export function TransactionsPage() {
   );
   const [searchQuery, setSearchQuery] = useState('');
   const [methodFilter, setMethodFilter] = useState<'all' | 'apple_pay' | 'card' | 'cash'>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'settled' | 'pending' | 'refunded'>('all');
   const [activeSlipTxn, setActiveSlipTxn] = useState<TransactionRecord | null>(null);
 
   useEffect(() => {
@@ -42,7 +34,6 @@ export function TransactionsPage() {
   const filteredTxns = useMemo(() => {
     return transactions.filter((t) => {
       if (methodFilter !== 'all' && t.paymentMethod !== methodFilter) return false;
-      if (statusFilter !== 'all' && t.status !== statusFilter) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return (
@@ -54,30 +45,26 @@ export function TransactionsPage() {
       }
       return true;
     });
-  }, [transactions, methodFilter, statusFilter, searchQuery]);
+  }, [transactions, methodFilter, searchQuery]);
 
-  const kpis = useMemo(() => {
-    const totalVolume = transactions.reduce((acc, t) => acc + t.amount, 0);
-    const digitalVolume = transactions
-      .filter((t) => t.paymentMethod === 'apple_pay' || t.paymentMethod === 'card')
-      .reduce((acc, t) => acc + t.amount, 0);
-    const cashVolume = transactions
-      .filter((t) => t.paymentMethod === 'cash')
-      .reduce((acc, t) => acc + t.amount, 0);
-    const digitalPct = totalVolume > 0 ? Math.round((digitalVolume / totalVolume) * 100) : 0;
-    return {
-      totalVolume,
-      digitalVolume,
-      cashVolume,
-      digitalPct,
-    };
-  }, [transactions]);
+  const getMethodLabel = (method: string) => {
+    switch (method) {
+      case 'apple_pay':
+        return 'Apple Pay';
+      case 'card':
+        return 'Card';
+      case 'cash':
+        return 'Cash';
+      default:
+        return method;
+    }
+  };
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Transactions"
-        description="Payment records and revenue."
+        description="Payment records and order history."
         action={
           <Button
             size="sm"
@@ -89,92 +76,6 @@ export function TransactionsPage() {
           </Button>
         }
       />
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Settled Volume */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Total Revenue
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Receipt className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-bold text-stone-900">
-              {formatCurrency(kpis.totalVolume)}
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              +18.4%
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Settled payments</p>
-        </div>
-
-        {/* Digital / Card Settlements */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Card &amp; Digital
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-              <CreditCard className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-bold text-stone-900">
-              {formatCurrency(kpis.digitalVolume)}
-            </span>
-            <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-              {kpis.digitalPct}% Digital
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Online payments</p>
-        </div>
-
-        {/* Cash Settlements */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Cash
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-              <Banknote className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-bold text-stone-900">
-              {formatCurrency(kpis.cashVolume)}
-            </span>
-            <span className="text-xs font-medium text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full">
-              {100 - kpis.digitalPct}% Cash
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Cash payments</p>
-        </div>
-
-        {/* Settlement Health */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-stone-500 uppercase tracking-wider">
-              Settlement
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-bold text-stone-900">100%</span>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              0 Disputes
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">No disputes</p>
-        </div>
-      </div>
 
       {/* Toolbar & Filters */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -227,112 +128,82 @@ export function TransactionsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
-                <th className="py-3.5 px-4">TXN ID</th>
-                <th className="py-3.5 px-4">Order #</th>
-                <th className="py-3.5 px-4">Customer</th>
-                <th className="py-3.5 px-4">Method</th>
-                <th className="py-3.5 px-4">Amount</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4">Time</th>
-                <th className="py-3.5 px-4 text-right">Receipt</th>
+                <th className="py-3 px-4">Order #</th>
+                <th className="py-3 px-4">Customer</th>
+                <th className="py-3 px-4">Method</th>
+                <th className="py-3 px-4">Amount</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 text-[13px]">
               {filteredTxns.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-stone-400">
+                  <td colSpan={7} className="py-12 text-center text-stone-400">
                     <Receipt className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    No transactions found matching your criteria.
+                    No transactions found.
                   </td>
                 </tr>
               ) : (
                 filteredTxns.map((t) => (
                   <tr key={t.id} className="hover:bg-stone-50/70 transition-colors">
-                    {/* Transaction Ref */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-mono text-xs font-semibold text-stone-900 bg-stone-100 px-2 py-1 rounded-md border border-stone-200/60">
-                        {t.id}
-                      </span>
-                    </td>
-
                     {/* Order Ref */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-semibold text-stone-800 text-xs hover:text-[#F15A24] cursor-pointer inline-flex items-center gap-1">
+                    <td className="py-3 px-4">
+                      <span className="font-semibold text-stone-900 text-xs">
                         #{t.orderNumber}
                       </span>
                     </td>
 
-                    {/* Customer */}
-                    <td className="py-3.5 px-4">
-                      <p className="font-semibold text-stone-900 leading-tight">{t.customerName}</p>
-                      <p className="text-[11.5px] text-stone-400 mt-0.5">{t.customerEmail}</p>
+                    {/* Customer Name */}
+                    <td className="py-3 px-4">
+                      <span className="font-semibold text-stone-900">
+                        {t.customerName}
+                      </span>
                     </td>
 
                     {/* Method */}
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5">
-                        {t.paymentMethod === 'apple_pay' && (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-stone-800 font-medium bg-stone-100 px-2.5 py-1 rounded-lg">
-                            <Smartphone className="w-3.5 h-3.5 text-stone-700" />
-                            Apple Pay
-                          </span>
-                        )}
-                        {t.paymentMethod === 'card' && (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-stone-800 font-medium bg-blue-50 text-blue-800 px-2.5 py-1 rounded-lg border border-blue-200/60">
-                            <CreditCard className="w-3.5 h-3.5 text-blue-600" />
-                            {t.methodLabel}
-                          </span>
-                        )}
-                        {t.paymentMethod === 'cash' && (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-amber-800 font-medium bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60">
-                            <Banknote className="w-3.5 h-3.5 text-amber-600" />
-                            Cash
-                          </span>
-                        )}
-                      </div>
+                    <td className="py-3 px-4">
+                      <span className="text-stone-700 text-xs font-medium">
+                        {getMethodLabel(t.paymentMethod)}
+                      </span>
                     </td>
 
                     {/* Amount */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-bold text-stone-900 text-sm">
+                    <td className="py-3 px-4">
+                      <span className="font-bold text-stone-900 text-[13.5px]">
                         {formatCurrency(t.amount)}
                       </span>
                     </td>
 
                     {/* Status */}
-                    <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                    <td className="py-3 px-4">
+                      <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                         Settled
                       </span>
                     </td>
 
-                    {/* Timestamp */}
-                    <td className="py-3.5 px-4">
-                      <div className="text-xs text-stone-600 flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-stone-400" />
-                        <span>
-                          {new Date(t.timestamp).toLocaleTimeString('en-IE', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
-                        </span>
-                      </div>
-                      <span className="text-[10.5px] text-stone-400 block mt-0.5">
+                    {/* Date */}
+                    <td className="py-3 px-4">
+                      <span className="text-stone-600 text-xs font-medium whitespace-nowrap">
                         {new Date(t.timestamp).toLocaleDateString('en-IE', {
                           day: 'numeric',
                           month: 'short',
+                        })}, {new Date(t.timestamp).toLocaleTimeString('en-IE', {
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </span>
                     </td>
 
                     {/* Actions */}
-                    <td className="py-3.5 px-4 text-right">
+                    <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => setActiveSlipTxn(t)}
-                        className="px-3 py-1.5 text-xs font-semibold text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                        className="px-3 py-1.5 text-xs font-medium text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-lg border border-stone-200 transition-colors cursor-pointer"
                       >
-                        Receipt Slip
+                        Receipt
                       </button>
                     </td>
                   </tr>
@@ -373,7 +244,25 @@ export function TransactionsPage() {
                 <span>{activeSlipTxn.customerName}</span>
               </div>
               <div className="flex justify-between">
-                <span>Tender Type:</span>
+                <span>Email:</span>
+                <span>{activeSlipTxn.customerEmail}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Date &amp; Time:</span>
+                <span>
+                  {new Date(activeSlipTxn.timestamp).toLocaleDateString('en-IE', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}{' '}
+                  {new Date(activeSlipTxn.timestamp).toLocaleTimeString('en-IE', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Payment Method:</span>
                 <span>{activeSlipTxn.methodLabel}</span>
               </div>
               <div className="flex justify-between">
