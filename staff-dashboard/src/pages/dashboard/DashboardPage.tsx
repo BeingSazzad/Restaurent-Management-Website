@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { KdsPipeline } from '../../components/dashboard/KdsPipeline';
-import { Badge } from '../../components/shared/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
@@ -82,11 +81,6 @@ export function DashboardPage() {
       <PageHeader
         title="Kitchen Orders"
         description="Track and manage live orders across preparation stations."
-        badge={
-          <Badge variant="success" dot size="sm">
-            Live
-          </Badge>
-        }
         action={
           <Button
             variant="primary"
