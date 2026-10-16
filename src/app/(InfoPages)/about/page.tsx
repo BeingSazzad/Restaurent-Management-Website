@@ -11,7 +11,6 @@ import {
   UtensilsCrossed,
   Phone,
   ArrowRight,
-  Star,
   Clock,
 } from 'lucide-react';
 import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
@@ -69,8 +68,8 @@ export default function AboutPage() {
               {aboutData.storyParagraph2}
             </p>
 
-            {/* CTA & Customer Social Proof */}
-            <div className="pt-3 flex flex-wrap items-center gap-6">
+            {/* CTA Button */}
+            <div className="pt-3">
               <Link
                 href="/menu"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[14px] font-bold shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-[1.02] active:scale-98 transition-all"
@@ -78,42 +77,6 @@ export default function AboutPage() {
                 <span>Explore Full Menu</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
-
-              {/* Avatar stack + Social Proof */}
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2 shrink-0">
-                  <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
-                    src="/images/avatars/ayesha.jpg"
-                    alt="Customer"
-                  />
-                  <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
-                    src="/images/avatars/cian.jpg"
-                    alt="Customer"
-                  />
-                  <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
-                    src="/images/avatars/elena.jpg"
-                    alt="Customer"
-                  />
-                  <img
-                    className="w-10 h-10 rounded-full ring-2 ring-white object-cover shrink-0 aspect-square shadow-sm"
-                    src="/images/avatars/james.jpg"
-                    alt="Customer"
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center text-[#FBA138] text-xs">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="text-[12px] font-bold text-[#1A130E] block">
-                    10K+ Happy Diners
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
