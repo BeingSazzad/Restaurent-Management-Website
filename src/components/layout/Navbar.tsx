@@ -175,14 +175,6 @@ export const Navbar: React.FC = () => {
                             <ShoppingBag className="w-4 h-4 text-[#B84A22]" />
                             <span>Orders</span>
                           </Link>
-                          <Link
-                            href="/reservations"
-                            onClick={() => setIsAccountMenuOpen(false)}
-                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#3D3D3D] hover:bg-orange-50/70 hover:text-[#B84A22] font-medium transition-colors"
-                          >
-                            <Calendar className="w-4 h-4 text-[#B84A22]" />
-                            <span>Reservations</span>
-                          </Link>
                           {(user?.role === 'admin' || user?.role === 'manager' || user?.role === 'chef') && (
                             <Link
                               href="/agent-dashboard"
@@ -246,16 +238,6 @@ export const Navbar: React.FC = () => {
                 </Link>
               );
             })}
-            <Link
-              href="/reservations"
-              className={`block px-4 py-2.5 rounded-xl text-[16px] font-medium transition-colors ${
-                pathname === '/reservations'
-                  ? 'bg-orange-50 text-[#B84A22] font-semibold'
-                  : 'text-[#3D3D3D] hover:bg-neutral-50 hover:text-[#B84A22]'
-              }`}
-            >
-              Table Reservations
-            </Link>
           </nav>
 
           {/* Account Section in Mobile Menu */}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Eye, UtensilsCrossed, Calendar } from 'lucide-react';
+import { ArrowRight, Sparkles, Eye, UtensilsCrossed } from 'lucide-react';
 import { getFullCmsData, GalleryItem, DEFAULT_GALLERY_ITEMS } from '@/services/cmsService';
 
 export default function GalleryPage() {
@@ -182,11 +182,11 @@ export default function GalleryPage() {
                 </button>
                 <div className="flex items-center gap-2">
                   <Link
-                    href="/reservations"
+                    href="/menu"
                     className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_12px_rgba(184,74,34,0.3)] flex items-center gap-2 transition-all hover:scale-105 cursor-pointer"
                   >
-                    <Calendar className="w-4 h-4" />
-                    <span>Reserve a Table</span>
+                    <UtensilsCrossed className="w-4 h-4" />
+                    <span>Explore Menu</span>
                   </Link>
                 </div>
               </div>

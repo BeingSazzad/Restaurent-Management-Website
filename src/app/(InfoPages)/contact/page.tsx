@@ -14,7 +14,6 @@ import {
   RotateCcw,
   Navigation,
   ArrowRight,
-  UtensilsCrossed,
 } from 'lucide-react';
 
 export default function ContactPage() {
@@ -74,7 +73,7 @@ export default function ContactPage() {
           Get in Touch With Us
         </h1>
         <p className="section-subtitle text-[#666666]">
-          Have queries regarding table reservations, catering feasts, allergen guidance, or custom orders? Reach out directly to our Dublin team.
+          Have queries regarding catering feasts, allergen guidance, or custom orders? Reach out directly to our Dublin team.
         </p>
       </div>
 
@@ -133,7 +132,7 @@ export default function ContactPage() {
           <div className="mb-6">
             <h2 className="text-xl font-bold text-[#1A130E]">Send Us a Message</h2>
             <p className="text-[13px] text-[#666666] mt-1">
-              Have queries regarding reservations, dietary allergens, catering events, or custom requests? Let us know below.
+              Have queries regarding dietary allergens, catering events, or custom requests? Let us know below.
             </p>
           </div>
 
@@ -199,7 +198,7 @@ export default function ContactPage() {
                   required
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  placeholder="e.g. Table Reservation, Catering Feasts, Allergen Guidance"
+                  placeholder="e.g. Catering Feasts, Dietary Guidance, Private Orders"
                   className="w-full bg-[rgb(249,249,249)] focus:bg-white rounded-xl px-4 py-3 text-[14px] text-[#1A130E] placeholder:text-[#888888] border border-[#E5E5E5] focus:border-[#B84A22] focus:outline-hidden transition-all"
                 />
               </div>
@@ -277,25 +276,18 @@ export default function ContactPage() {
       <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#1C1510] via-[#241A14] to-[#17110D] border border-[#3A2D24] text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-1.5 text-center md:text-left">
           <h3 className="font-bold text-xl sm:text-2xl text-white">
-            Planning a Visit or Takeaway?
+            Craving Authentic Indian Cuisine?
           </h3>
           <p className="text-[13.5px] text-[#D5CBC2] max-w-lg leading-relaxed">
-            Order ahead online to have your food packed hot when you arrive, or reserve an intimate table for dinner.
+            Order online for fast takeaway collection or direct hot delivery right to your door in Dublin.
           </p>
         </div>
         <div className="flex items-center gap-3 shrink-0 flex-wrap justify-center">
           <Link
-            href="/reservations"
-            className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[13px] font-semibold transition-all inline-flex items-center gap-2"
-          >
-            <UtensilsCrossed className="w-4 h-4 text-[#FBA138]" />
-            <span>Book a Table</span>
-          </Link>
-          <Link
             href="/menu"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13px] font-semibold shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-2"
+            className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-[13.5px] font-semibold shadow-[0_4px_14px_rgba(184,74,34,0.3)] hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-2"
           >
-            <span>Order Takeaway</span>
+            <span>Order Takeaway & Delivery</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
