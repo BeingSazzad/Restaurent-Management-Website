@@ -137,7 +137,7 @@ export function ShiftZReport() {
     <div className="space-y-5">
       <PageHeader
         title="Shift Report"
-        description="Shift sales summary, order counts, and station breakdown."
+        description="Shift sales and station breakdown."
         action={
           <Button
             size="sm"
@@ -145,7 +145,7 @@ export function ShiftZReport() {
             leftIcon={<Printer className="w-3.5 h-3.5" />}
             onClick={() => window.print()}
           >
-            Print Report
+            Print
           </Button>
         }
       />

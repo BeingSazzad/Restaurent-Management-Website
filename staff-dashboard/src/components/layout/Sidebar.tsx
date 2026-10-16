@@ -28,7 +28,6 @@ export function Sidebar() {
       name: 'Kitchen Orders',
       path: ROUTES.DASHBOARD.KDS,
       icon: LayoutDashboard,
-      badge: 'Live',
       allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
