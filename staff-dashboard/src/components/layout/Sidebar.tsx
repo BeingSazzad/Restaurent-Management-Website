@@ -137,13 +137,7 @@ export function Sidebar() {
                     <item.icon className="w-4 h-4 shrink-0" />
                     <span>{item.name}</span>
                   </div>
-                  {item.badge ? (
-                    <span className="text-[10.5px] px-2 py-0.2 rounded-full bg-white/20 text-white font-bold tracking-wide">
-                      {item.badge}
-                    </span>
-                  ) : (
-                    <ChevronRight className="w-3.5 h-3.5 text-stone-500/70" />
-                  )}
+                  <ChevronRight className="w-3.5 h-3.5 text-stone-500/70" />
                 </NavLink>
               ))}
             </div>

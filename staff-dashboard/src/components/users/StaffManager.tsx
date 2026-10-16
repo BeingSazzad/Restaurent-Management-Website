@@ -206,11 +206,11 @@ export function StaffManager() {
         {/* Role Segmented Filter */}
         <div className="flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto">
           {[
-            { id: 'all', label: 'All Staff' },
+            { id: 'all', label: 'All' },
             { id: 'admin', label: 'Admins' },
             { id: 'chef', label: 'Chefs' },
             { id: 'expo', label: 'Expo' },
-            { id: 'staff', label: 'Line Staff' },
+            { id: 'staff', label: 'Staff' },
           ].map((r) => (
             <button
               key={r.id}
@@ -227,91 +227,109 @@ export function StaffManager() {
         </div>
       </div>
 
-      {/* Staff Roster Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredUsers.map((staff) => (
-          <div
-            key={staff.id}
-            className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs flex flex-col justify-between hover:border-stone-300 transition-colors"
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <Avatar name={staff.name} size="md" />
-                  <div>
-                    <h3 className="font-bold text-stone-900 text-sm leading-tight">{staff.name}</h3>
-                    <p className="text-xs text-stone-500 mt-0.5">{staff.email}</p>
-                  </div>
-                </div>
+      {/* Staff Directory Table */}
+      <div className="bg-white border border-stone-200/90 rounded-2xl shadow-2xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
+                <th className="py-3.5 px-4">Staff Member</th>
+                <th className="py-3.5 px-4">Role</th>
+                <th className="py-3.5 px-4">Station</th>
+                <th className="py-3.5 px-4">Status</th>
+                <th className="py-3.5 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100 text-[13px]">
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-stone-400">
+                    <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    No staff members found matching your search.
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((staff) => (
+                  <tr key={staff.id} className="hover:bg-stone-50/60 transition-colors">
+                    {/* Staff Member */}
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar name={staff.name} size="sm" />
+                        <div>
+                          <p className="font-semibold text-stone-900 leading-tight">{staff.name}</p>
+                          <p className="text-xs text-stone-500 mt-0.5">{staff.email}</p>
+                        </div>
+                      </div>
+                    </td>
 
-                {/* Duty Tag */}
-                <span
-                  className={`text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${
-                    staff.isActive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-stone-100 text-stone-500 border border-stone-200'
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      staff.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'
-                    }`}
-                  />
-                  {staff.isActive ? 'On Duty' : 'Off Duty'}
-                </span>
-              </div>
+                    {/* Role */}
+                    <td className="py-3 px-4">
+                      <select
+                        value={staff.role}
+                        onChange={(e) => handleRoleChange(staff.id, e.target.value as UserRole)}
+                        className="h-7 px-2 text-xs font-semibold rounded-lg border border-stone-200 bg-white text-stone-800 outline-none focus:border-[#F15A24] cursor-pointer shadow-2xs"
+                      >
+                        <option value="admin">Admin</option>
+                        <option value="chef">Chef</option>
+                        <option value="expo">Expo</option>
+                        <option value="staff">Staff</option>
+                      </select>
+                    </td>
 
-              <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
-                <span className="text-stone-400 font-medium">Assigned Role</span>
-                <span className="font-bold uppercase tracking-wider text-[11px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-800">
-                  {staff.role}
-                </span>
-              </div>
+                    {/* Station */}
+                    <td className="py-3 px-4">
+                      <span className="text-xs font-medium text-stone-600 bg-stone-100 px-2.5 py-1 rounded-md capitalize">
+                        {staff.shiftStation || 'All Stations'}
+                      </span>
+                    </td>
 
-              <div className="mt-2 flex items-center justify-between text-xs">
-                <span className="text-stone-400 font-medium">Station Coverage</span>
-                <span className="text-stone-700 capitalize font-medium">
-                  {staff.shiftStation || 'All Kitchen Stations'}
-                </span>
-              </div>
-            </div>
+                    {/* Duty Status */}
+                    <td className="py-3 px-4">
+                      <span
+                        className={`text-[11px] font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 ${
+                          staff.isActive
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : 'bg-stone-100 text-stone-500 border border-stone-200'
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            staff.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'
+                          }`}
+                        />
+                        {staff.isActive ? 'On Duty' : 'Off Duty'}
+                      </span>
+                    </td>
 
-            {/* Quick Actions */}
-            <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
-              <select
-                value={staff.role}
-                onChange={(e) => handleRoleChange(staff.id, e.target.value as UserRole)}
-                className="h-8 px-2 text-xs font-medium rounded-lg border border-stone-200 bg-stone-50 text-stone-800 outline-none focus:border-[#F15A24] cursor-pointer"
-              >
-                <option value="admin">Admin</option>
-                <option value="chef">Chef</option>
-                <option value="expo">Expo</option>
-                <option value="staff">Staff</option>
-              </select>
+                    {/* Actions */}
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => handleToggleActive(staff.id)}
+                          className={`h-7 px-2.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                            staff.isActive
+                              ? 'bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100'
+                              : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                          }`}
+                        >
+                          {staff.isActive ? 'Set Off Duty' : 'Set On Duty'}
+                        </button>
 
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() => handleToggleActive(staff.id)}
-                  className={`h-8 px-2.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
-                    staff.isActive
-                      ? 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-                      : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                  }`}
-                >
-                  {staff.isActive ? 'Set Off Duty' : 'Set On Duty'}
-                </button>
-
-                <button
-                  onClick={() => handleDeleteStaff(staff.id)}
-                  title="Remove staff member"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+                        <button
+                          onClick={() => handleDeleteStaff(staff.id)}
+                          title="Remove staff member"
+                          className="w-7 h-7 rounded-lg flex items-center justify-center text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Invite Staff Modal */}
