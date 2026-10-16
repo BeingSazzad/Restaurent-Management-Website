@@ -33,31 +33,30 @@
 }
 
 /* ==========================================================================
-   GLOBAL TYPOGRAPHY - 100% POPPINS ENFORCEMENT
+   GLOBAL TYPOGRAPHY & FONT INHERITANCE
    ========================================================================== */
-*,
-*::before,
-*::after {
-  font-family: 'Poppins', sans-serif !important;
-}
-
 html,
 body {
   background-color: rgb(249, 249, 249) !important;
   color: #3D3D3D;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif !important;
-  letter-spacing: 0;
-}
-
-p, span, label, input, textarea, button, a, select, option, table, th, td, div {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 /* Custom Scrollbars */

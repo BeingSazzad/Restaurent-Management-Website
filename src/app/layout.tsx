@@ -9,6 +9,8 @@ import { CheckoutModal } from '../components/shared/CheckoutModal';
 import { OrderTrackerModal } from '../components/shared/OrderTrackerModal';
 import { MobileStickyBar } from '../components/layout/MobileStickyBar';
 
+import { AppShell } from '../components/layout/AppShell';
+
 export const metadata: Metadata = {
   title: 'AMBER SPICE | Authentic Flavors · Timeless Recipes',
   description:
@@ -33,15 +35,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[rgb(249,249,249)] text-[#2C221C] min-h-screen flex flex-col font-sans antialiased">
         <ReduxProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-
-          {/* Interactive Modals & Slide-overs */}
-          <CartDrawer />
-          <CheckoutModal />
-          <OrderTrackerModal />
-          <MobileStickyBar />
+          <AppShell>{children}</AppShell>
         </ReduxProvider>
       </body>
     </html>

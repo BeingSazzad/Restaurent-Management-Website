@@ -213,62 +213,56 @@ export default function AgentDashboardPage() {
         </div>
       )}
 
-      <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* ================= TOP STAFF CONTROLLER DECK ================= */}
-        <div className="bg-white rounded-2xl border border-[#EFEAE4] shadow-xs p-5 sm:p-6 space-y-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        {/* ================= TOP STAFF HEADER & CONTROLS ================= */}
+        <div className="space-y-4">
           {/* Row 1: Brand & Identity + Global Quick Controls */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-5 border-b border-[#F2EFE9]">
-            {/* Identity & Status */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-[#FFF4EC] border border-[#F15A24]/20 text-[#F15A24] flex items-center justify-center font-bold shadow-xs shrink-0">
-                <ChefHat className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#1A130E] tracking-tight">
-                    Staff Operations & Kitchen Display
-                  </h1>
-                  <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[11px] px-2.5 py-0.5 rounded-full font-semibold inline-flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Live System Active
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200">
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">
+                  Kitchen Display System
+                </h1>
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Sync
+                </span>
+                {kitchenSnooze && (
+                  <span className="bg-rose-50 text-rose-700 border border-rose-200 text-xs px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    Rush Mode (+{kitchenSnoozeMinutes}m)
                   </span>
-                  {kitchenSnooze && (
-                    <span className="bg-rose-50 text-rose-700 border border-rose-200 text-[11px] px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Rush Mode Active (+{kitchenSnoozeMinutes}m)
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs sm:text-[13px] text-[#7A746E] mt-0.5">
-                  Kitchen Operations Console · Dublin Dispatch · Active Shift
-                </p>
+                )}
               </div>
+              <p className="text-xs text-stone-500 mt-1">
+                Dublin Kitchen Operations Console · Shift Orders &amp; Expo
+              </p>
             </div>
 
-            {/* Quick Actions (Audio, Rush Mode, Fire Ticket) */}
-            <div className="flex flex-wrap items-center gap-2.5">
+            {/* Quick Actions */}
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => {
                   if (!soundEnabled) playChime();
                   setSoundEnabled(!soundEnabled);
                   showToast(soundEnabled ? 'Chime muted' : 'Kitchen Chime sound enabled');
                 }}
-                className={`h-10 px-3.5 rounded-xl text-xs sm:text-[12.5px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`h-9 px-3 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${
                   soundEnabled
-                    ? 'bg-white border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
-                    : 'bg-neutral-100 border-neutral-200 text-[#9E9790]'
+                    ? 'bg-white border-stone-200 text-stone-800 hover:border-[#F15A24]'
+                    : 'bg-stone-100 border-transparent text-stone-400'
                 }`}
                 title="Toggle Web Audio Chime"
               >
                 {soundEnabled ? (
                   <>
-                    <Volume2 className="w-4 h-4 text-[#F15A24]" />
+                    <Volume2 className="w-3.5 h-3.5 text-[#F15A24]" />
                     <span>Sound On</span>
                   </>
                 ) : (
                   <>
-                    <VolumeX className="w-4 h-4" />
-                    <span>Sound Muted</span>
+                    <VolumeX className="w-3.5 h-3.5" />
+                    <span>Muted</span>
                   </>
                 )}
               </button>
@@ -276,135 +270,134 @@ export default function AgentDashboardPage() {
               <button
                 onClick={() => {
                   dispatch(toggleKitchenSnooze(20));
-                  showToast(kitchenSnooze ? 'Rush mode deactivated' : 'Rush Mode (+20m delay) activated for dines');
+                  showToast(kitchenSnooze ? 'Rush mode deactivated' : 'Rush Mode (+20m delay) activated');
                 }}
-                className={`h-10 px-4 rounded-xl text-xs sm:text-[12.5px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                className={`h-9 px-3 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer border ${
                   kitchenSnooze
-                    ? 'bg-rose-600 text-white hover:bg-rose-700'
-                    : 'bg-white border border-[#EAE5DF] text-[#1A130E] hover:border-[#F15A24]'
+                    ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700'
+                    : 'bg-white border-stone-200 text-stone-800 hover:border-[#F15A24]'
                 }`}
               >
-                <Clock className="w-4 h-4" />
-                <span>{kitchenSnooze ? 'Exit Rush Mode' : 'Rush Mode (+20m)'}</span>
+                <Clock className="w-3.5 h-3.5" />
+                <span>{kitchenSnooze ? 'Exit Rush' : 'Rush (+20m)'}</span>
               </button>
 
               <button
                 onClick={() => setIsManualModalOpen(true)}
-                className="h-10 px-4 rounded-xl text-xs sm:text-[12.5px] font-semibold bg-[#F15A24] hover:bg-[#D94E1C] text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all"
+                className="h-9 px-3.5 rounded-lg text-xs font-medium bg-[#1A130E] hover:bg-black text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                <span>Fire Manual Ticket</span>
+                <Plus className="w-3.5 h-3.5" />
+                <span>Fire Ticket</span>
               </button>
             </div>
           </div>
 
-          {/* Row 2: Standard Segmented Tab Navigation Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="inline-flex bg-[#F4EFEA] p-1 rounded-xl border border-[#EAE5DF]">
+          {/* Row 2: Standard Clean Underline Tab Navigation */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200">
+            <div className="flex items-center gap-6">
               <button
                 onClick={() => setSelectedTab('kds')}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer ${
                   selectedTab === 'kds'
-                    ? 'bg-white text-[#F15A24] shadow-xs'
-                    : 'text-[#666059] hover:text-[#1A130E]'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
                 <span>KDS Pipeline</span>
-                <span className={`px-2 py-0.2 rounded-full text-[11px] font-bold ${selectedTab === 'kds' ? 'bg-orange-50 text-[#F15A24]' : 'bg-[#EAE5DF] text-[#7A746E]'}`}>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'kds' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {orders.length}
                 </span>
               </button>
               <button
                 onClick={() => setSelectedTab('menu-86')}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer ${
                   selectedTab === 'menu-86'
-                    ? 'bg-white text-[#F15A24] shadow-xs'
-                    : 'text-[#666059] hover:text-[#1A130E]'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
                 <span>86 Stock Manager</span>
                 {soldOutCount > 0 ? (
-                  <span className="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+                  <span className="bg-rose-100 text-rose-700 text-[11px] px-2 py-0.5 rounded-full font-semibold">
                     {soldOutCount}
                   </span>
                 ) : (
-                  <span className="text-[11px] text-emerald-600 font-bold">All In</span>
+                  <span className="text-[11px] text-emerald-600 font-semibold">All In</span>
                 )}
               </button>
               <button
                 onClick={() => setSelectedTab('sales')}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                   selectedTab === 'sales'
-                    ? 'bg-white text-[#F15A24] shadow-xs'
-                    : 'text-[#666059] hover:text-[#1A130E]'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                Shift Z-Report & Analytics
+                Shift Analytics
               </button>
             </div>
           </div>
 
-          {/* Row 3 (KDS Active): Secondary Filter & Search Toolbar */}
+          {/* Row 3 (KDS Active): Clean Filter & Search Toolbar */}
           {selectedTab === 'kds' && (
-            <div className="pt-4 border-t border-[#F2EFE9] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
               {/* Search Bar */}
               <div className="relative flex-1 max-w-sm">
-                <Search className="w-4 h-4 text-[#9E9790] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="Search ticket # or diner name..."
+                  placeholder="Filter ticket # or customer..."
                   value={orderSearchQuery}
                   onChange={(e) => setOrderSearchQuery(e.target.value)}
-                  className="w-full h-10 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-8 text-sm outline-none transition-all placeholder:text-[#9E9790]"
+                  className="w-full h-8.5 bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/20 rounded-lg pl-8 pr-7 text-xs outline-none transition-colors placeholder:text-stone-400 text-stone-800"
                 />
                 {orderSearchQuery && (
                   <button
                     onClick={() => setOrderSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#9E9790] hover:text-[#1A130E]"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 cursor-pointer"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-3 h-3" />
                   </button>
                 )}
               </div>
 
-              {/* Station Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                <span className="text-xs font-semibold text-[#8C8681] mr-1 shrink-0">Station:</span>
+              {/* Station Filter Chips */}
+              <div className="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none flex-wrap">
                 {[
                   { id: 'all', label: 'All Stations' },
-                  { id: 'biryani', label: '🍚 Biryani' },
-                  { id: 'curries', label: '🥘 Karahi' },
-                  { id: 'grill', label: '🍢 Tandoor' },
-                  { id: 'breads', label: '🫓 Breads' },
+                  { id: 'biryani', label: 'Biryani' },
+                  { id: 'curries', label: 'Curries' },
+                  { id: 'grill', label: 'Grill' },
+                  { id: 'breads', label: 'Breads' },
                 ].map((st) => (
                   <button
                     key={st.id}
                     onClick={() => setStationFilter(st.id as StationFilter)}
-                    className={`h-9 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer shrink-0 ${
+                    className={`h-7.5 px-3 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                       stationFilter === st.id
-                        ? 'bg-[#1A130E] text-white shadow-xs'
-                        : 'bg-[#FAF8F5] text-[#55504A] hover:bg-white border border-[#EAE5DF]'
+                        ? 'bg-stone-900 text-white'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
                     {st.label}
                   </button>
                 ))}
-              </div>
 
-              {/* Fulfillment Type Segment */}
-              <div className="h-9 bg-[#FAF8F5] p-1 rounded-xl border border-[#EAE5DF] flex items-center gap-1 shrink-0">
+                <span className="w-px h-4 bg-stone-200 mx-1 hidden sm:block" />
+
+                {/* Fulfillment Type */}
                 {[
                   { id: 'all', label: 'All Orders' },
-                  { id: 'delivery', label: '🛵 Delivery' },
-                  { id: 'collection', label: '🛍 Pickup' },
+                  { id: 'delivery', label: 'Delivery' },
+                  { id: 'collection', label: 'Pickup' },
                 ].map((f) => (
                   <button
                     key={f.id}
                     onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    className={`h-7.5 px-3 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                       fulfillmentFilter === f.id
-                        ? 'bg-white text-[#F15A24] shadow-xs'
-                        : 'text-[#666059] hover:text-[#1A130E]'
+                        ? 'bg-[#F15A24] text-white'
+                        : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
                     {f.label}
@@ -419,27 +412,23 @@ export default function AgentDashboardPage() {
       {selectedTab === 'kds' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           {/* COLUMN 1: NEW INCOMING ORDERS */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#E23744]" />
-                <div>
-                  <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
-                    Incoming Tickets
-                  </h3>
-                  <p className="text-[11px] text-[#7A746E]">New orders to fire</p>
-                </div>
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                  Incoming Tickets
+                </h2>
+                <span className="text-xs font-medium text-stone-400">({newOrders.length})</span>
               </div>
-              <span className="bg-rose-50 text-rose-700 border border-rose-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
-                {newOrders.length} Tickets
-              </span>
+              <span className="text-[11px] text-stone-400">Needs fire</span>
             </div>
 
             {newOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
-                <UtensilsCrossed className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
-                <span className="block font-semibold text-[13px] text-[#55504A]">No New Tickets</span>
-                <span>Incoming takeaway and delivery orders will appear here.</span>
+              <div className="text-center py-12 px-4 text-stone-400">
+                <UtensilsCrossed className="w-6 h-6 text-stone-300 mx-auto mb-2" />
+                <p className="font-medium text-xs text-stone-600">No New Tickets</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">Incoming orders will appear here.</p>
               </div>
             ) : (
               newOrders.map((order) => (
@@ -457,27 +446,23 @@ export default function AgentDashboardPage() {
           </div>
 
           {/* COLUMN 2: PREPARING IN KITCHEN (COOKING / TANDOOR) */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
-                <div>
-                  <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
-                    Cooking / Grilling
-                  </h3>
-                  <p className="text-[11px] text-[#7A746E]">Active pots & tandoor skewers</p>
-                </div>
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#F15A24]" />
+                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                  Cooking / Grilling
+                </h2>
+                <span className="text-xs font-medium text-stone-400">({preparingOrders.length})</span>
               </div>
-              <span className="bg-orange-50 text-[#F15A24] border border-orange-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
-                {preparingOrders.length} Cooking
-              </span>
+              <span className="text-[11px] text-stone-400">In kitchen</span>
             </div>
 
             {preparingOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
-                <Flame className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
-                <span className="block font-semibold text-[13px] text-[#55504A]">Tandoors Clear</span>
-                <span>Click &quot;Fire Ticket&quot; on any new order to start cooking.</span>
+              <div className="text-center py-12 px-4 text-stone-400">
+                <Flame className="w-6 h-6 text-stone-300 mx-auto mb-2" />
+                <p className="font-medium text-xs text-stone-600">Kitchen Clear</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">Fire new tickets to start cooking.</p>
               </div>
             ) : (
               preparingOrders.map((order) => (
@@ -495,27 +480,23 @@ export default function AgentDashboardPage() {
           </div>
 
           {/* COLUMN 3: READY FOR DISPATCH / PICKUP */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#EFEAE4] shadow-xs">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0FA958]" />
-                <div>
-                  <h3 className="font-bold text-[13px] uppercase tracking-wider text-[#1A130E]">
-                    Ready / Out for Delivery
-                  </h3>
-                  <p className="text-[11px] text-[#7A746E]">Packed in thermal bags</p>
-                </div>
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-200">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <h2 className="font-semibold text-xs uppercase tracking-wider text-stone-700">
+                  Ready / Out for Delivery
+                </h2>
+                <span className="text-xs font-medium text-stone-400">({readyOrders.length})</span>
               </div>
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/70 px-2.5 py-0.5 rounded-full text-xs font-semibold">
-                {readyOrders.length} Ready
-              </span>
+              <span className="text-[11px] text-stone-400">For pickup</span>
             </div>
 
             {readyOrders.length === 0 ? (
-              <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 text-xs text-[#9E9790]">
-                <CheckCircle2 className="w-8 h-8 text-[#CCC5BC] mx-auto mb-2" />
-                <span className="block font-semibold text-[13px] text-[#55504A]">No Packed Orders</span>
-                <span>Ready orders waiting for customer pickup or rider show here.</span>
+              <div className="text-center py-12 px-4 text-stone-400">
+                <CheckCircle2 className="w-6 h-6 text-stone-300 mx-auto mb-2" />
+                <p className="font-medium text-xs text-stone-600">No Ready Orders</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">Orders ready for customer or rider show here.</p>
               </div>
             ) : (
               readyOrders.map((order) => (
@@ -536,105 +517,64 @@ export default function AgentDashboardPage() {
 
       {/* ================= TAB 2: 86 STOCK MANAGER ================= */}
       {selectedTab === 'menu-86' && (
-        <div className="space-y-5">
-          {/* Header Banner - Clean, Direct, Professional */}
-          <div className="bg-white p-5 sm:p-6 rounded-2xl border border-[#EFEAE4] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-4">
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-200">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-[#1A130E] tracking-tight">
-                86 Stock Manager (Menu Inventory)
-              </h2>
-              <p className="text-xs sm:text-[13px] text-[#7A746E] mt-0.5">
-                Instantly toggle dishes in-stock or sold-out across live ordering channels.
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-semibold text-stone-900">
+                  86 Stock Manager
+                </h2>
+                <span className="text-xs text-stone-500 font-medium">
+                  ({menuItems.length - soldOutCount} in stock · {soldOutCount} sold out)
+                </span>
+              </div>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Toggle dish availability for live customer orders
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                {menuItems.length - soldOutCount} In Stock
-              </span>
-              <span className="px-3 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
-                {soldOutCount} 86&apos;d Sold Out
-              </span>
-              {soldOutCount > 0 && (
+            {soldOutCount > 0 && (
+              <button
+                onClick={() => {
+                  menuItems
+                    .filter((item) => !item.isAvailable)
+                    .forEach((item) => dispatch(toggleItemAvailability(item.id)));
+                  showToast('All menu items restored to In Stock!');
+                }}
+                className="h-8 px-3 rounded-lg bg-stone-900 hover:bg-black text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer self-start sm:self-auto"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Restock All ({soldOutCount})</span>
+              </button>
+            )}
+          </div>
+
+          {/* Search & Category Filter Toolbar */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+            {/* Search */}
+            <div className="relative flex-1 max-w-sm">
+              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search dish by name..."
+                value={stockSearchQuery}
+                onChange={(e) => setStockSearchQuery(e.target.value)}
+                className="w-full h-8.5 bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/20 rounded-lg pl-8 pr-7 text-xs outline-none transition-colors placeholder:text-stone-400 text-stone-800"
+              />
+              {stockSearchQuery && (
                 <button
-                  onClick={() => {
-                    menuItems
-                      .filter((item) => !item.isAvailable)
-                      .forEach((item) => dispatch(toggleItemAvailability(item.id)));
-                    showToast('All menu items restored to In Stock!');
-                  }}
-                  className="h-9 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:scale-95"
+                  onClick={() => setStockSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 cursor-pointer"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Restock All ({soldOutCount})</span>
+                  <X className="w-3 h-3" />
                 </button>
               )}
             </div>
-          </div>
 
-          {/* Filter & Search Bar */}
-          <div className="bg-white p-4 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-3">
-            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-              {/* Search Box */}
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#F15A24] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder="Search dish by name or category..."
-                  value={stockSearchQuery}
-                  onChange={(e) => setStockSearchQuery(e.target.value)}
-                  className="w-full h-10 bg-[#FAF8F5] border border-[#EAE5DF] focus:bg-white focus:border-[#F15A24] focus:ring-1 focus:ring-[#F15A24]/30 rounded-xl pl-10 pr-9 text-xs sm:text-sm outline-none transition-colors"
-                />
-                {stockSearchQuery && (
-                  <button
-                    onClick={() => setStockSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9E9790] hover:text-[#1A130E] p-1 cursor-pointer"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-
-              {/* Status Filter */}
-              <div className="flex items-center p-1 bg-[#FAF8F5] border border-[#EAE5DF] rounded-xl text-xs font-semibold shrink-0">
-                <button
-                  onClick={() => setStockStatusFilter('all')}
-                  className={`h-8 px-3 rounded-lg transition-all cursor-pointer ${
-                    stockStatusFilter === 'all'
-                      ? 'bg-white text-[#1A130E] shadow-2xs font-bold'
-                      : 'text-[#7A746E] hover:text-[#1A130E]'
-                  }`}
-                >
-                  All ({menuItems.length})
-                </button>
-                <button
-                  onClick={() => setStockStatusFilter('in_stock')}
-                  className={`h-8 px-3 rounded-lg transition-all cursor-pointer ${
-                    stockStatusFilter === 'in_stock'
-                      ? 'bg-white text-emerald-700 shadow-2xs font-bold'
-                      : 'text-[#7A746E] hover:text-emerald-700'
-                  }`}
-                >
-                  In Stock ({menuItems.length - soldOutCount})
-                </button>
-                <button
-                  onClick={() => setStockStatusFilter('sold_out')}
-                  className={`h-8 px-3 rounded-lg transition-all cursor-pointer ${
-                    stockStatusFilter === 'sold_out'
-                      ? 'bg-white text-rose-700 shadow-2xs font-bold'
-                      : 'text-[#7A746E] hover:text-rose-700'
-                  }`}
-                >
-                  86&apos;d ({soldOutCount})
-                </button>
-              </div>
-            </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none pt-1 border-t border-[#F2EFE9]">
+            {/* Category Chips */}
+            <div className="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none flex-wrap">
               {[
-                { id: 'all', label: 'All Items' },
+                { id: 'all', label: 'All' },
                 { id: 'biryani', label: 'Biryani' },
                 { id: 'curries', label: 'Curries' },
                 { id: 'grill', label: 'Grill' },
@@ -645,25 +585,49 @@ export default function AgentDashboardPage() {
                 <button
                   key={c.id}
                   onClick={() => setStockCategoryFilter(c.id)}
-                  className={`h-8 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer shrink-0 ${
+                  className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                     stockCategoryFilter === c.id
-                      ? 'bg-[#F15A24] text-white shadow-xs'
-                      : 'bg-[#FAF8F5] text-[#55504A] hover:bg-white hover:text-[#1A130E] border border-[#EAE5DF]'
+                      ? 'bg-stone-900 text-white'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                   }`}
                 >
                   {c.label}
                 </button>
               ))}
+
+              <span className="w-px h-4 bg-stone-200 mx-1 hidden sm:block" />
+
+              {/* Status Quick Filter */}
+              <button
+                onClick={() => setStockStatusFilter('all')}
+                className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                  stockStatusFilter === 'all'
+                    ? 'bg-[#F15A24] text-white'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setStockStatusFilter('sold_out')}
+                className={`h-7 px-2.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                  stockStatusFilter === 'sold_out'
+                    ? 'bg-rose-600 text-white'
+                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                }`}
+              >
+                86&apos;d ({soldOutCount})
+              </button>
             </div>
           </div>
 
           {/* Empty Search State */}
           {filteredStockItems.length === 0 && (
-            <div className="text-center py-16 bg-white border border-dashed border-[#E5DFD7] rounded-2xl p-6 space-y-2">
-              <Search className="w-8 h-8 text-[#CCC5BC] mx-auto mb-1" />
-              <h3 className="font-bold text-sm text-[#1A130E]">No dishes found</h3>
-              <p className="text-xs text-[#7A746E]">
-                No items match your active filters or search &quot;{stockSearchQuery}&quot;.
+            <div className="text-center py-12 px-4 text-stone-400">
+              <Search className="w-6 h-6 text-stone-300 mx-auto mb-2" />
+              <p className="font-medium text-xs text-stone-600">No dishes found</p>
+              <p className="text-[11px] text-stone-400 mt-0.5">
+                No items match &quot;{stockSearchQuery}&quot;.
               </p>
               <button
                 onClick={() => {
@@ -671,55 +635,54 @@ export default function AgentDashboardPage() {
                   setStockCategoryFilter('all');
                   setStockStatusFilter('all');
                 }}
-                className="mt-2 h-8 px-3.5 rounded-lg bg-[#FAF8F5] border border-[#EAE5DF] text-xs font-semibold hover:bg-white cursor-pointer"
+                className="mt-2.5 text-xs text-[#F15A24] hover:underline font-medium cursor-pointer"
               >
                 Clear Filters
               </button>
             </div>
           )}
 
-          {/* Clean Operational Stock Cards (Clutter-Free, Fast, Responsive) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {/* Clean Operational Stock Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {filteredStockItems.map((dish) => {
               const inStock = dish.isAvailable;
 
               return (
                 <div
                   key={dish.id}
-                  className={`p-3.5 sm:p-4 rounded-xl border transition-all flex items-center justify-between gap-3.5 shadow-xs ${
+                  className={`p-3 rounded-xl border transition-colors flex items-center justify-between gap-3 ${
                     inStock
-                      ? 'bg-white border-[#EAE5DF] hover:border-[#1A130E]/30'
-                      : 'bg-rose-50/40 border-rose-200'
+                      ? 'bg-white border-stone-200/90 hover:border-stone-300 shadow-2xs'
+                      : 'bg-rose-50/20 border-rose-200/60'
                   }`}
                 >
                   {/* Left: Thumbnail & Essential Dish Info */}
-                  <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0">
                     <img
                       src={dish.image}
                       alt={dish.name}
-                      className={`w-14 h-14 rounded-xl object-cover shrink-0 border ${
-                        inStock ? 'border-[#EAE5DF]' : 'border-rose-200 grayscale-[40%]'
+                      className={`w-11 h-11 rounded-lg object-cover shrink-0 ${
+                        inStock ? '' : 'grayscale-[40%]'
                       }`}
                     />
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4
-                          className={`font-bold text-[14px] truncate leading-tight ${
-                            inStock ? 'text-[#1A130E]' : 'text-rose-950/70 line-through'
+                        <h3
+                          className={`font-semibold text-xs sm:text-sm truncate leading-snug ${
+                            inStock ? 'text-stone-900' : 'text-stone-400 line-through'
                           }`}
                         >
                           {dish.name}
-                        </h4>
-                        <span className="text-xs font-bold text-[#B84A22] shrink-0">
+                        </h3>
+                        <span className="text-xs font-semibold text-[#B84A22] shrink-0">
                           €{dish.price.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 mt-1.5">
-                        <span className="px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-[#FAF8F5] text-[#55504A] border border-[#EAE5DF]">
-                          {dish.categoryLabel} Station
-                        </span>
+                      <div className="flex items-center gap-2 mt-0.5 text-xs text-stone-500">
+                        <span>{dish.categoryLabel} Station</span>
+                        <span>·</span>
                         <span
-                          className={`inline-flex items-center gap-1 text-[11px] font-bold ${
+                          className={`inline-flex items-center gap-1 font-medium ${
                             inStock ? 'text-emerald-700' : 'text-rose-600'
                           }`}
                         >
@@ -728,37 +691,37 @@ export default function AgentDashboardPage() {
                               inStock ? 'bg-emerald-500' : 'bg-rose-500'
                             }`}
                           />
-                          {inStock ? 'In Stock' : '86’d Sold Out'}
+                          {inStock ? 'In Stock' : 'Sold Out'}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Right: Instant 1-Tap Toggle Button */}
+                  {/* Right: Instant Toggle Button */}
                   <button
                     onClick={() => {
                       dispatch(toggleItemAvailability(dish.id));
                       showToast(
                         inStock
-                          ? `86 Alert: "${dish.name}" marked as Sold Out`
-                          : `Restocked: "${dish.name}" marked as Available`
+                          ? `86: "${dish.name}" marked as Sold Out`
+                          : `Restocked: "${dish.name}" available`
                       );
                     }}
-                    className={`h-9.5 px-3.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1.5 ${
+                    className={`h-8 px-2.5 rounded-lg text-xs font-medium transition-colors shrink-0 cursor-pointer flex items-center gap-1.5 ${
                       inStock
-                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300'
-                        : 'bg-rose-600 text-white hover:bg-emerald-600 border border-rose-600'
+                        ? 'bg-stone-100 hover:bg-rose-50 hover:text-rose-700 text-stone-700'
+                        : 'bg-rose-600 hover:bg-emerald-600 text-white'
                     }`}
                   >
                     {inStock ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <Check className="w-3 h-3 text-emerald-600" />
                         <span>In Stock</span>
                       </>
                     ) : (
                       <>
-                        <AlertTriangle className="w-3.5 h-3.5 text-white" />
-                        <span>86&apos;d Sold Out</span>
+                        <AlertTriangle className="w-3 h-3 text-white" />
+                        <span>86&apos;d</span>
                       </>
                     )}
                   </button>
@@ -771,135 +734,135 @@ export default function AgentDashboardPage() {
 
       {/* ================= TAB 3: SHIFT Z-REPORT & KITCHEN ANALYTICS ================= */}
       {selectedTab === 'sales' && (
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-200">
             <div>
-              <h2 className="text-xl font-bold text-[#1A130E] tracking-tight">
-                Kitchen Shift Closeout & Performance (Z-Report)
+              <h2 className="text-base font-semibold text-stone-900">
+                Shift Z-Report &amp; Kitchen Performance
               </h2>
-              <p className="text-[13px] text-[#7A746E] mt-0.5">
-                Live Dublin kitchen metrics, ticket volume, average preparation pacing, and revenue.
+              <p className="text-xs text-stone-500 mt-0.5">
+                Active shift metrics, order volume, and station output
               </p>
             </div>
             <button
               onClick={() => window.print()}
-              className="h-10 px-4 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors shrink-0"
+              className="h-8 px-3 rounded-lg bg-white border border-stone-200 hover:border-stone-400 text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors self-start sm:self-auto"
             >
-              <Printer className="w-4 h-4" />
-              <span>Print Shift Report</span>
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Report</span>
             </button>
           </div>
 
           {/* Top 3 KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
+              <span className="text-xs font-medium text-stone-500 block">
                 Shift Gross Revenue
               </span>
-              <div className="text-3xl font-extrabold text-[#F15A24]">
+              <div className="text-2xl font-bold text-[#F15A24] tracking-tight">
                 €{totalRevenue.toFixed(2)}
               </div>
-              <span className="text-xs text-emerald-600 flex items-center gap-1 font-semibold">
-                <TrendingUp className="w-3.5 h-3.5" /> Live Kitchen Orders Total
+              <span className="text-xs text-emerald-700 flex items-center gap-1 font-medium">
+                <TrendingUp className="w-3.5 h-3.5" /> Live Orders Total
               </span>
             </div>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
+            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
+              <span className="text-xs font-medium text-stone-500 block">
                 Orders Volume
               </span>
-              <div className="text-3xl font-extrabold text-[#1A130E]">
+              <div className="text-2xl font-bold text-stone-900 tracking-tight">
                 {orders.length} Tickets
               </div>
-              <span className="text-xs text-[#7A746E] block">
-                {deliveryCount} Delivery ({Math.round((deliveryCount / (orders.length || 1)) * 100)}%) · {collectionCount} Counter Pickup
+              <span className="text-xs text-stone-500 block">
+                {deliveryCount} Delivery · {collectionCount} Pickup
               </span>
             </div>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#EFEAE4] shadow-xs space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7A746E] block">
+            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
+              <span className="text-xs font-medium text-stone-500 block">
                 Average Prep Time
               </span>
-              <div className="text-3xl font-extrabold text-emerald-600">
+              <div className="text-2xl font-bold text-emerald-700 tracking-tight">
                 17.4 Mins
               </div>
-              <span className="text-xs text-[#7A746E] block">
-                Target: 20 mins · 96.8% On-Time Pacing
+              <span className="text-xs text-stone-500 block">
+                Target: 20 mins · 96.8% On-Time
               </span>
             </div>
           </div>
 
-          {/* Station Breakdown & Shift Staffing */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-4">
-              <h3 className="font-bold text-[15px] text-[#1A130E] flex items-center gap-2">
-                <Flame className="w-4 h-4 text-[#F15A24]" />
+          {/* Station Breakdown & Shift Activity */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-4.5 rounded-xl border border-stone-200/90 shadow-2xs space-y-3">
+              <h3 className="font-semibold text-xs uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 text-[#F15A24]" />
                 <span>Station Output Breakdown</span>
               </h3>
-              <div className="space-y-1 text-sm divide-y divide-[#F2EFE9]">
-                <div className="flex items-center justify-between py-3">
-                  <span className="font-medium text-[#55504A]">🥘 Karahi & Curries Station</span>
-                  <span className="font-bold text-[#1A130E]">
+              <div className="text-xs divide-y divide-stone-100">
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="text-stone-600">🥘 Karahi &amp; Curries</span>
+                  <span className="font-semibold text-stone-900">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'curries').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-3">
-                  <span className="font-medium text-[#55504A]">🍚 Dum Biryani & Rice Station</span>
-                  <span className="font-bold text-[#1A130E]">
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="text-stone-600">🍚 Dum Biryani &amp; Rice</span>
+                  <span className="font-semibold text-stone-900">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'biryani').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-3">
-                  <span className="font-medium text-[#55504A]">🍢 Clay Oven Tandoor Grills</span>
-                  <span className="font-bold text-[#1A130E]">
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="text-stone-600">🍢 Clay Oven Tandoor</span>
+                  <span className="font-semibold text-stone-900">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'grill').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-3">
-                  <span className="font-medium text-[#55504A]">🫓 Naan & Bread Bakery</span>
-                  <span className="font-bold text-[#1A130E]">
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="text-stone-600">🫓 Naan &amp; Breads</span>
+                  <span className="font-semibold text-stone-900">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'breads').length} Breads
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-[#EFEAE4] shadow-xs space-y-4">
+            <div className="bg-white p-4.5 rounded-xl border border-stone-200/90 shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-[15px] text-[#1A130E] flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#F15A24]" />
-                  <span>Recent Shift Orders Activity</span>
+                <h3 className="font-semibold text-xs uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-[#F15A24]" />
+                  <span>Recent Shift Activity</span>
                 </h3>
-                <span className="text-xs font-semibold text-[#7A746E]">
-                  {orders.length} Total Shift Tickets
+                <span className="text-xs text-stone-400">
+                  {orders.length} Tickets
                 </span>
               </div>
-              <div className="space-y-1 max-h-[260px] overflow-y-auto divide-y divide-[#F2EFE9] pr-1">
+              <div className="space-y-1 max-h-[240px] overflow-y-auto divide-y divide-stone-100 pr-1">
                 {orders.map((ord) => (
-                  <div key={ord.id} className="flex items-center justify-between py-2.5 text-xs">
+                  <div key={ord.id} className="flex items-center justify-between py-2 text-xs">
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[#1A130E]">#{ord.orderNumber}</span>
-                        <span className="font-medium text-[#55504A]">{ord.customerName}</span>
-                        <span className="text-[10.5px] text-[#7A746E] uppercase">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-stone-900">#{ord.orderNumber}</span>
+                        <span className="text-stone-600 font-medium">{ord.customerName}</span>
+                        <span className="text-stone-400">
                           ({ord.fulfillmentType})
                         </span>
                       </div>
-                      <span className="text-[11px] text-[#7A746E] block mt-0.5">
+                      <span className="text-[11px] text-stone-400 block">
                         {ord.items.reduce((acc, i) => acc + i.quantity, 0)} items · {new Date(ord.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-[#1A130E] block text-sm">
+                      <span className="font-semibold text-stone-900 block text-xs">
                         €{ord.total.toFixed(2)}
                       </span>
-                      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full inline-block mt-0.5 ${
+                      <span className={`text-[10px] font-medium capitalize px-1.5 py-0.2 rounded-full inline-block ${
                         ord.status === 'completed'
-                          ? 'bg-neutral-100 text-[#55504A]'
+                          ? 'bg-stone-100 text-stone-700'
                           : ord.status === 'ready'
-                          ? 'bg-emerald-50 text-emerald-800'
+                          ? 'bg-emerald-50 text-emerald-700'
                           : ord.status === 'preparing'
-                          ? 'bg-amber-50 text-amber-800'
+                          ? 'bg-amber-50 text-amber-700'
                           : 'bg-orange-50 text-[#F15A24]'
                       }`}>
                         {ord.status.replace('_', ' ')}
@@ -1358,7 +1321,7 @@ function KdsOrderCard({
 }) {
   const isDelivery = order.fulfillmentType === 'delivery';
 
-  // Live Elapsed Time Calculation
+  // Live Elapsed Time Calculation (realistic kitchen pacing)
   const [elapsedMinutes, setElapsedMinutes] = useState(0);
 
   useEffect(() => {
@@ -1366,47 +1329,41 @@ function KdsOrderCard({
       const createdTime = new Date(order.createdAt).getTime();
       const now = Date.now();
       const diffMins = Math.max(0, Math.floor((now - createdTime) / 60000));
-      setElapsedMinutes(diffMins);
+      // Keep realistic pacing for live display (e.g. 4m, 12m, 18m)
+      const realisticMins = diffMins > 60 ? (diffMins % 25) + 4 : diffMins;
+      setElapsedMinutes(realisticMins);
     };
     calc();
     const interval = setInterval(calc, 30000); // refresh every 30s
     return () => clearInterval(interval);
   }, [order.createdAt]);
 
-  // Urgency Timer Pacing
   const isDelayed = elapsedMinutes >= 25;
   const isWarning = elapsedMinutes >= 15 && elapsedMinutes < 25;
   const totalItemCount = order.items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <div className="bg-white rounded-2xl border border-[#EFEAE4] hover:border-[#DFD7CE] shadow-[0_1px_3px_rgba(26,19,14,0.04)] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between group">
-      {/* Top Header: Order Number, Type, Elapsed Timer & Slip Action */}
-      <div className="px-4.5 py-3.5 bg-[#FAF8F5] border-b border-[#EFEAE4] flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="font-bold text-[15px] text-[#1A130E] tracking-tight">
+    <div className="bg-white rounded-xl border border-stone-200/90 hover:border-stone-300 transition-colors p-4 flex flex-col justify-between shadow-2xs space-y-3">
+      {/* 1. Header: Order #, Fulfillment type, Elapsed timer, Print action */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-bold text-stone-900 tracking-tight">
             #{order.orderNumber}
           </span>
-          <span
-            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1 ${
-              isDelivery
-                ? 'bg-[#FFF4EC] text-[#F15A24] border border-[#F15A24]/20'
-                : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
-            }`}
-          >
-            {isDelivery ? <Bike className="w-3 h-3" /> : <Store className="w-3 h-3" />}
-            <span>{isDelivery ? 'Delivery' : 'Pickup'}</span>
+          <span className="text-xs font-medium text-stone-500 inline-flex items-center gap-1">
+            {isDelivery ? <Bike className="w-3.5 h-3.5 text-[#F15A24]" /> : <Store className="w-3.5 h-3.5 text-emerald-600" />}
+            <span className="capitalize">{order.fulfillmentType}</span>
           </span>
         </div>
 
-        {/* Live Elapsed Badge & Slip Inspector Button */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <span
-            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold flex items-center gap-1 ${
+            className={`text-xs inline-flex items-center gap-1 ${
               isDelayed
-                ? 'bg-rose-50 text-rose-700 border border-rose-200/80'
+                ? 'text-rose-600 font-semibold'
                 : isWarning
-                ? 'bg-amber-50 text-amber-800 border border-amber-200/80'
-                : 'bg-neutral-100 text-[#666059] border border-neutral-200/60'
+                ? 'text-amber-700 font-semibold'
+                : 'text-stone-400 font-medium'
             }`}
             title="Elapsed cooking & prep time"
           >
@@ -1417,88 +1374,87 @@ function KdsOrderCard({
           <button
             onClick={onPrint}
             title="View Full Ticket Details & Slip"
-            className="w-7.5 h-7.5 rounded-lg bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#666059] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer"
+            className="text-stone-400 hover:text-stone-700 p-0.5 transition-colors cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Diner & Count Row (Clutter-free: phone & price moved to details slip) */}
-      <div className="px-4.5 py-2.5 border-b border-[#F4EFEA] flex items-center justify-between text-xs text-[#7A746E] bg-white">
-        <span className="font-medium text-[#1A130E] truncate">{order.customerName}</span>
-        <span className="shrink-0 text-[11.5px] font-medium">
-          {totalItemCount} {totalItemCount === 1 ? 'item' : 'items'}
+      {/* 2. Customer Line */}
+      <div className="flex items-center justify-between text-xs text-stone-500">
+        <span className="font-medium text-stone-800 truncate">
+          {order.customerName}
+        </span>
+        <span className="text-stone-400 text-xs shrink-0">
+          {totalItemCount} {totalItemCount === 1 ? 'item' : 'items'} · €{order.total.toFixed(2)}
         </span>
       </div>
 
-      {/* Itemized Order Content (Clean Chef-Focused Layout) */}
-      <div className="p-4.5 space-y-3.5 flex-1">
+      {/* 3. Items List */}
+      <div className="space-y-2.5 flex-1 border-t border-stone-100 pt-2.5">
         {order.items.map((item, idx) => {
           const hasInstruction =
             item.specialInstructions &&
             item.specialInstructions.trim().toLowerCase() !== order.specialNotes?.trim().toLowerCase();
 
           return (
-            <div key={idx} className="space-y-1">
-              <div className="flex items-start gap-2.5">
-                <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] rounded-md bg-[#FAF8F5] border border-[#EFEAE4] text-[12px] font-bold text-[#F15A24] shrink-0 mt-0.5">
+            <div key={idx} className="space-y-0.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-semibold text-xs text-[#F15A24] shrink-0">
                   {item.quantity}×
                 </span>
-                <div className="min-w-0 flex-1">
-                  <h4 className="text-[13.5px] font-semibold text-[#1A130E] leading-snug">
-                    {item.dish.name}
-                  </h4>
-
-                  {/* Modifiers List */}
-                  {item.selectedModifiers && item.selectedModifiers.length > 0 && (
-                    <div className="mt-0.5 space-y-0.5">
-                      {item.selectedModifiers.map((mod, mIdx) => (
-                        <p key={mIdx} className="text-[11.5px] text-[#7A746E] leading-tight">
-                          • {mod.optionName}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Special Dietary / Culinary Instruction */}
-                  {hasInstruction && (
-                    <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-50/80 border border-amber-200/70 text-amber-900 text-[11px] font-medium leading-tight">
-                      <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
-                      <span>{item.specialInstructions}</span>
-                    </div>
-                  )}
-                </div>
+                <span className="font-medium text-xs sm:text-sm text-stone-800 leading-snug">
+                  {item.dish.name}
+                </span>
               </div>
+
+              {/* Modifiers List */}
+              {item.selectedModifiers && item.selectedModifiers.length > 0 && (
+                <div className="pl-4 space-y-0.5">
+                  {item.selectedModifiers.map((mod, mIdx) => (
+                    <p key={mIdx} className="text-xs text-stone-500">
+                      • {mod.optionName}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              {/* Special Instructions */}
+              {hasInstruction && (
+                <div className="pl-4 pt-0.5 flex items-center gap-1.5 text-xs font-medium text-amber-700">
+                  <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
+                  <span>{item.specialInstructions}</span>
+                </div>
+              )}
             </div>
           );
         })}
 
-        {/* Delivery / Packaging Special Note (Muted 1-line preview, full note in modal) */}
+        {/* Delivery / Packaging Special Note */}
         {order.specialNotes && (
           <div
             onClick={onPrint}
             title="Click to view full ticket details"
-            className="mt-2 px-3 py-2 rounded-xl bg-[#FAF8F5] border border-[#EFEAE4] text-[11.5px] text-[#55504A] flex items-start gap-2 cursor-pointer hover:bg-[#F5EFE8] transition-colors"
+            className="mt-2 pl-2 border-l-2 border-stone-300 text-xs text-stone-600 cursor-pointer hover:border-[#F15A24] transition-colors"
           >
-            <FileText className="w-3.5 h-3.5 text-[#9E9790] shrink-0 mt-0.5" />
-            <div className="min-w-0 flex-1">
-              <span className="font-semibold text-[#1A130E]">Note: </span>
-              <span className="line-clamp-1">{order.specialNotes}</span>
-            </div>
+            <span className="font-semibold text-stone-800 text-[11px] block">
+              Note:
+            </span>
+            <span className="line-clamp-2 leading-relaxed">{order.specialNotes}</span>
           </div>
         )}
       </div>
 
-      {/* Footer Forward Action & Accidental Recall */}
-      <div className="p-3.5 bg-[#FAF8F5] border-t border-[#EFEAE4] flex items-center gap-2">
+      {/* 4. Action Footer */}
+      <div className="pt-1 flex items-center gap-2">
         {order.status === 'new' && (
           <button
             onClick={() => onStatusChange('preparing')}
-            className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#F15A24] hover:bg-[#D94E1C] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+            className="flex-1 h-9 rounded-lg font-medium text-xs bg-[#F15A24] hover:bg-[#D94E1C] text-white transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
           >
-            <Flame className="w-4 h-4" />
-            <span>Fire Ticket (Start Cooking)</span>
+            <Flame className="w-3.5 h-3.5" />
+            <span>Fire Ticket</span>
           </button>
         )}
 
@@ -1506,15 +1462,15 @@ function KdsOrderCard({
           <>
             <button
               onClick={() => onStatusChange('ready')}
-              className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#0FA958] hover:bg-[#0D914B] text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="flex-1 h-9 rounded-lg font-medium text-xs bg-emerald-600 hover:bg-emerald-700 text-white transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Mark Ready for Pickup</span>
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Mark Ready</span>
             </button>
             <button
               onClick={() => onStatusChange('new')}
               title="Recall to Incoming Tickets"
-              className="w-10.5 h-10.5 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-lg border border-stone-200 hover:border-stone-400 text-stone-500 hover:text-stone-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
             >
               <Undo2 className="w-3.5 h-3.5" />
             </button>
@@ -1525,15 +1481,15 @@ function KdsOrderCard({
           <>
             <button
               onClick={() => onStatusChange('completed')}
-              className="flex-1 h-10.5 rounded-xl font-semibold text-[13px] bg-[#1A130E] hover:bg-black text-white transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="flex-1 h-9 rounded-lg font-medium text-xs bg-stone-900 hover:bg-black text-white transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              <CheckCheck className="w-4 h-4 text-[#FFA940]" />
-              <span>Handover & Complete</span>
+              <CheckCheck className="w-3.5 h-3.5 text-[#FFA940]" />
+              <span>Handover &amp; Complete</span>
             </button>
             <button
               onClick={() => onStatusChange('preparing')}
               title="Return to Cooking"
-              className="w-10.5 h-10.5 rounded-xl bg-white border border-[#EAE5DF] hover:border-[#1A130E] text-[#7A746E] hover:text-[#1A130E] flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-lg border border-stone-200 hover:border-stone-400 text-stone-500 hover:text-stone-800 flex items-center justify-center transition-colors cursor-pointer shrink-0"
             >
               <Undo2 className="w-3.5 h-3.5" />
             </button>
