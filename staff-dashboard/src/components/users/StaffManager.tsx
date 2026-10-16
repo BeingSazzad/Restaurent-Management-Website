@@ -20,18 +20,31 @@ import {
   KeyRound,
   Sparkles,
   UserPlus,
+  Pencil,
 } from 'lucide-react';
 
 export function StaffManager() {
   const [users, setUsers] = useState<StaffUser[]>(INITIAL_STAFF_USERS);
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+  // Add Staff Modal State
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newRole, setNewRole] = useState<UserRole>('admin');
   const [newStation, setNewStation] = useState<'all' | 'curries' | 'biryani' | 'grill' | 'breads'>('all');
+
+  // Edit Staff Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingStaff, setEditingStaff] = useState<StaffUser | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editRole, setEditRole] = useState<UserRole>('staff');
+  const [editStation, setEditStation] = useState<'all' | 'curries' | 'biryani' | 'grill' | 'breads'>('all');
+  const [editIsActive, setEditIsActive] = useState(true);
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -49,11 +62,46 @@ export function StaffManager() {
     return { total, onDuty, admins, chefs, expo, staff };
   }, [users]);
 
-  const handleRoleChange = (userId: string, nextRole: UserRole) => {
+  const handleOpenEdit = (staff: StaffUser) => {
+    setEditingStaff(staff);
+    setEditName(staff.name);
+    setEditEmail(staff.email);
+    setEditRole(staff.role);
+    setEditStation(staff.shiftStation || 'all');
+    setEditIsActive(staff.isActive);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStaff) return;
+    if (!editName.trim()) {
+      showToast('⚠️ Please enter a valid staff name');
+      return;
+    }
+    if (!editEmail.trim() || !editEmail.includes('@')) {
+      showToast('⚠️ Please enter a valid email address');
+      return;
+    }
+
     setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, role: nextRole } : u))
+      prev.map((u) =>
+        u.id === editingStaff.id
+          ? {
+              ...u,
+              name: editName.trim(),
+              email: editEmail.trim().toLowerCase(),
+              role: editRole,
+              shiftStation: editRole === 'chef' ? editStation : 'all',
+              isActive: editIsActive,
+            }
+          : u
+      )
     );
-    showToast(`Role updated to ${nextRole.toUpperCase()}`);
+
+    setIsEditModalOpen(false);
+    setEditingStaff(null);
+    showToast(`Staff member "${editName.trim()}" updated successfully`);
   };
 
   const handleToggleActive = (userId: string) => {
@@ -68,7 +116,7 @@ export function StaffManager() {
     showToast('Staff member removed');
   };
 
-  const handleInviteStaff = (e: React.FormEvent) => {
+  const handleAddStaff = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim() || !newEmail.trim()) return;
 
@@ -87,8 +135,8 @@ export function StaffManager() {
     setNewPhone('');
     setNewRole('admin');
     setNewStation('all');
-    setIsInviteModalOpen(false);
-    showToast(`🎉 Invitation sent to ${newStaff.email} as ${newRole.toUpperCase()}!`);
+    setIsAddModalOpen(false);
+    showToast(`🎉 Staff member "${newStaff.name}" added as ${newRole.toUpperCase()}!`);
   };
 
   const filteredUsers = users.filter((u) => {
@@ -111,18 +159,18 @@ export function StaffManager() {
         </div>
       )}
 
-      {/* Page Header with Invite Admin Button */}
+      {/* Page Header with Add Staff Member Button */}
       <PageHeader
         title="Staff & Roles"
         description="Team members, roles, and shift status."
         action={
           <Button
             size="sm"
-            variant="secondary"
-            leftIcon={<UserPlus className="w-3.5 h-3.5" />}
-            onClick={() => setIsInviteModalOpen(true)}
+            variant="primary"
+            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            onClick={() => setIsAddModalOpen(true)}
           >
-            Invite Staff
+            Add Staff Member
           </Button>
         }
       />
@@ -264,16 +312,30 @@ export function StaffManager() {
 
                     {/* Role */}
                     <td className="py-3 px-4">
-                      <select
-                        value={staff.role}
-                        onChange={(e) => handleRoleChange(staff.id, e.target.value as UserRole)}
-                        className="h-7 px-2 text-xs font-semibold rounded-lg border border-stone-200 bg-white text-stone-800 outline-none focus:border-[#F15A24] cursor-pointer shadow-2xs"
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="chef">Chef</option>
-                        <option value="expo">Expo</option>
-                        <option value="staff">Staff</option>
-                      </select>
+                      {staff.role === 'admin' && (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200/80">
+                          <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+                          Admin
+                        </span>
+                      )}
+                      {staff.role === 'chef' && (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
+                          <ChefHat className="w-3.5 h-3.5 text-amber-600" />
+                          Chef
+                        </span>
+                      )}
+                      {staff.role === 'expo' && (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                          Expo
+                        </span>
+                      )}
+                      {staff.role === 'staff' && (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200/80">
+                          <span className="w-1.5 h-1.5 rounded-full bg-stone-400" />
+                          Staff
+                        </span>
+                      )}
                     </td>
 
                     {/* Station */}
@@ -305,6 +367,17 @@ export function StaffManager() {
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
+                          type="button"
+                          onClick={() => handleOpenEdit(staff)}
+                          title="Edit staff details and role"
+                          className="h-7 px-2.5 rounded-lg text-xs font-semibold border border-stone-200 bg-white hover:bg-stone-50 hover:text-stone-900 text-stone-700 inline-flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                        >
+                          <Pencil className="w-3 h-3 text-stone-500" />
+                          <span>Edit</span>
+                        </button>
+
+                        <button
+                          type="button"
                           onClick={() => handleToggleActive(staff.id)}
                           className={`h-7 px-2.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
                             staff.isActive
@@ -316,6 +389,7 @@ export function StaffManager() {
                         </button>
 
                         <button
+                          type="button"
                           onClick={() => handleDeleteStaff(staff.id)}
                           title="Remove staff member"
                           className="w-7 h-7 rounded-lg flex items-center justify-center text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
@@ -332,15 +406,15 @@ export function StaffManager() {
         </div>
       </div>
 
-      {/* Invite Staff Modal */}
+      {/* Add Staff Member Modal */}
       <Modal
-        isOpen={isInviteModalOpen}
-        onClose={() => setIsInviteModalOpen(false)}
-        title="Invite Team Member"
-        subtitle="Send invitation and assign role."
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Add Staff Member"
+        subtitle="Create a new team account and assign their role & kitchen station."
         maxWidth="md"
       >
-        <form onSubmit={handleInviteStaff} className="space-y-4">
+        <form onSubmit={handleAddStaff} className="space-y-4">
           <Input
             label="Full Name"
             placeholder="e.g. Liam O'Connor"
@@ -364,91 +438,36 @@ export function StaffManager() {
           />
 
           <div className="space-y-1">
-            <label className="block text-xs font-semibold text-stone-700">Role</label>
+            <label className="block text-xs font-semibold text-stone-700">Role & Access Level</label>
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <label
-                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
-                  newRole === 'admin'
-                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
-                    : 'border-stone-200 bg-white hover:bg-stone-50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-stone-900">Administrator</span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="admin"
-                    checked={newRole === 'admin'}
-                    onChange={() => setNewRole('admin')}
-                    className="accent-[#F15A24]"
-                  />
-                </div>
-                <p className="text-[11px] text-stone-500 mt-1">Full control (Revenue, CMS, Staff, Menu)</p>
-              </label>
-
-              <label
-                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
-                  newRole === 'chef'
-                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
-                    : 'border-stone-200 bg-white hover:bg-stone-50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-stone-900">Head Chef</span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="chef"
-                    checked={newRole === 'chef'}
-                    onChange={() => setNewRole('chef')}
-                    className="accent-[#F15A24]"
-                  />
-                </div>
-                <p className="text-[11px] text-stone-500 mt-1">KDS kitchen display, stations, and 86 inventory</p>
-              </label>
-
-              <label
-                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
-                  newRole === 'expo'
-                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
-                    : 'border-stone-200 bg-white hover:bg-stone-50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-stone-900">Expo Dispatch</span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="expo"
-                    checked={newRole === 'expo'}
-                    onChange={() => setNewRole('expo')}
-                    className="accent-[#F15A24]"
-                  />
-                </div>
-                <p className="text-[11px] text-stone-500 mt-1">Packaging, driver dispatch, and tickets</p>
-              </label>
-
-              <label
-                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
-                  newRole === 'staff'
-                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
-                    : 'border-stone-200 bg-white hover:bg-stone-50'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-stone-900">Line Staff</span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="staff"
-                    checked={newRole === 'staff'}
-                    onChange={() => setNewRole('staff')}
-                    className="accent-[#F15A24]"
-                  />
-                </div>
-                <p className="text-[11px] text-stone-500 mt-1">Station food prep and stock availability</p>
-              </label>
+              {[
+                { id: 'admin', label: 'Administrator', desc: 'Full control (Revenue, CMS, Staff, Menu)' },
+                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and 86 inventory' },
+                { id: 'expo', label: 'Expo Dispatch', desc: 'Packaging, driver dispatch, and tickets' },
+                { id: 'staff', label: 'Line Staff', desc: 'Station food prep and stock availability' },
+              ].map((r) => (
+                <label
+                  key={r.id}
+                  className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                    newRole === r.id
+                      ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                      : 'border-stone-200 bg-white hover:bg-stone-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-stone-900">{r.label}</span>
+                    <input
+                      type="radio"
+                      name="newRole"
+                      value={r.id}
+                      checked={newRole === r.id}
+                      onChange={() => setNewRole(r.id as UserRole)}
+                      className="accent-[#F15A24]"
+                    />
+                  </div>
+                  <p className="text-[11px] text-stone-500 mt-1">{r.desc}</p>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -477,17 +496,136 @@ export function StaffManager() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => setIsInviteModalOpen(false)}
+              onClick={() => setIsAddModalOpen(false)}
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              variant="secondary"
+              variant="primary"
               size="sm"
-              leftIcon={<Send className="w-3.5 h-3.5" />}
+              leftIcon={<Plus className="w-3.5 h-3.5" />}
             >
-              Send Invitation
+              Add Staff Member
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Staff Member Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingStaff(null);
+        }}
+        title="Edit Staff Member"
+        subtitle="Update name, email, role permissions, and assigned station."
+        maxWidth="md"
+      >
+        <form onSubmit={handleSaveEdit} className="space-y-4">
+          <Input
+            label="Full Name"
+            placeholder="e.g. Liam O'Connor"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            required
+          />
+          <Input
+            label="Email Address"
+            type="email"
+            placeholder="e.g. liam@amberspice.ie"
+            value={editEmail}
+            onChange={(e) => setEditEmail(e.target.value)}
+            required
+          />
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-stone-700">Role & Access Level</label>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {[
+                { id: 'admin', label: 'Administrator', desc: 'Full control (Revenue, CMS, Staff, Menu)' },
+                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and 86 inventory' },
+                { id: 'expo', label: 'Expo Dispatch', desc: 'Packaging, driver dispatch, and tickets' },
+                { id: 'staff', label: 'Line Staff', desc: 'Station food prep and stock availability' },
+              ].map((r) => (
+                <label
+                  key={r.id}
+                  className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                    editRole === r.id
+                      ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                      : 'border-stone-200 bg-white hover:bg-stone-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-stone-900">{r.label}</span>
+                    <input
+                      type="radio"
+                      name="editRole"
+                      value={r.id}
+                      checked={editRole === r.id}
+                      onChange={() => setEditRole(r.id as UserRole)}
+                      className="accent-[#F15A24]"
+                    />
+                  </div>
+                  <p className="text-[11px] text-stone-500 mt-1">{r.desc}</p>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-stone-700">Kitchen Station</label>
+            <select
+              value={editStation}
+              onChange={(e) => setEditStation(e.target.value as any)}
+              className="w-full h-10 rounded-xl border border-stone-200 bg-white px-3 text-xs text-stone-900 outline-none focus:border-[#F15A24] cursor-pointer"
+            >
+              <option value="all">All Stations (General Dispatch)</option>
+              <option value="curries">Karahi &amp; Curries</option>
+              <option value="biryani">Dum Biryani &amp; Rice</option>
+              <option value="grill">Clay Oven Tandoor Grill</option>
+              <option value="breads">Artisan Naan &amp; Breads</option>
+            </select>
+          </div>
+
+          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-stone-800">Shift Duty Status</p>
+              <p className="text-[11px] text-stone-500">Enable or pause active shift permissions</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setEditIsActive(!editIsActive)}
+              className={`h-7 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                editIsActive
+                  ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  : 'bg-stone-200 text-stone-700 hover:bg-stone-300'
+              }`}
+            >
+              {editIsActive ? 'On Duty' : 'Off Duty'}
+            </button>
+          </div>
+
+          <div className="pt-2 flex justify-end gap-2.5">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setIsEditModalOpen(false);
+                setEditingStaff(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
+            >
+              Save Changes
             </Button>
           </div>
         </form>
