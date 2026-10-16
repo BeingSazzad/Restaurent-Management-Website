@@ -168,8 +168,8 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
             {/* Stat Card 1 */}
-            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group cursor-default">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] group-hover:from-[#B84A22] group-hover:to-[#FBA138] text-[#B84A22] group-hover:text-white border border-[#FFD8BD] group-hover:border-[#B84A22] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all duration-300 shadow-xs">
                 <UtensilsCrossed className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
@@ -183,8 +183,8 @@ export default function AboutPage() {
             </div>
 
             {/* Stat Card 2 */}
-            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group cursor-default">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] group-hover:from-[#B84A22] group-hover:to-[#FBA138] text-[#B84A22] group-hover:text-white border border-[#FFD8BD] group-hover:border-[#B84A22] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all duration-300 shadow-xs">
                 <Heart className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
@@ -198,8 +198,8 @@ export default function AboutPage() {
             </div>
 
             {/* Stat Card 3 */}
-            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group cursor-default">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] group-hover:from-[#B84A22] group-hover:to-[#FBA138] text-[#B84A22] group-hover:text-white border border-[#FFD8BD] group-hover:border-[#B84A22] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all duration-300 shadow-xs">
                 <Sparkles className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
@@ -213,8 +213,8 @@ export default function AboutPage() {
             </div>
 
             {/* Stat Card 4 */}
-            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+            <div className="bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group cursor-default">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] group-hover:from-[#B84A22] group-hover:to-[#FBA138] text-[#B84A22] group-hover:text-white border border-[#FFD8BD] group-hover:border-[#B84A22] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all duration-300 shadow-xs">
                 <Award className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
@@ -228,8 +228,8 @@ export default function AboutPage() {
             </div>
 
             {/* Stat Card 5 */}
-            <div className="col-span-2 md:col-span-1 bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] text-[#B84A22] border border-[#FFD8BD] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#B84A22] group-hover:text-white transition-all duration-300 shadow-xs">
+            <div className="col-span-2 md:col-span-1 bg-white rounded-2xl p-6 text-center border border-[#EAE5DF] shadow-[0_2px_12px_rgba(26,19,14,0.03)] hover:-translate-y-1 hover:border-[#B84A22]/50 hover:shadow-[0_10px_24px_rgba(184,74,34,0.08)] transition-all duration-300 flex flex-col items-center justify-between group cursor-default">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFF5ED] to-[#FFE8D6] group-hover:from-[#B84A22] group-hover:to-[#FBA138] text-[#B84A22] group-hover:text-white border border-[#FFD8BD] group-hover:border-[#B84A22] flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-[0_4px_14px_rgba(184,74,34,0.3)] transition-all duration-300 shadow-xs">
                 <ChefHat className="w-6 h-6 stroke-[2]" />
               </div>
               <div>
