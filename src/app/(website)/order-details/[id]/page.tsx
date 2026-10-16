@@ -32,6 +32,13 @@ export default function OrderDetailsPage() {
 
   React.useEffect(() => {
     dispatch(syncOrdersFromStorage());
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'amber_spice_orders') {
+        dispatch(syncOrdersFromStorage());
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, [dispatch]);
   
   // Intelligent lookup: matches AS-2041, ord-2041, 2041, ZM-4047, zm-4047, etc.

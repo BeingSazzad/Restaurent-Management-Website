@@ -72,9 +72,12 @@ export const orderSlice = createSlice({
         state.rushMinutes = action.payload;
       }
     },
+    syncOrdersFromStorage: (state) => {
+      state.orders = getInitialOrders();
+    },
   },
 });
 
-export const { createManualOrder, updateOrderStatus, toggleSound, toggleRushMode } = orderSlice.actions;
+export const { createManualOrder, updateOrderStatus, toggleSound, toggleRushMode, syncOrdersFromStorage } = orderSlice.actions;
 export const addOrder = createManualOrder;
 export default orderSlice.reducer;

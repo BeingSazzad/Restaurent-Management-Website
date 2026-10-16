@@ -1,14 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { Printer, TrendingUp, Flame, FileText } from 'lucide-react';
+import { Printer, TrendingUp, Flame, FileText, Bike, Store, ArrowUpRight } from 'lucide-react';
 import { useAppSelector } from '../../store/hooks';
 import { formatCurrency, formatTime } from '../../lib/utils';
 import { PageHeader } from '../layout/PageHeader';
 import { Button } from '../ui/Button';
 import { KdsOrder } from '../../types/common.types';
+import { TicketSlipModal } from '../dashboard/TicketSlipModal';
 
 export function ShiftZReport() {
   const { orders } = useAppSelector((state) => state.orders);
   const [selectedPeriod, setSelectedPeriod] = useState<string>('live');
+  const [activeSlipOrder, setActiveSlipOrder] = useState<KdsOrder | null>(null);
 
   const baseRevenue = orders.reduce((acc, o) => acc + o.total, 0);
 
@@ -83,8 +85,56 @@ export function ShiftZReport() {
     return orders;
   }, [selectedPeriod, orders]);
 
+  const totalPortions = Math.max(
+    1,
+    periodData.curryPortions + periodData.biryaniPortions + periodData.grillPortions + periodData.breadCount
+  );
+
+  const stations = [
+    {
+      name: 'Karahi & Curries Station',
+      count: periodData.curryPortions,
+      unit: 'Portions',
+      color: 'bg-amber-500',
+      barColor: 'bg-amber-500',
+      lightBg: 'bg-amber-50',
+      textAccent: 'text-amber-800',
+      percent: Math.round((periodData.curryPortions / totalPortions) * 100),
+    },
+    {
+      name: 'Dum Biryani & Rice Line',
+      count: periodData.biryaniPortions,
+      unit: 'Portions',
+      color: 'bg-orange-500',
+      barColor: 'bg-[#F15A24]',
+      lightBg: 'bg-orange-50',
+      textAccent: 'text-orange-800',
+      percent: Math.round((periodData.biryaniPortions / totalPortions) * 100),
+    },
+    {
+      name: 'Clay Oven Tandoor Grill',
+      count: periodData.grillPortions,
+      unit: 'Portions',
+      color: 'bg-rose-500',
+      barColor: 'bg-rose-500',
+      lightBg: 'bg-rose-50',
+      textAccent: 'text-rose-800',
+      percent: Math.round((periodData.grillPortions / totalPortions) * 100),
+    },
+    {
+      name: 'Artisan Naan & Breads',
+      count: periodData.breadCount,
+      unit: 'Breads',
+      color: 'bg-stone-500',
+      barColor: 'bg-stone-500',
+      lightBg: 'bg-stone-100',
+      textAccent: 'text-stone-800',
+      percent: Math.round((periodData.breadCount / totalPortions) * 100),
+    },
+  ];
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <PageHeader
         title="Shift Report"
         description="Shift sales summary, order counts, and station breakdown."
@@ -129,7 +179,7 @@ export function ShiftZReport() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+        <div className="p-6 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">Shift Revenue</span>
           <div className="text-2xl sm:text-3xl font-bold text-[#F15A24] tracking-tight">
             {formatCurrency(periodData.revenue)}
@@ -139,7 +189,7 @@ export function ShiftZReport() {
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+        <div className="p-6 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">Total Orders</span>
           <div className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
             {periodData.ticketCount} Orders
@@ -149,7 +199,7 @@ export function ShiftZReport() {
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+        <div className="p-6 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">Average Prep Time</span>
           <div className="text-2xl sm:text-3xl font-bold text-emerald-700 tracking-tight">{periodData.avgPrep}</div>
           <span className="text-xs text-stone-500 block">Target: 20 min · {periodData.onTime}</span>
@@ -157,108 +207,145 @@ export function ShiftZReport() {
       </div>
 
       {/* Station Breakdown & Shift Activity */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* Stations Breakdown Card */}
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+        {/* Stations Breakdown Card with Visual Capacity Bars */}
+        <div className="bg-white p-6 rounded-2xl border border-stone-200/90 shadow-2xs space-y-5">
+          <div className="flex items-center justify-between pb-3.5 border-b border-stone-100">
             <h3 className="font-bold text-xs uppercase tracking-wider text-stone-800 flex items-center gap-2">
               <Flame className="w-4 h-4 text-[#F15A24]" />
-              <span>Station Output</span>
+              <span>Station Output Breakdown</span>
             </h3>
-            <span className="text-xs text-stone-400 font-medium">Breakdown</span>
-          </div>
-
-          <div className="divide-y divide-stone-100 text-xs">
-            <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                <span className="font-medium text-stone-700">Karahi &amp; Curries Station</span>
-              </div>
-              <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
-                {periodData.curryPortions} Portions
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0" />
-                <span className="font-medium text-stone-700">Dum Biryani &amp; Rice Line</span>
-              </div>
-              <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
-                {periodData.biryaniPortions} Portions
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
-                <span className="font-medium text-stone-700">Clay Oven Tandoor Grill</span>
-              </div>
-              <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
-                {periodData.grillPortions} Portions
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
-              <div className="flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-stone-400 shrink-0" />
-                <span className="font-medium text-stone-700">Artisan Naan &amp; Breads</span>
-              </div>
-              <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
-                {periodData.breadCount} Breads
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Activity log Card */}
-        <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-            <h3 className="font-bold text-xs uppercase tracking-wider text-stone-800 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#F15A24]" />
-              <span>Recent Orders</span>
-            </h3>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
-              {displayedOrders.length} Orders
+            <span className="text-xs text-stone-500 font-medium bg-stone-100 px-2.5 py-1 rounded-md">
+              {totalPortions} Total Units
             </span>
           </div>
 
-          <div className="divide-y divide-stone-100 max-h-[260px] overflow-y-auto scrollbar-none pr-1">
-            {displayedOrders.map((ord: KdsOrder) => (
-              <div key={ord.id} className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors text-xs">
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-stone-900">#{ord.orderNumber}</span>
-                    <span className="text-stone-700 font-semibold">{ord.customerName}</span>
-                    <span className="text-[11px] text-stone-400 capitalize font-medium">({ord.fulfillmentType})</span>
+          <div className="space-y-3">
+            {stations.map((st) => (
+              <div
+                key={st.name}
+                className="p-3.5 rounded-xl bg-stone-50/60 border border-stone-200/50 hover:bg-stone-50 transition-colors"
+              >
+                <div className="flex items-center justify-between gap-3 text-sm">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className={`w-2.5 h-2.5 rounded-full ${st.color} shrink-0`} />
+                    <span className="font-semibold text-stone-800 text-sm truncate">{st.name}</span>
                   </div>
-                  <span className="text-[11px] text-stone-400 block">
-                    {ord.items.reduce((acc: number, i) => acc + i.quantity, 0)} items · {formatTime(ord.createdAt)}
-                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="font-bold text-stone-900 text-sm">
+                      {st.count} {st.unit}
+                    </span>
+                    <span className="text-xs font-medium text-stone-400">
+                      ({st.percent}%)
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right space-y-1">
-                  <span className="font-bold text-stone-900 block text-xs">
-                    {formatCurrency(ord.total)}
-                  </span>
-                  <span
-                    className={`text-[10px] font-semibold uppercase tracking-wide px-2.5 py-0.5 rounded-full inline-block ${
-                      ord.status === 'completed'
-                        ? 'bg-stone-100 text-stone-700'
-                        : ord.status === 'ready'
-                        ? 'bg-emerald-50 text-emerald-700'
-                        : ord.status === 'preparing'
-                        ? 'bg-amber-50 text-amber-700'
-                        : 'bg-orange-50 text-[#F15A24]'
-                    }`}
-                  >
-                    {ord.status.replace('_', ' ')}
-                  </span>
+
+                {/* Purposeful visual progress bar across middle space */}
+                <div className="mt-2.5 w-full bg-stone-200/70 h-2 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full ${st.barColor} rounded-full transition-all duration-500`}
+                    style={{ width: `${Math.max(st.count > 0 ? 5 : 0, st.percent)}%` }}
+                  />
                 </div>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Recent Orders Card with Structured Order Tiles */}
+        <div className="bg-white p-6 rounded-2xl border border-stone-200/90 shadow-2xs space-y-5">
+          <div className="flex items-center justify-between pb-3.5 border-b border-stone-100">
+            <h3 className="font-bold text-xs uppercase tracking-wider text-stone-800 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#F15A24]" />
+              <span>Recent Shift Activity</span>
+            </h3>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-stone-100 text-stone-700">
+              {displayedOrders.length} Tickets
+            </span>
+          </div>
+
+          <div className="space-y-3 max-h-[380px] overflow-y-auto scrollbar-none pr-0.5">
+            {displayedOrders.length === 0 ? (
+              <div className="text-center py-10 text-stone-400 text-xs font-medium">
+                No orders recorded in this service period.
+              </div>
+            ) : (
+              displayedOrders.map((ord: KdsOrder) => {
+                const isDelivery = ord.fulfillmentType === 'delivery';
+                const totalItemCount = ord.items.reduce((acc: number, i) => acc + i.quantity, 0);
+
+                return (
+                  <div
+                    key={ord.id}
+                    onClick={() => setActiveSlipOrder(ord)}
+                    title="Click to view ticket details"
+                    className="p-3.5 rounded-xl bg-stone-50/60 hover:bg-stone-50 border border-stone-200/50 hover:border-stone-300 transition-all flex items-center justify-between gap-4 cursor-pointer group"
+                  >
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono font-bold text-xs bg-stone-200/80 text-stone-800 px-2 py-0.5 rounded-md">
+                          #{ord.orderNumber}
+                        </span>
+                        <span className="text-sm font-semibold text-stone-900 truncate">
+                          {ord.customerName}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-500 bg-white border border-stone-200/60 px-2 py-0.5 rounded-md">
+                          {isDelivery ? (
+                            <Bike className="w-3 h-3 text-[#F15A24]" />
+                          ) : (
+                            <Store className="w-3 h-3 text-emerald-600" />
+                          )}
+                          <span className="capitalize">{ord.fulfillmentType}</span>
+                        </span>
+                      </div>
+                      <div className="text-xs text-stone-500 flex items-center gap-2">
+                        <span>{totalItemCount} {totalItemCount === 1 ? 'item' : 'items'}</span>
+                        <span>·</span>
+                        <span>{formatTime(ord.createdAt)}</span>
+                        <span>·</span>
+                        <span className="text-stone-400 truncate max-w-[200px]">
+                          {ord.items.map((i) => i.dish.name).join(', ')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="text-right space-y-1 shrink-0">
+                      <div className="flex items-center justify-end gap-1">
+                        <span className="font-bold text-stone-900 text-sm">
+                          {formatCurrency(ord.total)}
+                        </span>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-stone-300 group-hover:text-stone-600 transition-colors" />
+                      </div>
+                      <span
+                        className={`text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full inline-block ${
+                          ord.status === 'completed'
+                            ? 'bg-stone-100 text-stone-700'
+                            : ord.status === 'ready'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
+                            : ord.status === 'preparing'
+                            ? 'bg-amber-50 text-amber-700 border border-amber-200/60'
+                            : 'bg-orange-50 text-[#F15A24] border border-orange-200/60'
+                        }`}
+                      >
+                        {ord.status.replace('_', ' ')}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* Ticket Slip Modal for Manager inspection */}
+      {activeSlipOrder && (
+        <TicketSlipModal
+          order={activeSlipOrder}
+          onClose={() => setActiveSlipOrder(null)}
+        />
+      )}
     </div>
   );
 }

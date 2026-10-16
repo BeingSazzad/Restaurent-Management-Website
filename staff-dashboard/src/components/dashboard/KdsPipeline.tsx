@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, X, UtensilsCrossed, Flame, CheckCircle2 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateOrderStatus } from '../../store/slices/orderSlice';
+import { updateOrderStatus, syncOrdersFromStorage } from '../../store/slices/orderSlice';
 import { KdsOrder, OrderStatus, StationType, FulfillmentType } from '../../types/common.types';
 import { KdsTicketCard } from './KdsTicketCard';
 import { TicketSlipModal } from './TicketSlipModal';
@@ -9,6 +9,16 @@ import { TicketSlipModal } from './TicketSlipModal';
 export function KdsPipeline() {
   const dispatch = useAppDispatch();
   const { orders } = useAppSelector((state) => state.orders);
+
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'amber_spice_orders') {
+        dispatch(syncOrdersFromStorage());
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [dispatch]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [stationFilter, setStationFilter] = useState<StationType>('all');
