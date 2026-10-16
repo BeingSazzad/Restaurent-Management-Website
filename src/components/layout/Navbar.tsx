@@ -19,6 +19,7 @@ import {
   UserPlus,
   LogOut,
   ChevronDown,
+  ChefHat,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -187,6 +188,14 @@ export const Navbar: React.FC = () => {
                           >
                             <Calendar className="w-4 h-4 text-[#B84A22]" />
                             <span>Reservations</span>
+                          </Link>
+                          <Link
+                            href="/agent-dashboard"
+                            onClick={() => setIsAccountMenuOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-100 font-medium transition-colors border-t border-[#F0ECE7] mt-1 pt-2"
+                          >
+                            <ChefHat className="w-4 h-4 text-[#F15A24]" />
+                            <span>Staff KDS Portal</span>
                           </Link>
                         </div>
 

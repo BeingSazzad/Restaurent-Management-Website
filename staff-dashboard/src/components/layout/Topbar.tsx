@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Clock, Maximize, Minimize, Plus } from 'lucide-react';
+import { Volume2, VolumeX, Clock, Maximize, Minimize, Plus, ShieldCheck } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toggleSound, toggleRushMode } from '../../store/slices/orderSlice';
+import { setActiveRole } from '../../store/slices/authSlice';
+import { useAuth } from '../../hooks/useAuth';
+import { UserRole } from '../../types/common.types';
 import { Button } from '../ui/Button';
 
 export interface TopbarProps {
@@ -10,6 +13,7 @@ export interface TopbarProps {
 
 export function Topbar({ onFireManualTicket }: TopbarProps) {
   const dispatch = useAppDispatch();
+  const { user } = useAuth();
   const { soundEnabled, rushMode, rushMinutes } = useAppSelector((state) => state.orders);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -35,17 +39,31 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
 
   return (
     <header className="h-16 bg-white border-b border-stone-200/90 px-6 lg:px-8 flex items-center justify-between shrink-0">
-      {/* Left: Shift Clock */}
+      {/* Left: Shift Clock & Active Role Indicator */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5 text-xs text-stone-600 font-medium">
           <Clock className="w-3.5 h-3.5 text-[#F15A24]" />
           <span>Shift:</span>
           <span className="font-semibold text-stone-900">{currentTime}</span>
         </div>
-        <span className="text-stone-300">|</span>
-        <span className="text-xs text-stone-500 font-medium hidden sm:inline">
-          Station: <strong className="text-stone-800">All</strong>
-        </span>
+        <span className="text-stone-300 hidden sm:inline">|</span>
+
+        {/* Dynamic Role Switcher (UX Law of Least Cognitive Friction) */}
+        <div className="flex items-center gap-1 bg-stone-100/90 p-1 rounded-xl border border-stone-200/80">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#F15A24] ml-1 hidden sm:inline" />
+          <span className="text-[11px] font-medium text-stone-500 hidden sm:inline">Role:</span>
+          <select
+            value={user?.role || 'admin'}
+            onChange={(e) => dispatch(setActiveRole(e.target.value as UserRole))}
+            className="h-7 px-2 rounded-lg text-xs font-semibold bg-white border border-stone-200/90 text-stone-800 outline-none cursor-pointer hover:border-[#F15A24] transition-colors shadow-2xs"
+            title="Switch Active Persona / Role"
+          >
+            <option value="admin">Admin (Manager)</option>
+            <option value="chef">Head Chef (Kitchen)</option>
+            <option value="expo">Expo (Dispatch)</option>
+            <option value="staff">Station Cook</option>
+          </select>
+        </div>
       </div>
 
       {/* Right Controls: Sound, Rush Mode, Fullscreen, New Ticket */}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateOrderStatus, toggleKitchenSnooze, createOrder } from '@/redux/slices/orderSlice';
 import { toggleItemAvailability } from '@/redux/slices/menuSlice';
@@ -289,6 +290,15 @@ export default function AgentDashboardPage() {
                 <Plus className="w-3.5 h-3.5" />
                 <span>New Ticket</span>
               </button>
+
+              <Link
+                href="/menu"
+                className="h-9 px-3 rounded-lg text-xs font-medium border border-stone-200 text-stone-700 hover:text-stone-900 hover:bg-stone-100 flex items-center gap-1.5 transition-colors cursor-pointer"
+                title="View Customer Storefront Menu"
+              >
+                <Store className="w-3.5 h-3.5 text-[#F15A24]" />
+                <span className="hidden sm:inline">Storefront</span>
+              </Link>
             </div>
           </div>
 

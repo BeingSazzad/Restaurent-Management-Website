@@ -16,6 +16,7 @@ import { RESTAURANT_BRAND } from '../../lib/constants';
 
 export function Sidebar() {
   const { user, logout } = useAuth();
+  const currentRole = user?.role || 'admin';
 
   const navigationItems = [
     {
@@ -23,23 +24,27 @@ export function Sidebar() {
       path: ROUTES.DASHBOARD.KDS,
       icon: LayoutDashboard,
       badge: 'Live',
+      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
       name: '86 Inventory',
       path: ROUTES.DASHBOARD.STOCK_86,
       icon: PackageX,
+      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
       name: 'Shift Report',
       path: ROUTES.DASHBOARD.ANALYTICS,
       icon: BarChart3,
+      allowedRoles: ['admin', 'expo'],
     },
     {
       name: 'Staff & Roles',
       path: ROUTES.DASHBOARD.USERS,
       icon: Users,
+      allowedRoles: ['admin'],
     },
-  ];
+  ].filter((item) => item.allowedRoles.includes(currentRole));
 
   return (
     <aside className="w-64 bg-[#140F0C] text-white flex flex-col justify-between shrink-0 min-h-screen border-r border-stone-800/90 relative overflow-hidden select-none">

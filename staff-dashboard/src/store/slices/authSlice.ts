@@ -33,8 +33,22 @@ export const authSlice = createSlice({
         state.user.shiftStation = action.payload;
       }
     },
+    setActiveRole: (state, action: PayloadAction<StaffUser['role']>) => {
+      if (state.user) {
+        state.user.role = action.payload;
+        if (action.payload === 'chef') {
+          state.user.name = 'Chef Tariq';
+        } else if (action.payload === 'expo') {
+          state.user.name = 'Sarah O’Connor';
+        } else if (action.payload === 'admin') {
+          state.user.name = 'Manager Tariq';
+        } else {
+          state.user.name = 'Vikram Singh';
+        }
+      }
+    },
   },
 });
 
-export const { loginSuccess, logout, switchStation } = authSlice.actions;
+export const { loginSuccess, logout, switchStation, setActiveRole } = authSlice.actions;
 export default authSlice.reducer;
