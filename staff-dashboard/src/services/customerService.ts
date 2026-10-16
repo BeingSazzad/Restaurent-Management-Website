@@ -8,9 +8,13 @@ export interface RegisteredCustomer {
   totalSpent: number;
   lastOrderDate: string;
   favoriteDish: string;
-  status: 'vip' | 'active' | 'new';
+  status: 'vip' | 'active' | 'new' | 'banned';
   deliveryAddress: string;
   eircode: string;
+  isBanned?: boolean;
+  bannedAt?: string;
+  banReason?: string;
+  previousStatus?: 'vip' | 'active' | 'new';
 }
 
 const CUSTOMERS_STORAGE_KEY = 'amber_spice_customers';
@@ -146,3 +150,44 @@ export function deleteCustomer(id: string): void {
   const updated = current.filter((c) => c.id !== id);
   saveCustomersList(updated);
 }
+
+export function banCustomer(id: string, reason?: string): RegisteredCustomer | null {
+  const current = getCustomersList();
+  const index = current.findIndex((c) => c.id === id);
+  if (index === -1) return null;
+
+  const target = current[index];
+  const updatedCustomer: RegisteredCustomer = {
+    ...target,
+    isBanned: true,
+    previousStatus: (target.status !== 'banned' ? target.status : target.previousStatus) || 'active',
+    status: 'banned',
+    bannedAt: new Date().toISOString(),
+    banReason: reason || 'Violation of restaurant terms',
+  };
+
+  current[index] = updatedCustomer;
+  saveCustomersList(current);
+  return updatedCustomer;
+}
+
+export function unbanCustomer(id: string): RegisteredCustomer | null {
+  const current = getCustomersList();
+  const index = current.findIndex((c) => c.id === id);
+  if (index === -1) return null;
+
+  const target = current[index];
+  const restoredStatus = target.previousStatus || (target.totalOrders >= 5 ? 'vip' : 'active');
+  const updatedCustomer: RegisteredCustomer = {
+    ...target,
+    isBanned: false,
+    status: restoredStatus,
+    bannedAt: undefined,
+    banReason: undefined,
+  };
+
+  current[index] = updatedCustomer;
+  saveCustomersList(current);
+  return updatedCustomer;
+}
+

@@ -33,6 +33,7 @@ export const CheckoutModal: React.FC = () => {
   const [specialNotes, setSpecialNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple_pay' | 'cash'>('apple_pay');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bannedError, setBannedError] = useState<string | null>(null);
 
   React.useEffect(() => {
     if (user) {
@@ -57,6 +58,30 @@ export const CheckoutModal: React.FC = () => {
 
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
+    setBannedError(null);
+
+    // Verify if customer account or contact is banned by restaurant staff
+    try {
+      const raw = localStorage.getItem('amber_spice_customers');
+      if (raw) {
+        const custs = JSON.parse(raw);
+        const banned = custs.find(
+          (c: any) =>
+            (c.isBanned || c.status === 'banned') &&
+            (c.email?.trim().toLowerCase() === email.trim().toLowerCase() ||
+              c.phone?.replace(/\D/g, '') === phone.replace(/\D/g, ''))
+        );
+        if (banned) {
+          setBannedError(
+            `Account Restricted: Orders for ${banned.email} are suspended by restaurant management (${banned.banReason || 'Policy terms'}). Please contact support.`
+          );
+          return;
+        }
+      }
+    } catch {
+      // fallback
+    }
+
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -284,6 +309,13 @@ export const CheckoutModal: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Banned Alert */}
+          {bannedError && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium">
+              {bannedError}
+            </div>
+          )}
 
           {/* Submit Order */}
           <button
