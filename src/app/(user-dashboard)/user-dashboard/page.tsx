@@ -28,9 +28,11 @@ import {
   Briefcase,
   KeyRound,
   Bell,
-  Sparkles,
-  Clock,
   Edit3,
+  MessageSquareText,
+  Receipt,
+  ChefHat,
+  Tag,
 } from 'lucide-react';
 
 type TabType = 'profile' | 'orders' | 'addresses' | 'payment' | 'security' | 'notifications' | 'logout';
@@ -1339,7 +1341,7 @@ function DashboardContent() {
                     <div className="py-6 first:pt-0 last:pb-0 flex items-center justify-between gap-5 sm:gap-6">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
-                          <Phone className="w-5 h-5" />
+                          <MessageSquareText className="w-5 h-5" />
                         </div>
                         <div>
                           <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
@@ -1369,8 +1371,8 @@ function DashboardContent() {
                     {/* Email Receipts */}
                     <div className="py-6 flex items-center justify-between gap-5 sm:gap-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-[#D49B37] flex items-center justify-center shrink-0 border border-amber-100">
-                          <Mail className="w-5 h-5" />
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Receipt className="w-5 h-5" />
                         </div>
                         <div>
                           <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
@@ -1401,7 +1403,7 @@ function DashboardContent() {
                     <div className="py-6 flex items-center justify-between gap-5 sm:gap-6">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
-                          <Clock className="w-5 h-5" />
+                          <ChefHat className="w-5 h-5" />
                         </div>
                         <div>
                           <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
@@ -1431,8 +1433,8 @@ function DashboardContent() {
                     {/* Special Offers & Promotions */}
                     <div className="py-6 last:pb-0 flex items-center justify-between gap-5 sm:gap-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-[#0FA958] flex items-center justify-center shrink-0 border border-emerald-100">
-                          <Sparkles className="w-5 h-5" />
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#F15A24] flex items-center justify-center shrink-0 border border-orange-100">
+                          <Tag className="w-5 h-5" />
                         </div>
                         <div>
                           <h4 className="font-bold text-[15px] sm:text-[16px] text-[#1A130E]">
