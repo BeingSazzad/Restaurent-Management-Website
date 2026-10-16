@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
+import { PolicyContentRenderer } from '@/components/shared/PolicyContentRenderer';
 
 export default function TermsPage() {
   const [termsData, setTermsData] = useState(() => getCmsPage('terms') || DEFAULT_CMS_DATA.terms);
@@ -32,18 +33,8 @@ export default function TermsPage() {
         </span>
       </div>
 
-      <div className="space-y-8 bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 text-[14px] sm:text-[15px] text-[#444444] leading-[26px] shadow-xs">
-        {termsData.sections.map((section, idx) => (
-          <section
-            key={section.id || idx}
-            className={`space-y-2 ${idx > 0 && idx === termsData.sections.length - 1 ? 'pt-4 border-t border-[#E5E5E5]' : ''}`}
-          >
-            <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-              {section.title}
-            </h2>
-            <p className="whitespace-pre-line">{section.content}</p>
-          </section>
-        ))}
+      <div className="bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 shadow-xs">
+        <PolicyContentRenderer content={termsData.content} sections={termsData.sections} />
       </div>
 
       {/* Back to Home & Privacy Link */}

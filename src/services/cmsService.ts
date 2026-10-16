@@ -8,6 +8,7 @@ export interface CmsPageData {
   title: string;
   subtitle: string;
   lastUpdated: string;
+  content?: string;
   sections: CmsSection[];
 }
 
@@ -56,11 +57,68 @@ export interface CmsDatabase {
   storeInfo: CmsStoreInfo;
 }
 
+export const DEFAULT_TERMS_TEXT = `## 1. Agreement to Terms
+By accessing our website or placing an online order for delivery or collection, you agree to be bound by these Terms & Conditions. If you disagree with any portion of these terms, please refrain from utilizing our online ordering platform.
+
+---
+
+## 2. Pricing, VAT & Payment
+All menu prices are listed in Euros (€) and are inclusive of standard Irish Value Added Tax (VAT). While we endeavor to ensure accurate pricing across the platform, we reserve the right to update prices, seasonal dishes, and special promotions without prior notice.
+
+• Cash on delivery & collection accepted
+• Major credit and debit cards (Visa, MasterCard, Apple Pay)
+• Corporate accounts with VAT invoices on request
+
+---
+
+## 3. Fulfillment, Delivery & Collections
+Estimated delivery times (~30-35 mins) and collection preparation times (~15-20 mins) are approximate and may vary due to peak hours, kitchen volume, or inclement weather in Dublin. Customers are responsible for providing complete and accurate Dublin addresses, Eircodes, and contact numbers.
+
+---
+
+## 4. Cancellations & Refunds
+Orders can be modified or cancelled within 5 minutes of placement by phoning our kitchen directly at +353 (01) 485 9210. Once an order has entered "preparing" status in our kitchen, cancellations or refunds cannot be guaranteed.
+
+---
+
+## 5. Allergens & Special Dietary Requests
+We take food safety and allergen management with extreme seriousness. However, as our dishes are handcrafted in an active kitchen that handles dairy, nuts, and gluten, cross-contact is possible.
+
+> **Important Allergy Advisory**: Please inform our team of severe allergies prior to placing your order.`;
+
+export const DEFAULT_PRIVACY_TEXT = `## 1. Information We Collect
+When you place an order, create an account, or book a table, we collect your name, phone number, email address, delivery address, and Eircode.
+
+• Identity Information: Full name and contact telephone
+• Location Information: Dublin delivery street address and Eircode
+• Transaction Records: Ordered items, payment confirmations, and special chef notes
+
+---
+
+## 2. How We Use Your Data
+Your personal data is strictly utilized to process, cook, dispatch, and track your food orders, send receipt SMS/email confirmations, and manage table reservations under GDPR compliance.
+
+---
+
+## 3. Data Protection & Security
+We employ industry-standard encryption protocols. We never sell, rent, or trade your personal data with third-party advertising brokers.`;
+
+export const DEFAULT_COOKIE_TEXT = `## 1. What Are Cookies?
+Cookies and browser storage are small data files saved on your device to keep your shopping cart intact, remember delivery addresses, and ensure seamless order tracking.
+
+---
+
+## 2. Cookies We Utilize
+• **Essential Session Cookies**: Retains dishes in your shopping cart during navigation
+• **Preferences Storage**: Remembers your preferred order fulfillment method (Delivery vs Collection)
+• **KDS & Tracking Sync**: Real-time order progress updates between kitchen and diner`;
+
 export const DEFAULT_CMS_DATA: CmsDatabase = {
   terms: {
     title: 'Terms & Conditions',
     subtitle: 'Customer terms and conditions for ordering, delivery, and dining services.',
     lastUpdated: 'October 2026',
+    content: DEFAULT_TERMS_TEXT,
     sections: [
       {
         id: 'term-1',
@@ -98,6 +156,7 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
     title: 'Privacy Policy',
     subtitle: 'How Amber Spice protects and handles your personal ordering and payment information under GDPR.',
     lastUpdated: 'October 2026',
+    content: DEFAULT_PRIVACY_TEXT,
     sections: [
       {
         id: 'priv-1',
@@ -129,6 +188,7 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
     title: 'Cookie Policy',
     subtitle: 'Transparency regarding cookies and local storage utilized to ensure seamless ordering and tracking.',
     lastUpdated: 'October 2026',
+    content: DEFAULT_COOKIE_TEXT,
     sections: [
       {
         id: 'cook-1',
@@ -250,9 +310,33 @@ export function getFullCmsData(): CmsDatabase {
       return {
         ...DEFAULT_CMS_DATA,
         ...parsed,
-        terms: { ...DEFAULT_CMS_DATA.terms, ...(parsed.terms || {}) },
-        privacy: { ...DEFAULT_CMS_DATA.privacy, ...(parsed.privacy || {}) },
-        cookie: { ...DEFAULT_CMS_DATA.cookie, ...(parsed.cookie || {}) },
+        terms: {
+          ...DEFAULT_CMS_DATA.terms,
+          ...(parsed.terms || {}),
+          content:
+            parsed.terms?.content ||
+            (parsed.terms?.sections
+              ? parsed.terms.sections.map((s: any) => `## ${s.title}\n\n${s.content}`).join('\n\n---\n\n')
+              : DEFAULT_TERMS_TEXT),
+        },
+        privacy: {
+          ...DEFAULT_CMS_DATA.privacy,
+          ...(parsed.privacy || {}),
+          content:
+            parsed.privacy?.content ||
+            (parsed.privacy?.sections
+              ? parsed.privacy.sections.map((s: any) => `## ${s.title}\n\n${s.content}`).join('\n\n---\n\n')
+              : DEFAULT_PRIVACY_TEXT),
+        },
+        cookie: {
+          ...DEFAULT_CMS_DATA.cookie,
+          ...(parsed.cookie || {}),
+          content:
+            parsed.cookie?.content ||
+            (parsed.cookie?.sections
+              ? parsed.cookie.sections.map((s: any) => `## ${s.title}\n\n${s.content}`).join('\n\n---\n\n')
+              : DEFAULT_COOKIE_TEXT),
+        },
         about: {
           ...DEFAULT_CMS_DATA.about,
           ...(parsed.about || {}),

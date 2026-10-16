@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   getFullCmsData,
   saveFullCmsData,
   CmsDatabase,
   CmsPageData,
   CmsFaqItem,
+  CmsSection,
 } from '@/services/cmsService';
+import { PolicyContentRenderer } from '@/components/shared/PolicyContentRenderer';
 import {
   FileText,
   Shield,
@@ -19,18 +21,72 @@ import {
   Trash2,
   Save,
   CheckCircle2,
+  Bold,
+  Italic,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Quote,
+  Minus,
+  Eye,
+  Edit3,
 } from 'lucide-react';
 
 type CmsTab = 'terms' | 'privacy' | 'cookie' | 'about' | 'faq' | 'storeInfo';
+
+// Helper: parse single-box markdown content into structured clauses for backwards-compatibility
+const contentToSections = (content: string): CmsSection[] => {
+  const parts = content.split(/\n(?=##\s+)/);
+  if (parts.length === 0 || (parts.length === 1 && !parts[0].trim())) {
+    return [{ id: 'sec-1', title: 'Terms & Conditions', content: content.trim() }];
+  }
+  return parts.map((part, idx) => {
+    const lines = part.trim().split('\n');
+    const headerMatch = lines[0].match(/^##\s+(.*)/);
+    const title = headerMatch ? headerMatch[1].trim() : `${idx + 1}. Clause`;
+    const body = headerMatch ? lines.slice(1).join('\n').trim() : part.trim();
+    return {
+      id: `sec-${idx + 1}`,
+      title,
+      content: body.replace(/^---\n*/, '').trim(),
+    };
+  });
+};
 
 export const CmsManager: React.FC = () => {
   const [cmsData, setCmsData] = useState<CmsDatabase>(() => getFullCmsData());
   const [activeTab, setActiveTab] = useState<CmsTab>('terms');
   const [saveSuccessNotice, setSaveSuccessNotice] = useState<string | null>(null);
+  const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSave = () => {
-    saveFullCmsData(cmsData);
-    setSaveSuccessNotice('✓ Changes successfully published to live website!');
+    const autoStamp = new Date().toLocaleDateString('en-IE', { month: 'long', year: 'numeric' });
+    const updatedData: CmsDatabase = {
+      ...cmsData,
+      terms: {
+        ...cmsData.terms,
+        lastUpdated: autoStamp,
+        content: cmsData.terms.content || '',
+        sections: contentToSections(cmsData.terms.content || ''),
+      },
+      privacy: {
+        ...cmsData.privacy,
+        lastUpdated: autoStamp,
+        content: cmsData.privacy.content || '',
+        sections: contentToSections(cmsData.privacy.content || ''),
+      },
+      cookie: {
+        ...cmsData.cookie,
+        lastUpdated: autoStamp,
+        content: cmsData.cookie.content || '',
+        sections: contentToSections(cmsData.cookie.content || ''),
+      },
+    };
+    setCmsData(updatedData);
+    saveFullCmsData(updatedData);
+    setSaveSuccessNotice('✓ Published with auto-timestamp!');
     setTimeout(() => setSaveSuccessNotice(null), 3500);
   };
 
@@ -49,36 +105,29 @@ export const CmsManager: React.FC = () => {
     }));
   };
 
-  const updatePolicySection = (
-    page: 'terms' | 'privacy' | 'cookie',
-    index: number,
-    field: 'title' | 'content',
-    value: string
-  ) => {
-    const updatedSections = [...cmsData[page].sections];
-    updatedSections[index] = {
-      ...updatedSections[index],
-      [field]: value,
-    };
-    updatePolicyField(page, 'sections', updatedSections);
-  };
+  const insertFormatting = (prefix: string, suffix: string = '', placeholder: string = '') => {
+    if (activeTab !== 'terms' && activeTab !== 'privacy' && activeTab !== 'cookie') return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-  const addPolicySection = (page: 'terms' | 'privacy' | 'cookie') => {
-    const newSection = {
-      id: `${page}-sec-${Date.now()}`,
-      title: `${cmsData[page].sections.length + 1}. New Clause Heading`,
-      content: 'Enter the policy clause details here...',
-    };
-    updatePolicyField(page, 'sections', [...cmsData[page].sections, newSection]);
-  };
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = cmsData[activeTab].content || '';
+    const selectedText = text.substring(start, end);
+    const replacement = selectedText ? `${prefix}${selectedText}${suffix}` : `${prefix}${placeholder}${suffix}`;
 
-  const removePolicySection = (page: 'terms' | 'privacy' | 'cookie', index: number) => {
-    if (cmsData[page].sections.length <= 1) {
-      alert('A policy page must contain at least one section.');
-      return;
-    }
-    const updated = cmsData[page].sections.filter((_, i) => i !== index);
-    updatePolicyField(page, 'sections', updated);
+    const nextVal = text.substring(0, start) + replacement + text.substring(end);
+    setCmsData((prev) => ({
+      ...prev,
+      [activeTab]: { ...prev[activeTab], content: nextVal },
+    }));
+
+    setTimeout(() => {
+      textarea.focus();
+      const cursorStart = start + prefix.length;
+      const cursorEnd = cursorStart + (selectedText ? selectedText.length : placeholder.length);
+      textarea.setSelectionRange(cursorStart, cursorEnd);
+    }, 15);
   };
 
   // Handlers for FAQ
@@ -112,19 +161,24 @@ export const CmsManager: React.FC = () => {
     }));
   };
 
+  const isPolicyTab = activeTab === 'terms' || activeTab === 'privacy' || activeTab === 'cookie';
+  const policyContent = isPolicyTab ? cmsData[activeTab].content || '' : '';
+  const policyWordCount = policyContent.trim() ? policyContent.trim().split(/\s+/).length : 0;
+  const policyCharCount = policyContent.length;
+
   return (
     <div className="space-y-6">
       {/* Top Header */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-[#1A130E] flex items-center gap-2">
-            <span>Dynamic CMS & Policy Page Manager</span>
+            <span>Dynamic CMS &amp; Policy Page Manager</span>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
               Live Sync
             </span>
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
-            Instantly edit and update Terms & Conditions, Privacy Policy, Cookie Policy, About story, and FAQs without touching code.
+            Single-box rich text editor for Terms, Privacy &amp; Cookie policies with auto-timestamp, and interactive FAQ management.
           </p>
         </div>
 
@@ -137,7 +191,7 @@ export const CmsManager: React.FC = () => {
           )}
           <button
             onClick={handleSave}
-            className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#F15A24] to-[#FBA138] hover:from-[#d94e1c] hover:to-[#e89228] text-white text-xs font-bold shadow-md shadow-[#F15A24]/20 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0"
+            className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#F15A24] to-[#FBA138] hover:from-[#d94e1c] hover:to-[#e89228] text-white text-xs font-bold shadow-md shadow-[#F15A24]/20 flex items-center justify-center gap-2 cursor-pointer transition-all shrink-0 active:scale-95"
           >
             <Save className="w-4 h-4" />
             <span>Publish Changes</span>
@@ -148,7 +202,10 @@ export const CmsManager: React.FC = () => {
       {/* Page Tabs */}
       <div className="flex items-center gap-2 border-b border-stone-200 pb-2 overflow-x-auto">
         <button
-          onClick={() => setActiveTab('terms')}
+          onClick={() => {
+            setActiveTab('terms');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'terms'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -156,11 +213,14 @@ export const CmsManager: React.FC = () => {
           }`}
         >
           <FileText className={`w-3.5 h-3.5 ${activeTab === 'terms' ? 'text-white' : 'text-[#F15A24]'}`} />
-          <span>Terms & Conditions</span>
+          <span>Terms &amp; Conditions</span>
         </button>
 
         <button
-          onClick={() => setActiveTab('privacy')}
+          onClick={() => {
+            setActiveTab('privacy');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'privacy'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -172,7 +232,10 @@ export const CmsManager: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('cookie')}
+          onClick={() => {
+            setActiveTab('cookie');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'cookie'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -184,7 +247,10 @@ export const CmsManager: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('about')}
+          onClick={() => {
+            setActiveTab('about');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'about'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -196,7 +262,10 @@ export const CmsManager: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('faq')}
+          onClick={() => {
+            setActiveTab('faq');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'faq'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -208,7 +277,10 @@ export const CmsManager: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('storeInfo')}
+          onClick={() => {
+            setActiveTab('storeInfo');
+            setEditorMode('edit');
+          }}
           className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
             activeTab === 'storeInfo'
               ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
@@ -216,89 +288,194 @@ export const CmsManager: React.FC = () => {
           }`}
         >
           <Store className={`w-3.5 h-3.5 ${activeTab === 'storeInfo' ? 'text-white' : 'text-orange-500'}`} />
-          <span>Store & Contact Info</span>
+          <span>Store &amp; Contact Info</span>
         </button>
       </div>
 
-      {/* ================= TAB 1, 2, 3: TERMS / PRIVACY / COOKIE ================= */}
-      {(activeTab === 'terms' || activeTab === 'privacy' || activeTab === 'cookie') && (
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-5 border-b border-stone-100">
+      {/* ================= TAB 1, 2, 3: SINGLE-BOX RICH TEXT EDITOR FOR TERMS / PRIVACY / COOKIE ================= */}
+      {isPolicyTab && (
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
+          {/* Header 2-Column Row (No Last Updated Stamp Input - Auto Stamped) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-stone-100">
             <div>
               <label className="block text-xs font-bold text-stone-700 mb-1">Page Title</label>
               <input
                 type="text"
                 value={cmsData[activeTab].title}
                 onChange={(e) => updatePolicyField(activeTab, 'title', e.target.value)}
-                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none font-bold"
+                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none font-bold transition-all"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Subtitle</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Subtitle / Summary</label>
               <input
                 type="text"
                 value={cmsData[activeTab].subtitle}
                 onChange={(e) => updatePolicyField(activeTab, 'subtitle', e.target.value)}
-                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Last Updated Stamp</label>
-              <input
-                type="text"
-                value={cmsData[activeTab].lastUpdated}
-                onChange={(e) => updatePolicyField(activeTab, 'lastUpdated', e.target.value)}
-                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none"
+                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#F15A24] rounded-xl text-xs text-stone-800 outline-none transition-all"
               />
             </div>
           </div>
 
-          {/* Sections List */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-sm text-[#1A130E]">
-                Policy Clauses & Sections ({cmsData[activeTab].sections.length})
-              </h3>
-              <button
-                type="button"
-                onClick={() => addPolicySection(activeTab)}
-                className="h-8 px-3 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#F15A24] text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Section</span>
-              </button>
+          {/* Single Box Editor with Rich Toolbar on Top */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <span className="text-xs font-bold text-[#1A130E] uppercase tracking-wider">
+                Full Policy Content &amp; Clauses
+              </span>
+
+              {/* Edit / Customer Preview Switcher */}
+              <div className="inline-flex items-center gap-1 bg-stone-100 p-0.5 rounded-lg border border-stone-200/80 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setEditorMode('edit')}
+                  className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    editorMode === 'edit'
+                      ? 'bg-white text-stone-900 shadow-xs font-bold'
+                      : 'text-stone-500 hover:text-stone-900'
+                  }`}
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Editor</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditorMode('preview')}
+                  className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    editorMode === 'preview'
+                      ? 'bg-white text-stone-900 shadow-xs font-bold'
+                      : 'text-stone-500 hover:text-stone-900'
+                  }`}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Customer Preview</span>
+                </button>
+              </div>
             </div>
 
-            {cmsData[activeTab].sections.map((sec, idx) => (
-              <div
-                key={sec.id || idx}
-                className="p-4 rounded-xl border border-stone-200/90 bg-stone-50/50 space-y-3"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <input
-                    type="text"
-                    value={sec.title}
-                    onChange={(e) => updatePolicySection(activeTab, idx, 'title', e.target.value)}
-                    className="flex-1 h-9 px-3 bg-white border border-stone-200 focus:border-[#F15A24] rounded-lg text-xs font-bold text-[#1A130E] outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removePolicySection(activeTab, idx)}
-                    className="w-8 h-8 rounded-lg border border-stone-200 hover:border-rose-400 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors shrink-0"
-                    title="Delete section"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+            {/* Rich Text Editor Frame */}
+            <div className="border border-stone-200 rounded-xl overflow-hidden shadow-xs focus-within:border-[#F15A24] transition-colors">
+              {/* Toolbar */}
+              <div className="bg-stone-50 px-3 py-2 border-b border-stone-200 flex items-center gap-1 sm:gap-1.5 flex-wrap text-stone-600">
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('**', '**', 'bold text')}
+                  title="Bold (**text**)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs font-bold flex items-center gap-1"
+                >
+                  <Bold className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Bold</span>
+                </button>
 
-                <textarea
-                  rows={3}
-                  value={sec.content}
-                  onChange={(e) => updatePolicySection(activeTab, idx, 'content', e.target.value)}
-                  className="w-full p-3 bg-white border border-stone-200 focus:border-[#F15A24] rounded-lg text-xs text-stone-700 leading-relaxed outline-none"
-                />
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('*', '*', 'italic text')}
+                  title="Italic (*text*)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs flex items-center gap-1"
+                >
+                  <Italic className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Italic</span>
+                </button>
+
+                <div className="w-[1px] h-4 bg-stone-300 mx-0.5" />
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n## ', '\n', 'Clause Heading')}
+                  title="Heading 2 (## Title)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs font-bold flex items-center gap-1"
+                >
+                  <Heading2 className="w-3.5 h-3.5 text-[#F15A24]" />
+                  <span>H2</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n### ', '\n', 'Sub-clause')}
+                  title="Heading 3 (### Sub-title)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs font-bold flex items-center gap-1"
+                >
+                  <Heading3 className="w-3.5 h-3.5 text-[#F15A24]" />
+                  <span>H3</span>
+                </button>
+
+                <div className="w-[1px] h-4 bg-stone-300 mx-0.5" />
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n• ', '\n', 'Bullet point item')}
+                  title="Bullet List (• item)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs flex items-center gap-1"
+                >
+                  <List className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Bullet List</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n1. ', '\n', 'Numbered step item')}
+                  title="Numbered List (1. item)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs flex items-center gap-1"
+                >
+                  <ListOrdered className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Numbered</span>
+                </button>
+
+                <div className="w-[1px] h-4 bg-stone-300 mx-0.5" />
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n> ', '\n', 'Important policy callout or legal warning')}
+                  title="Blockquote (> quote)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs flex items-center gap-1"
+                >
+                  <Quote className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Quote</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => insertFormatting('\n\n---\n\n', '', '')}
+                  title="Horizontal Divider (---)"
+                  className="p-1.5 hover:bg-stone-200/70 hover:text-stone-900 rounded-md transition-colors cursor-pointer text-xs flex items-center gap-1"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Divider</span>
+                </button>
               </div>
-            ))}
+
+              {/* Single Box Editor or Live Preview */}
+              {editorMode === 'edit' ? (
+                <textarea
+                  ref={textareaRef}
+                  rows={16}
+                  value={cmsData[activeTab].content || ''}
+                  onChange={(e) => updatePolicyField(activeTab, 'content', e.target.value)}
+                  placeholder="Write your entire policy, clauses, terms, bullet points, and notices in this single box..."
+                  className="w-full p-4 bg-white text-xs sm:text-[13.5px] text-[#1A130E] leading-relaxed font-sans outline-none resize-y min-h-[380px]"
+                />
+              ) : (
+                <div className="p-6 bg-white min-h-[380px] overflow-y-auto">
+                  <div className="max-w-2xl">
+                    <div className="pb-3 mb-4 border-b border-stone-100">
+                      <h3 className="text-base font-bold text-[#1A130E]">{cmsData[activeTab].title}</h3>
+                      <p className="text-xs text-stone-500 mt-0.5">{cmsData[activeTab].subtitle}</p>
+                    </div>
+                    <PolicyContentRenderer content={cmsData[activeTab].content || ''} />
+                  </div>
+                </div>
+              )}
+
+              {/* Status bar */}
+              <div className="bg-stone-50/80 px-4 py-2 border-t border-stone-200 text-[11px] text-stone-500 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span>{policyWordCount} words</span>
+                  <span>•</span>
+                  <span>{policyCharCount} characters</span>
+                </div>
+                <span className="text-stone-400">Timestamp automatically set on publish</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -306,7 +483,7 @@ export const CmsManager: React.FC = () => {
       {/* ================= TAB 4: ABOUT PAGE STORY ================= */}
       {activeTab === 'about' && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
-          <h3 className="font-bold text-sm text-[#1A130E]">About Us Page Story & Heritage</h3>
+          <h3 className="font-bold text-sm text-[#1A130E]">About Us Page Story &amp; Heritage</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -371,7 +548,7 @@ export const CmsManager: React.FC = () => {
         </div>
       )}
 
-      {/* ================= TAB 5: FAQ ================= */}
+      {/* ================= TAB 5: FAQ (ONLY FAQ WITH QUESTION ITEMS, ADD, REMOVE, EDIT) ================= */}
       {activeTab === 'faq' && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-stone-100">
@@ -413,6 +590,7 @@ export const CmsManager: React.FC = () => {
                     type="button"
                     onClick={() => removeFaqItem(idx)}
                     className="w-8 h-8 rounded-lg border border-stone-200 hover:border-rose-400 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors shrink-0"
+                    title="Delete question"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -433,7 +611,7 @@ export const CmsManager: React.FC = () => {
       {/* ================= TAB 6: STORE & RESTAURANT INFO ================= */}
       {activeTab === 'storeInfo' && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
-          <h3 className="font-bold text-sm text-[#1A130E]">Restaurant Brand & Dublin Contact Info</h3>
+          <h3 className="font-bold text-sm text-[#1A130E]">Restaurant Brand &amp; Dublin Contact Info</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -482,7 +660,7 @@ export const CmsManager: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Dublin Address & Eircode</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Dublin Address &amp; Eircode</label>
               <input
                 type="text"
                 value={`${cmsData.storeInfo.address}, ${cmsData.storeInfo.eircode}`}
