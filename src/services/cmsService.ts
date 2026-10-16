@@ -19,6 +19,14 @@ export interface CmsFaqItem {
   category: string;
 }
 
+export interface DayOperatingHours {
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+  short: 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+  isOpen: boolean;
+  openTime: string;
+  closeTime: string;
+}
+
 export interface CmsStoreInfo {
   name: string;
   tagline: string;
@@ -31,6 +39,7 @@ export interface CmsStoreInfo {
   hoursMonThu?: string;
   hoursFriSat?: string;
   hoursSun?: string;
+  weeklySchedule?: DayOperatingHours[];
   minOrderDelivery: number;
   deliveryPrepTime: string;
   collectionPrepTime: string;
@@ -242,6 +251,16 @@ export const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
+export const DEFAULT_WEEKLY_SCHEDULE: DayOperatingHours[] = [
+  { day: 'Monday', short: 'Mon', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Tuesday', short: 'Tue', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Wednesday', short: 'Wed', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Thursday', short: 'Thu', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Friday', short: 'Fri', isOpen: true, openTime: '16:30', closeTime: '22:30' },
+  { day: 'Saturday', short: 'Sat', isOpen: true, openTime: '16:30', closeTime: '22:30' },
+  { day: 'Sunday', short: 'Sun', isOpen: false, openTime: '16:00', closeTime: '21:30' },
+];
+
 export const DEFAULT_CMS_DATA: CmsDatabase = {
   terms: {
     title: 'Terms & Conditions',
@@ -424,6 +443,7 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
     hoursMonThu: '17:00 – 22:00',
     hoursFriSat: '16:30 – 22:30',
     hoursSun: 'Closed',
+    weeklySchedule: DEFAULT_WEEKLY_SCHEDULE,
     minOrderDelivery: 15.0,
     deliveryPrepTime: '30-40 min',
     collectionPrepTime: '15-20 min',
@@ -481,7 +501,11 @@ export function getFullCmsData(): CmsDatabase {
               : (parsed.about?.heroTitle || 'About Us'),
         },
         faq: { ...DEFAULT_CMS_DATA.faq, ...(parsed.faq || {}) },
-        storeInfo: { ...DEFAULT_CMS_DATA.storeInfo, ...(parsed.storeInfo || {}) },
+        storeInfo: {
+          ...DEFAULT_CMS_DATA.storeInfo,
+          ...(parsed.storeInfo || {}),
+          weeklySchedule: parsed.storeInfo?.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE,
+        },
         social: { ...DEFAULT_CMS_DATA.social, ...(parsed.social || {}) },
         gallery: Array.isArray(parsed.gallery) && parsed.gallery.length > 0 ? parsed.gallery : DEFAULT_GALLERY_ITEMS,
       };

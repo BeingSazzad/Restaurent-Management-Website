@@ -61,6 +61,14 @@ export interface GalleryItem {
   description?: string;
 }
 
+export interface DayOperatingHours {
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+  short: 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
+  isOpen: boolean;
+  openTime: string;
+  closeTime: string;
+}
+
 export interface CmsStoreInfo {
   name: string;
   tagline: string;
@@ -73,6 +81,7 @@ export interface CmsStoreInfo {
   hoursMonThu?: string;
   hoursFriSat?: string;
   hoursSun?: string;
+  weeklySchedule?: DayOperatingHours[];
   minOrderDelivery: number;
   deliveryPrepTime: string;
   collectionPrepTime: string;
@@ -171,6 +180,16 @@ Most modern web browsers allow you to manage or delete cookies via browser setti
 ## 4. Questions Regarding Cookies
 For further information regarding our cookie practices, please contact our team at orders@amberspice.ie.`;
 
+export const DEFAULT_WEEKLY_SCHEDULE: DayOperatingHours[] = [
+  { day: 'Monday', short: 'Mon', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Tuesday', short: 'Tue', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Wednesday', short: 'Wed', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Thursday', short: 'Thu', isOpen: true, openTime: '17:00', closeTime: '22:00' },
+  { day: 'Friday', short: 'Fri', isOpen: true, openTime: '16:30', closeTime: '22:30' },
+  { day: 'Saturday', short: 'Sat', isOpen: true, openTime: '16:30', closeTime: '22:30' },
+  { day: 'Sunday', short: 'Sun', isOpen: false, openTime: '16:00', closeTime: '21:30' },
+];
+
 const DEFAULT_STORE_INFO: CmsStoreInfo = {
   name: 'AMBER SPICE',
   tagline: 'Authentic Flavors · Timeless Recipes',
@@ -183,6 +202,7 @@ const DEFAULT_STORE_INFO: CmsStoreInfo = {
   hoursMonThu: '17:00 – 22:00',
   hoursFriSat: '16:30 – 22:30',
   hoursSun: 'Closed',
+  weeklySchedule: DEFAULT_WEEKLY_SCHEDULE,
   minOrderDelivery: 15.0,
   deliveryPrepTime: '30-40 min',
   collectionPrepTime: '15-20 min',
@@ -364,7 +384,11 @@ const getStoredCms = (): CmsData => {
               : DEFAULT_COOKIE_TEXT),
         },
         faq: { ...DEFAULT_DATA.faq, ...(parsed.faq || {}) },
-        storeInfo: { ...DEFAULT_DATA.storeInfo, ...(parsed.storeInfo || {}) },
+        storeInfo: {
+          ...DEFAULT_DATA.storeInfo,
+          ...(parsed.storeInfo || {}),
+          weeklySchedule: parsed.storeInfo?.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE,
+        },
         social: { ...DEFAULT_DATA.social, ...(parsed.social || {}) },
         gallery: Array.isArray(parsed.gallery) && parsed.gallery.length > 0 ? parsed.gallery : DEFAULT_GALLERY_ITEMS,
       };
@@ -472,6 +496,60 @@ const ContactPhoneOfficialIcon = () => (
     <Phone className="w-3 h-3 fill-current" />
   </div>
 );
+
+// Calculate Mon-Thu, Fri-Sat, Sun summary from 7-day schedule
+const computeHoursSummary = (schedule: DayOperatingHours[]) => {
+  const getDayStr = (d?: DayOperatingHours) => {
+    if (!d || !d.isOpen) return 'Closed';
+    return `${d.openTime} – ${d.closeTime}`;
+  };
+
+  // Mon-Thu
+  const mon = schedule.find((d) => d.day === 'Monday');
+  const tue = schedule.find((d) => d.day === 'Tuesday');
+  const wed = schedule.find((d) => d.day === 'Wednesday');
+  const thu = schedule.find((d) => d.day === 'Thursday');
+  const monThuList = [mon, tue, wed, thu].filter(Boolean) as DayOperatingHours[];
+  const allMonThuSame =
+    monThuList.length === 4 &&
+    monThuList.every(
+      (d) =>
+        d.isOpen === monThuList[0].isOpen &&
+        d.openTime === monThuList[0].openTime &&
+        d.closeTime === monThuList[0].closeTime
+    );
+  const hoursMonThu = allMonThuSame
+    ? getDayStr(monThuList[0])
+    : monThuList
+        .map((d) => `${d.short}: ${d.isOpen ? `${d.openTime}–${d.closeTime}` : 'Closed'}`)
+        .join(', ');
+
+  // Fri-Sat
+  const fri = schedule.find((d) => d.day === 'Friday');
+  const sat = schedule.find((d) => d.day === 'Saturday');
+  const friSatList = [fri, sat].filter(Boolean) as DayOperatingHours[];
+  const allFriSatSame =
+    friSatList.length === 2 &&
+    friSatList.every(
+      (d) =>
+        d.isOpen === friSatList[0].isOpen &&
+        d.openTime === friSatList[0].openTime &&
+        d.closeTime === friSatList[0].closeTime
+    );
+  const hoursFriSat = allFriSatSame
+    ? getDayStr(friSatList[0])
+    : friSatList
+        .map((d) => `${d.short}: ${d.isOpen ? `${d.openTime}–${d.closeTime}` : 'Closed'}`)
+        .join(', ');
+
+  // Sunday
+  const sun = schedule.find((d) => d.day === 'Sunday');
+  const hoursSun = getDayStr(sun);
+
+  const openingHours = `Mon – Thu: ${hoursMonThu}, Fri – Sat: ${hoursFriSat} (Sun: ${hoursSun})`;
+
+  return { hoursMonThu, hoursFriSat, hoursSun, openingHours };
+};
 
 export function CmsPage() {
   const [data, setData] = useState<CmsData>(() => getStoredCms());
@@ -909,56 +987,246 @@ export function CmsPage() {
             </div>
           </div>
 
-          {/* Operating Hours Breakdown */}
-          <div className="pt-4 border-t border-stone-100">
-            <h4 className="font-bold text-xs text-stone-800 mb-3 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#B84A22]" />
-              <span>Operating Hours (Displayed on Website Footer &amp; Contact Page)</span>
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Dynamic Operating Hours & Weekly Schedule Manager */}
+          <div className="pt-4 border-t border-stone-100 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <label className="block text-xs text-stone-600 mb-1">Monday – Thursday</label>
-                <input
-                  type="text"
-                  value={data.storeInfo.hoursMonThu || '17:00 – 22:00'}
-                  onChange={(e) =>
-                    setData((prev) => ({
-                      ...prev,
-                      storeInfo: { ...prev.storeInfo, hoursMonThu: e.target.value },
-                    }))
-                  }
-                  className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-                />
+                <h4 className="font-bold text-xs text-stone-800 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-[#B84A22]" />
+                  <span>Operating Hours &amp; Weekly Schedule (Dine-in, Takeaway &amp; Delivery)</span>
+                </h4>
+                <p className="text-[11px] text-stone-500 mt-0.5">
+                  Set active opening times (ON) and rest/closed days (OFF) for each day of the week.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-xs text-stone-600 mb-1">Friday – Saturday</label>
-                <input
-                  type="text"
-                  value={data.storeInfo.hoursFriSat || '16:30 – 22:30'}
-                  onChange={(e) =>
+              {/* Quick Presets */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = DEFAULT_WEEKLY_SCHEDULE;
+                    const summary = computeHoursSummary(updated);
                     setData((prev) => ({
                       ...prev,
-                      storeInfo: { ...prev.storeInfo, hoursFriSat: e.target.value },
-                    }))
-                  }
-                  className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-                />
-              </div>
+                      storeInfo: {
+                        ...prev.storeInfo,
+                        weeklySchedule: updated,
+                        ...summary,
+                      },
+                    }));
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200/80 rounded-lg transition-colors cursor-pointer"
+                >
+                  Default Hours
+                </button>
 
-              <div>
-                <label className="block text-xs text-stone-600 mb-1">Sunday</label>
-                <input
-                  type="text"
-                  value={data.storeInfo.hoursSun || 'Closed'}
-                  onChange={(e) =>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const currentSchedule = data.storeInfo.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE;
+                    const updated = currentSchedule.map((d) => ({
+                      ...d,
+                      isOpen: true,
+                    }));
+                    const summary = computeHoursSummary(updated);
                     setData((prev) => ({
                       ...prev,
-                      storeInfo: { ...prev.storeInfo, hoursSun: e.target.value },
-                    }))
-                  }
-                  className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-                />
+                      storeInfo: {
+                        ...prev.storeInfo,
+                        weeklySchedule: updated,
+                        ...summary,
+                      },
+                    }));
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/60 rounded-lg transition-colors cursor-pointer"
+                >
+                  Open All 7 Days
+                </button>
+              </div>
+            </div>
+
+            {/* 7-Day Interactive Schedule Table */}
+            <div className="border border-stone-200/90 rounded-2xl overflow-hidden bg-white shadow-2xs divide-y divide-stone-100">
+              {(data.storeInfo.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE).map((item, idx) => (
+                <div
+                  key={item.day}
+                  className={`px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors ${
+                    item.isOpen ? 'bg-white hover:bg-stone-50/50' : 'bg-stone-50/60 hover:bg-stone-50'
+                  }`}
+                >
+                  {/* Day Info & Badge */}
+                  <div className="flex items-center gap-3 min-w-[140px]">
+                    <span className="w-10 text-[11px] font-bold text-stone-400 uppercase tracking-wider">{item.short}</span>
+                    <span className="text-xs font-bold text-[#1A130E]">{item.day}</span>
+                  </div>
+
+                  {/* ON / OFF Switch */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentSchedule = data.storeInfo.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE;
+                        const updated = currentSchedule.map((d, i) =>
+                          i === idx ? { ...d, isOpen: !d.isOpen } : d
+                        );
+                        const summary = computeHoursSummary(updated);
+                        setData((prev) => ({
+                          ...prev,
+                          storeInfo: {
+                            ...prev.storeInfo,
+                            weeklySchedule: updated,
+                            ...summary,
+                          },
+                        }));
+                      }}
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        item.isOpen
+                          ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200/80 border border-emerald-300/60'
+                          : 'bg-stone-200/80 text-stone-600 hover:bg-stone-300 border border-stone-300/60'
+                      }`}
+                    >
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          item.isOpen ? 'bg-emerald-500' : 'bg-stone-400'
+                        }`}
+                      />
+                      <span>{item.isOpen ? 'OPEN (ON)' : 'CLOSED (OFF)'}</span>
+                    </button>
+                  </div>
+
+                  {/* Time Inputs (kobe on time, kobe off time) */}
+                  <div className="flex items-center gap-2">
+                    {item.isOpen ? (
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-stone-500 font-medium">Open:</span>
+                          <input
+                            type="time"
+                            value={item.openTime}
+                            onChange={(e) => {
+                              const currentSchedule = data.storeInfo.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE;
+                              const updated = currentSchedule.map((d, i) =>
+                                i === idx ? { ...d, openTime: e.target.value } : d
+                              );
+                              const summary = computeHoursSummary(updated);
+                              setData((prev) => ({
+                                ...prev,
+                                storeInfo: {
+                                  ...prev.storeInfo,
+                                  weeklySchedule: updated,
+                                  ...summary,
+                                },
+                              }));
+                            }}
+                            className="h-8 px-2 bg-stone-50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-lg text-xs font-semibold text-[#1A130E] outline-none shadow-2xs"
+                          />
+                        </div>
+
+                        <span className="text-stone-400 text-xs font-bold">–</span>
+
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-stone-500 font-medium">Close:</span>
+                          <input
+                            type="time"
+                            value={item.closeTime}
+                            onChange={(e) => {
+                              const currentSchedule = data.storeInfo.weeklySchedule || DEFAULT_WEEKLY_SCHEDULE;
+                              const updated = currentSchedule.map((d, i) =>
+                                i === idx ? { ...d, closeTime: e.target.value } : d
+                              );
+                              const summary = computeHoursSummary(updated);
+                              setData((prev) => ({
+                                ...prev,
+                                storeInfo: {
+                                  ...prev.storeInfo,
+                                  weeklySchedule: updated,
+                                  ...summary,
+                                },
+                              }));
+                            }}
+                            className="h-8 px-2 bg-stone-50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-lg text-xs font-semibold text-[#1A130E] outline-none shadow-2xs"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 py-1 text-xs text-stone-400 italic">
+                        <span>Rest day · Kitchen &amp; deliveries closed</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Summary Status Badge */}
+                  <div className="min-w-[120px] text-left md:text-right">
+                    {item.isOpen ? (
+                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                        {item.openTime} – {item.closeTime}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-semibold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-md border border-stone-200/60">
+                        Closed
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Live Website Footer Preview Cards */}
+            <div className="bg-stone-50/70 border border-stone-200/80 rounded-xl p-3.5 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-600">
+                  Live Website Footer Display (Auto-Generated from Schedule)
+                </span>
+                <span className="text-[11px] text-emerald-700 font-medium">
+                  ✓ Synced with Dublin restaurant footer &amp; contact page
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
+                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Monday – Thursday</label>
+                  <input
+                    type="text"
+                    value={data.storeInfo.hoursMonThu || ''}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        storeInfo: { ...prev.storeInfo, hoursMonThu: e.target.value },
+                      }))
+                    }
+                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
+                  />
+                </div>
+
+                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
+                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Friday – Saturday</label>
+                  <input
+                    type="text"
+                    value={data.storeInfo.hoursFriSat || ''}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        storeInfo: { ...prev.storeInfo, hoursFriSat: e.target.value },
+                      }))
+                    }
+                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
+                  />
+                </div>
+
+                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
+                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Sunday</label>
+                  <input
+                    type="text"
+                    value={data.storeInfo.hoursSun || ''}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        storeInfo: { ...prev.storeInfo, hoursSun: e.target.value },
+                      }))
+                    }
+                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
+                  />
+                </div>
               </div>
             </div>
           </div>
