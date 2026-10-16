@@ -349,7 +349,7 @@ export default function AgentDashboardPage() {
                   placeholder="Search ticket # or customer..."
                   value={orderSearchQuery}
                   onChange={(e) => setOrderSearchQuery(e.target.value)}
-                  className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-9.5 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
+                  className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-10 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
                 />
                 {orderSearchQuery && (
                   <button
