@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, X, UtensilsCrossed, Flame, CheckCircle2 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { updateOrderStatus, syncOrdersFromStorage } from '../../store/slices/orderSlice';
+import { deductRecipeStockForOrder } from '../../store/slices/stockSlice';
 import { KdsOrder, OrderStatus, StationType, FulfillmentType } from '../../types/common.types';
 import { KdsTicketCard } from './KdsTicketCard';
 import { TicketSlipModal } from './TicketSlipModal';
@@ -57,6 +58,14 @@ export function KdsPipeline() {
 
   const handleStatusChange = (orderId: string, status: OrderStatus) => {
     dispatch(updateOrderStatus({ orderId, status }));
+    const targetOrder = orders.find((o) => o.id === orderId);
+    if (targetOrder && ['ready', 'out_for_delivery', 'completed'].includes(status) && !targetOrder.stockDeducted) {
+      dispatch(
+        deductRecipeStockForOrder({
+          items: targetOrder.items.map((i) => ({ dishId: i.dish.id, quantity: i.quantity })),
+        })
+      );
+    }
   };
 
   return (

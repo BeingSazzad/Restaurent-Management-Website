@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateOrderStatus } from '../../store/slices/orderSlice';
+import { updateOrderStatus, assignDriver, updateInternalNotes } from '../../store/slices/orderSlice';
+import { deductRecipeStockForOrder } from '../../store/slices/stockSlice';
 import { KdsOrder, OrderStatus } from '../../types/common.types';
+import { INITIAL_DRIVERS } from '../../lib/constants';
 import {
   ArrowLeft,
   Printer,
@@ -19,10 +21,10 @@ import {
   UtensilsCrossed,
   Receipt,
   User,
-  ShieldCheck,
   Flame,
-  ChevronRight,
   ExternalLink,
+  FileText,
+  Save,
 } from 'lucide-react';
 import { TicketSlipModal } from '../../components/dashboard/TicketSlipModal';
 
@@ -39,6 +41,9 @@ export function OrderDetailPage() {
   const order: KdsOrder | undefined = orders.find(
     (o) => o.id === orderId || o.orderNumber.replace('#', '') === orderId?.replace('#', '')
   );
+
+  const [internalNotesInput, setInternalNotesInput] = useState<string>(order?.internalNotes || '');
+  const [notesSaved, setNotesSaved] = useState(false);
 
   if (!order) {
     return (
@@ -61,6 +66,32 @@ export function OrderDetailPage() {
 
   const handleStatusChange = (newStatus: OrderStatus) => {
     dispatch(updateOrderStatus({ orderId: order.id, status: newStatus }));
+    if (['ready', 'out_for_delivery', 'completed'].includes(newStatus) && !order.stockDeducted) {
+      dispatch(
+        deductRecipeStockForOrder({
+          items: order.items.map((i) => ({ dishId: i.dish.id, quantity: i.quantity })),
+        })
+      );
+    }
+  };
+
+  const handleAssignDriver = (driverName: string) => {
+    if (!driverName) return;
+    dispatch(assignDriver({ orderId: order.id, driverName }));
+    if (!order.stockDeducted) {
+      dispatch(
+        deductRecipeStockForOrder({
+          items: order.items.map((i) => ({ dishId: i.dish.id, quantity: i.quantity })),
+        })
+      );
+    }
+  };
+
+  const handleSaveInternalNotes = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(updateInternalNotes({ orderId: order.id, notes: internalNotesInput.trim() }));
+    setNotesSaved(true);
+    setTimeout(() => setNotesSaved(false), 2000);
   };
 
   const copyOrderNumber = () => {
@@ -87,6 +118,12 @@ export function OrderDetailPage() {
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5" /> Ready
+          </span>
+        );
+      case 'out_for_delivery':
+        return (
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200 flex items-center gap-1.5">
+            <Bike className="w-3.5 h-3.5" /> On The Way
           </span>
         );
       case 'completed':
@@ -116,13 +153,22 @@ export function OrderDetailPage() {
     year: 'numeric',
   });
 
-  // Calculate timeline states
-  const stages: { key: OrderStatus; label: string; desc: string }[] = [
-    { key: 'new', label: 'Received', desc: 'Order placed' },
-    { key: 'preparing', label: 'Preparing', desc: 'In kitchen' },
-    { key: 'ready', label: 'Ready', desc: 'For dispatch' },
-    { key: 'completed', label: 'Completed', desc: 'Fulfilled' },
-  ];
+  // Calculate timeline states based on fulfillment type
+  const isDelivery = order.fulfillmentType === 'delivery';
+  const stages: { key: OrderStatus; label: string; desc: string }[] = isDelivery
+    ? [
+        { key: 'new', label: 'Received', desc: 'Order placed' },
+        { key: 'preparing', label: 'Preparing', desc: 'Kitchen prep' },
+        { key: 'ready', label: 'Ready', desc: 'Packed for courier' },
+        { key: 'out_for_delivery', label: 'On The Way', desc: 'Driver dispatched' },
+        { key: 'completed', label: 'Delivered', desc: 'Handed to customer' },
+      ]
+    : [
+        { key: 'new', label: 'Received', desc: 'Order placed' },
+        { key: 'preparing', label: 'Preparing', desc: 'Kitchen prep' },
+        { key: 'ready', label: 'Ready', desc: 'Ready at counter' },
+        { key: 'completed', label: 'Collected', desc: 'Handed to guest' },
+      ];
 
   const currentStageIndex = stages.findIndex((s) => s.key === order.status);
 
@@ -182,6 +228,7 @@ export function OrderDetailPage() {
               <option value="new">New Order</option>
               <option value="preparing">Kitchen Prep (Cooking)</option>
               <option value="ready">Ready for Dispatch</option>
+              <option value="out_for_delivery">On The Way (Driver)</option>
               <option value="completed">Completed / Handed Over</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -196,7 +243,7 @@ export function OrderDetailPage() {
           <div>{getStatusBadge(order.status)}</div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 relative">
+        <div className={`grid grid-cols-2 ${isDelivery ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-3 relative`}>
           {stages.map((stage, idx) => {
             const isCompleted = currentStageIndex >= idx;
             const isCurrent = order.status === stage.key;
@@ -319,6 +366,22 @@ export function OrderDetailPage() {
                     </span>
                   </div>
                 )}
+
+                <div className="pt-2 border-t border-stone-100">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">
+                    Courier Driver
+                  </span>
+                  <select
+                    value={order.driverName || ''}
+                    onChange={(e) => handleAssignDriver(e.target.value)}
+                    className="w-full h-8 px-2 bg-stone-50 border border-stone-200 rounded-lg text-xs font-bold text-stone-800 outline-none cursor-pointer focus:border-[#B84A22]"
+                  >
+                    <option value="">{order.driverName ? `🛵 ${order.driverName}` : '+ Assign Courier'}</option>
+                    {INITIAL_DRIVERS.map((d) => (
+                      <option key={d.id} value={d.name}>🛵 {d.name} ({d.phone})</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             ) : (
               <div className="space-y-2 mt-3 text-xs text-stone-600">
@@ -401,6 +464,33 @@ export function OrderDetailPage() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Internal Notes Quick Banner */}
+      <div className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs">
+        <div className="flex items-center justify-between pb-2 border-b border-stone-100 mb-3">
+          <h3 className="font-bold text-xs uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
+            <FileText className="w-3.5 h-3.5 text-[#B84A22]" />
+            <span>Internal Kitchen &amp; Courier Notes</span>
+          </h3>
+          <span className="text-[10px] text-stone-400">Private internal note for staff</span>
+        </div>
+        <form onSubmit={handleSaveInternalNotes} className="flex gap-2">
+          <input
+            type="text"
+            placeholder="e.g. Guest requested buzzer 419, extra tamarind chutney added, cutlery pre-packed..."
+            value={internalNotesInput}
+            onChange={(e) => setInternalNotesInput(e.target.value)}
+            className="flex-1 h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-xl text-xs text-stone-900 outline-none"
+          />
+          <button
+            type="submit"
+            className="h-9 px-4 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+          >
+            <Save className="w-3.5 h-3.5" />
+            <span>{notesSaved ? 'Saved!' : 'Save Note'}</span>
+          </button>
+        </form>
       </div>
 
       {/* 4. ORDERED DISHES & KITCHEN ACTIONS (Full-Width) */}
@@ -515,44 +605,79 @@ export function OrderDetailPage() {
             <div className="text-sm font-bold text-[#1A130E] mt-0.5">
               {order.status === 'new' && 'Move ticket to Kitchen Prep line'}
               {order.status === 'preparing' && 'Notify packing station that dishes are ready'}
-              {order.status === 'ready' && 'Hand over order to courier or counter guest'}
+              {order.status === 'ready' && (isDelivery ? 'Hand over packed food to courier driver' : 'Ready at counter for customer pickup')}
+              {order.status === 'out_for_delivery' && `On the road with ${order.driverName || 'courier'}`}
               {order.status === 'completed' && 'This order is fully settled and closed.'}
               {order.status === 'cancelled' && 'This order was cancelled.'}
             </div>
           </div>
 
-          {order.status === 'new' && (
-            <button
-              type="button"
-              onClick={() => handleStatusChange('preparing')}
-              className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
-            >
-              <Flame className="w-4 h-4" />
-              <span>Start Kitchen Prep</span>
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {order.status === 'new' && (
+              <button
+                type="button"
+                onClick={() => handleStatusChange('preparing')}
+                className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+              >
+                <Flame className="w-4 h-4" />
+                <span>Start Kitchen Prep</span>
+              </button>
+            )}
 
-          {order.status === 'preparing' && (
-            <button
-              type="button"
-              onClick={() => handleStatusChange('ready')}
-              className="h-10 px-5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Mark as Ready for Handover</span>
-            </button>
-          )}
+            {order.status === 'preparing' && (
+              <button
+                type="button"
+                onClick={() => handleStatusChange('ready')}
+                className="h-10 px-5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Mark as Ready</span>
+              </button>
+            )}
 
-          {order.status === 'ready' && (
-            <button
-              type="button"
-              onClick={() => handleStatusChange('completed')}
-              className="h-10 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Complete & Close Order</span>
-            </button>
-          )}
+            {order.status === 'ready' && isDelivery && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => handleStatusChange('out_for_delivery')}
+                  className="h-10 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+                >
+                  <Bike className="w-4 h-4" />
+                  <span>Dispatch Driver (On The Way)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleStatusChange('completed')}
+                  className="h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Complete</span>
+                </button>
+              </>
+            )}
+
+            {order.status === 'ready' && !isDelivery && (
+              <button
+                type="button"
+                onClick={() => handleStatusChange('completed')}
+                className="h-10 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Hand Over &amp; Complete</span>
+              </button>
+            )}
+
+            {order.status === 'out_for_delivery' && (
+              <button
+                type="button"
+                onClick={() => handleStatusChange('completed')}
+                className="h-10 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-xs font-bold shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Delivered &amp; Complete Order</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

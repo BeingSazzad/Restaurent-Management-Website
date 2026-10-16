@@ -10,9 +10,16 @@ export interface StaffUser {
   isActive: boolean;
 }
 
-export type OrderStatus = 'new' | 'preparing' | 'ready' | 'completed' | 'cancelled';
+export type OrderStatus = 'new' | 'preparing' | 'ready' | 'out_for_delivery' | 'completed' | 'cancelled';
 export type FulfillmentType = 'delivery' | 'collection';
 export type StationType = 'all' | 'biryani' | 'curries' | 'grill' | 'breads';
+
+export interface RecipeIngredient {
+  ingredientId: string;
+  name: string;
+  quantity: number; // in raw unit (e.g. 0.25 kg)
+  unit: string;
+}
 
 export interface DishItem {
   id: string;
@@ -25,6 +32,7 @@ export interface DishItem {
   description?: string;
   stockCount?: number;
   lowStockThreshold?: number;
+  recipe?: RecipeIngredient[];
 }
 
 export interface OrderModifier {
@@ -60,6 +68,9 @@ export interface KdsOrder {
   createdAt: string;
   estimatedMinutes: number;
   specialNotes?: string;
+  internalNotes?: string;
+  driverName?: string;
+  stockDeducted?: boolean;
   paymentMethod: string;
 }
 
@@ -75,4 +86,19 @@ export interface RawIngredientItem {
   supplier: string;
   lastRestocked: string;
   status: 'healthy' | 'low_stock' | 'out_of_stock';
+  expiryDate?: string;
+}
+
+export interface WastageRecord {
+  id: string;
+  itemId: string;
+  itemName: string;
+  itemType: 'raw' | 'dish';
+  quantity: number;
+  unit: string;
+  reason: 'expired' | 'burned' | 'damaged' | 'customer_return';
+  costLost: number;
+  timestamp: string;
+  loggedBy: string;
+  notes?: string;
 }

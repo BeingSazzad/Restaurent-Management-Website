@@ -27,8 +27,9 @@ import {
   restockRawToPar,
   addRawIngredient,
   syncStockFromStorage,
+  logWastage,
 } from '../../store/slices/stockSlice';
-import { RawIngredientItem } from '../../types/common.types';
+import { RawIngredientItem, WastageRecord } from '../../types/common.types';
 import { formatCurrency } from '../../lib/utils';
 import { PageHeader } from '../layout/PageHeader';
 import { Button } from '../ui/Button';
@@ -96,7 +97,7 @@ const getIngredientCategoryBadge = (cat: string) => {
 
 export function StockManager86() {
   const dispatch = useAppDispatch();
-  const { dishes, rawIngredients } = useAppSelector((state) => state.stock);
+  const { dishes, rawIngredients, wastageHistory } = useAppSelector((state) => state.stock);
 
   // Sync on mount or when storage updates
   useEffect(() => {
@@ -109,8 +110,8 @@ export function StockManager86() {
     };
   }, [dispatch]);
 
-  // Main Section Tab: 'dishes_86' | 'raw_inventory'
-  const [activeInventoryTab, setActiveInventoryTab] = useState<'dishes_86' | 'raw_inventory'>('dishes_86');
+  // Main Section Tab: 'dishes_86' | 'raw_inventory' | 'wastage_spoilage'
+  const [activeInventoryTab, setActiveInventoryTab] = useState<'dishes_86' | 'raw_inventory' | 'wastage_spoilage'>('dishes_86');
 
   // Dish Tab Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -122,6 +123,17 @@ export function StockManager86() {
   const [rawSearchQuery, setRawSearchQuery] = useState('');
   const [rawCategoryFilter, setRawCategoryFilter] = useState('all');
   const [rawStatusFilter, setRawStatusFilter] = useState<'all' | 'healthy' | 'low_stock' | 'out_of_stock'>('all');
+
+  // Wastage Filters & Modal State
+  const [isWasteModalOpen, setIsWasteModalOpen] = useState(false);
+  const [wasteItemType, setWasteItemType] = useState<'raw' | 'dish'>('raw');
+  const [wasteItemId, setWasteItemId] = useState<string>('');
+  const [wasteQty, setWasteQty] = useState<number>(1);
+  const [wasteReason, setWasteReason] = useState<WastageRecord['reason']>('expired');
+  const [wasteStaff, setWasteStaff] = useState<string>('Chef Tariq');
+  const [wasteNotes, setWasteNotes] = useState<string>('');
+  const [wasteSearchQuery, setWasteSearchQuery] = useState('');
+  const [wasteReasonFilter, setWasteReasonFilter] = useState<string>('all');
 
   // Add Raw Ingredient Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -140,6 +152,7 @@ export function StockManager86() {
   ).length;
   const lowStockRawCount = rawIngredients.filter((i) => i.status === 'low_stock' || i.status === 'out_of_stock').length;
   const outOfStockRawCount = rawIngredients.filter((i) => i.status === 'out_of_stock').length;
+  const totalWastageCost = (wastageHistory || []).reduce((sum, w) => sum + (w.costLost || 0), 0);
 
   // Filtered Dishes
   const filteredDishes = dishes.filter((dish) => {
@@ -172,6 +185,18 @@ export function StockManager86() {
     return true;
   });
 
+  // Filtered Wastage
+  const filteredWastage = (wastageHistory || []).filter((w) => {
+    if (wasteReasonFilter !== 'all' && w.reason !== wasteReasonFilter) return false;
+    if (wasteSearchQuery.trim()) {
+      const q = wasteSearchQuery.toLowerCase();
+      if (!w.itemName.toLowerCase().includes(q) && !w.loggedBy.toLowerCase().includes(q)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
   // Dishes Pagination State
   const [dishPage, setDishPage] = useState(1);
   const [dishPageSize, setDishPageSize] = useState(5);
@@ -198,6 +223,19 @@ export function StockManager86() {
     rawPage * rawPageSize
   );
 
+  // Wastage Pagination State
+  const [wastePage, setWastePage] = useState(1);
+  const [wastePageSize, setWastePageSize] = useState(5);
+
+  useEffect(() => {
+    setWastePage(1);
+  }, [wasteSearchQuery, wasteReasonFilter]);
+
+  const paginatedWastage = filteredWastage.slice(
+    (wastePage - 1) * wastePageSize,
+    wastePage * wastePageSize
+  );
+
   const handleAddIngredient = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newIngName.trim()) return;
@@ -220,6 +258,49 @@ export function StockManager86() {
     setIsAddModalOpen(false);
     setNewIngName('');
     setNewIngSupplier('');
+  };
+
+  const handleLogWaste = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!wasteItemId) return;
+
+    let name = '';
+    let unit = 'kg';
+    let costPerUnit = 0;
+
+    if (wasteItemType === 'raw') {
+      const raw = rawIngredients.find((r) => r.id === wasteItemId);
+      if (raw) {
+        name = raw.name;
+        unit = raw.unit;
+        costPerUnit = raw.unitCost;
+      }
+    } else {
+      const dish = dishes.find((d) => d.id === wasteItemId);
+      if (dish) {
+        name = dish.name;
+        unit = 'portions';
+        costPerUnit = Math.round(dish.price * 0.28 * 100) / 100;
+      }
+    }
+
+    const record: WastageRecord = {
+      id: `w-${Date.now()}`,
+      itemId: wasteItemId,
+      itemName: name || 'Material/Dish',
+      itemType: wasteItemType,
+      quantity: Number(wasteQty) || 1,
+      unit,
+      reason: wasteReason,
+      costLost: Math.round(costPerUnit * (Number(wasteQty) || 1) * 100) / 100,
+      timestamp: new Date().toISOString(),
+      loggedBy: wasteStaff.trim() || 'Chef Tariq',
+      notes: wasteNotes.trim() || undefined,
+    };
+
+    dispatch(logWastage(record));
+    setIsWasteModalOpen(false);
+    setWasteNotes('');
   };
 
   return (
@@ -245,6 +326,19 @@ export function StockManager86() {
               onClick={() => setIsAddModalOpen(true)}
             >
               Add Raw Material
+            </Button>
+          ) : activeInventoryTab === 'wastage_spoilage' ? (
+            <Button
+              size="sm"
+              leftIcon={<Plus className="w-3.5 h-3.5" />}
+              onClick={() => {
+                setWasteItemId(rawIngredients[0]?.id || '');
+                setWasteItemType('raw');
+                setWasteQty(1);
+                setIsWasteModalOpen(true);
+              }}
+            >
+              Log Spoilage / Waste
             </Button>
           ) : undefined
         }
@@ -373,6 +467,23 @@ export function StockManager86() {
           {lowStockRawCount > 0 && (
             <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
               {lowStockRawCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          onClick={() => setActiveInventoryTab('wastage_spoilage')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 cursor-pointer transition-all ${
+            activeInventoryTab === 'wastage_spoilage'
+              ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-xs'
+              : 'bg-white border border-stone-200 text-stone-600 hover:bg-stone-50'
+          }`}
+        >
+          <AlertOctagon className="w-3.5 h-3.5" />
+          <span>Wastage &amp; Spoilage</span>
+          {totalWastageCost > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+              €{totalWastageCost.toFixed(2)}
             </span>
           )}
         </button>
@@ -1049,6 +1160,278 @@ export function StockManager86() {
               pageSizeOptions={[5, 10, 20]}
             />
           )}
+        </div>
+      )}
+
+      {/* ================= SECTION 3: WASTAGE & SPOILAGE LOG ================= */}
+      {activeInventoryTab === 'wastage_spoilage' && (
+        <div className="space-y-4">
+          {/* Wastage Toolbar */}
+          <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            {/* Search */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search waste item or staff member..."
+                value={wasteSearchQuery}
+                onChange={(e) => setWasteSearchQuery(e.target.value)}
+                className="w-full h-10 bg-stone-50 hover:bg-stone-100/70 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
+              />
+              {wasteSearchQuery && (
+                <button
+                  onClick={() => setWasteSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-1 rounded-lg hover:bg-stone-200/60 transition-colors cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Reason Filter */}
+            <div className="flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto scrollbar-none">
+              {[
+                { id: 'all', label: 'All Reasons' },
+                { id: 'expired', label: 'Expired' },
+                { id: 'burned', label: 'Burned / Overcooked' },
+                { id: 'damaged', label: 'Damaged' },
+                { id: 'customer_return', label: 'Customer Return' },
+              ].map((r) => (
+                <button
+                  key={r.id}
+                  onClick={() => setWasteReasonFilter(r.id)}
+                  className={`h-8 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    wasteReasonFilter === r.id
+                      ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                      : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
+                  }`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Wastage Table */}
+          <div className="bg-white border border-stone-200/90 rounded-2xl shadow-2xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-stone-50/80 border-b border-stone-200/90 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                    <th className="py-3.5 px-4 font-semibold">Timestamp</th>
+                    <th className="py-3.5 px-4 font-semibold">Item &amp; Type</th>
+                    <th className="py-3.5 px-4 font-semibold">Quantity</th>
+                    <th className="py-3.5 px-4 font-semibold">Lost Value</th>
+                    <th className="py-3.5 px-4 font-semibold">Waste Reason</th>
+                    <th className="py-3.5 px-4 font-semibold">Logged By &amp; Notes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100 text-xs">
+                  {paginatedWastage.map((record) => (
+                    <tr key={record.id} className="hover:bg-stone-50/70 transition-colors">
+                      <td className="py-3.5 px-4 whitespace-nowrap text-stone-500 font-mono text-[11px]">
+                        {new Date(record.timestamp).toLocaleDateString([], {
+                          month: 'short',
+                          day: 'numeric',
+                        })}{' '}
+                        {new Date(record.timestamp).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </td>
+
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-stone-900 text-sm">{record.itemName}</div>
+                        <span
+                          className={`inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                            record.itemType === 'raw'
+                              ? 'bg-blue-50 text-blue-700 border-blue-200'
+                              : 'bg-amber-50 text-amber-800 border-amber-200'
+                          }`}
+                        >
+                          {record.itemType === 'raw' ? 'Raw Ingredient' : 'Prepared Dish'}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap font-bold text-stone-900">
+                        {record.quantity} {record.unit}
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap font-bold text-rose-600 text-sm">
+                        €{record.costLost.toFixed(2)}
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                          {record.reason.replace('_', ' ').toUpperCase()}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4">
+                        <div className="font-semibold text-stone-800">{record.loggedBy}</div>
+                        {record.notes && (
+                          <div className="text-[11px] text-stone-500 italic mt-0.5">{record.notes}</div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {paginatedWastage.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-stone-400">
+                        No wastage recorded. Tap &quot;Log Spoilage / Waste&quot; to log an incident.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pagination for Wastage */}
+          {filteredWastage.length > 0 && (
+            <Pagination
+              currentPage={wastePage}
+              totalItems={filteredWastage.length}
+              pageSize={wastePageSize}
+              onPageChange={setWastePage}
+              onPageSizeChange={setWastePageSize}
+              pageSizeOptions={[5, 10, 20]}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Log Waste Modal */}
+      {isWasteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="bg-white rounded-2xl max-w-lg w-full border border-stone-200 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <h3 className="font-bold text-base text-stone-900">Log Kitchen Waste / Spoilage</h3>
+              <button
+                onClick={() => setIsWasteModalOpen(false)}
+                className="text-stone-400 hover:text-stone-700 p-1 rounded-lg hover:bg-stone-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleLogWaste} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Item Category</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWasteItemType('raw');
+                      setWasteItemId(rawIngredients[0]?.id || '');
+                    }}
+                    className={`py-2 rounded-xl font-bold border transition-all ${
+                      wasteItemType === 'raw'
+                        ? 'bg-stone-900 text-white border-stone-900'
+                        : 'bg-stone-50 text-stone-600 border-stone-200'
+                    }`}
+                  >
+                    Raw Material
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWasteItemType('dish');
+                      setWasteItemId(dishes[0]?.id || '');
+                    }}
+                    className={`py-2 rounded-xl font-bold border transition-all ${
+                      wasteItemType === 'dish'
+                        ? 'bg-stone-900 text-white border-stone-900'
+                        : 'bg-stone-50 text-stone-600 border-stone-200'
+                    }`}
+                  >
+                    Prepared Dish
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-stone-700 mb-1">Select Item *</label>
+                <select
+                  value={wasteItemId}
+                  onChange={(e) => setWasteItemId(e.target.value)}
+                  className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs"
+                >
+                  {wasteItemType === 'raw'
+                    ? rawIngredients.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.name} ({r.currentStock} {r.unit} in stock - €{r.unitCost}/{r.unit})
+                        </option>
+                      ))
+                    : dishes.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.name} ({d.stockCount || 0} portions - €{d.price})
+                        </option>
+                      ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Quantity Lost</label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    min="0.1"
+                    required
+                    value={wasteQty}
+                    onChange={(e) => setWasteQty(parseFloat(e.target.value) || 0)}
+                    className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Reason for Waste</label>
+                  <select
+                    value={wasteReason}
+                    onChange={(e) => setWasteReason(e.target.value as any)}
+                    className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs"
+                  >
+                    <option value="expired">Expired / Past Best Before</option>
+                    <option value="burned">Burned / Overcooked</option>
+                    <option value="damaged">Damaged / Dropped</option>
+                    <option value="customer_return">Customer Return / Remake</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Logged By</label>
+                  <input
+                    type="text"
+                    required
+                    value={wasteStaff}
+                    onChange={(e) => setWasteStaff(e.target.value)}
+                    className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Incident Notes (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Fridge thermostat failure"
+                    value={wasteNotes}
+                    onChange={(e) => setWasteNotes(e.target.value)}
+                    className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
+                <Button variant="secondary" size="sm" type="button" onClick={() => setIsWasteModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button size="sm" type="submit">
+                  Record Loss &amp; Deduct Stock
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 

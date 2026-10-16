@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DishItem, RawIngredientItem } from '../../types/common.types';
+import { DishItem, RawIngredientItem, WastageRecord } from '../../types/common.types';
 import { INITIAL_DISHES, INITIAL_RAW_INGREDIENTS } from '../../lib/constants';
 
 const MENU_STORAGE_KEY = 'amber_spice_menu_items';
@@ -50,6 +50,8 @@ const persistDishes = (dishes: DishItem[]) => {
   }
 };
 
+const WASTAGE_STORAGE_KEY = 'amber_spice_wastage_records';
+
 const persistRaw = (items: RawIngredientItem[]) => {
   if (typeof window === 'undefined') return;
   try {
@@ -60,14 +62,52 @@ const persistRaw = (items: RawIngredientItem[]) => {
   }
 };
 
+const getInitialWastage = (): WastageRecord[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(WASTAGE_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {
+    // fallback
+  }
+  return [
+    {
+      id: 'w-01',
+      itemId: 'ing-01',
+      itemName: 'Fresh Irish Chicken Fillet',
+      itemType: 'raw',
+      quantity: 1.2,
+      unit: 'kg',
+      reason: 'expired',
+      costLost: 8.16,
+      timestamp: '2026-10-15T16:30:00Z',
+      loggedBy: 'Chef Tariq',
+    },
+  ];
+};
+
+const persistWastage = (records: WastageRecord[]) => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(WASTAGE_STORAGE_KEY, JSON.stringify(records));
+  } catch {
+    // ignore
+  }
+};
+
 interface StockState {
   dishes: DishItem[];
   rawIngredients: RawIngredientItem[];
+  wastageHistory: WastageRecord[];
 }
 
 const initialState: StockState = {
   dishes: getInitialDishes(),
   rawIngredients: getInitialRaw(),
+  wastageHistory: getInitialWastage(),
 };
 
 export const stockSlice = createSlice({
@@ -77,6 +117,7 @@ export const stockSlice = createSlice({
     syncStockFromStorage: (state) => {
       state.dishes = getInitialDishes();
       state.rawIngredients = getInitialRaw();
+      state.wastageHistory = getInitialWastage();
     },
     toggleDishAvailability: (state, action: PayloadAction<string>) => {
       const dish = state.dishes.find((d) => d.id === action.payload);
@@ -129,6 +170,59 @@ export const stockSlice = createSlice({
         persistDishes(state.dishes);
       }
     },
+    deductRecipeStockForOrder: (state, action: PayloadAction<{ items: { dishId: string; quantity: number }[] }>) => {
+      let rawChanged = false;
+      action.payload.items.forEach(({ dishId, quantity }) => {
+        const dish = state.dishes.find((d) => d.id === dishId);
+        if (dish && dish.recipe && dish.recipe.length > 0) {
+          dish.recipe.forEach((ingUsage) => {
+            const raw = state.rawIngredients.find((r) => r.id === ingUsage.ingredientId);
+            if (raw) {
+              const consumed = ingUsage.quantity * quantity;
+              raw.currentStock = Math.max(0, Math.round((raw.currentStock - consumed) * 100) / 100);
+              if (raw.currentStock === 0) {
+                raw.status = 'out_of_stock';
+              } else if (raw.currentStock <= raw.parLevel) {
+                raw.status = 'low_stock';
+              }
+              rawChanged = true;
+            }
+          });
+        }
+      });
+      if (rawChanged) {
+        persistRaw(state.rawIngredients);
+      }
+    },
+    logWastage: (state, action: PayloadAction<WastageRecord>) => {
+      state.wastageHistory.unshift(action.payload);
+      persistWastage(state.wastageHistory);
+
+      // Deduct from stock
+      if (action.payload.itemType === 'raw') {
+        const raw = state.rawIngredients.find((r) => r.id === action.payload.itemId);
+        if (raw) {
+          raw.currentStock = Math.max(0, Math.round((raw.currentStock - action.payload.quantity) * 100) / 100);
+          if (raw.currentStock === 0) raw.status = 'out_of_stock';
+          else if (raw.currentStock <= raw.parLevel) raw.status = 'low_stock';
+          persistRaw(state.rawIngredients);
+        }
+      } else {
+        const dish = state.dishes.find((d) => d.id === action.payload.itemId);
+        if (dish && dish.stockCount !== undefined) {
+          dish.stockCount = Math.max(0, dish.stockCount - action.payload.quantity);
+          if (dish.stockCount === 0) dish.isAvailable = false;
+          persistDishes(state.dishes);
+        }
+      }
+    },
+    updateDishRecipe: (state, action: PayloadAction<{ dishId: string; recipe: DishItem['recipe'] }>) => {
+      const dish = state.dishes.find((d) => d.id === action.payload.dishId);
+      if (dish) {
+        dish.recipe = action.payload.recipe;
+        persistDishes(state.dishes);
+      }
+    },
     restockAllDishes: (state) => {
       state.dishes.forEach((d) => {
         d.isAvailable = true;
@@ -178,6 +272,9 @@ export const {
   adjustDishPortions,
   setDishPortions,
   deductOrderedDishes,
+  deductRecipeStockForOrder,
+  logWastage,
+  updateDishRecipe,
   restockAllDishes,
   adjustRawStock,
   restockRawToPar,

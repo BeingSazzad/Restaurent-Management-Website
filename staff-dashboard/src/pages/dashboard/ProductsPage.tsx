@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { DishItem } from '../../types/common.types';
 import { INITIAL_DISHES } from '../../lib/constants';
+import { useAppSelector } from '../../store/hooks';
 import {
   Plus,
   Search,
@@ -9,6 +10,8 @@ import {
   Upload,
   AlertCircle,
   X,
+  ChefHat,
+  Package,
 } from 'lucide-react';
 import { Pagination } from '../../components/ui/Pagination';
 
@@ -47,11 +50,25 @@ const PRESET_IMAGES = [
 ];
 
 export function ProductsPage() {
+  const { rawIngredients } = useAppSelector((state) => state.stock);
   const [dishes, setDishes] = useState<DishItem[]>(() => getStoredMenu());
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDish, setEditingDish] = useState<DishItem | null>(null);
+  const [recipeDish, setRecipeDish] = useState<DishItem | null>(null);
+
+  const calculateDishCost = (dish: DishItem) => {
+    if (dish.recipe && dish.recipe.length > 0) {
+      const total = dish.recipe.reduce((sum, r) => {
+        const raw = rawIngredients.find((i) => i.id === r.ingredientId);
+        const unitCost = raw ? raw.unitCost : 4.0;
+        return sum + r.quantity * unitCost;
+      }, 0);
+      return Math.round(total * 100) / 100;
+    }
+    return Math.round(dish.price * 0.24 * 100) / 100;
+  };
 
   // Sync menu state when updated from Inventory & 86 kill-switch or other tabs
   React.useEffect(() => {
@@ -253,85 +270,110 @@ export function ProductsPage() {
 
       {/* Dish Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {paginatedDishes.map((dish) => (
-          <div
-            key={dish.id}
-            className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
-          >
-            <div>
-              <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
-                  }}
-                />
-                <div className="absolute top-2.5 left-2.5">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
-                    €{dish.price.toFixed(2)}
+        {paginatedDishes.map((dish) => {
+          const foodCost = calculateDishCost(dish);
+          const marginPercent = Math.round(((dish.price - foodCost) / dish.price) * 100);
+
+          return (
+            <div
+              key={dish.id}
+              className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
+            >
+              <div>
+                <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
+                  <img
+                    src={dish.image}
+                    alt={dish.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
+                    }}
+                  />
+                  <div className="absolute top-2.5 left-2.5">
+                    <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
+                      €{dish.price.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5">
+                    <button
+                      onClick={() => toggleAvailability(dish.id)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer transition-all ${
+                        dish.isAvailable
+                          ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                          : 'bg-rose-600 text-white hover:bg-rose-700'
+                      }`}
+                    >
+                      {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-1 mb-2">
+                  <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
+                    {dish.category}
+                  </span>
+                  <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
+                  <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
+                </div>
+
+                {/* Portions Remaining Indicator */}
+                <div className="flex items-center justify-between text-xs pt-2 mt-2 border-t border-stone-100">
+                  <span className="text-stone-400 font-medium">Batch Stock:</span>
+                  {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
+                    <span
+                      className={
+                        (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
+                          ? 'text-amber-600 font-bold'
+                          : 'text-emerald-700 font-bold'
+                      }
+                    >
+                      {dish.stockCount} portions remaining
+                    </span>
+                  ) : (
+                    <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
+                  )}
+                </div>
+
+                {/* BOM Food Cost & Margin Indicator */}
+                <div className="flex items-center justify-between text-[11px] pt-1.5 mt-1 border-t border-stone-100">
+                  <span className="text-stone-400 font-medium">Portion Cost:</span>
+                  <span className="font-bold text-stone-800">
+                    €{foodCost.toFixed(2)}{' '}
+                    <span className="text-emerald-700 font-extrabold">({marginPercent}% margin)</span>
                   </span>
                 </div>
-                <div className="absolute top-2.5 right-2.5">
+              </div>
+
+              <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setRecipeDish(dish)}
+                  className="h-8 px-2.5 rounded-lg border border-stone-200 hover:border-amber-600 hover:text-amber-700 text-stone-600 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                  title="View Recipe Ingredients & BOM"
+                >
+                  <ChefHat className="w-3.5 h-3.5 text-stone-500" />
+                  <span>Recipe BOM</span>
+                </button>
+
+                <div className="flex items-center gap-1.5">
                   <button
-                    onClick={() => toggleAvailability(dish.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer transition-all ${
-                      dish.isAvailable
-                        ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                        : 'bg-rose-600 text-white hover:bg-rose-700'
-                    }`}
+                    onClick={() => openEditModal(dish)}
+                    className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
-                    {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                    <Edit2 className="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(dish.id, dish.name)}
+                    className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
+                    title="Remove dish"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
-
-              <div className="space-y-1 mb-2">
-                <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
-                  {dish.category}
-                </span>
-                <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
-                <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
-              </div>
-
-              {/* Portions Remaining Indicator */}
-              <div className="flex items-center justify-between text-xs pt-2 mt-2 border-t border-stone-100">
-                <span className="text-stone-400 font-medium">Batch Stock:</span>
-                {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
-                  <span
-                    className={
-                      (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
-                        ? 'text-amber-600 font-bold'
-                        : 'text-emerald-700 font-bold'
-                    }
-                  >
-                    {dish.stockCount} portions remaining
-                  </span>
-                ) : (
-                  <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
-                )}
-              </div>
             </div>
-
-            <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-end gap-2">
-              <button
-                onClick={() => openEditModal(dish)}
-                className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>Edit</span>
-              </button>
-              <button
-                onClick={() => handleDelete(dish.id, dish.name)}
-                className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
-                title="Remove dish"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Pagination */}
@@ -517,6 +559,110 @@ export function ProductsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Recipe BOM Modal */}
+      {recipeDish && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-stone-200 shadow-2xl text-[#1A130E] p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#B84A22] flex items-center justify-center">
+                  <ChefHat className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-[#1A130E]">{recipeDish.name}</h3>
+                  <p className="text-[11px] text-stone-500">Portion Bill of Materials (BOM) &amp; Depletion</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setRecipeDish(null)}
+                className="w-8 h-8 rounded-full bg-stone-100 text-stone-500 hover:text-stone-900 flex items-center justify-center cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Margin Summary Strip */}
+            <div className="grid grid-cols-3 gap-2 p-3 bg-stone-50 border border-stone-200/80 rounded-2xl text-center">
+              <div>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Menu Price</span>
+                <span className="text-sm font-extrabold text-stone-900">€{recipeDish.price.toFixed(2)}</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Food Cost</span>
+                <span className="text-sm font-extrabold text-amber-700">€{calculateDishCost(recipeDish).toFixed(2)}</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Gross Margin</span>
+                <span className="text-sm font-extrabold text-emerald-700">
+                  {Math.round(((recipeDish.price - calculateDishCost(recipeDish)) / recipeDish.price) * 100)}%
+                </span>
+              </div>
+            </div>
+
+            {/* Ingredients Breakdown Table */}
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-600 block mb-2">
+                Raw Ingredients Consumed Per Portion
+              </span>
+              <div className="border border-stone-200 rounded-xl overflow-hidden text-xs">
+                <table className="w-full text-left">
+                  <thead className="bg-stone-50 border-b border-stone-200 text-[11px] font-bold text-stone-500 uppercase">
+                    <tr>
+                      <th className="py-2.5 px-3">Ingredient</th>
+                      <th className="py-2.5 px-3 text-right">Portion Measure</th>
+                      <th className="py-2.5 px-3 text-right">Est. Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {(recipeDish.recipe && recipeDish.recipe.length > 0
+                      ? recipeDish.recipe
+                      : [
+                          { ingredientId: 'ing-01', name: 'Fresh Protein / Base Veg', quantity: 0.25, unit: 'kg' },
+                          { ingredientId: 'ing-03', name: 'Pure Ghee & Butter', quantity: 0.04, unit: 'kg' },
+                          { ingredientId: 'ing-05', name: 'Stone-Ground Spices', quantity: 0.015, unit: 'kg' },
+                          { ingredientId: 'ing-06', name: 'Eco Takeaway Container', quantity: 1, unit: 'pcs' },
+                        ]
+                    ).map((item, idx) => {
+                      const raw = rawIngredients.find((r) => r.id === item.ingredientId);
+                      const unitCost = raw ? raw.unitCost : 4.0;
+                      const itemCost = Math.round(item.quantity * unitCost * 100) / 100;
+
+                      return (
+                        <tr key={idx} className="hover:bg-stone-50/50">
+                          <td className="py-2.5 px-3 font-semibold text-stone-900">
+                            {item.name}
+                          </td>
+                          <td className="py-2.5 px-3 text-right text-stone-600 font-mono">
+                            {item.quantity} {item.unit}
+                          </td>
+                          <td className="py-2.5 px-3 text-right font-bold text-stone-900">
+                            €{itemCost.toFixed(2)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-[11px] text-amber-800 leading-relaxed">
+              💡 <strong>Kitchen Automation:</strong> When an order with this dish is prepared and marked <em>Ready</em> or <em>Completed</em>, these ingredients are automatically depleted from live raw stock.
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-stone-100">
+              <button
+                type="button"
+                onClick={() => setRecipeDish(null)}
+                className="px-4 py-2 rounded-xl bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 cursor-pointer"
+              >
+                Close BOM View
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -58,6 +58,12 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
   },
 ];
 
+export const INITIAL_DRIVERS = [
+  { id: 'drv-01', name: 'Dave (E-Bike 1)', phone: '+353 87 111 2233', status: 'available' },
+  { id: 'drv-02', name: 'Alex (Scooter 2)', phone: '+353 87 444 5566', status: 'available' },
+  { id: 'drv-03', name: 'Sarah (Car 3)', phone: '+353 87 777 8899', status: 'busy' },
+];
+
 export const INITIAL_DISHES: DishItem[] = [
   {
     id: 'dish-biryani-01',
@@ -69,6 +75,11 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 18,
     lowStockThreshold: 5,
+    recipe: [
+      { ingredientId: 'ing-01', name: 'Fresh Irish Chicken Fillet', quantity: 0.25, unit: 'kg' },
+      { ingredientId: 'ing-03', name: 'Aged Himalayan Basmati Rice', quantity: 0.12, unit: 'kg' },
+      { ingredientId: 'ing-04', name: 'Desi Ghee (Clarified Butter)', quantity: 0.02, unit: 'kg' },
+    ],
   },
   {
     id: 'dish-curry-01',
@@ -80,6 +91,10 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 14,
     lowStockThreshold: 5,
+    recipe: [
+      { ingredientId: 'ing-01', name: 'Fresh Irish Chicken Fillet', quantity: 0.22, unit: 'kg' },
+      { ingredientId: 'ing-04', name: 'Desi Ghee (Clarified Butter)', quantity: 0.03, unit: 'kg' },
+    ],
   },
   {
     id: 'dish-curry-02',
@@ -91,6 +106,10 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 3,
     lowStockThreshold: 5,
+    recipe: [
+      { ingredientId: 'ing-02', name: 'Wicklow Spring Lamb (Boneless)', quantity: 0.25, unit: 'kg' },
+      { ingredientId: 'ing-04', name: 'Desi Ghee (Clarified Butter)', quantity: 0.03, unit: 'kg' },
+    ],
   },
   {
     id: 'dish-grill-01',
@@ -102,6 +121,9 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 12,
     lowStockThreshold: 4,
+    recipe: [
+      { ingredientId: 'ing-01', name: 'Fresh Irish Chicken Fillet', quantity: 0.28, unit: 'kg' },
+    ],
   },
   {
     id: 'dish-veg-01',
@@ -113,6 +135,9 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 9,
     lowStockThreshold: 4,
+    recipe: [
+      { ingredientId: 'ing-04', name: 'Desi Ghee (Clarified Butter)', quantity: 0.025, unit: 'kg' },
+    ],
   },
   {
     id: 'dish-bread-01',
@@ -124,6 +149,9 @@ export const INITIAL_DISHES: DishItem[] = [
     isAvailable: true,
     stockCount: 35,
     lowStockThreshold: 10,
+    recipe: [
+      { ingredientId: 'ing-04', name: 'Desi Ghee (Clarified Butter)', quantity: 0.02, unit: 'kg' },
+    ],
   },
 ];
 

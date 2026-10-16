@@ -60,6 +60,33 @@ export const orderSlice = createSlice({
       const order = state.orders.find((o) => o.id === action.payload.orderId || o.orderNumber === action.payload.orderId);
       if (order) {
         order.status = action.payload.status;
+        if (['ready', 'out_for_delivery', 'completed'].includes(action.payload.status)) {
+          order.stockDeducted = true;
+        }
+        saveOrders(state.orders);
+      }
+    },
+    assignDriver: (
+      state,
+      action: PayloadAction<{ orderId: string; driverName: string }>
+    ) => {
+      const order = state.orders.find((o) => o.id === action.payload.orderId || o.orderNumber === action.payload.orderId);
+      if (order) {
+        order.driverName = action.payload.driverName;
+        if (order.status === 'ready' || order.status === 'preparing') {
+          order.status = 'out_for_delivery';
+          order.stockDeducted = true;
+        }
+        saveOrders(state.orders);
+      }
+    },
+    updateInternalNotes: (
+      state,
+      action: PayloadAction<{ orderId: string; notes: string }>
+    ) => {
+      const order = state.orders.find((o) => o.id === action.payload.orderId || o.orderNumber === action.payload.orderId);
+      if (order) {
+        order.internalNotes = action.payload.notes;
         saveOrders(state.orders);
       }
     },
@@ -78,6 +105,14 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { createManualOrder, updateOrderStatus, toggleSound, toggleRushMode, syncOrdersFromStorage } = orderSlice.actions;
+export const {
+  createManualOrder,
+  updateOrderStatus,
+  assignDriver,
+  updateInternalNotes,
+  toggleSound,
+  toggleRushMode,
+  syncOrdersFromStorage,
+} = orderSlice.actions;
 export const addOrder = createManualOrder;
 export default orderSlice.reducer;

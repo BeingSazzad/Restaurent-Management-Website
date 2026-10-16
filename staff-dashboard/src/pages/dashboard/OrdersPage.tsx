@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { updateOrderStatus } from '../../store/slices/orderSlice';
+import { updateOrderStatus, assignDriver } from '../../store/slices/orderSlice';
+import { deductRecipeStockForOrder } from '../../store/slices/stockSlice';
 import { KdsOrder, OrderStatus } from '../../types/common.types';
+import { INITIAL_DRIVERS } from '../../lib/constants';
 import {
   Search,
   CheckCircle2,
@@ -29,7 +31,7 @@ export function OrdersPage() {
   // Financial Metrics
   const totalRevenue = orders.reduce((sum: number, o: KdsOrder) => sum + (o.status !== 'cancelled' ? o.total : 0), 0);
   const completedOrders = orders.filter((o: KdsOrder) => o.status === 'completed');
-  const activeOrders = orders.filter((o: KdsOrder) => ['new', 'preparing', 'ready'].includes(o.status));
+  const activeOrders = orders.filter((o: KdsOrder) => ['new', 'preparing', 'ready', 'out_for_delivery'].includes(o.status));
 
   const filteredOrders = orders.filter((order: KdsOrder) => {
     const matchStatus = statusFilter === 'all' || order.status === statusFilter;
@@ -48,6 +50,14 @@ export function OrdersPage() {
 
   const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
     dispatch(updateOrderStatus({ orderId, status: newStatus }));
+    const targetOrder = orders.find((o) => o.id === orderId);
+    if (targetOrder && ['ready', 'out_for_delivery', 'completed'].includes(newStatus) && !targetOrder.stockDeducted) {
+      dispatch(
+        deductRecipeStockForOrder({
+          items: targetOrder.items.map((i) => ({ dishId: i.dish.id, quantity: i.quantity })),
+        })
+      );
+    }
   };
 
   const getStatusBadge = (status: OrderStatus) => {
@@ -58,6 +68,8 @@ export function OrdersPage() {
         return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-orange-100 text-[#B84A22]">Preparing</span>;
       case 'ready':
         return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">Ready</span>;
+      case 'out_for_delivery':
+        return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-purple-100 text-purple-800">On The Way</span>;
       case 'completed':
         return <span className="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800">Completed</span>;
       case 'cancelled':
@@ -238,6 +250,32 @@ export function OrdersPage() {
                         {order.deliveryAddress}
                       </div>
                     )}
+                    {order.fulfillmentType === 'delivery' && (
+                      <div className="mt-1">
+                        <select
+                          value={order.driverName || ''}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              dispatch(assignDriver({ orderId: order.id, driverName: e.target.value }));
+                              const targetOrder = orders.find((o) => o.id === order.id);
+                              if (targetOrder && !targetOrder.stockDeducted) {
+                                dispatch(
+                                  deductRecipeStockForOrder({
+                                    items: targetOrder.items.map((i) => ({ dishId: i.dish.id, quantity: i.quantity })),
+                                  })
+                                );
+                              }
+                            }
+                          }}
+                          className="text-[10px] font-bold text-stone-700 bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 rounded px-1.5 py-0.5 outline-none cursor-pointer"
+                        >
+                          <option value="">{order.driverName ? `🛵 ${order.driverName}` : '+ Assign Driver'}</option>
+                          {INITIAL_DRIVERS.map((d) => (
+                            <option key={d.id} value={d.name}>🛵 {d.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </td>
 
                   <td className="py-3.5 px-4 text-stone-600">
@@ -246,6 +284,9 @@ export function OrdersPage() {
                     </div>
                     {order.specialNotes && (
                       <div className="text-[10px] text-amber-700 italic mt-0.5">Note: {order.specialNotes}</div>
+                    )}
+                    {order.internalNotes && (
+                      <div className="text-[10px] text-blue-700 font-semibold mt-0.5">Internal: {order.internalNotes}</div>
                     )}
                   </td>
 
@@ -274,6 +315,7 @@ export function OrdersPage() {
                         <option value="new">New</option>
                         <option value="preparing">Prep</option>
                         <option value="ready">Ready</option>
+                        <option value="out_for_delivery">On The Way</option>
                         <option value="completed">Done</option>
                         <option value="cancelled">Cancel</option>
                       </select>
