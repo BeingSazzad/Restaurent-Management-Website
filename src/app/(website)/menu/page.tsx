@@ -123,7 +123,7 @@ function MenuContent() {
                 placeholder="Search biryani, korma, tandoori, naan, or ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 bg-white border border-[#EAE5DF] focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/10 rounded-2xl pl-11 pr-10 text-[14px] text-[#1A130E] placeholder:text-[#9E9790] shadow-[0_2px_8px_rgba(26,19,14,0.02)] outline-none transition-all"
+                className="w-full h-12 bg-white border border-[#EAE5DF] focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/10 rounded-2xl pl-12 pr-11 text-[14px] text-[#1A130E] placeholder:text-[#9E9790] shadow-[0_2px_8px_rgba(26,19,14,0.02)] outline-none transition-all"
               />
               {searchQuery && (
                 <button

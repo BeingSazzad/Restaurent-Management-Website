@@ -87,7 +87,7 @@ export default function GalleryPage() {
 
       {/* Modern Segmented Control Filter Bar */}
       <div className="flex justify-center mb-12">
-        <div className="bg-white border border-[#E5E5E5] p-1.5 rounded-2xl shadow-xs inline-flex items-center gap-1.5 max-w-full overflow-x-auto scrollbar-none">
+        <div className="bg-white border border-[#E5E5E5] p-1.5 rounded-2xl shadow-xs inline-flex items-center gap-1.5 max-w-full overflow-x-auto overflow-y-hidden scrollbar-none">
           {[
             { key: 'all', label: 'All Dishes', count: GALLERY_ITEMS.length },
             {
@@ -116,7 +116,7 @@ export default function GalleryPage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveFilter(tab.key as any)}
-                className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+                className={`whitespace-nowrap shrink-0 px-4 sm:px-5 py-2.5 rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all flex items-center gap-2 cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white shadow-[0_2px_8px_rgba(184,74,34,0.25)]'
                     : 'text-[#555555] hover:text-[#1A130E] hover:bg-[rgb(249,249,249)]'

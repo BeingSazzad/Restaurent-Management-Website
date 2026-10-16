@@ -341,7 +341,7 @@ export default function AgentDashboardPage() {
           {/* Row 3 (KDS Active): Standard Unified Filter & Search Toolbar */}
           {selectedTab === 'kds' && (
             <div className="bg-stone-50/80 border border-stone-200/90 rounded-2xl p-2.5 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3 mt-1">
-              {/* Search Bar */}
+              {/* Search Bar (Equal h-10 height, spacious pl-11 icon clearance) */}
               <div className="relative flex-1 max-w-md">
                 <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
@@ -349,22 +349,22 @@ export default function AgentDashboardPage() {
                   placeholder="Search ticket # or customer..."
                   value={orderSearchQuery}
                   onChange={(e) => setOrderSearchQuery(e.target.value)}
-                  className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-10 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
+                  className="w-full h-10 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13.5px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
                 />
                 {orderSearchQuery && (
                   <button
                     onClick={() => setOrderSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-0.5 rounded-md hover:bg-stone-100 transition-colors cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-1 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
 
-              {/* Segmented Controls */}
+              {/* Segmented Controls (Equal h-10 height) */}
               <div className="flex items-center gap-2 flex-wrap">
                 {/* Station Filter */}
-                <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto scrollbar-none">
+                <div className="h-10 flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto overflow-y-hidden scrollbar-none">
                   {[
                     { id: 'all', label: 'All Stations' },
                     { id: 'biryani', label: 'Biryani' },
@@ -375,7 +375,7 @@ export default function AgentDashboardPage() {
                     <button
                       key={st.id}
                       onClick={() => setStationFilter(st.id as StationFilter)}
-                      className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                      className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                         stationFilter === st.id
                           ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
                           : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
@@ -387,7 +387,7 @@ export default function AgentDashboardPage() {
                 </div>
 
                 {/* Fulfillment Filter */}
-                <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
+                <div className="h-10 flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
                   {[
                     { id: 'all', label: 'All Orders' },
                     { id: 'delivery', label: 'Delivery' },
@@ -396,7 +396,7 @@ export default function AgentDashboardPage() {
                     <button
                       key={f.id}
                       onClick={() => setFulfillmentFilter(f.id as FulfillmentFilter)}
-                      className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                      className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                         fulfillmentFilter === f.id
                           ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
                           : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
@@ -568,22 +568,22 @@ export default function AgentDashboardPage() {
                 placeholder="Search dish by name..."
                 value={stockSearchQuery}
                 onChange={(e) => setStockSearchQuery(e.target.value)}
-                className="w-full h-9 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-10 pr-8 text-xs font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
+                className="w-full h-10 bg-white hover:bg-stone-50 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13.5px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
               />
               {stockSearchQuery && (
                 <button
                   onClick={() => setStockSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-0.5 rounded-md hover:bg-stone-100 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 p-1 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
 
-            {/* Segmented Controls: Categories & Status */}
+            {/* Segmented Controls: Categories & Status (Equal h-10 height) */}
             <div className="flex items-center gap-2 flex-wrap">
               {/* Category Segmented Control */}
-              <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto scrollbar-none">
+              <div className="h-10 flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50 overflow-x-auto overflow-y-hidden scrollbar-none">
                 {[
                   { id: 'all', label: 'All' },
                   { id: 'biryani', label: 'Biryani' },
@@ -596,7 +596,7 @@ export default function AgentDashboardPage() {
                   <button
                     key={c.id}
                     onClick={() => setStockCategoryFilter(c.id)}
-                    className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                    className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                       stockCategoryFilter === c.id
                         ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
                         : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
@@ -608,10 +608,10 @@ export default function AgentDashboardPage() {
               </div>
 
               {/* Status Segmented Control */}
-              <div className="flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
+              <div className="h-10 flex items-center gap-1 bg-stone-200/60 p-1 rounded-xl border border-stone-200/50">
                 <button
                   onClick={() => setStockStatusFilter('all')}
-                  className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                  className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     stockStatusFilter === 'all'
                       ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
@@ -621,7 +621,7 @@ export default function AgentDashboardPage() {
                 </button>
                 <button
                   onClick={() => setStockStatusFilter('sold_out')}
-                  className={`h-7 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+                  className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     stockStatusFilter === 'sold_out'
                       ? 'bg-white text-rose-700 font-semibold shadow-xs border border-stone-200/60'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
