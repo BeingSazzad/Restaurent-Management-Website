@@ -245,7 +245,7 @@ export default function ContactPage() {
               </a>
             </div>
 
-            <div className="relative flex-1 min-h-[380px] sm:min-h-[440px] w-full bg-[#E8E4DF]">
+            <div className="relative flex-1 min-h-[500px] sm:min-h-[540px] lg:min-h-[580px] w-full bg-[#E8E4DF]">
               <iframe
                 title="Amber Spice Dublin Location"
                 src="https://maps.google.com/maps?q=18+South+William+Street,+Dublin+2,+Ireland&t=&z=16&ie=UTF8&iwloc=&output=embed"
