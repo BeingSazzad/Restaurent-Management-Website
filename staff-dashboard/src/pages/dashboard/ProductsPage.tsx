@@ -65,6 +65,7 @@ export function ProductsPage() {
   const [formName, setFormName] = useState('');
   const [formCategory, setFormCategory] = useState<DishItem['category']>('biryani');
   const [formPrice, setFormPrice] = useState<number>(14.5);
+  const [formStockCount, setFormStockCount] = useState<number>(15);
   const [formDescription, setFormDescription] = useState('');
   const [formImage, setFormImage] = useState('/images/amber_hero_dish.jpg');
   const [formIsAvailable, setFormIsAvailable] = useState(true);
@@ -76,6 +77,7 @@ export function ProductsPage() {
     setFormName('');
     setFormCategory('biryani');
     setFormPrice(14.5);
+    setFormStockCount(15);
     setFormDescription('');
     setFormImage('/images/amber_hero_dish.jpg');
     setFormIsAvailable(true);
@@ -88,6 +90,7 @@ export function ProductsPage() {
     setFormName(dish.name);
     setFormCategory(dish.category);
     setFormPrice(dish.price);
+    setFormStockCount(dish.stockCount !== undefined ? dish.stockCount : 12);
     setFormDescription(dish.description || '');
     setFormImage(dish.image);
     setFormIsAvailable(dish.isAvailable);
@@ -125,8 +128,10 @@ export function ProductsPage() {
       categoryLabel: formCategory.toUpperCase(),
       description: formDescription.trim() || 'Authentic heirloom recipe prepared with stone-ground spices.',
       price: Number(formPrice) || 12.0,
+      stockCount: Number(formStockCount) || 0,
+      lowStockThreshold: 5,
       image: formImage.trim() || '/images/amber_hero_dish.jpg',
-      isAvailable: formIsAvailable,
+      isAvailable: Number(formStockCount) > 0 && formIsAvailable,
     };
 
     let updated: DishItem[];
@@ -150,7 +155,17 @@ export function ProductsPage() {
   };
 
   const toggleAvailability = (id: string) => {
-    const updated = dishes.map((d) => (d.id === id ? { ...d, isAvailable: !d.isAvailable } : d));
+    const updated = dishes.map((d) => {
+      if (d.id === id) {
+        const nextAvail = !d.isAvailable;
+        return {
+          ...d,
+          isAvailable: nextAvail,
+          stockCount: nextAvail ? (d.stockCount && d.stockCount > 0 ? d.stockCount : 12) : 0,
+        };
+      }
+      return d;
+    });
     setDishes(updated);
     saveStoredMenu(updated);
   };
@@ -264,6 +279,24 @@ export function ProductsPage() {
                 </span>
                 <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
                 <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
+              </div>
+
+              {/* Portions Remaining Indicator */}
+              <div className="flex items-center justify-between text-xs pt-2 mt-2 border-t border-stone-100">
+                <span className="text-stone-400 font-medium">Batch Stock:</span>
+                {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
+                  <span
+                    className={
+                      (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
+                        ? 'text-amber-600 font-bold'
+                        : 'text-emerald-700 font-bold'
+                    }
+                  >
+                    {dish.stockCount} portions remaining
+                  </span>
+                ) : (
+                  <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
+                )}
               </div>
             </div>
 
@@ -404,18 +437,32 @@ export function ProductsPage() {
                 </div>
               </div>
 
-              {/* Price & Description */}
-              <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Price (€)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="1"
-                  required
-                  value={formPrice}
-                  onChange={(e) => setFormPrice(parseFloat(e.target.value) || 0)}
-                  className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
-                />
+              {/* Price & Stock Portions 2-Column Row */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">Price (€) *</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    required
+                    value={formPrice}
+                    onChange={(e) => setFormPrice(parseFloat(e.target.value) || 0)}
+                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">Daily Prep Portions *</label>
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    required
+                    value={formStockCount}
+                    onChange={(e) => setFormStockCount(parseInt(e.target.value, 10) || 0)}
+                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none font-bold"
+                  />
+                </div>
               </div>
 
               <div>

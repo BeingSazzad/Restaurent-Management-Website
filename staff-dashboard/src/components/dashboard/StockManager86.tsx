@@ -15,10 +15,13 @@ import {
   TrendingDown,
   AlertOctagon,
   RefreshCw,
+  Clock,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   toggleDishAvailability,
+  adjustDishPortions,
+  setDishPortions,
   restockAllDishes,
   adjustRawStock,
   restockRawToPar,
@@ -111,7 +114,7 @@ export function StockManager86() {
   // Dish Tab Filters
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'in_stock' | 'sold_out'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'in_stock' | 'low_stock' | 'sold_out'>('all');
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
   // Raw Inventory Filters
@@ -130,15 +133,22 @@ export function StockManager86() {
   const [newIngSupplier, setNewIngSupplier] = useState('');
 
   // Counts
-  const soldOutCount = dishes.filter((d) => !d.isAvailable).length;
+  const soldOutCount = dishes.filter((d) => !d.isAvailable || (d.stockCount || 0) <= 0).length;
+  const lowPortionDishesCount = dishes.filter(
+    (d) => d.isAvailable && (d.stockCount || 0) > 0 && (d.stockCount || 0) <= (d.lowStockThreshold || 5)
+  ).length;
   const lowStockRawCount = rawIngredients.filter((i) => i.status === 'low_stock' || i.status === 'out_of_stock').length;
   const outOfStockRawCount = rawIngredients.filter((i) => i.status === 'out_of_stock').length;
 
   // Filtered Dishes
   const filteredDishes = dishes.filter((dish) => {
+    const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
+    const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
+
     if (categoryFilter !== 'all' && dish.category !== categoryFilter) return false;
-    if (statusFilter === 'in_stock' && !dish.isAvailable) return false;
-    if (statusFilter === 'sold_out' && dish.isAvailable) return false;
+    if (statusFilter === 'in_stock' && (isOut || isLow)) return false;
+    if (statusFilter === 'low_stock' && !isLow) return false;
+    if (statusFilter === 'sold_out' && !isOut) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       if (!dish.name.toLowerCase().includes(q) && !dish.categoryLabel.toLowerCase().includes(q)) {
@@ -189,8 +199,8 @@ export function StockManager86() {
     <div className="space-y-5 text-[#1A130E]">
       {/* Page Header */}
       <PageHeader
-        title="Inventory & 86"
-        description="Stock levels, ingredient par counts, and 86 availability."
+        title="Inventory & 86 Management"
+        description="Kitchen stock control, real-time portion burn rates, and live 86 dish availability."
         action={
           activeInventoryTab === 'dishes_86' && soldOutCount > 0 ? (
             <Button
@@ -199,7 +209,7 @@ export function StockManager86() {
               leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
               onClick={() => dispatch(restockAllDishes())}
             >
-              Restock All ({soldOutCount})
+              Restock All 86&apos;d ({soldOutCount})
             </Button>
           ) : activeInventoryTab === 'raw_inventory' ? (
             <Button
@@ -207,19 +217,19 @@ export function StockManager86() {
               leftIcon={<Plus className="w-3.5 h-3.5" />}
               onClick={() => setIsAddModalOpen(true)}
             >
-              Add Ingredient
+              Add Raw Material
             </Button>
           ) : undefined
         }
       />
 
-      {/* KPI Stats Strip */}
+      {/* KPI Stats Metric Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Menu Dishes Metric */}
+        {/* Total Menu Items */}
         <div className="bg-white border border-stone-200/90 rounded-2xl p-4 flex items-center justify-between shadow-2xs">
           <div>
             <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Menu Items
+              Total Menu Items
             </p>
             <p className="text-2xl font-bold text-stone-900 mt-0.5">{dishes.length}</p>
             <p className="text-[11px] text-stone-400 mt-0.5">
@@ -239,12 +249,12 @@ export function StockManager86() {
         >
           <div>
             <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Sold Out (86)
+              86&apos;d (Sold Out)
             </p>
             <p className={`text-2xl font-bold mt-0.5 ${soldOutCount > 0 ? 'text-rose-600' : 'text-stone-900'}`}>
               {soldOutCount}
             </p>
-            <p className="text-[11px] text-stone-400 mt-0.5">Unavailable on menu</p>
+            <p className="text-[11px] text-stone-400 mt-0.5">Depleted portion batches</p>
           </div>
           <div
             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
@@ -255,44 +265,50 @@ export function StockManager86() {
           </div>
         </div>
 
-        {/* Low Stock Raw Ingredients Metric */}
+        {/* Low Portions Warning Metric */}
         <div
           className={`border rounded-2xl p-4 flex items-center justify-between shadow-2xs transition-colors ${
-            lowStockRawCount > 0 ? 'bg-amber-50/50 border-amber-200/80' : 'bg-white border-stone-200/90'
+            lowPortionDishesCount > 0 ? 'bg-amber-50/50 border-amber-200/80' : 'bg-white border-stone-200/90'
           }`}
         >
           <div>
             <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Low Stock
+              Low Portions Warning
             </p>
-            <p className={`text-2xl font-bold mt-0.5 ${lowStockRawCount > 0 ? 'text-amber-600' : 'text-stone-900'}`}>
-              {lowStockRawCount}
+            <p className={`text-2xl font-bold mt-0.5 ${lowPortionDishesCount > 0 ? 'text-amber-600' : 'text-stone-900'}`}>
+              {lowPortionDishesCount}
             </p>
             <p className="text-[11px] text-stone-400 mt-0.5">
-              {outOfStockRawCount > 0 ? `${outOfStockRawCount} out of stock` : 'Below par level'}
+              {lowPortionDishesCount > 0 ? 'Dishes with ≤ 5 portions left' : 'Batches healthy'}
             </p>
           </div>
           <div
             className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-              lowStockRawCount > 0 ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'
+              lowPortionDishesCount > 0 ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'
             }`}
           >
-            <TrendingDown className="w-5 h-5" />
+            <Clock className="w-5 h-5" />
           </div>
         </div>
 
-        {/* Raw Inventory Tracked Metric */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4 flex items-center justify-between shadow-2xs">
+        {/* Raw Inventory Low Stock */}
+        <div
+          className={`border rounded-2xl p-4 flex items-center justify-between shadow-2xs transition-colors ${
+            lowStockRawCount > 0 ? 'bg-orange-50/50 border-orange-200/80' : 'bg-white border-stone-200/90'
+          }`}
+        >
           <div>
             <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Ingredients
+              Raw Goods Below Par
             </p>
-            <p className="text-2xl font-bold text-stone-900 mt-0.5">{rawIngredients.length}</p>
+            <p className={`text-2xl font-bold mt-0.5 ${lowStockRawCount > 0 ? 'text-[#B84A22]' : 'text-stone-900'}`}>
+              {lowStockRawCount}
+            </p>
             <p className="text-[11px] text-stone-400 mt-0.5">
-              {rawIngredients.length - lowStockRawCount} healthy stock
+              {rawIngredients.length} ingredients tracked
             </p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-orange-100 text-[#B84A22] flex items-center justify-center shrink-0">
             <Box className="w-5 h-5" />
           </div>
         </div>
@@ -309,7 +325,7 @@ export function StockManager86() {
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
-          <span>Menu Dishes (86 List)</span>
+          <span>Menu Dishes &amp; Portions (86 List)</span>
           {soldOutCount > 0 && (
             <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-white/20 text-white">
               {soldOutCount}
@@ -338,7 +354,7 @@ export function StockManager86() {
       {/* ================= SECTION 1: MENU DISHES 86 MANAGEMENT ================= */}
       {activeInventoryTab === 'dishes_86' && (
         <div className="space-y-4">
-          {/* Unified Toolbar (Search, Filter Tabs, View Switcher) */}
+          {/* Unified Toolbar */}
           <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
@@ -406,7 +422,17 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  In Stock
+                  Healthy Batch
+                </button>
+                <button
+                  onClick={() => setStatusFilter('low_stock')}
+                  className={`h-8 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    statusFilter === 'low_stock'
+                      ? 'bg-white text-amber-700 font-semibold shadow-xs border border-stone-200/60'
+                      : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
+                  }`}
+                >
+                  Low ({lowPortionDishesCount})
                 </button>
                 <button
                   onClick={() => setStatusFilter('sold_out')}
@@ -457,21 +483,23 @@ export function StockManager86() {
                     <tr className="bg-stone-50/80 border-b border-stone-200/90 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
                       <th className="py-3.5 px-4 font-semibold">Dish &amp; Station</th>
                       <th className="py-3.5 px-4 font-semibold">Prep Station</th>
-                      <th className="py-3.5 px-4 font-semibold">Menu Price</th>
-                      <th className="py-3.5 px-4 font-semibold">Availability Status</th>
+                      <th className="py-3.5 px-4 font-semibold">Price</th>
+                      <th className="py-3.5 px-4 font-semibold">Portions Remaining &amp; Prep Log</th>
+                      <th className="py-3.5 px-4 font-semibold">Stock Status</th>
                       <th className="py-3.5 px-4 font-semibold text-right">Instant 86 Kill-Switch</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 text-xs">
                     {filteredDishes.map((dish) => {
-                      const inStock = dish.isAvailable;
+                      const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
+                      const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                       const station = getStationBadge(dish.category);
 
                       return (
                         <tr
                           key={dish.id}
                           className={`transition-colors ${
-                            inStock ? 'hover:bg-amber-50/20 bg-white' : 'bg-rose-50/25 hover:bg-rose-50/45'
+                            !isOut ? 'hover:bg-amber-50/20 bg-white' : 'bg-rose-50/25 hover:bg-rose-50/45'
                           }`}
                         >
                           <td className="py-3 px-4">
@@ -480,7 +508,7 @@ export function StockManager86() {
                                 src={dish.image}
                                 alt={dish.name}
                                 className={`w-11 h-11 rounded-xl object-cover shrink-0 border border-stone-200/80 ${
-                                  inStock ? '' : 'grayscale-[40%] opacity-80'
+                                  !isOut ? '' : 'grayscale-[40%] opacity-80'
                                 }`}
                                 onError={(e) => {
                                   (e.target as HTMLImageElement).src =
@@ -491,12 +519,12 @@ export function StockManager86() {
                                 <div className="flex items-center gap-2">
                                   <h4
                                     className={`font-semibold text-sm truncate leading-snug ${
-                                      inStock ? 'text-stone-900' : 'text-stone-400 line-through'
+                                      !isOut ? 'text-stone-900' : 'text-stone-400 line-through'
                                     }`}
                                   >
                                     {dish.name}
                                   </h4>
-                                  {!inStock && (
+                                  {isOut && (
                                     <span className="text-[10px] font-bold text-rose-600 bg-rose-100/80 px-1.5 py-0.5 rounded-md">
                                       86&apos;d
                                     </span>
@@ -524,38 +552,100 @@ export function StockManager86() {
                             </span>
                           </td>
 
+                          {/* Portions Remaining & Quick Log */}
                           <td className="py-3 px-4 whitespace-nowrap">
-                            {inStock ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                Available Live
+                            <div className="flex items-center gap-3">
+                              <div className="min-w-[110px]">
+                                <div className="flex items-center gap-1.5 font-bold text-xs">
+                                  {!isOut ? (
+                                    <span
+                                      className={
+                                        isLow
+                                          ? 'text-amber-600 font-extrabold flex items-center gap-1'
+                                          : 'text-stone-900'
+                                      }
+                                    >
+                                      {isLow && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
+                                      )}
+                                      {dish.stockCount} portions left
+                                    </span>
+                                  ) : (
+                                    <span className="text-rose-600 font-extrabold">0 portions (Out)</span>
+                                  )}
+                                </div>
+                                <span className="text-[10px] text-stone-400 block mt-0.5">
+                                  Min par: {dish.lowStockThreshold || 5}
+                                </span>
+                              </div>
+
+                              {/* Quick Adjustment Actions */}
+                              <div className="inline-flex items-center gap-1 bg-stone-100/90 p-0.5 rounded-lg border border-stone-200/80">
+                                <button
+                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
+                                  disabled={!dish.stockCount || dish.stockCount <= 0}
+                                  className="h-7 w-7 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-bold flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-xs transition-colors shadow-2xs"
+                                  title="Deduct 1 portion (sold)"
+                                >
+                                  -1
+                                </button>
+                                <button
+                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
+                                  className="h-7 w-7 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-bold flex items-center justify-center cursor-pointer text-xs transition-colors shadow-2xs"
+                                  title="Add 1 portion (prepped)"
+                                >
+                                  +1
+                                </button>
+                                <button
+                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 5 }))}
+                                  className="h-7 px-2 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-semibold flex items-center justify-center cursor-pointer text-xs transition-colors shadow-2xs"
+                                  title="Add 5 portions (batch cook)"
+                                >
+                                  +5
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Stock Status Badge */}
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            {isOut ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
+                                <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
+                                86&apos;d / Sold Out
+                              </span>
+                            ) : isLow ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
+                                <TrendingDown className="w-3.5 h-3.5 text-amber-600" />
+                                Low ({dish.stockCount} left)
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
-                                <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />
-                                86&apos;d / Sold Out
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                Healthy Batch
                               </span>
                             )}
                           </td>
 
+                          {/* Instant 86 Action */}
                           <td className="py-3 px-4 text-right whitespace-nowrap">
                             <button
                               onClick={() => dispatch(toggleDishAvailability(dish.id))}
                               className={`h-9 px-3.5 rounded-xl text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer active:scale-95 ${
-                                inStock
+                                !isOut
                                   ? 'bg-stone-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-stone-700 border border-stone-200/90'
                                   : 'bg-rose-600 hover:bg-emerald-600 text-white shadow-2xs'
                               }`}
                             >
-                              {inStock ? (
+                              {!isOut ? (
                                 <>
-                                  <AlertOctagon className="w-3.5 h-3.5 text-stone-500 group-hover:text-rose-600" />
-                                  <span>Mark 86 (Out of Stock)</span>
+                                  <AlertOctagon className="w-3.5 h-3.5 text-stone-500" />
+                                  <span>Mark 86 (Sold Out)</span>
                                 </>
                               ) : (
                                 <>
                                   <Check className="w-3.5 h-3.5" />
-                                  <span>Restock Dish</span>
+                                  <span>Restock Batch</span>
                                 </>
                               )}
                             </button>
@@ -573,13 +663,15 @@ export function StockManager86() {
           {filteredDishes.length > 0 && viewMode === 'grid' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredDishes.map((dish) => {
-                const inStock = dish.isAvailable;
+                const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
+                const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                 const station = getStationBadge(dish.category);
+
                 return (
                   <div
                     key={dish.id}
-                    className={`bg-white border rounded-2xl p-4 shadow-2xs flex items-center justify-between gap-3 transition-colors ${
-                      inStock ? 'border-stone-200/90' : 'border-rose-200/80 bg-rose-50/20'
+                    className={`bg-white border rounded-2xl p-4 shadow-2xs flex flex-col justify-between gap-3 transition-colors ${
+                      !isOut ? 'border-stone-200/90' : 'border-rose-200/80 bg-rose-50/20'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -587,13 +679,13 @@ export function StockManager86() {
                         src={dish.image}
                         alt={dish.name}
                         className={`w-12 h-12 rounded-xl object-cover shrink-0 border border-stone-200/80 ${
-                          inStock ? '' : 'grayscale-[40%] opacity-80'
+                          !isOut ? '' : 'grayscale-[40%] opacity-80'
                         }`}
                       />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <h4
                           className={`font-semibold text-xs sm:text-sm truncate leading-snug ${
-                            inStock ? 'text-stone-900' : 'text-stone-400 line-through'
+                            !isOut ? 'text-stone-900' : 'text-stone-400 line-through'
                           }`}
                         >
                           {dish.name}
@@ -608,16 +700,44 @@ export function StockManager86() {
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => dispatch(toggleDishAvailability(dish.id))}
-                      className={`h-8 px-3 rounded-lg text-xs font-medium transition-colors shrink-0 cursor-pointer flex items-center gap-1.5 ${
-                        inStock
-                          ? 'bg-stone-100 hover:bg-rose-50 hover:text-rose-700 text-stone-700 border border-stone-200/80'
-                          : 'bg-rose-600 hover:bg-emerald-600 text-white shadow-2xs'
-                      }`}
-                    >
-                      {inStock ? '86 Dish' : 'Restock'}
-                    </button>
+                    {/* Portions & Actions Row */}
+                    <div className="pt-2 border-t border-stone-100 flex items-center justify-between gap-2">
+                      <div className="text-xs">
+                        {!isOut ? (
+                          <span className={isLow ? 'text-amber-600 font-bold' : 'text-stone-800 font-bold'}>
+                            {dish.stockCount} portions left
+                          </span>
+                        ) : (
+                          <span className="text-rose-600 font-bold">86&apos;d (Out)</span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
+                          disabled={!dish.stockCount || dish.stockCount <= 0}
+                          className="h-7 w-7 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center text-xs disabled:opacity-30"
+                        >
+                          -1
+                        </button>
+                        <button
+                          onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
+                          className="h-7 w-7 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center text-xs"
+                        >
+                          +1
+                        </button>
+                        <button
+                          onClick={() => dispatch(toggleDishAvailability(dish.id))}
+                          className={`h-7 px-2.5 rounded-md text-xs font-semibold ${
+                            !isOut
+                              ? 'bg-stone-100 hover:bg-rose-50 text-stone-700 border border-stone-200'
+                              : 'bg-rose-600 text-white'
+                          }`}
+                        >
+                          {!isOut ? '86' : 'Restock'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
@@ -731,8 +851,9 @@ export function StockManager86() {
                   <tr className="bg-stone-50/80 border-b border-stone-200/90 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
                     <th className="py-3.5 px-4 font-semibold">Ingredient &amp; Category</th>
                     <th className="py-3.5 px-4 font-semibold">Stock vs Par Level</th>
+                    <th className="py-3.5 px-4 font-semibold">Portion Yield Est.</th>
                     <th className="py-3.5 px-4 font-semibold">Health Status</th>
-                    <th className="py-3.5 px-4 font-semibold">Unit Cost / Value</th>
+                    <th className="py-3.5 px-4 font-semibold">Unit Cost / Val</th>
                     <th className="py-3.5 px-4 font-semibold">Supplier</th>
                     <th className="py-3.5 px-4 font-semibold text-right">Quick Stock Adjustment</th>
                   </tr>
@@ -741,6 +862,15 @@ export function StockManager86() {
                   {filteredRaw.map((item) => {
                     const badge = getIngredientCategoryBadge(item.category);
                     const percent = Math.min(100, Math.round((item.currentStock / item.parLevel) * 100));
+                    // Estimated yield: 250g per portion for proteins, 100g for grains/dairy
+                    const portionYield =
+                      item.category === 'protein'
+                        ? Math.floor(item.currentStock / 0.25)
+                        : item.category === 'grain'
+                        ? Math.floor(item.currentStock / 0.1)
+                        : item.unit === 'pcs'
+                        ? Math.floor(item.currentStock)
+                        : Math.floor(item.currentStock * 4);
 
                     return (
                       <tr key={item.id} className="hover:bg-stone-50/70 transition-colors">
@@ -778,6 +908,16 @@ export function StockManager86() {
                               />
                             </div>
                           </div>
+                        </td>
+
+                        {/* Portion Yield Est. */}
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className="font-semibold text-stone-800">
+                            ~{portionYield} {portionYield === 1 ? 'portion' : 'portions'}
+                          </span>
+                          <span className="text-[10px] text-stone-400 block mt-0.5">
+                            Kitchen prep capacity
+                          </span>
                         </td>
 
                         <td className="py-3.5 px-4 whitespace-nowrap">

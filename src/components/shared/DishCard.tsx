@@ -21,11 +21,14 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
     dispatch(toggleFavorite(dish.id));
   };
 
+  const isAvailable = dish.isAvailable && (dish.stockCount === undefined || dish.stockCount > 0);
+  const isLowStock = isAvailable && dish.stockCount !== undefined && dish.stockCount > 0 && dish.stockCount <= (dish.lowStockThreshold || 5);
+
   return (
     <div
-      onClick={() => dish.isAvailable && onSelect(dish)}
+      onClick={() => isAvailable && onSelect(dish)}
       className={`group flex flex-col justify-between bg-white border border-[#E5E5E5] rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
-        !dish.isAvailable ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+        !isAvailable ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
       }`}
     >
       {/* Food Photo Container */}
@@ -35,7 +38,6 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
           alt={dish.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
-
 
         {/* Wishlist / Favorite Heart Button */}
         <button
@@ -52,8 +54,18 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
           />
         </button>
 
+        {/* Low Stock Urgency Pill */}
+        {isLowStock && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-amber-600/95 text-white px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-xs flex items-center gap-1 backdrop-blur-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              Only {dish.stockCount} left
+            </span>
+          </div>
+        )}
+
         {/* Sold out overlay */}
-        {!dish.isAvailable && (
+        {!isAvailable && (
           <div className="absolute inset-0 bg-white/85 backdrop-blur-sm flex items-center justify-center z-20">
             <span className="bg-[#B84A22] text-white px-3 py-1 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-1 shadow-sm">
               <AlertCircle className="w-3.5 h-3.5" /> Sold Out
@@ -90,9 +102,9 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onSelect }) => {
 
           {/* Sunset Orange Gradient Add Button */}
           <button
-            disabled={!dish.isAvailable}
+            disabled={!isAvailable}
             className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-              dish.isAvailable
+              isAvailable
                 ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_2px_8px_rgba(184,74,34,0.25)] hover:scale-105 active:scale-95'
                 : 'bg-[#E5E5E5] text-[#999999] cursor-not-allowed'
             }`}
