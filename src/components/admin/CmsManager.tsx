@@ -318,7 +318,7 @@ export const CmsManager: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <span className="text-xs font-bold text-[#1A130E] uppercase tracking-wider">
-                Full Policy Content &amp; Clauses
+                Policy Content
               </span>
 
               {/* Edit / Customer Preview Switcher */}
@@ -470,7 +470,9 @@ export const CmsManager: React.FC = () => {
                   <span>•</span>
                   <span>{policyCharCount} characters</span>
                 </div>
-                <span className="text-stone-400">Timestamp automatically set on publish</span>
+                <span className="text-stone-400">
+                  Last updated: {cmsData[activeTab].lastUpdated || 'Current Month'}
+                </span>
               </div>
             </div>
           </div>
