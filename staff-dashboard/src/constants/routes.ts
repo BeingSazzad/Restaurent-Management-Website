@@ -2,6 +2,8 @@ export const ROUTES = {
   AUTH: {
     LOGIN: '/login',
     REGISTER: '/register',
+    FORGOT_PASSWORD: '/forgot-password',
+    RESET_PASSWORD: '/reset-password',
   },
   DASHBOARD: {
     ROOT: '/',
@@ -16,6 +18,7 @@ export const ROUTES = {
     SHIFT_REPORT: '/shift-report',
     ANALYTICS: '/analytics',
     USERS: '/staff-users',
+    CHANGE_PASSWORD: '/change-password',
   },
 } as const;
 

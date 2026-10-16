@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { ChefHat, KeyRound, Mail, Sparkles, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ChefHat, KeyRound, Mail, Sparkles, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../../ui/Button';
 import { Input } from '../../ui/Input';
 import { useLogin } from '../hooks/useLogin';
 import { INITIAL_STAFF_USERS } from '../../../lib/constants';
+import { ROUTES } from '../../../constants/routes';
 
 export function LoginForm() {
   const [emailOrPin, setEmailOrPin] = useState('headchef@amberspice.ie');
   const [password, setPassword] = useState('kitchen123');
+  const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading, error } = useLogin();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,12 +27,15 @@ export function LoginForm() {
     <div className="w-full max-w-md mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="w-12 h-12 bg-[#F15A24] rounded-2xl mx-auto flex items-center justify-center text-white shadow-md shadow-[#F15A24]/20 mb-3">
+        <div className="w-12 h-12 bg-gradient-to-br from-[#B84A22] to-[#FBA138] rounded-2xl mx-auto flex items-center justify-center text-white shadow-md shadow-[#B84A22]/20 mb-3">
           <ChefHat className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-bold text-stone-900 tracking-tight">Kitchen Console Login</h2>
+        <span className="inline-block text-[10.5px] font-bold text-[#B84A22] bg-orange-50 border border-orange-200/60 px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
+          Kitchen &amp; Operations Portal
+        </span>
+        <h2 className="text-xl font-bold text-stone-900 tracking-tight">Staff Terminal Login</h2>
         <p className="text-xs text-stone-500 mt-1">
-          Authorized staff & culinary team access only.
+          Authorized head chef, expo &amp; kitchen administration only.
         </p>
       </div>
 
@@ -52,15 +58,35 @@ export function LoginForm() {
           required
         />
 
-        <Input
-          label="Kitchen Security PIN / Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
-          leftIcon={<KeyRound className="w-4 h-4" />}
-          required
-        />
+        <div>
+          <Input
+            label="Kitchen Security PIN / Password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            leftIcon={<KeyRound className="w-4 h-4" />}
+            rightIcon={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-stone-400 hover:text-stone-700 transition-colors cursor-pointer"
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            }
+            required
+          />
+          <div className="flex justify-end mt-1.5">
+            <Link
+              to={ROUTES.AUTH.FORGOT_PASSWORD}
+              className="text-xs font-medium text-[#F15A24] hover:text-[#D94E1C] hover:underline transition-colors"
+            >
+              Forgot Password / Station PIN?
+            </Link>
+          </div>
+        </div>
 
         <Button
           type="submit"

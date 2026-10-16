@@ -7,6 +7,9 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 // Page imports
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
+import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
+import ChangePasswordPage from '../pages/dashboard/ChangePasswordPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import AnalyticsPage from '../pages/dashboard/AnalyticsPage';
 import ShiftReportPage from '../pages/dashboard/ShiftReportPage';
@@ -29,6 +32,14 @@ export const router = createBrowserRouter([
   {
     path: ROUTES.AUTH.REGISTER,
     element: <RegisterPage />,
+  },
+  {
+    path: ROUTES.AUTH.FORGOT_PASSWORD,
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: ROUTES.AUTH.RESET_PASSWORD,
+    element: <ResetPasswordPage />,
   },
 
   // Protected Staff & Kitchen Dashboard Routes
@@ -82,6 +93,10 @@ export const router = createBrowserRouter([
           {
             path: 'staff-users',
             element: <StaffUsersPage />,
+          },
+          {
+            path: 'change-password',
+            element: <ChangePasswordPage />,
           },
         ],
       },
