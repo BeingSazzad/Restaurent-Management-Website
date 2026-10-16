@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import {
   ChefHat,
   LayoutDashboard,
@@ -14,6 +14,8 @@ import {
   FileText,
   UserCheck,
   Receipt,
+  Bell,
+  User,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../hooks/useAuth';
@@ -35,6 +37,12 @@ export function Sidebar() {
       path: ROUTES.DASHBOARD.ORDERS,
       icon: ClipboardList,
       allowedRoles: ['admin', 'expo'],
+    },
+    {
+      name: 'Notifications',
+      path: ROUTES.DASHBOARD.NOTIFICATIONS,
+      icon: Bell,
+      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
       name: 'Inventory & 86',
@@ -178,16 +186,29 @@ export function Sidebar() {
       {/* Staff User Card */}
       <div className="p-3.5 border-t border-stone-800/80 relative z-10">
         <div className="p-3 rounded-xl bg-stone-900/90 border border-stone-800/80 backdrop-blur-xs flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-stone-800 flex items-center justify-center text-xs font-bold text-[#FFA940]">
+          <Link
+            to={ROUTES.DASHBOARD.PROFILE}
+            title="View & Edit Admin Profile"
+            className="flex items-center gap-2.5 min-w-0 hover:opacity-85 transition-opacity cursor-pointer group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-stone-800 group-hover:bg-stone-700 flex items-center justify-center text-xs font-bold text-[#FFA940] transition-colors">
               <Flame className="w-4 h-4 text-[#F15A24]" />
             </div>
             <div className="min-w-0">
-              <p className="text-[13.5px] font-semibold text-white truncate">{user?.name || 'Chef on Duty'}</p>
-              <p className="text-[11px] text-stone-400 capitalize">{user?.role || 'Staff'} · Active Shift</p>
+              <p className="text-[13px] font-semibold text-white truncate group-hover:text-[#FFA940] transition-colors">
+                {user?.name || 'Chef on Duty'}
+              </p>
+              <p className="text-[11px] text-stone-400 capitalize">{user?.role || 'Staff'} · Profile</p>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-1">
+            <Link
+              to={ROUTES.DASHBOARD.PROFILE}
+              title="Admin Profile & Password"
+              className="text-stone-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <User className="w-4 h-4" />
+            </Link>
             <button
               onClick={logout}
               title="Log Out Staff Console"

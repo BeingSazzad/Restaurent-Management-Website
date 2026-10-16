@@ -33,6 +33,15 @@ export const authSlice = createSlice({
         state.user.shiftStation = action.payload;
       }
     },
+    updateProfile: (state, action: PayloadAction<{ name: string; email: string; phone?: string }>) => {
+      if (state.user) {
+        state.user.name = action.payload.name;
+        state.user.email = action.payload.email;
+        if (action.payload.phone !== undefined) {
+          state.user.phone = action.payload.phone;
+        }
+      }
+    },
     setActiveRole: (state, action: PayloadAction<StaffUser['role']>) => {
       if (state.user) {
         state.user.role = action.payload;
@@ -50,5 +59,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { loginSuccess, logout, switchStation, setActiveRole } = authSlice.actions;
+export const { loginSuccess, logout, switchStation, setActiveRole, updateProfile } = authSlice.actions;
 export default authSlice.reducer;

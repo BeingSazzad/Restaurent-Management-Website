@@ -19,6 +19,8 @@ import ProductsPage from '../pages/dashboard/ProductsPage';
 import CustomersPage from '../pages/dashboard/CustomersPage';
 import TransactionsPage from '../pages/dashboard/TransactionsPage';
 import CmsPage from '../pages/dashboard/CmsPage';
+import NotificationsPage from '../pages/dashboard/NotificationsPage';
+import ProfilePage from '../pages/dashboard/ProfilePage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -87,6 +89,14 @@ export const router = createBrowserRouter([
           {
             path: 'staff-users',
             element: <StaffUsersPage />,
+          },
+          {
+            path: 'notifications',
+            element: <NotificationsPage />,
+          },
+          {
+            path: 'profile',
+            element: <ProfilePage />,
           },
         ],
       },

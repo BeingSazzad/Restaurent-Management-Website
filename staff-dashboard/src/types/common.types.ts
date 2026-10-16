@@ -5,10 +5,22 @@ export interface StaffUser {
   name: string;
   email: string;
   role: UserRole;
+  phone?: string;
   avatarUrl?: string;
   shiftStation?: 'all' | 'biryani' | 'curries' | 'grill' | 'breads';
   isActive: boolean;
   joinedAt?: string;
+}
+
+export interface AppNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'order' | 'kitchen' | 'stock' | 'system';
+  severity: 'info' | 'warning' | 'urgent';
+  createdAt: string;
+  isRead: boolean;
+  link?: string;
 }
 
 export type OrderStatus = 'new' | 'preparing' | 'ready' | 'out_for_delivery' | 'completed' | 'cancelled';
