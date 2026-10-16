@@ -72,7 +72,8 @@ export interface DayOperatingHours {
 
 export interface CmsStoreInfo {
   name: string;
-  tagline: string;
+  tagline?: string;
+  logoUrl?: string;
   phone: string;
   secondaryPhone?: string;
   email: string;
@@ -194,6 +195,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: DayOperatingHours[] = [
 const DEFAULT_STORE_INFO: CmsStoreInfo = {
   name: 'AMBER SPICE',
   tagline: 'Authentic Flavors · Timeless Recipes',
+  logoUrl: '/images/logo.svg',
   phone: '+353 (01) 485 9210',
   secondaryPhone: '+353 (01) 485 9211',
   email: 'orders@amberspice.ie',
@@ -595,6 +597,24 @@ export function CmsPage() {
     reader.readAsDataURL(file);
   };
 
+  const logoFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setData((prev) => ({
+        ...prev,
+        storeInfo: {
+          ...prev.storeInfo,
+          logoUrl: reader.result as string,
+        },
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSave = () => {
     if (typeof window !== 'undefined') {
       try {
@@ -927,39 +947,74 @@ export function CmsPage() {
             </p>
           </div>
 
+          {/* Restaurant Brand Logo Section */}
+          <div className="p-4 rounded-xl bg-stone-50/70 border border-stone-200/80">
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-2.5">
+              Restaurant Logo
+            </label>
+            <div className="flex items-center gap-4">
+              <div
+                onClick={() => logoFileInputRef.current?.click()}
+                className="w-16 h-16 rounded-xl overflow-hidden bg-white border border-stone-200 shrink-0 shadow-2xs group relative cursor-pointer flex items-center justify-center p-1.5"
+                title="Click to change logo"
+              >
+                <img
+                  src={data.storeInfo.logoUrl || '/images/logo.svg'}
+                  alt="Restaurant Logo"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/logo.svg';
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white rounded-xl">
+                  <Upload className="w-4 h-4" />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <input
+                  ref={logoFileInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                  className="hidden"
+                  onChange={handleLogoUpload}
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => logoFileInputRef.current?.click()}
+                    className="h-8 px-3.5 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-xs font-semibold text-stone-800 flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-[#B84A22]" />
+                    <span>Upload Logo</span>
+                  </button>
+                  {data.storeInfo.logoUrl && data.storeInfo.logoUrl !== '/images/logo.svg' && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setData((prev) => ({
+                          ...prev,
+                          storeInfo: { ...prev.storeInfo, logoUrl: '/images/logo.svg' },
+                        }))
+                      }
+                      className="h-8 px-2.5 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-xs text-stone-500 hover:text-stone-700 transition-colors cursor-pointer shadow-2xs"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+                <p className="text-[11px] text-stone-400">
+                  Recommended: SVG, PNG or WebP with transparent background.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Restaurant Name</label>
-              <input
-                type="text"
-                value={data.storeInfo.name}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    storeInfo: { ...prev.storeInfo, name: e.target.value },
-                  }))
-                }
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs font-semibold text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Tagline</label>
-              <input
-                type="text"
-                value={data.storeInfo.tagline}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    storeInfo: { ...prev.storeInfo, tagline: e.target.value },
-                  }))
-                }
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Primary Phone Number (Orders &amp; Front Desk)</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">
+                Primary Phone Number (Orders &amp; Front Desk)
+              </label>
               <input
                 type="text"
                 value={data.storeInfo.phone}
@@ -970,22 +1025,6 @@ export function CmsPage() {
                   }))
                 }
                 className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs font-semibold text-[#1A130E] outline-none focus:border-[#B84A22]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Secondary / Catering Telephone</label>
-              <input
-                type="text"
-                value={data.storeInfo.secondaryPhone || ''}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    storeInfo: { ...prev.storeInfo, secondaryPhone: e.target.value },
-                  }))
-                }
-                placeholder="+353 (01) 485 9211"
-                className="w-full h-9 px-3 bg-white border border-stone-200 rounded-xl text-xs text-[#1A130E] outline-none focus:border-[#B84A22]"
               />
             </div>
 
@@ -1019,7 +1058,7 @@ export function CmsPage() {
               />
             </div>
 
-            <div className="sm:col-span-2">
+            <div>
               <label className="block text-xs font-bold text-stone-700 mb-1">Street Address</label>
               <input
                 type="text"

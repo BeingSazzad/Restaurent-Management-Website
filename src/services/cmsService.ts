@@ -29,7 +29,8 @@ export interface DayOperatingHours {
 
 export interface CmsStoreInfo {
   name: string;
-  tagline: string;
+  tagline?: string;
+  logoUrl?: string;
   phone: string;
   secondaryPhone?: string;
   email: string;
@@ -434,6 +435,7 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
   storeInfo: {
     name: 'AMBER SPICE',
     tagline: 'Authentic Flavors · Timeless Recipes',
+    logoUrl: '/images/logo.svg',
     phone: '+353 (01) 485 9210',
     secondaryPhone: '+353 (01) 485 9211',
     email: 'orders@amberspice.ie',

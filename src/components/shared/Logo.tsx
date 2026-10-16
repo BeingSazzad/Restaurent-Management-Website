@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface LogoProps {
@@ -15,13 +15,28 @@ export const Logo: React.FC<LogoProps> = ({
   showText = true,
 }) => {
   const [imgFailed, setImgFailed] = useState(false);
+  const [customLogoUrl, setCustomLogoUrl] = useState<string | null>(null);
   const isFooter = variant === 'footer';
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('amber_spice_cms_data');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.storeInfo?.logoUrl) {
+          setCustomLogoUrl(parsed.storeInfo.logoUrl);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   return (
     <Link href="/" className={`flex items-center gap-3 group ${className}`}>
       {/* 
         BRAND EMBLEM:
-        Automatically loads from /images/logo.svg (vector) or /images/logo.png / logo.jpg
+        Automatically loads from custom CMS logo or /images/logo.svg / /images/logo.png
         Perfect height (42px-44px), beautifully contained, never broken.
       */}
       <div
@@ -33,11 +48,13 @@ export const Logo: React.FC<LogoProps> = ({
       >
         {!imgFailed ? (
           <img
-            src="/images/logo.svg"
+            src={customLogoUrl || '/images/logo.svg'}
             alt="Amber Spice Dublin"
             onError={(e) => {
               const currentSrc = e.currentTarget.getAttribute('src');
-              if (currentSrc === '/images/logo.svg') {
+              if (currentSrc && currentSrc.startsWith('data:')) {
+                e.currentTarget.src = '/images/logo.svg';
+              } else if (currentSrc === '/images/logo.svg') {
                 e.currentTarget.src = '/images/logo.png';
               } else if (currentSrc === '/images/logo.png') {
                 e.currentTarget.src = '/images/logo.jpg';
