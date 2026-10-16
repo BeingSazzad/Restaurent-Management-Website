@@ -17,7 +17,7 @@ export const PolicyPreview: React.FC<PolicyPreviewProps> = ({ content }) => {
   const flushLists = (keyPrefix: string) => {
     if (currentBulletList.length > 0) {
       elements.push(
-        <ul key={`${keyPrefix}-bullet`} className="list-disc list-outside pl-5 space-y-1 my-2 text-stone-700 text-xs sm:text-[13px]">
+        <ul key={`${keyPrefix}-bullet`} className="list-disc list-outside pl-5 space-y-2 my-2.5 text-stone-700 text-xs sm:text-[13px] marker:text-[#B84A22] leading-relaxed">
           {currentBulletList.map((item, idx) => (
             <li key={idx} dangerouslySetInnerHTML={{ __html: formatInline(item) }} />
           ))}

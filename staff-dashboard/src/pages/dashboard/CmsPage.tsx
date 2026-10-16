@@ -155,9 +155,20 @@ Cookies and browser storage are small data files saved on your device to keep yo
 ---
 
 ## 2. Cookies We Utilize
-• **Essential Session Cookies**: Retains dishes in your shopping cart during navigation
-• **Preferences Storage**: Remembers your preferred order fulfillment method (Delivery vs Collection)
-• **KDS & Tracking Sync**: Real-time order progress updates between kitchen and diner`;
+• **Session & Cart Persistence**: Necessary for the core operation of our ordering platform. These cookies retain the items in your food basket, your chosen Dublin delivery zone, and your authentication status.
+• **Preferences & Customization**: Remembers your past delivery notes, spice preference defaults, and saved Dublin delivery addresses for quicker future checkouts.
+• **Anonymous Traffic Analytics**: Helps us understand which heritage dishes are most popular and identify any slow-loading pages to continually enhance speed and responsiveness.
+• **KDS & Kitchen Sync**: Real-time order progress updates between our kitchen pass and your live tracking screen.
+
+---
+
+## 3. Managing Cookie Preferences
+Most modern web browsers allow you to manage or delete cookies via browser settings. You can choose to block third-party cookies or receive alerts when a cookie is placed. Please note that disabling strictly essential cookies may impact your ability to checkout online.
+
+---
+
+## 4. Questions Regarding Cookies
+For further information regarding our cookie practices, please contact our team at orders@amberspice.ie.`;
 
 const DEFAULT_STORE_INFO: CmsStoreInfo = {
   name: 'AMBER SPICE',
