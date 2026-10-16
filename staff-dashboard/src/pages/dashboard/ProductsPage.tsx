@@ -12,6 +12,8 @@ import {
   X,
   ChefHat,
   Package,
+  List,
+  LayoutGrid,
 } from 'lucide-react';
 import { Pagination } from '../../components/ui/Pagination';
 
@@ -200,9 +202,12 @@ export function ProductsPage() {
     return matchCategory && matchSearch;
   });
 
+  // View Mode: 'table' (default) or 'grid'
+  const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(10);
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -251,130 +256,303 @@ export function ProductsPage() {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-          {['all', 'biryani', 'curries', 'grill', 'vegetarian', 'breads', 'desserts'].map((cat) => (
+        <div className="flex items-center gap-2">
+          {/* Category Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+            {['all', 'biryani', 'curries', 'grill', 'vegetarian', 'breads', 'desserts'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors capitalize border ${
+                  selectedCategory === cat
+                    ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
+                    : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 shadow-2xs'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200 shrink-0">
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors capitalize border ${
-                selectedCategory === cat
-                  ? 'bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white border-transparent shadow-xs'
-                  : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900 shadow-2xs'
+              type="button"
+              onClick={() => setViewMode('table')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors ${
+                viewMode === 'table'
+                  ? 'bg-white text-stone-900 shadow-xs'
+                  : 'text-stone-500 hover:text-stone-800'
               }`}
+              title="Table View"
             >
-              {cat}
+              <List className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Table</span>
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors ${
+                viewMode === 'grid'
+                  ? 'bg-white text-stone-900 shadow-xs'
+                  : 'text-stone-500 hover:text-stone-800'
+              }`}
+              title="Grid View"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Grid</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Dish Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {paginatedDishes.map((dish) => {
-          const foodCost = calculateDishCost(dish);
-          const marginPercent = Math.round(((dish.price - foodCost) / dish.price) * 100);
+      {/* Dish List: Table or Grid */}
+      {viewMode === 'table' ? (
+        <div className="bg-white border border-stone-200/90 rounded-2xl shadow-2xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-stone-200/80 bg-stone-50/70 text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
+                  <th className="py-3 px-4">Dish</th>
+                  <th className="py-3 px-4">Category</th>
+                  <th className="py-3 px-4 text-right">Price</th>
+                  <th className="py-3 px-4">Cost &amp; Margin</th>
+                  <th className="py-3 px-4">Batch Stock</th>
+                  <th className="py-3 px-4 text-center">Status</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-100 text-[13px]">
+                {paginatedDishes.map((dish) => {
+                  const foodCost = calculateDishCost(dish);
+                  const marginPercent = Math.round(((dish.price - foodCost) / dish.price) * 100);
 
-          return (
-            <div
-              key={dish.id}
-              className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
-            >
-              <div>
-                <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
-                  <img
-                    src={dish.image}
-                    alt={dish.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
-                    }}
-                  />
-                  <div className="absolute top-2.5 left-2.5">
-                    <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
-                      €{dish.price.toFixed(2)}
+                  return (
+                    <tr key={dish.id} className="hover:bg-stone-50/70 transition-colors">
+                      {/* Dish Image + Name + Description */}
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={dish.image}
+                            alt={dish.name}
+                            className="w-10 h-10 rounded-xl object-cover shrink-0 border border-stone-200/80 shadow-2xs"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
+                            }}
+                          />
+                          <div className="min-w-0">
+                            <span className="font-bold text-stone-900 text-xs block truncate">
+                              {dish.name}
+                            </span>
+                            <span className="text-[11px] text-stone-400 line-clamp-1 max-w-xs">
+                              {dish.description}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Category */}
+                      <td className="py-3 px-4">
+                        <span className="text-[10px] font-bold text-[#B84A22] bg-orange-50 border border-orange-200/60 px-2.5 py-0.5 rounded-lg uppercase tracking-wider">
+                          {dish.category}
+                        </span>
+                      </td>
+
+                      {/* Selling Price */}
+                      <td className="py-3 px-4 text-right">
+                        <span className="font-bold text-stone-900 text-xs">
+                          €{dish.price.toFixed(2)}
+                        </span>
+                      </td>
+
+                      {/* Food Cost & Margin */}
+                      <td className="py-3 px-4">
+                        <div className="text-xs">
+                          <span className="font-semibold text-stone-700">€{foodCost.toFixed(2)}</span>
+                          <span className="ml-1.5 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                            {marginPercent}% margin
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Batch Stock */}
+                      <td className="py-3 px-4">
+                        {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
+                          <span
+                            className={`text-xs font-semibold ${
+                              (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
+                                ? 'text-amber-600'
+                                : 'text-stone-700'
+                            }`}
+                          >
+                            {dish.stockCount} portions
+                          </span>
+                        ) : (
+                          <span className="text-xs font-bold text-rose-600">0 portions</span>
+                        )}
+                      </td>
+
+                      {/* Availability Status Toggle */}
+                      <td className="py-3 px-4 text-center">
+                        <button
+                          type="button"
+                          onClick={() => toggleAvailability(dish.id)}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold shadow-2xs cursor-pointer transition-all ${
+                            dish.isAvailable
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                              : 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
+                          }`}
+                          title="Click to toggle availability"
+                        >
+                          {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                        </button>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setRecipeDish(dish)}
+                            className="h-7 px-2 rounded-lg border border-stone-200 hover:border-amber-600 hover:text-amber-700 text-stone-600 text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                            title="Recipe Ingredients & BOM"
+                          >
+                            <ChefHat className="w-3 h-3 text-stone-500" />
+                            <span>BOM</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openEditModal(dish)}
+                            className="h-7 px-2 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <Edit2 className="w-3 h-3" />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(dish.id, dish.name)}
+                            className="h-7 w-7 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
+                            title="Remove dish"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {paginatedDishes.map((dish) => {
+            const foodCost = calculateDishCost(dish);
+            const marginPercent = Math.round(((dish.price - foodCost) / dish.price) * 100);
+
+            return (
+              <div
+                key={dish.id}
+                className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
+              >
+                <div>
+                  <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
+                    <img
+                      src={dish.image}
+                      alt={dish.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
+                      }}
+                    />
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
+                        €{dish.price.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="absolute top-2.5 right-2.5">
+                      <button
+                        onClick={() => toggleAvailability(dish.id)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer transition-all ${
+                          dish.isAvailable
+                            ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                            : 'bg-rose-600 text-white hover:bg-rose-700'
+                        }`}
+                      >
+                        {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 mb-2">
+                    <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
+                      {dish.category}
+                    </span>
+                    <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
+                    <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
+                  </div>
+
+                  {/* Portions Remaining Indicator */}
+                  <div className="flex items-center justify-between text-xs pt-2 mt-2 border-t border-stone-100">
+                    <span className="text-stone-400 font-medium">Batch Stock:</span>
+                    {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
+                      <span
+                        className={
+                          (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
+                            ? 'text-amber-600 font-bold'
+                            : 'text-emerald-700 font-bold'
+                        }
+                      >
+                        {dish.stockCount} portions remaining
+                      </span>
+                    ) : (
+                      <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
+                    )}
+                  </div>
+
+                  {/* BOM Food Cost & Margin Indicator */}
+                  <div className="flex items-center justify-between text-[11px] pt-1.5 mt-1 border-t border-stone-100">
+                    <span className="text-stone-400 font-medium">Portion Cost:</span>
+                    <span className="font-bold text-stone-800">
+                      €{foodCost.toFixed(2)}{' '}
+                      <span className="text-emerald-700 font-extrabold">({marginPercent}% margin)</span>
                     </span>
                   </div>
-                  <div className="absolute top-2.5 right-2.5">
+                </div>
+
+                <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => setRecipeDish(dish)}
+                    className="h-8 px-2.5 rounded-lg border border-stone-200 hover:border-amber-600 hover:text-amber-700 text-stone-600 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                    title="View Recipe Ingredients & BOM"
+                  >
+                    <ChefHat className="w-3.5 h-3.5 text-stone-500" />
+                    <span>Recipe BOM</span>
+                  </button>
+
+                  <div className="flex items-center gap-1.5">
                     <button
-                      onClick={() => toggleAvailability(dish.id)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer transition-all ${
-                        dish.isAvailable
-                          ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                          : 'bg-rose-600 text-white hover:bg-rose-700'
-                      }`}
+                      onClick={() => openEditModal(dish)}
+                      className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
                     >
-                      {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(dish.id, dish.name)}
+                      className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
+                      title="Remove dish"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
-
-                <div className="space-y-1 mb-2">
-                  <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
-                    {dish.category}
-                  </span>
-                  <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
-                  <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
-                </div>
-
-                {/* Portions Remaining Indicator */}
-                <div className="flex items-center justify-between text-xs pt-2 mt-2 border-t border-stone-100">
-                  <span className="text-stone-400 font-medium">Batch Stock:</span>
-                  {dish.isAvailable && (dish.stockCount || 0) > 0 ? (
-                    <span
-                      className={
-                        (dish.stockCount || 0) <= (dish.lowStockThreshold || 5)
-                          ? 'text-amber-600 font-bold'
-                          : 'text-emerald-700 font-bold'
-                      }
-                    >
-                      {dish.stockCount} portions remaining
-                    </span>
-                  ) : (
-                    <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
-                  )}
-                </div>
-
-                {/* BOM Food Cost & Margin Indicator */}
-                <div className="flex items-center justify-between text-[11px] pt-1.5 mt-1 border-t border-stone-100">
-                  <span className="text-stone-400 font-medium">Portion Cost:</span>
-                  <span className="font-bold text-stone-800">
-                    €{foodCost.toFixed(2)}{' '}
-                    <span className="text-emerald-700 font-extrabold">({marginPercent}% margin)</span>
-                  </span>
-                </div>
               </div>
-
-              <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-between gap-2">
-                <button
-                  onClick={() => setRecipeDish(dish)}
-                  className="h-8 px-2.5 rounded-lg border border-stone-200 hover:border-amber-600 hover:text-amber-700 text-stone-600 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
-                  title="View Recipe Ingredients & BOM"
-                >
-                  <ChefHat className="w-3.5 h-3.5 text-stone-500" />
-                  <span>Recipe BOM</span>
-                </button>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => openEditModal(dish)}
-                    className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
-                  >
-                    <Edit2 className="w-3.5 h-3.5" />
-                    <span>Edit</span>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(dish.id, dish.name)}
-                    className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
-                    title="Remove dish"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Pagination */}
       {filteredDishes.length > 0 && (
@@ -384,7 +562,7 @@ export function ProductsPage() {
           pageSize={pageSize}
           onPageChange={setCurrentPage}
           onPageSizeChange={setPageSize}
-          pageSizeOptions={[6, 12, 24]}
+          pageSizeOptions={[10, 20, 50]}
         />
       )}
 
