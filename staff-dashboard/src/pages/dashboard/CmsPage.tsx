@@ -1258,64 +1258,6 @@ export function CmsPage() {
                 </div>
               ))}
             </div>
-
-            {/* Live Website Footer Preview Cards */}
-            <div className="bg-stone-50/70 border border-stone-200/80 rounded-xl p-3.5 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-stone-600">
-                  Live Website Footer Display (Auto-Generated from Schedule)
-                </span>
-                <span className="text-[11px] text-emerald-700 font-medium">
-                  ✓ Synced with Dublin restaurant footer &amp; contact page
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Monday – Thursday</label>
-                  <input
-                    type="text"
-                    value={data.storeInfo.hoursMonThu || ''}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        storeInfo: { ...prev.storeInfo, hoursMonThu: e.target.value },
-                      }))
-                    }
-                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
-                  />
-                </div>
-
-                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Friday – Saturday</label>
-                  <input
-                    type="text"
-                    value={data.storeInfo.hoursFriSat || ''}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        storeInfo: { ...prev.storeInfo, hoursFriSat: e.target.value },
-                      }))
-                    }
-                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
-                  />
-                </div>
-
-                <div className="bg-white p-2.5 rounded-lg border border-stone-200/70 shadow-2xs">
-                  <label className="block text-[11px] font-bold text-stone-600 mb-1">Sunday</label>
-                  <input
-                    type="text"
-                    value={data.storeInfo.hoursSun || ''}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        storeInfo: { ...prev.storeInfo, hoursSun: e.target.value },
-                      }))
-                    }
-                    className="w-full h-8 px-2 bg-stone-50/50 hover:bg-white focus:bg-white border border-stone-200 focus:border-[#B84A22] rounded-md text-xs font-semibold text-[#1A130E] outline-none"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Announcement Banner */}
