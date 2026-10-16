@@ -284,7 +284,7 @@ export function CmsPage() {
       <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-[#1A130E]">
-            Content Management System
+            CMS
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
             Website policies and FAQs.

@@ -172,7 +172,7 @@ export const CmsManager: React.FC = () => {
       <div className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-[#1A130E]">
-            Content Management System
+            CMS
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
             Website policies and FAQs.
