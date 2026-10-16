@@ -376,7 +376,7 @@ export function OrderDetailPage() {
                     onChange={(e) => handleAssignDriver(e.target.value)}
                     className="w-full h-8 px-2 bg-stone-50 border border-stone-200 rounded-lg text-xs font-bold text-stone-800 outline-none cursor-pointer focus:border-[#B84A22]"
                   >
-                    <option value="">{order.driverName ? `🛵 ${order.driverName}` : '+ Assign Courier'}</option>
+                    <option value="">+ Assign Courier...</option>
                     {INITIAL_DRIVERS.map((d) => (
                       <option key={d.id} value={d.name}>🛵 {d.name} ({d.phone})</option>
                     ))}

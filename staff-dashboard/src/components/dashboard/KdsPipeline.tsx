@@ -54,7 +54,7 @@ export function KdsPipeline() {
 
   const newOrders = filteredOrders.filter((o) => o.status === 'new');
   const preparingOrders = filteredOrders.filter((o) => o.status === 'preparing');
-  const readyOrders = filteredOrders.filter((o) => o.status === 'ready');
+  const readyOrders = filteredOrders.filter((o) => o.status === 'ready' || o.status === 'out_for_delivery');
 
   const handleStatusChange = (orderId: string, status: OrderStatus) => {
     dispatch(updateOrderStatus({ orderId, status }));
@@ -214,13 +214,13 @@ export function KdsPipeline() {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100" />
               <h3 className="font-bold text-xs uppercase tracking-wider text-stone-900">
-                Ready
+                Ready / Dispatched
               </h3>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                 {readyOrders.length}
               </span>
             </div>
-            <span className="text-[11px] font-medium text-stone-400">For Handover</span>
+            <span className="text-[11px] font-medium text-stone-400">Handover / In Transit</span>
           </div>
 
           {readyOrders.length === 0 ? (

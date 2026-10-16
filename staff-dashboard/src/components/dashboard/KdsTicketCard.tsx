@@ -48,6 +48,11 @@ export function KdsTicketCard({ order, onStatusChange, onViewSlip }: KdsTicketCa
             )}
             <span className="capitalize">{order.fulfillmentType}</span>
           </span>
+          {order.driverName && (
+            <span className="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200/80 rounded px-1.5 py-0.5">
+              🛵 {order.driverName}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
@@ -167,14 +172,14 @@ export function KdsTicketCard({ order, onStatusChange, onViewSlip }: KdsTicketCa
           </>
         )}
 
-        {order.status === 'ready' && (
+        {(order.status === 'ready' || order.status === 'out_for_delivery') && (
           <>
             <button
               onClick={() => onStatusChange('completed')}
               className="flex-1 h-9 rounded-lg font-medium text-xs bg-stone-900 hover:bg-black text-white transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
             >
               <CheckCheck className="w-3.5 h-3.5 text-[#FFA940]" />
-              <span>Complete &amp; Handover</span>
+              <span>{order.status === 'out_for_delivery' ? 'Delivered & Complete' : 'Complete & Handover'}</span>
             </button>
             <button
               onClick={() => onStatusChange('preparing')}

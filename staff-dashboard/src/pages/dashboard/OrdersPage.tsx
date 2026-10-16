@@ -255,8 +255,8 @@ export function OrdersPage() {
                         <select
                           value={order.driverName || ''}
                           onChange={(e) => {
+                            dispatch(assignDriver({ orderId: order.id, driverName: e.target.value }));
                             if (e.target.value) {
-                              dispatch(assignDriver({ orderId: order.id, driverName: e.target.value }));
                               const targetOrder = orders.find((o) => o.id === order.id);
                               if (targetOrder && !targetOrder.stockDeducted) {
                                 dispatch(
@@ -267,9 +267,9 @@ export function OrdersPage() {
                               }
                             }
                           }}
-                          className="text-[10px] font-bold text-stone-700 bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 rounded px-1.5 py-0.5 outline-none cursor-pointer"
+                          className="text-[11px] font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200/90 rounded-lg px-2 py-1 outline-none cursor-pointer"
                         >
-                          <option value="">{order.driverName ? `🛵 ${order.driverName}` : '+ Assign Driver'}</option>
+                          <option value="">+ Assign Courier</option>
                           {INITIAL_DRIVERS.map((d) => (
                             <option key={d.id} value={d.name}>🛵 {d.name}</option>
                           ))}
