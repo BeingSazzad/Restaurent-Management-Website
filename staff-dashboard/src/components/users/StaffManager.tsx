@@ -17,7 +17,6 @@ import {
   Users,
   ChefHat,
   Send,
-  KeyRound,
   Sparkles,
   UserPlus,
   Pencil,
@@ -365,10 +364,6 @@ export function StaffManager() {
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600 flex items-center gap-2">
-            <KeyRound className="w-4 h-4 text-stone-400 shrink-0" />
-            <span>A temporary login PIN will be dispatched to this email address automatically.</span>
-          </div>
 
           <div className="pt-2 flex justify-end gap-2.5">
             <Button
