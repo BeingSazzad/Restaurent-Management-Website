@@ -38,6 +38,7 @@ const saveOrdersToStorage = (orders: OrderItem[]) => {
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('amber_spice_orders', JSON.stringify(orders));
+      window.dispatchEvent(new Event('amber_spice_orders_updated'));
     } catch {
       // ignore
     }

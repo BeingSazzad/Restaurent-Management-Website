@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useRef, Suspense } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
-import { setActiveTrackingOrderId } from '@/redux/slices/orderSlice';
+import { setActiveTrackingOrderId, syncOrdersFromStorage } from '@/redux/slices/orderSlice';
 import { logout } from '@/redux/slices/authSlice';
 import { MenuItem, MOCK_USER } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
@@ -74,6 +74,18 @@ function DashboardContent() {
     }
   };
   const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
+
+  // Real-time synchronization of customer orders
+  useEffect(() => {
+    dispatch(syncOrdersFromStorage());
+    const handleSync = () => dispatch(syncOrdersFromStorage());
+    window.addEventListener('amber_spice_orders_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('amber_spice_orders_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
+  }, [dispatch]);
 
   // Profile data
   const [profile, setProfile] = useState({
@@ -656,14 +668,36 @@ function DashboardContent() {
                               </p>
                             </div>
                           </div>
-                          <span className="text-[12px] text-[#8C8681] font-medium">
-                            {new Date(order.createdAt).toLocaleDateString('en-IE', {
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
+                          <div className="flex flex-col items-end gap-1.5 shrink-0">
+                            {order.status === 'new' && (
+                              <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                                Order Received
+                              </span>
+                            )}
+                            {order.status === 'preparing' && (
+                              <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                Cooking in Kitchen
+                              </span>
+                            )}
+                            {(order.status === 'ready' || order.status === 'out_for_delivery') && (
+                              <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                Ready for Handover
+                              </span>
+                            )}
+                            {order.status === 'completed' && (
+                              <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-stone-100 text-stone-700 border border-stone-200">
+                                Delivered
+                              </span>
+                            )}
+                            <span className="text-[12px] text-[#8C8681] font-medium">
+                              {new Date(order.createdAt).toLocaleDateString('en-IE', {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          </div>
                         </div>
 
                         <div className="border-b border-dashed border-[#EAE6E1] my-4" />

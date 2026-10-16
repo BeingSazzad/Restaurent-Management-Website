@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { updateOrderStatus, toggleKitchenSnooze, createOrder } from '@/redux/slices/orderSlice';
+import { updateOrderStatus, toggleKitchenSnooze, createOrder, syncOrdersFromStorage } from '@/redux/slices/orderSlice';
 import { toggleItemAvailability } from '@/redux/slices/menuSlice';
 import { OrderItem, RESTAURANT_INFO } from '@/Mockdata';
 import {
@@ -106,6 +106,42 @@ export default function AgentDashboardPage() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
+
+  // Real-time synchronization: sync orders from storage and listen to multi-tab / website events
+  const prevOrdersCountRef = useRef(orders.length);
+
+  useEffect(() => {
+    dispatch(syncOrdersFromStorage());
+    const handleOrdersSync = () => {
+      dispatch(syncOrdersFromStorage());
+    };
+    window.addEventListener('amber_spice_orders_updated', handleOrdersSync);
+    window.addEventListener('storage', handleOrdersSync);
+    return () => {
+      window.removeEventListener('amber_spice_orders_updated', handleOrdersSync);
+      window.removeEventListener('storage', handleOrdersSync);
+    };
+  }, [dispatch]);
+
+  // Alert kitchen staff with chime and banner when a new order arrives
+  useEffect(() => {
+    if (orders.length > prevOrdersCountRef.current) {
+      const latest = orders[0];
+      if (latest && latest.status === 'new') {
+        if (soundEnabled) {
+          playChime();
+        }
+        const timer = setTimeout(() => {
+          showToast(
+            `🔔 New Order Received: #${latest.orderNumber} (€${latest.total.toFixed(2)}) from ${latest.customerName}!`
+          );
+        }, 10);
+        prevOrdersCountRef.current = orders.length;
+        return () => clearTimeout(timer);
+      }
+    }
+    prevOrdersCountRef.current = orders.length;
+  }, [orders, soundEnabled]);
 
   // Filtered Orders for KDS Screen
   const filteredOrders = useMemo(() => {
@@ -1833,10 +1869,15 @@ function KdsOrderCard({
     <div className="bg-white rounded-xl border border-stone-200/90 hover:border-stone-300 transition-colors p-4 flex flex-col justify-between shadow-2xs space-y-3">
       {/* 1. Header: Order #, Fulfillment type, Elapsed timer, Print action */}
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-bold text-stone-900 tracking-tight">
             #{order.orderNumber}
           </span>
+          {order.status === 'new' && (
+            <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-[10px] animate-pulse">
+              NEW
+            </span>
+          )}
           <span className="text-xs font-medium text-stone-500 inline-flex items-center gap-1">
             {isDelivery ? <Bike className="w-3.5 h-3.5 text-[#F15A24]" /> : <Store className="w-3.5 h-3.5 text-emerald-600" />}
             <span className="capitalize">{order.fulfillmentType}</span>

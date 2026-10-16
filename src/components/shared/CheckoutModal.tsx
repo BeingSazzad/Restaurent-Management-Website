@@ -52,7 +52,7 @@ export const CheckoutModal: React.FC = () => {
 
     setTimeout(() => {
       const orderId = `ord-${Math.floor(1000 + Math.random() * 9000)}`;
-      const orderNumber = `ZM-${Math.floor(1000 + Math.random() * 9000)}`;
+      const orderNumber = `AS-${Math.floor(1000 + Math.random() * 9000)}`;
 
       const newOrder: OrderItem = {
         id: orderId,
