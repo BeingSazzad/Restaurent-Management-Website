@@ -240,25 +240,23 @@ export function AnalyticsPage() {
     ? `${salesCurve} L ${salesPoints[salesPoints.length - 1].x} ${c1PadTop + c1PlotH} L ${salesPoints[0].x} ${c1PadTop + c1PlotH} Z`
     : '';
 
-  // Chart 2: Total Income & Profit calculations
+  // Chart 2: Total Income calculations
   const activeIncomeData = INCOME_DATA_BY_YEAR[incomeYear] || INCOME_DATA_BY_YEAR['2026'];
   const totalYearGross = activeIncomeData.reduce((acc, d) => acc + d.gross, 0);
-  const totalYearNet = activeIncomeData.reduce((acc, d) => acc + d.net, 0);
-  const netMarginAvg = ((totalYearNet / totalYearGross) * 100).toFixed(1);
 
   // SVG Chart 2 dimensions (Edge-to-edge standard width)
   const c2Width = 760;
-  const c2Height = 220;
+  const c2Height = 210;
   const c2PadLeft = 40;
   const c2PadRight = 14;
-  const c2PadTop = 18;
-  const c2PadBottom = 30;
+  const c2PadTop = 16;
+  const c2PadBottom = 28;
   const c2PlotW = c2Width - c2PadLeft - c2PadRight;
   const c2PlotH = c2Height - c2PadTop - c2PadBottom;
 
-  const maxIncomeVal = Math.max(...activeIncomeData.map((d) => d.gross)) * 1.15;
+  const maxIncomeVal = Math.max(...activeIncomeData.map((d) => d.gross)) * 1.12;
   const colWidth = c2PlotW / activeIncomeData.length;
-  const barWidth = Math.max(9, Math.min(15, colWidth * 0.26));
+  const barWidth = Math.max(16, Math.min(26, colWidth * 0.46));
 
   return (
     <div className="space-y-4">
@@ -546,9 +544,9 @@ export function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Chart 2: Total Annual Income (Modern Dual-Column Bar Chart) */}
+          {/* Chart 2: Total Annual Income (Single Clean Monthly Bar Chart) */}
           <div className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col justify-between">
-            {/* Header with Title, Stats & Legend & Year Dropdown */}
+            {/* Header with Title, Stats & Year Dropdown */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-100">
               <div>
                 <div className="flex items-center gap-2">
@@ -557,42 +555,25 @@ export function AnalyticsPage() {
                     Total Annual Income
                   </h2>
                 </div>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-lg font-bold text-emerald-600">
-                    €{(totalYearNet / 1000).toFixed(1)}k
-                  </span>
-                  <span className="text-[11px] font-semibold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
-                    Net Margin: {netMarginAvg}%
+                <div className="mt-1">
+                  <span className="text-lg font-bold text-stone-900">
+                    €{(totalYearGross / 1000).toFixed(1)}k
                   </span>
                 </div>
               </div>
 
-              {/* Legend & Year Filter */}
-              <div className="flex items-center gap-3 self-start sm:self-auto">
-                <div className="hidden sm:flex items-center gap-2 text-[11px] font-medium text-stone-600">
-                  <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 rounded bg-amber-500" />
-                    Gross
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 rounded bg-emerald-500" />
-                    Net
-                  </span>
-                </div>
-
-                {/* Year Dropdown Filter */}
-                <div className="relative">
-                  <select
-                    value={incomeYear}
-                    onChange={(e) => setIncomeYear(e.target.value as '2026' | '2025' | '2024')}
-                    aria-label="Filter income year"
-                    className="text-xs font-bold bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/80 rounded-xl px-2.5 py-1.5 text-emerald-700 outline-none cursor-pointer transition-colors"
-                  >
-                    <option value="2026">Year 2026</option>
-                    <option value="2025">Year 2025</option>
-                    <option value="2024">Year 2024</option>
-                  </select>
-                </div>
+              {/* Year Dropdown Filter */}
+              <div className="relative self-start sm:self-auto">
+                <select
+                  value={incomeYear}
+                  onChange={(e) => setIncomeYear(e.target.value as '2026' | '2025' | '2024')}
+                  aria-label="Filter income year"
+                  className="text-xs font-bold bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/80 rounded-xl px-2.5 py-1.5 text-emerald-700 outline-none cursor-pointer transition-colors"
+                >
+                  <option value="2026">Year 2026</option>
+                  <option value="2025">Year 2025</option>
+                  <option value="2024">Year 2024</option>
+                </select>
               </div>
             </div>
 
@@ -602,6 +583,13 @@ export function AnalyticsPage() {
                 viewBox={`0 0 ${c2Width} ${c2Height}`}
                 className="w-full h-auto select-none overflow-visible"
               >
+                <defs>
+                  <linearGradient id="incomeSingleBarGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F59E0B" />
+                    <stop offset="100%" stopColor="#D97706" />
+                  </linearGradient>
+                </defs>
+
                 {/* Horizontal Guide Lines */}
                 {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
                   const y = c2PadTop + c2PlotH * ratio;
@@ -631,50 +619,37 @@ export function AnalyticsPage() {
                   );
                 })}
 
-                {/* 12 Month Modern Pillars & Dual Bars */}
+                {/* 12 Monthly Clean Income Bars */}
                 {activeIncomeData.map((d, i) => {
                   const colCenter = c2PadLeft + (i + 0.5) * colWidth;
-                  const grossHeight = (d.gross / maxIncomeVal) * c2PlotH;
-                  const netHeight = (d.net / maxIncomeVal) * c2PlotH;
+                  const barHeight = (d.gross / maxIncomeVal) * c2PlotH;
                   const isHovered = hoveredIncomeIdx === i;
-
-                  const grossX = colCenter - barWidth - 1.5;
-                  const netX = colCenter + 1.5;
+                  const barX = colCenter - barWidth / 2;
                   const baseY = c2PadTop + c2PlotH;
 
                   return (
                     <g key={d.month}>
-                      {/* Background Pillar for Fintech Card Look */}
-                      <rect
-                        x={colCenter - colWidth * 0.42}
-                        y={c2PadTop}
-                        width={colWidth * 0.84}
-                        height={c2PlotH}
-                        rx="6"
-                        fill={isHovered ? '#F5F5F4' : '#FAFAF9'}
-                        className="transition-colors"
-                      />
+                      {/* Background Column Highlight on Hover */}
+                      {isHovered && (
+                        <rect
+                          x={colCenter - colWidth * 0.45}
+                          y={c2PadTop}
+                          width={colWidth * 0.9}
+                          height={c2PlotH}
+                          rx="6"
+                          fill="#FFFBEB"
+                        />
+                      )}
 
-                      {/* Gross Income Bar (Amber Gradient) */}
+                      {/* Single Clean Amber Bar */}
                       <rect
-                        x={grossX}
-                        y={baseY - grossHeight}
+                        x={barX}
+                        y={baseY - barHeight}
                         width={barWidth}
-                        height={grossHeight}
-                        rx={barWidth / 2}
-                        fill={isHovered ? '#D97706' : '#F59E0B'}
-                        className="transition-all duration-200"
-                      />
-
-                      {/* Net Profit Bar (Emerald Gradient) */}
-                      <rect
-                        x={netX}
-                        y={baseY - netHeight}
-                        width={barWidth}
-                        height={netHeight}
-                        rx={barWidth / 2}
-                        fill={isHovered ? '#059669' : '#10B981'}
-                        className="transition-all duration-200"
+                        height={barHeight}
+                        rx="5"
+                        fill={isHovered ? '#B45309' : 'url(#incomeSingleBarGradient)'}
+                        className="transition-all duration-150 cursor-pointer"
                       />
 
                       {/* Invisible Hover Hitbox */}
@@ -696,7 +671,7 @@ export function AnalyticsPage() {
                         textAnchor="middle"
                         fontSize="10"
                         fontWeight={isHovered ? '700' : '500'}
-                        fill={isHovered ? '#059669' : '#78716C'}
+                        fill={isHovered ? '#B45309' : '#78716C'}
                         className="transition-colors"
                       >
                         {d.month}
@@ -711,36 +686,19 @@ export function AnalyticsPage() {
                 <div
                   className="pointer-events-none absolute z-20 bg-stone-900 text-white rounded-xl px-3 py-2 shadow-xl border border-stone-800 text-xs transition-all duration-75"
                   style={{
-                    left: `${Math.min(82, Math.max(12, ((c2PadLeft + (hoveredIncomeIdx + 0.5) * colWidth) / c2Width) * 100))}%`,
-                    top: '10px',
+                    left: `${Math.min(88, Math.max(12, ((c2PadLeft + (hoveredIncomeIdx + 0.5) * colWidth) / c2Width) * 100))}%`,
+                    top: '8px',
                     transform: 'translateX(-50%)',
                   }}
                 >
-                  <div className="flex items-center justify-between gap-3 font-semibold text-stone-300 pb-1 border-b border-stone-800 text-[11px]">
+                  <div className="font-semibold text-stone-300 pb-1 border-b border-stone-800 text-[11px]">
                     <span>{activeIncomeData[hoveredIncomeIdx].month} {incomeYear}</span>
-                    <span className="text-emerald-400 font-bold">
-                      {activeIncomeData[hoveredIncomeIdx].margin}% Margin
-                    </span>
                   </div>
-                  <div className="mt-1 space-y-0.5">
-                    <div className="flex justify-between gap-3">
-                      <span className="text-stone-400 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                        Gross Income:
-                      </span>
-                      <span className="font-semibold text-stone-100">
-                        {formatCurrency(activeIncomeData[hoveredIncomeIdx].gross)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between gap-3">
-                      <span className="text-stone-400 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        Net Profit:
-                      </span>
-                      <span className="font-bold text-emerald-400">
-                        {formatCurrency(activeIncomeData[hoveredIncomeIdx].net)}
-                      </span>
-                    </div>
+                  <div className="mt-1 flex items-center justify-between gap-3 text-xs">
+                    <span className="text-stone-400">Total Income:</span>
+                    <span className="font-bold text-amber-400">
+                      {formatCurrency(activeIncomeData[hoveredIncomeIdx].gross)}
+                    </span>
                   </div>
                 </div>
               )}
