@@ -767,23 +767,23 @@ export default function AgentDashboardPage() {
 
           {/* Top 3 KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
-              <span className="text-xs font-medium text-stone-500 block">
+            <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">
                 Shift Gross Revenue
               </span>
-              <div className="text-2xl font-bold text-[#F15A24] tracking-tight">
+              <div className="text-2xl sm:text-3xl font-bold text-[#F15A24] tracking-tight">
                 €{totalRevenue.toFixed(2)}
               </div>
-              <span className="text-xs text-emerald-700 flex items-center gap-1 font-medium">
+              <span className="text-xs text-emerald-700 flex items-center gap-1.5 font-medium">
                 <TrendingUp className="w-3.5 h-3.5" /> Live Orders Total
               </span>
             </div>
 
-            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
-              <span className="text-xs font-medium text-stone-500 block">
+            <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">
                 Orders Volume
               </span>
-              <div className="text-2xl font-bold text-stone-900 tracking-tight">
+              <div className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
                 {orders.length} Tickets
               </div>
               <span className="text-xs text-stone-500 block">
@@ -791,11 +791,11 @@ export default function AgentDashboardPage() {
               </span>
             </div>
 
-            <div className="p-4.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-1">
-              <span className="text-xs font-medium text-stone-500 block">
+            <div className="p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500 block">
                 Average Prep Time
               </span>
-              <div className="text-2xl font-bold text-emerald-700 tracking-tight">
+              <div className="text-2xl sm:text-3xl font-bold text-emerald-700 tracking-tight">
                 17.4 Mins
               </div>
               <span className="text-xs text-stone-500 block">
@@ -805,78 +805,100 @@ export default function AgentDashboardPage() {
           </div>
 
           {/* Station Breakdown & Shift Activity */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white p-4.5 rounded-xl border border-stone-200/90 shadow-2xs space-y-3">
-              <h3 className="font-semibold text-xs uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-[#F15A24]" />
-                <span>Station Output Breakdown</span>
-              </h3>
-              <div className="text-xs divide-y divide-stone-100">
-                <div className="flex items-center justify-between py-2.5">
-                  <span className="text-stone-600">🥘 Karahi &amp; Curries</span>
-                  <span className="font-semibold text-stone-900">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Stations Breakdown Card */}
+            <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-[#F15A24]" />
+                  <span>Station Output Breakdown</span>
+                </h3>
+                <span className="text-xs text-stone-400 font-medium">Live Kitchen Expo</span>
+              </div>
+
+              <div className="divide-y divide-stone-100 text-xs">
+                <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
+                    <span className="font-medium text-stone-700">Karahi &amp; Curries Station</span>
+                  </div>
+                  <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'curries').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2.5">
-                  <span className="text-stone-600">🍚 Dum Biryani &amp; Rice</span>
-                  <span className="font-semibold text-stone-900">
+
+                <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0" />
+                    <span className="font-medium text-stone-700">Dum Biryani &amp; Rice Line</span>
+                  </div>
+                  <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'biryani').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2.5">
-                  <span className="text-stone-600">🍢 Clay Oven Tandoor</span>
-                  <span className="font-semibold text-stone-900">
+
+                <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
+                    <span className="font-medium text-stone-700">Clay Oven Tandoor Grill</span>
+                  </div>
+                  <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'grill').length} Portions
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-2.5">
-                  <span className="text-stone-600">🫓 Naan &amp; Breads</span>
-                  <span className="font-semibold text-stone-900">
+
+                <div className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-stone-400 shrink-0" />
+                    <span className="font-medium text-stone-700">Artisan Naan &amp; Breads</span>
+                  </div>
+                  <span className="font-bold text-xs text-stone-900 bg-stone-100 px-3 py-1 rounded-lg">
                     {orders.flatMap((o) => o.items).filter((i) => i.dish.category === 'breads').length} Breads
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-4.5 rounded-xl border border-stone-200/90 shadow-2xs space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-xs uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-[#F15A24]" />
+            {/* Activity log Card */}
+            <div className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-[#F15A24]" />
                   <span>Recent Shift Activity</span>
                 </h3>
-                <span className="text-xs text-stone-400">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
                   {orders.length} Tickets
                 </span>
               </div>
-              <div className="space-y-1 max-h-[240px] overflow-y-auto divide-y divide-stone-100 pr-1">
+
+              <div className="divide-y divide-stone-100 max-h-[260px] overflow-y-auto scrollbar-none pr-1">
                 {orders.map((ord) => (
-                  <div key={ord.id} className="flex items-center justify-between py-2 text-xs">
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-stone-900">#{ord.orderNumber}</span>
-                        <span className="text-stone-600 font-medium">{ord.customerName}</span>
-                        <span className="text-stone-400">
-                          ({ord.fulfillmentType})
-                        </span>
+                  <div key={ord.id} className="flex items-center justify-between py-3 px-1.5 hover:bg-stone-50/70 rounded-xl transition-colors text-xs">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-stone-900">#{ord.orderNumber}</span>
+                        <span className="text-stone-700 font-semibold">{ord.customerName}</span>
+                        <span className="text-[11px] text-stone-400 capitalize font-medium">({ord.fulfillmentType})</span>
                       </div>
                       <span className="text-[11px] text-stone-400 block">
                         {ord.items.reduce((acc, i) => acc + i.quantity, 0)} items · {new Date(ord.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <div className="text-right">
-                      <span className="font-semibold text-stone-900 block text-xs">
+                    <div className="text-right space-y-1">
+                      <span className="font-bold text-stone-900 block text-xs">
                         €{ord.total.toFixed(2)}
                       </span>
-                      <span className={`text-[10px] font-medium capitalize px-1.5 py-0.2 rounded-full inline-block ${
-                        ord.status === 'completed'
-                          ? 'bg-stone-100 text-stone-700'
-                          : ord.status === 'ready'
-                          ? 'bg-emerald-50 text-emerald-700'
-                          : ord.status === 'preparing'
-                          ? 'bg-amber-50 text-amber-700'
-                          : 'bg-orange-50 text-[#F15A24]'
-                      }`}>
+                      <span
+                        className={`text-[10px] font-semibold uppercase tracking-wide px-2.5 py-0.5 rounded-full inline-block ${
+                          ord.status === 'completed'
+                            ? 'bg-stone-100 text-stone-700'
+                            : ord.status === 'ready'
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : ord.status === 'preparing'
+                            ? 'bg-amber-50 text-amber-700'
+                            : 'bg-orange-50 text-[#F15A24]'
+                        }`}
+                      >
                         {ord.status.replace('_', ' ')}
                       </span>
                     </div>
