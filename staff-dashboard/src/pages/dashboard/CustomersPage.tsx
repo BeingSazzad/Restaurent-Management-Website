@@ -4,16 +4,8 @@ import {
   Search,
   Plus,
   X,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  ShoppingBag,
-  TrendingUp,
-  Award,
   Crown,
   CheckCircle2,
-  Sparkles,
 } from 'lucide-react';
 import {
   getCustomersList,
@@ -73,18 +65,6 @@ export function CustomersPage() {
     });
   }, [customers, statusFilter, searchQuery]);
 
-  const kpis = useMemo(() => {
-    const total = customers.length;
-    const vips = customers.filter((c) => c.status === 'vip').length;
-    const totalRevenue = customers.reduce((acc, c) => acc + c.totalSpent, 0);
-    const avgSpend = total > 0 ? totalRevenue / total : 0;
-    return {
-      total,
-      vips,
-      avgSpend,
-    };
-  }, [customers]);
-
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim() || !newEmail.trim()) return;
@@ -138,85 +118,7 @@ export function CustomersPage() {
         }
       />
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Registered Diners */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Total Diners
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-[#F15A24] flex items-center justify-center shrink-0">
-              <Users className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{kpis.total}</span>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              +23.5%
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Registered accounts</p>
-        </div>
 
-        {/* VIP Loyalty Diners */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              VIP Diners
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-              <Crown className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{kpis.vips}</span>
-            <span className="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
-              3+ orders
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">High retention</p>
-        </div>
-
-        {/* Avg Lifetime Spend */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Avg Spend
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <ShoppingBag className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-extrabold text-stone-900 tracking-tight">{formatCurrency(kpis.avgSpend)}</span>
-            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-              +14.2%
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Per customer</p>
-        </div>
-
-        {/* Dublin Delivery Zones */}
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
-              Zones
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2.5">
-            <span className="text-2xl font-extrabold text-stone-900 tracking-tight">6 Zones</span>
-            <span className="text-xs font-medium text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full">
-              Dublin
-            </span>
-          </div>
-          <p className="text-[11.5px] text-stone-400 mt-1">Active delivery radius</p>
-        </div>
-      </div>
 
       {/* Toolbar & Filters */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">

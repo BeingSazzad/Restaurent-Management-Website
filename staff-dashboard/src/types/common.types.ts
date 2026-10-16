@@ -23,6 +23,8 @@ export interface DishItem {
   image: string;
   isAvailable: boolean;
   description?: string;
+  stockCount?: number;
+  lowStockThreshold?: number;
 }
 
 export interface OrderModifier {
