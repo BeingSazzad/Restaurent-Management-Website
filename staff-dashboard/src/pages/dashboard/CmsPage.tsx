@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import {
   FileText,
   Shield,
@@ -554,6 +554,7 @@ const computeHoursSummary = (schedule: DayOperatingHours[]) => {
 
 export function CmsPage() {
   const [data, setData] = useState<CmsData>(() => getStoredCms());
+  const [savedSnapshot, setSavedSnapshot] = useState<string>(() => JSON.stringify(getStoredCms()));
   const [activeTab, setActiveTab] = useState<'gallery' | 'contact' | 'social' | 'terms' | 'privacy' | 'cookie' | 'faq'>('gallery');
   const [notice, setNotice] = useState<string | null>(null);
   const [editorMode, setEditorMode] = useState<'edit' | 'preview'>('edit');
@@ -563,6 +564,23 @@ export function CmsPage() {
   const [editingGalleryItem, setEditingGalleryItem] = useState<GalleryItem | null>(null);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Track if any change has been made since last publish
+  const hasUnsavedChanges = useMemo(() => {
+    return JSON.stringify(data) !== savedSnapshot;
+  }, [data, savedSnapshot]);
+
+  // Warn if leaving with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
 
   const handleGalleryFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -607,6 +625,7 @@ export function CmsPage() {
         localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(merged));
         window.dispatchEvent(new Event('amber_spice_cms_updated'));
         window.dispatchEvent(new Event('storage'));
+        setSavedSnapshot(JSON.stringify(updatedData));
         setNotice('✓ Published to live website with auto-timestamp!');
         setTimeout(() => setNotice(null), 3500);
       } catch {
@@ -663,19 +682,31 @@ export function CmsPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          {notice && (
-            <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 animate-in fade-in">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              {notice}
+          {hasUnsavedChanges ? (
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2 duration-150">
+              <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span>Unsaved changes</span>
+              </span>
+              <button
+                onClick={handleSave}
+                className="h-9 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>Publish Changes</span>
+              </button>
+            </div>
+          ) : notice ? (
+            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200/70 px-3 py-1.5 rounded-xl flex items-center gap-1.5 animate-in fade-in">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{notice}</span>
             </span>
+          ) : (
+            <div className="flex items-center gap-1.5 text-xs font-medium text-stone-500 bg-stone-50 border border-stone-200/70 px-3 py-1.5 rounded-xl">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>All changes published</span>
+            </div>
           )}
-          <button
-            onClick={handleSave}
-            className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all shrink-0"
-          >
-            <Save className="w-4 h-4" />
-            <span>Publish Changes</span>
-          </button>
         </div>
       </div>
 
