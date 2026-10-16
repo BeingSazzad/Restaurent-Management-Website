@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
 import {
   TrendingUp,
@@ -11,7 +12,7 @@ import {
   AlertOctagon,
 } from 'lucide-react';
 import { formatCurrency } from '../../lib/utils';
-import { ShiftZReport } from '../../components/analytics/ShiftZReport';
+import { ROUTES } from '../../constants/routes';
 
 interface BestSellingDish {
   id: string;
@@ -66,7 +67,6 @@ const TOP_SELLING_DISHES: BestSellingDish[] = [
 ];
 
 export function AnalyticsPage() {
-  const [activeTab, setActiveTab] = useState<'growth' | 'shift_z'>('growth');
   const { orders } = useAppSelector((state) => state.orders);
   const { wastageHistory } = useAppSelector((state) => state.stock);
 
@@ -84,41 +84,20 @@ export function AnalyticsPage() {
             Analytics &amp; Margins
           </h1>
           <p className="text-xs text-stone-500 mt-0.5">
-            Real-time revenue, gross kitchen margin, and shift report.
+            Real-time revenue, gross kitchen food margin, and stock wastage performance.
           </p>
         </div>
 
-        {/* View Switcher */}
-        <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl self-start sm:self-auto">
-          <button
-            onClick={() => setActiveTab('growth')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'growth'
-                ? 'bg-white text-stone-900 shadow-xs'
-                : 'text-stone-500 hover:text-stone-800'
-            }`}
-          >
-            <BarChart3 className="w-3.5 h-3.5 text-[#F15A24]" />
-            <span>Growth &amp; Margins</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('shift_z')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'shift_z'
-                ? 'bg-white text-stone-900 shadow-xs'
-                : 'text-stone-500 hover:text-stone-800'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5 text-stone-600" />
-            <span>Shift Report</span>
-          </button>
-        </div>
+        <Link
+          to={ROUTES.DASHBOARD.SHIFT_REPORT}
+          className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200/80 text-stone-700 transition-colors inline-flex items-center gap-1.5 self-start sm:self-auto border border-stone-200/60"
+        >
+          <FileText className="w-3.5 h-3.5 text-stone-500" />
+          <span>View Shift Report &rarr;</span>
+        </Link>
       </div>
 
-      {activeTab === 'shift_z' ? (
-        <ShiftZReport />
-      ) : (
-        <div className="space-y-4">
+      <div className="space-y-4">
           {/* 4 Clean, High-Signal KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Revenue */}
@@ -257,7 +236,6 @@ export function AnalyticsPage() {
             </div>
           </div>
         </div>
-      )}
     </div>
   );
 }

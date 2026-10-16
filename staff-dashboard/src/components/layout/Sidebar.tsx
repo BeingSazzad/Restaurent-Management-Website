@@ -42,6 +42,12 @@ export function Sidebar() {
       icon: PackageX,
       allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
+    {
+      name: 'Shift Report',
+      path: ROUTES.DASHBOARD.SHIFT_REPORT,
+      icon: FileText,
+      allowedRoles: ['admin', 'chef', 'expo'],
+    },
   ].filter((item) => item.allowedRoles.includes(currentRole));
 
   const managementItems = [

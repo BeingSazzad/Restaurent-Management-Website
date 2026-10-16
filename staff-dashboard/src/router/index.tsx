@@ -9,6 +9,7 @@ import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import AnalyticsPage from '../pages/dashboard/AnalyticsPage';
+import ShiftReportPage from '../pages/dashboard/ShiftReportPage';
 import Stock86Page from '../pages/dashboard/Stock86Page';
 import StaffUsersPage from '../pages/dashboard/StaffUsersPage';
 import OrdersPage from '../pages/dashboard/OrdersPage';
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
           {
             path: 'stock-86',
             element: <Stock86Page />,
+          },
+          {
+            path: 'shift-report',
+            element: <ShiftReportPage />,
           },
           {
             path: 'analytics',
