@@ -23,13 +23,7 @@ import {
   UtensilsCrossed,
 } from 'lucide-react';
 
-const PRESET_IMAGES = [
-  { label: 'Royal Biryani', url: '/images/amber_hero_dish.jpg' },
-  { label: 'Heritage Curry', url: '/images/curry_dish.jpg' },
-  { label: 'Tandoori Grill', url: '/images/grill_dish.jpg' },
-  { label: 'Lamb Rogan Josh', url: '/images/curry_dish.jpg' },
-  { label: 'Kebab Platter', url: '/images/grill_dish.jpg' },
-];
+
 
 const CATEGORIES_LIST: { id: MenuItem['category']; label: string }[] = [
   { id: 'biryani', label: 'Dum Biryani' },
@@ -599,59 +593,27 @@ export const ProductManager: React.FC = () => {
                     />
                   </div>
 
-                  <div className="flex-1 space-y-2 w-full">
+                  <div className="space-y-2">
                     {/* File Picker Trigger */}
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="h-9 px-3.5 rounded-xl bg-white border border-stone-300 hover:border-[#F15A24] text-xs font-semibold text-stone-800 shadow-2xs flex items-center gap-2 cursor-pointer transition-colors"
-                      >
-                        <Upload className="w-3.5 h-3.5 text-[#F15A24]" />
-                        <span>Upload from Computer / Phone</span>
-                      </button>
-                    </div>
-
-                    {/* Or URL input */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Or enter direct image URL (https://... or /images/...)"
-                        value={formImage}
-                        onChange={(e) => setFormImage(e.target.value)}
-                        className="w-full h-9 bg-white border border-stone-200 focus:border-[#F15A24] rounded-xl px-3 text-xs text-stone-800 placeholder:text-stone-400 outline-none"
-                      />
-                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="h-9 px-4 rounded-xl bg-white border border-stone-300 hover:border-[#F15A24] text-xs font-semibold text-stone-800 shadow-2xs flex items-center gap-2 cursor-pointer transition-colors"
+                    >
+                      <Upload className="w-3.5 h-3.5 text-[#F15A24]" />
+                      <span>Upload from Device</span>
+                    </button>
 
                     {uploadNotice && (
                       <p className="text-[11px] font-semibold text-emerald-600">{uploadNotice}</p>
                     )}
-
-                    {/* Preset Badges */}
-                    <div className="pt-1">
-                      <span className="text-[10px] text-stone-500 font-semibold block mb-1">
-                        Or select from restaurant photo presets:
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {PRESET_IMAGES.map((p) => (
-                          <button
-                            key={p.label}
-                            type="button"
-                            onClick={() => setFormImage(p.url)}
-                            className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white border border-stone-200 hover:border-[#F15A24] text-stone-700 cursor-pointer"
-                          >
-                            {p.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

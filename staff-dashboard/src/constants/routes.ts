@@ -9,6 +9,8 @@ export const ROUTES = {
     ORDERS: '/all-orders',
     ORDER_DETAILS: '/all-orders/:orderId',
     PRODUCTS: '/products',
+    CUSTOMERS: '/customers',
+    TRANSACTIONS: '/transactions',
     CMS: '/cms',
     STOCK_86: '/stock-86',
     ANALYTICS: '/analytics',
