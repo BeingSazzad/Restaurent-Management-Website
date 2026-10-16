@@ -10,6 +10,7 @@ import {
   AlertCircle,
   X,
 } from 'lucide-react';
+import { Pagination } from '../../components/ui/Pagination';
 
 const MENU_STORAGE_KEY = 'amber_spice_menu_items';
 
@@ -182,6 +183,19 @@ export function ProductsPage() {
     return matchCategory && matchSearch;
   });
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
+
+  const paginatedDishes = filteredDishes.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="space-y-6 text-[#1A130E]">
       {/* Header */}
@@ -239,7 +253,7 @@ export function ProductsPage() {
 
       {/* Dish Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredDishes.map((dish) => (
+        {paginatedDishes.map((dish) => (
           <div
             key={dish.id}
             className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
@@ -319,6 +333,18 @@ export function ProductsPage() {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {filteredDishes.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredDishes.length}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={setPageSize}
+          pageSizeOptions={[6, 12, 24]}
+        />
+      )}
 
       {filteredDishes.length === 0 && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-12 text-center text-stone-500 shadow-2xs">

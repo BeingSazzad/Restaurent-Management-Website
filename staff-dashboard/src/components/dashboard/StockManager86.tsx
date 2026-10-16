@@ -32,6 +32,7 @@ import { RawIngredientItem } from '../../types/common.types';
 import { formatCurrency } from '../../lib/utils';
 import { PageHeader } from '../layout/PageHeader';
 import { Button } from '../ui/Button';
+import { Pagination } from '../ui/Pagination';
 
 const getStationBadge = (category: string) => {
   switch (category.toLowerCase()) {
@@ -170,6 +171,32 @@ export function StockManager86() {
     }
     return true;
   });
+
+  // Dishes Pagination State
+  const [dishPage, setDishPage] = useState(1);
+  const [dishPageSize, setDishPageSize] = useState(5);
+
+  useEffect(() => {
+    setDishPage(1);
+  }, [searchQuery, categoryFilter, statusFilter]);
+
+  const paginatedDishes = filteredDishes.slice(
+    (dishPage - 1) * dishPageSize,
+    dishPage * dishPageSize
+  );
+
+  // Raw Inventory Pagination State
+  const [rawPage, setRawPage] = useState(1);
+  const [rawPageSize, setRawPageSize] = useState(5);
+
+  useEffect(() => {
+    setRawPage(1);
+  }, [rawSearchQuery, rawCategoryFilter, rawStatusFilter]);
+
+  const paginatedRaw = filteredRaw.slice(
+    (rawPage - 1) * rawPageSize,
+    rawPage * rawPageSize
+  );
 
   const handleAddIngredient = (e: React.FormEvent) => {
     e.preventDefault();
@@ -490,7 +517,7 @@ export function StockManager86() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 text-xs">
-                    {filteredDishes.map((dish) => {
+                    {paginatedDishes.map((dish) => {
                       const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
                       const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                       const station = getStationBadge(dish.category);
@@ -662,7 +689,7 @@ export function StockManager86() {
           {/* Cards View */}
           {filteredDishes.length > 0 && viewMode === 'grid' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filteredDishes.map((dish) => {
+              {paginatedDishes.map((dish) => {
                 const isOut = !dish.isAvailable || (dish.stockCount || 0) <= 0;
                 const isLow = !isOut && (dish.stockCount || 0) <= (dish.lowStockThreshold || 5);
                 const station = getStationBadge(dish.category);
@@ -742,6 +769,18 @@ export function StockManager86() {
                 );
               })}
             </div>
+          )}
+
+          {/* Pagination for Menu Dishes */}
+          {filteredDishes.length > 0 && (
+            <Pagination
+              currentPage={dishPage}
+              totalItems={filteredDishes.length}
+              pageSize={dishPageSize}
+              onPageChange={setDishPage}
+              onPageSizeChange={setDishPageSize}
+              pageSizeOptions={[5, 10, 20]}
+            />
           )}
         </div>
       )}
@@ -859,7 +898,7 @@ export function StockManager86() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-100 text-xs">
-                  {filteredRaw.map((item) => {
+                  {paginatedRaw.map((item) => {
                     const badge = getIngredientCategoryBadge(item.category);
                     const percent = Math.min(100, Math.round((item.currentStock / item.parLevel) * 100));
                     // Estimated yield: 250g per portion for proteins, 100g for grains/dairy
@@ -998,6 +1037,18 @@ export function StockManager86() {
               </table>
             </div>
           </div>
+
+          {/* Pagination for Raw Materials */}
+          {filteredRaw.length > 0 && (
+            <Pagination
+              currentPage={rawPage}
+              totalItems={filteredRaw.length}
+              pageSize={rawPageSize}
+              onPageChange={setRawPage}
+              onPageSizeChange={setRawPageSize}
+              pageSizeOptions={[5, 10, 20]}
+            />
+          )}
         </div>
       )}
 

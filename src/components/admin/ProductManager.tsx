@@ -22,6 +22,7 @@ import {
   Sparkles,
   UtensilsCrossed,
 } from 'lucide-react';
+import { Pagination } from '@/components/ui/Pagination';
 
 const PRESET_IMAGES = [
   { label: 'Royal Biryani', url: '/images/amber_hero_dish.jpg' },
@@ -362,6 +363,19 @@ export const ProductManager: React.FC = () => {
     return matchCategory && matchSearch;
   });
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
+
+  const paginatedDishes = filteredDishes.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="space-y-6">
       {/* Top Action Bar */}
@@ -434,7 +448,7 @@ export const ProductManager: React.FC = () => {
 
       {/* Dish Grid / Table */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredDishes.map((dish) => (
+        {paginatedDishes.map((dish) => (
           <div
             key={dish.id}
             className="bg-white border border-stone-200/90 hover:border-stone-300 rounded-2xl p-4 shadow-2xs flex flex-col justify-between transition-all group"
@@ -547,6 +561,18 @@ export const ProductManager: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {filteredDishes.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredDishes.length}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={setPageSize}
+          pageSizeOptions={[6, 12, 24]}
+        />
+      )}
 
       {filteredDishes.length === 0 && (
         <div className="bg-white border border-stone-200 rounded-2xl p-12 text-center text-stone-500">
