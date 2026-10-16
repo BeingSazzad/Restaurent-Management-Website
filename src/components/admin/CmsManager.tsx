@@ -171,14 +171,11 @@ export const CmsManager: React.FC = () => {
       {/* Top Header */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-[#1A130E] flex items-center gap-2">
-            <span>Dynamic CMS &amp; Policy Page Manager</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
-              Live Sync
-            </span>
+          <h2 className="text-lg font-bold text-[#1A130E]">
+            Content Management System
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
-            Single-box rich text editor for Terms, Privacy &amp; Cookie policies with auto-timestamp, and interactive FAQ management.
+            Manage website policies, legal documentation, and customer FAQs.
           </p>
         </div>
 

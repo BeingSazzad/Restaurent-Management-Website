@@ -283,14 +283,11 @@ export function CmsPage() {
       {/* Header */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold flex items-center gap-2 text-[#1A130E]">
-            <span>Dynamic CMS Policy &amp; Content Editor</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
-              Live Sync
-            </span>
+          <h2 className="text-lg font-bold text-[#1A130E]">
+            Content Management System
           </h2>
           <p className="text-xs text-stone-500 mt-0.5">
-            Single-box rich text editor with markdown formatting for Terms, Privacy, Cookies &amp; FAQs.
+            Manage website policies, legal documentation, and customer FAQs.
           </p>
         </div>
 
