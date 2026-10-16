@@ -130,7 +130,7 @@ export function DashboardLayout() {
 
         {/* Scrollable Workspace Container with standard dashboard margins */}
         <main className="flex-1 overflow-y-auto">
-          <div className="w-full px-6 lg:px-8 py-6">
+          <div className="w-full max-w-[1750px] mx-auto px-8 sm:px-10 lg:px-12 xl:px-16 py-7">
             <Outlet />
           </div>
         </main>

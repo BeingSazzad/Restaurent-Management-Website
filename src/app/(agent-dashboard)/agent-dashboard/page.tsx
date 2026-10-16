@@ -215,7 +215,7 @@ export default function AgentDashboardPage() {
         </div>
       )}
 
-      <div className="w-full px-6 lg:px-8 space-y-6">
+      <div className="w-full max-w-[1750px] mx-auto px-8 sm:px-10 lg:px-12 xl:px-16 space-y-6">
         {/* ================= TOP STAFF HEADER & CONTROLS ================= */}
         <div className="space-y-4">
           {/* Row 1: Brand & Identity + Global Quick Controls */}
