@@ -207,69 +207,99 @@ export function ProductsPage() {
         </div>
       </div>
 
-      {/* Dish Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredDishes.map((dish) => (
-          <div
-            key={dish.id}
-            className="bg-white border border-stone-200/90 rounded-2xl p-4 shadow-2xs flex flex-col justify-between group hover:border-[#B84A22]/40 transition-all"
-          >
-            <div>
-              <div className="relative h-44 rounded-xl overflow-hidden mb-3 bg-stone-100 border border-stone-200">
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
-                  }}
-                />
-                <div className="absolute top-2.5 left-2.5">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/95 text-[#1A130E] border border-stone-200/90 shadow-xs text-[11px] font-bold">
+      {/* Product Table List */}
+      <div className="bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-stone-200/90 bg-stone-50/70 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                <th className="py-3.5 px-5">Dish</th>
+                <th className="py-3.5 px-4">Category</th>
+                <th className="py-3.5 px-4">Price</th>
+                <th className="py-3.5 px-4">Stock Status</th>
+                <th className="py-3.5 px-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-100 text-xs">
+              {filteredDishes.map((dish) => (
+                <tr key={dish.id} className="hover:bg-stone-50/70 transition-colors group">
+                  {/* Dish Info & Thumbnail */}
+                  <td className="py-3.5 px-5">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-xl overflow-hidden bg-stone-100 border border-stone-200 shrink-0 shadow-2xs">
+                        <img
+                          src={dish.image}
+                          alt={dish.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/amber_hero_dish.jpg';
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0 max-w-md">
+                        <div className="font-bold text-sm text-[#1A130E] truncate">
+                          {dish.name}
+                        </div>
+                        <div className="text-xs text-stone-500 truncate line-clamp-1 mt-0.5">
+                          {dish.description}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Category */}
+                  <td className="py-3.5 px-4 whitespace-nowrap">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-orange-50 text-[#B84A22] border border-orange-100/80">
+                      {dish.category}
+                    </span>
+                  </td>
+
+                  {/* Price */}
+                  <td className="py-3.5 px-4 whitespace-nowrap font-extrabold text-sm text-[#1A130E]">
                     €{dish.price.toFixed(2)}
-                  </span>
-                </div>
-                <div className="absolute top-2.5 right-2.5">
-                  <button
-                    onClick={() => toggleAvailability(dish.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-xs cursor-pointer transition-all ${
-                      dish.isAvailable
-                        ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                        : 'bg-rose-600 text-white hover:bg-rose-700'
-                    }`}
-                  >
-                    {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
-                  </button>
-                </div>
-              </div>
+                  </td>
 
-              <div className="space-y-1 mb-2">
-                <span className="text-[11px] font-bold text-[#B84A22] uppercase tracking-wider block">
-                  {dish.category}
-                </span>
-                <h3 className="font-bold text-sm text-[#1A130E] line-clamp-1">{dish.name}</h3>
-                <p className="text-xs text-stone-500 line-clamp-2">{dish.description}</p>
-              </div>
-            </div>
+                  {/* Status Toggle */}
+                  <td className="py-3.5 px-4 whitespace-nowrap">
+                    <button
+                      type="button"
+                      onClick={() => toggleAvailability(dish.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-all ${
+                        dish.isAvailable
+                          ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/80'
+                          : 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200/80'
+                      }`}
+                      title="Click to toggle availability"
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${dish.isAvailable ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                      <span>{dish.isAvailable ? 'In Stock' : '86 Sold Out'}</span>
+                    </button>
+                  </td>
 
-            <div className="pt-3.5 mt-3 border-t border-stone-100 flex items-center justify-end gap-2">
-              <button
-                onClick={() => openEditModal(dish)}
-                className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-                <span>Edit</span>
-              </button>
-              <button
-                onClick={() => handleDelete(dish.id, dish.name)}
-                className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors"
-                title="Remove dish"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        ))}
+                  {/* Actions */}
+                  <td className="py-3.5 px-5 whitespace-nowrap text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => openEditModal(dish)}
+                        className="h-8 px-3 rounded-lg border border-stone-200 hover:border-[#B84A22] hover:text-[#B84A22] text-stone-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors bg-white shadow-2xs"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(dish.id, dish.name)}
+                        className="h-8 w-8 rounded-lg border border-stone-200 hover:border-rose-500 hover:text-rose-600 text-stone-400 flex items-center justify-center cursor-pointer transition-colors bg-white shadow-2xs"
+                        title="Delete dish"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {filteredDishes.length === 0 && (
