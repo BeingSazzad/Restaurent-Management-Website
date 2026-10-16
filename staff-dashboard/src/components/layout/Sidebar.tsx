@@ -64,7 +64,7 @@ export function Sidebar() {
       allowedRoles: ['admin'],
     },
     {
-      name: 'Menu & Products',
+      name: 'Products',
       path: ROUTES.DASHBOARD.PRODUCTS,
       icon: Utensils,
       allowedRoles: ['admin'],
