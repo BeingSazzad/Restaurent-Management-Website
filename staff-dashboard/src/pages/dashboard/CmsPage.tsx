@@ -1083,7 +1083,7 @@ export function CmsPage() {
                   <span>Operating Hours &amp; Weekly Schedule (Dine-in, Takeaway &amp; Delivery)</span>
                 </h4>
                 <p className="text-[11px] text-stone-500 mt-0.5">
-                  Set active opening times (ON) and rest/closed days (OFF) for each day of the week.
+                  Set opening times and closed days for each day of the week.
                 </p>
               </div>
 
@@ -1178,7 +1178,7 @@ export function CmsPage() {
                           item.isOpen ? 'bg-emerald-500' : 'bg-stone-400'
                         }`}
                       />
-                      <span>{item.isOpen ? 'OPEN (ON)' : 'CLOSED (OFF)'}</span>
+                      <span>{item.isOpen ? 'Open' : 'Closed'}</span>
                     </button>
                   </div>
 
