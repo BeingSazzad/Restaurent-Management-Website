@@ -21,6 +21,7 @@ import {
   Sparkles,
   UserPlus,
   Pencil,
+  Calendar,
 } from 'lucide-react';
 
 export function StaffManager() {
@@ -34,7 +35,6 @@ export function StaffManager() {
   const [newEmail, setNewEmail] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newRole, setNewRole] = useState<UserRole>('admin');
-  const [newStation, setNewStation] = useState<'all' | 'curries' | 'biryani' | 'grill' | 'breads'>('all');
 
   // Edit Staff Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -42,8 +42,6 @@ export function StaffManager() {
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
   const [editRole, setEditRole] = useState<UserRole>('staff');
-  const [editStation, setEditStation] = useState<'all' | 'curries' | 'biryani' | 'grill' | 'breads'>('all');
-  const [editIsActive, setEditIsActive] = useState(true);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -54,12 +52,11 @@ export function StaffManager() {
 
   const counts = useMemo(() => {
     const total = users.length;
-    const onDuty = users.filter((u) => u.isActive).length;
     const admins = users.filter((u) => u.role === 'admin').length;
     const chefs = users.filter((u) => u.role === 'chef').length;
     const expo = users.filter((u) => u.role === 'expo').length;
     const staff = users.filter((u) => u.role === 'staff').length;
-    return { total, onDuty, admins, chefs, expo, staff };
+    return { total, admins, chefs, expo, staff };
   }, [users]);
 
   const handleOpenEdit = (staff: StaffUser) => {
@@ -67,8 +64,6 @@ export function StaffManager() {
     setEditName(staff.name);
     setEditEmail(staff.email);
     setEditRole(staff.role);
-    setEditStation(staff.shiftStation || 'all');
-    setEditIsActive(staff.isActive);
     setIsEditModalOpen(true);
   };
 
@@ -92,8 +87,6 @@ export function StaffManager() {
               name: editName.trim(),
               email: editEmail.trim().toLowerCase(),
               role: editRole,
-              shiftStation: editRole === 'chef' ? editStation : 'all',
-              isActive: editIsActive,
             }
           : u
       )
@@ -102,13 +95,6 @@ export function StaffManager() {
     setIsEditModalOpen(false);
     setEditingStaff(null);
     showToast(`Staff member "${editName.trim()}" updated successfully`);
-  };
-
-  const handleToggleActive = (userId: string) => {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, isActive: !u.isActive } : u))
-    );
-    showToast('Staff duty status updated');
   };
 
   const handleDeleteStaff = (userId: string) => {
@@ -126,7 +112,7 @@ export function StaffManager() {
       email: newEmail.trim().toLowerCase(),
       role: newRole,
       isActive: true,
-      shiftStation: newRole === 'chef' ? newStation : 'all',
+      joinedAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
     };
 
     setUsers((prev) => [newStaff, ...prev]);
@@ -134,7 +120,6 @@ export function StaffManager() {
     setNewEmail('');
     setNewPhone('');
     setNewRole('admin');
-    setNewStation('all');
     setIsAddModalOpen(false);
     showToast(`🎉 Staff member "${newStaff.name}" added as ${newRole.toUpperCase()}!`);
   };
@@ -162,7 +147,7 @@ export function StaffManager() {
       {/* Page Header with Add Staff Member Button */}
       <PageHeader
         title="Staff & Roles"
-        description="Team members, roles, and shift status."
+        description="Team members, roles, and joined dates."
         action={
           <Button
             size="sm"
@@ -176,24 +161,13 @@ export function StaffManager() {
       />
 
       {/* Staff Summary Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
           <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
             Total Staff
           </span>
           <span className="text-xl font-bold text-stone-900 mt-1 block">{counts.total}</span>
           <span className="text-[10.5px] text-stone-400">Registered staff</span>
-        </div>
-
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
-          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
-            On Duty
-          </span>
-          <div className="flex items-center gap-1.5 mt-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xl font-bold text-emerald-600">{counts.onDuty}</span>
-          </div>
-          <span className="text-[10.5px] text-stone-400">Active today</span>
         </div>
 
         <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
@@ -283,15 +257,14 @@ export function StaffManager() {
               <tr className="border-b border-stone-100 bg-stone-50/70 text-[11.5px] font-semibold text-stone-500 uppercase tracking-wider">
                 <th className="py-3.5 px-4">Staff Member</th>
                 <th className="py-3.5 px-4">Role</th>
-                <th className="py-3.5 px-4">Station</th>
-                <th className="py-3.5 px-4">Status</th>
+                <th className="py-3.5 px-4">Joined Date</th>
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 text-[13px]">
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-stone-400">
+                  <td colSpan={4} className="py-12 text-center text-stone-400">
                     <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                     No staff members found matching your search.
                   </td>
@@ -338,28 +311,11 @@ export function StaffManager() {
                       )}
                     </td>
 
-                    {/* Station */}
-                    <td className="py-3 px-4">
-                      <span className="text-xs font-medium text-stone-600 bg-stone-100 px-2.5 py-1 rounded-md capitalize">
-                        {staff.shiftStation || 'All Stations'}
-                      </span>
-                    </td>
-
-                    {/* Duty Status */}
-                    <td className="py-3 px-4">
-                      <span
-                        className={`text-[11px] font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5 ${
-                          staff.isActive
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-stone-100 text-stone-500 border border-stone-200'
-                        }`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            staff.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'
-                          }`}
-                        />
-                        {staff.isActive ? 'On Duty' : 'Off Duty'}
+                    {/* Joined Date */}
+                    <td className="py-3 px-4 whitespace-nowrap">
+                      <span className="text-xs font-medium text-stone-600 inline-flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                        {staff.joinedAt || '12 Jan 2024'}
                       </span>
                     </td>
 
@@ -374,18 +330,6 @@ export function StaffManager() {
                         >
                           <Pencil className="w-3 h-3 text-stone-500" />
                           <span>Edit</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleToggleActive(staff.id)}
-                          className={`h-7 px-2.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
-                            staff.isActive
-                              ? 'bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100'
-                              : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                          }`}
-                        >
-                          {staff.isActive ? 'Set Off Duty' : 'Set On Duty'}
                         </button>
 
                         <button
@@ -411,7 +355,7 @@ export function StaffManager() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         title="Add Staff Member"
-        subtitle="Create a new team account and assign their role & kitchen station."
+        subtitle="Create a new team account and assign their role."
         maxWidth="md"
       >
         <form onSubmit={handleAddStaff} className="space-y-4">
@@ -471,21 +415,6 @@ export function StaffManager() {
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-xs font-semibold text-stone-700">Kitchen Station (Optional)</label>
-            <select
-              value={newStation}
-              onChange={(e) => setNewStation(e.target.value as any)}
-              className="w-full h-10 rounded-xl border border-stone-200 bg-white px-3 text-xs text-stone-900 outline-none focus:border-[#F15A24] cursor-pointer"
-            >
-              <option value="all">All Stations (General Dispatch)</option>
-              <option value="curries">Karahi &amp; Curries</option>
-              <option value="biryani">Dum Biryani &amp; Rice</option>
-              <option value="grill">Clay Oven Tandoor Grill</option>
-              <option value="breads">Artisan Naan &amp; Breads</option>
-            </select>
-          </div>
-
           <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600 flex items-center gap-2">
             <KeyRound className="w-4 h-4 text-stone-400 shrink-0" />
             <span>A temporary login PIN will be dispatched to this email address automatically.</span>
@@ -520,7 +449,7 @@ export function StaffManager() {
           setEditingStaff(null);
         }}
         title="Edit Staff Member"
-        subtitle="Update name, email, role permissions, and assigned station."
+        subtitle="Update name, email, and role permissions."
         maxWidth="md"
       >
         <form onSubmit={handleSaveEdit} className="space-y-4">
@@ -572,39 +501,6 @@ export function StaffManager() {
                 </label>
               ))}
             </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-xs font-semibold text-stone-700">Kitchen Station</label>
-            <select
-              value={editStation}
-              onChange={(e) => setEditStation(e.target.value as any)}
-              className="w-full h-10 rounded-xl border border-stone-200 bg-white px-3 text-xs text-stone-900 outline-none focus:border-[#F15A24] cursor-pointer"
-            >
-              <option value="all">All Stations (General Dispatch)</option>
-              <option value="curries">Karahi &amp; Curries</option>
-              <option value="biryani">Dum Biryani &amp; Rice</option>
-              <option value="grill">Clay Oven Tandoor Grill</option>
-              <option value="breads">Artisan Naan &amp; Breads</option>
-            </select>
-          </div>
-
-          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-stone-800">Shift Duty Status</p>
-              <p className="text-[11px] text-stone-500">Enable or pause active shift permissions</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setEditIsActive(!editIsActive)}
-              className={`h-7 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                editIsActive
-                  ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  : 'bg-stone-200 text-stone-700 hover:bg-stone-300'
-              }`}
-            >
-              {editIsActive ? 'On Duty' : 'Off Duty'}
-            </button>
           </div>
 
           <div className="pt-2 flex justify-end gap-2.5">

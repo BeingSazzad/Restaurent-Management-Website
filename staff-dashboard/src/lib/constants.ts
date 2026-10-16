@@ -15,6 +15,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'admin',
     shiftStation: 'all',
     isActive: true,
+    joinedAt: '12 Jan 2024',
   },
   {
     id: 'user-01',
@@ -23,6 +24,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'admin',
     shiftStation: 'all',
     isActive: true,
+    joinedAt: '15 Mar 2024',
   },
   {
     id: 'user-02',
@@ -31,6 +33,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'chef',
     shiftStation: 'all',
     isActive: true,
+    joinedAt: '01 Apr 2024',
   },
   {
     id: 'user-03',
@@ -39,6 +42,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'chef',
     shiftStation: 'curries',
     isActive: true,
+    joinedAt: '10 May 2024',
   },
   {
     id: 'user-04',
@@ -47,6 +51,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'expo',
     shiftStation: 'all',
     isActive: true,
+    joinedAt: '22 Jun 2024',
   },
   {
     id: 'user-05',
@@ -55,6 +60,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     role: 'staff',
     shiftStation: 'grill',
     isActive: false,
+    joinedAt: '05 Aug 2024',
   },
 ];
 

@@ -8,6 +8,7 @@ export interface StaffUser {
   avatarUrl?: string;
   shiftStation?: 'all' | 'biryani' | 'curries' | 'grill' | 'breads';
   isActive: boolean;
+  joinedAt?: string;
 }
 
 export type OrderStatus = 'new' | 'preparing' | 'ready' | 'out_for_delivery' | 'completed' | 'cancelled';
