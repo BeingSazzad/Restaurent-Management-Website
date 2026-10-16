@@ -30,6 +30,7 @@ export const CartDrawer: React.FC = () => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.cart);
   const fulfillment = useAppSelector((state) => state.fulfillment);
+  const coupons = useAppSelector((state) => state.coupons?.items || []);
   const [promoInput, setPromoInput] = useState('');
   const [promoError, setPromoError] = useState('');
 
@@ -54,13 +55,32 @@ export const CartDrawer: React.FC = () => {
 
   const handleApplyPromo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!promoInput.trim()) return;
+    const cleanCode = promoInput.trim().toUpperCase();
+    if (!cleanCode) return;
 
-    if (promoInput.trim().toUpperCase() === 'WELCOME10' || promoInput.trim().toUpperCase() === 'CHEF20') {
-      dispatch(applyPromoCode(promoInput));
+    const activeCoupons = coupons.filter((c) => c.isActive);
+    const matched = activeCoupons.find((c) => c.code.toUpperCase() === cleanCode);
+
+    if (matched) {
+      if (matched.minOrderAmount > 0 && subtotal < matched.minOrderAmount) {
+        setPromoError(
+          `Minimum order of €${matched.minOrderAmount.toFixed(2)} required for code "${matched.code}"`
+        );
+        return;
+      }
+      dispatch(applyPromoCode(cleanCode));
+      setPromoError('');
+    } else if (
+      cleanCode === 'SPICE20' ||
+      cleanCode === 'CHEF20' ||
+      cleanCode === 'FAMILYFEST' ||
+      cleanCode === 'WELCOME10' ||
+      cleanCode === 'FIRSTBITE'
+    ) {
+      dispatch(applyPromoCode(cleanCode));
       setPromoError('');
     } else {
-      setPromoError('Invalid code. Try "WELCOME10"');
+      setPromoError(`Invalid or expired code "${cleanCode}". View active offers below.`);
     }
   };
 

@@ -36,9 +36,10 @@ import {
 } from 'lucide-react';
 import { ProductManager } from '@/components/admin/ProductManager';
 import { CmsManager } from '@/components/admin/CmsManager';
+import { CouponManager } from '@/components/admin/CouponManager';
 import { MasterOrdersManager } from '@/components/admin/MasterOrdersManager';
 
-type KdsTab = 'kds' | 'all-orders' | 'product-manager' | 'cms-updater' | 'menu-86' | 'sales' | 'manual-order';
+type KdsTab = 'kds' | 'all-orders' | 'product-manager' | 'coupons' | 'cms-updater' | 'menu-86' | 'sales' | 'manual-order';
 type StationFilter = 'all' | 'curries' | 'biryani' | 'grill' | 'breads';
 type FulfillmentFilter = 'all' | 'delivery' | 'collection';
 
@@ -46,6 +47,7 @@ export default function AgentDashboardPage() {
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
   const menuItems = useAppSelector((state) => state.menu.items);
+  const couponsCount = useAppSelector((state) => state.coupons?.items?.length || 5);
   const kitchenSnooze = useAppSelector((state) => state.orders.kitchenSnoozeActive);
   const kitchenSnoozeMinutes = useAppSelector((state) => state.orders.kitchenSnoozeMinutes);
 
@@ -346,6 +348,20 @@ export default function AgentDashboardPage() {
                 <span>Products & Media</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'product-manager' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {menuItems.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setSelectedTab('coupons')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'coupons'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>Discounts & Coupons</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'coupons' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
+                  {couponsCount}
                 </span>
               </button>
 
@@ -1335,6 +1351,11 @@ export default function AgentDashboardPage() {
       {/* ================= TAB 4: PRODUCT & MENU MANAGER ================= */}
       {selectedTab === 'product-manager' && (
         <ProductManager />
+      )}
+
+      {/* ================= TAB: DISCOUNTS & COUPONS ================= */}
+      {selectedTab === 'coupons' && (
+        <CouponManager />
       )}
 
       {/* ================= TAB 5: DYNAMIC CMS UPDATER ================= */}

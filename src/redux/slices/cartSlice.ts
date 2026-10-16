@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CartItem } from '../../Mockdata';
+import { getStoredCoupons } from './couponSlice';
 
 interface CartState {
   items: CartItem[];
@@ -57,7 +58,13 @@ export const cartSlice = createSlice({
     },
     applyPromoCode: (state, action: PayloadAction<string>) => {
       const code = action.payload.trim().toUpperCase();
-      if (code === 'SPICE20' || code === 'CHEF20') {
+      const stored = getStoredCoupons().filter((c) => c.isActive);
+      const matched = stored.find((c) => c.code.toUpperCase() === code);
+
+      if (matched) {
+        state.promoCode = matched.code;
+        state.discountPercentage = matched.discountValue;
+      } else if (code === 'SPICE20' || code === 'CHEF20') {
         state.promoCode = code;
         state.discountPercentage = 20;
       } else if (code === 'FAMILYFEST') {
