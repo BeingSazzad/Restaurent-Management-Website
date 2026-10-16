@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAppSelector } from '@/redux/hooks';
 import {
   Clock,
   CheckCircle2,
@@ -12,15 +13,24 @@ import {
 } from 'lucide-react';
 
 export default function ReservationsPage() {
+  const { user } = useAppSelector((state) => state.auth);
   const [guests, setGuests] = useState('2');
   const [date, setDate] = useState('2026-10-18');
   const [time, setTime] = useState('19:30');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [phone, setPhone] = useState(user?.phone || '');
   const [occasion, setOccasion] = useState('Dinner');
   const [specialRequest, setSpecialRequest] = useState('');
   const [isBooked, setIsBooked] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (!name && user.name) setName(user.name);
+      if (!email && user.email) setEmail(user.email);
+      if (!phone && user.phone) setPhone(user.phone);
+    }
+  }, [user]);
 
   const handleBookTable = (e: React.FormEvent) => {
     e.preventDefault();

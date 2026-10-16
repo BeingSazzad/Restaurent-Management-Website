@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
@@ -6,12 +6,26 @@ import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { useAppDispatch } from '../../store/hooks';
-import { addOrder } from '../../store/slices/orderSlice';
+import { addOrder, syncOrdersFromStorage } from '../../store/slices/orderSlice';
 import { KdsOrder } from '../../types/common.types';
 import { Flame, CheckCircle2 } from 'lucide-react';
 
 export function DashboardLayout() {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(syncOrdersFromStorage());
+    const handleSync = () => dispatch(syncOrdersFromStorage());
+    window.addEventListener('storage', handleSync);
+    window.addEventListener('amber_spice_orders_updated', handleSync);
+    const interval = setInterval(handleSync, 4000);
+    return () => {
+      window.removeEventListener('storage', handleSync);
+      window.removeEventListener('amber_spice_orders_updated', handleSync);
+      clearInterval(interval);
+    };
+  }, [dispatch]);
+
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [tableOrType, setTableOrType] = useState('Table 4');

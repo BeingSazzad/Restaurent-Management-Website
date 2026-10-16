@@ -285,6 +285,16 @@ export const Navbar: React.FC = () => {
               >
                 Dashboard & Orders
               </Link>
+              {(user?.role === 'admin' || user?.role === 'manager' || user?.role === 'chef') && (
+                <Link
+                  href="/agent-dashboard"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-[#B84A22] bg-orange-50/60 border border-orange-100 hover:bg-orange-100/60 transition-colors"
+                >
+                  <ChefHat className="w-4 h-4 text-[#F15A24]" />
+                  <span>Staff KDS Portal</span>
+                </Link>
+              )}
             </div>
           ) : (
             <div className="pt-2 pb-1 border-t border-[#F0ECE7] space-y-2">

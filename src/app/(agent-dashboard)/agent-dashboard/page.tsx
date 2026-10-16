@@ -257,8 +257,9 @@ export default function AgentDashboardPage() {
     setManualQty(1);
   };
 
-  // ACCESS BARRIER: If a user is logged in as a normal diner/customer ('user'), restrict access
-  if (currentUser && currentUser.role === 'user') {
+  // ACCESS BARRIER: If a user is not logged in or is logged in as a normal diner ('user'), require staff authentication
+  if (!currentUser || currentUser.role === 'user') {
+    const isCustomer = !!(currentUser && currentUser.role === 'user');
     return (
       <div className="min-h-screen bg-[#FBF9F6] text-[#1A130E] flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl max-w-lg w-full p-8 sm:p-10 border border-[#EAE5DF] shadow-xl text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
@@ -270,14 +271,23 @@ export default function AgentDashboardPage() {
               Staff Clearance Required
             </span>
             <h1 className="text-2xl font-bold text-stone-900 mt-3 tracking-tight">
-              Kitchen &amp; Operations Restricted
+              Kitchen &amp; Operations Portal
             </h1>
             <p className="text-[13.5px] text-stone-600 mt-2.5 leading-relaxed">
-              Your account (<strong>{currentUser.email}</strong>) is currently registered as a <strong>Diner / Customer</strong>.
-              In a restaurant, kitchen tickets, menu pricing, and KDS controls are restricted to verified staff members.
+              {isCustomer ? (
+                <>
+                  Your account (<strong>{currentUser?.email}</strong>) is currently registered as a <strong>Diner / Customer</strong>.
+                  In a restaurant, kitchen tickets, menu pricing, and KDS controls are restricted to verified staff members.
+                </>
+              ) : (
+                <>
+                  This operations portal is restricted to Amber Spice kitchen brigade, floor managers, and restaurant administrators.
+                  Please sign in with your staff credentials to access live kitchen orders.
+                </>
+              )}
             </p>
             <p className="text-xs text-stone-500 mt-3 bg-stone-50 p-3 rounded-xl border border-stone-200 leading-relaxed">
-              💡 <em>To access staff operations, ask your restaurant administrator to grant role clearance to your email in the <strong>Staff &amp; Access</strong> manager.</em>
+              💡 <em>To test staff operations, sign in as <strong>admin@amberspice.ie</strong> or <strong>chef@amberspice.ie</strong> in the Sign In portal.</em>
             </p>
           </div>
           <div className="pt-2 flex flex-col sm:flex-row gap-3">
@@ -291,7 +301,7 @@ export default function AgentDashboardPage() {
               href="/login"
               className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-xs sm:text-sm font-bold shadow-md hover:scale-[1.02] active:scale-98 transition-all"
             >
-              Sign In with Staff Account
+              Sign In to Staff Portal
             </Link>
           </div>
         </div>
@@ -323,7 +333,7 @@ export default function AgentDashboardPage() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   Live Sync
                 </span>
-                {currentUser && currentUser.role && currentUser.role !== 'user' && (
+                {currentUser && currentUser.role && (
                   <span className="bg-purple-50 text-purple-700 border border-purple-200/80 text-xs px-2.5 py-0.5 rounded-full font-bold inline-flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span className="capitalize">{currentUser.role}</span>

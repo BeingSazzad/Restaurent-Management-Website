@@ -103,6 +103,23 @@ function DashboardContent() {
     email: user?.email || MOCK_USER?.email || 'sarah.ahmed@dublin.ie',
     phone: user?.phone || MOCK_USER?.phone || '+353 87 555 1234',
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }));
+      setEditForm({
+        name: user.name || 'Sarah Ahmed',
+        email: user.email || 'sarah.ahmed@dublin.ie',
+        phone: user.phone || '+353 87 555 1234',
+      });
+    }
+  }, [user]);
+
   const [saveSuccessMsg, setSaveSuccessMsg] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -152,7 +169,7 @@ function DashboardContent() {
   const [newCardCvv, setNewCardCvv] = useState('');
   const [cardSuccessMsg, setCardSuccessMsg] = useState(false);
 
-  // Sample Dublin Takeaway Orders
+  // Sample Dublin Takeaway Orders with Euro currency
   const [mockOrders] = useState([
     {
       id: 'ord-mcd',
@@ -160,7 +177,7 @@ function DashboardContent() {
       transactionId: '#ACB12345458',
       date: 'Today, 3:00 PM',
       totalAmount: 40.0,
-      currency: '$',
+      currency: '€',
       logo: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=120&q=80',
       itemsSummary: '2x Big Mac Meal, 1x 9pc McNuggets, 1x Large Fries',
     },
@@ -170,7 +187,7 @@ function DashboardContent() {
       transactionId: '#ACB12345459',
       date: 'Yesterday, 6:00 PM',
       totalAmount: 100.0,
-      currency: '$',
+      currency: '€',
       logo: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=120&q=80',
       itemsSummary: '3x Caramel Macchiato, 2x Butter Croissant, 1x Cold Brew',
     },
@@ -180,7 +197,7 @@ function DashboardContent() {
       transactionId: '#ACB12345678',
       date: '25 March 2026, 8:00 PM',
       totalAmount: 60.0,
-      currency: '$',
+      currency: '€',
       logo: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=120&q=80',
       itemsSummary: '1x Stuffed Crust Pepperoni Feast, 1x Garlic Breadsticks',
     },
@@ -190,7 +207,7 @@ function DashboardContent() {
       transactionId: '#ACB12345679',
       date: '20 March 2026, 2:00 PM',
       totalAmount: 45.0,
-      currency: '$',
+      currency: '€',
       logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=120&q=80',
       itemsSummary: '2x Flame-Grilled Whopper, 1x Onion Rings, 2x Coke Zero',
     },

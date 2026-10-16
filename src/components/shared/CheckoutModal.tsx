@@ -23,15 +23,24 @@ export const CheckoutModal: React.FC = () => {
   const dispatch = useAppDispatch();
   const fulfillment = useAppSelector((state) => state.fulfillment);
   const cart = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.auth);
 
-  const [name, setName] = useState('Mark Jecno');
-  const [phone, setPhone] = useState('+353 87 123 4567');
-  const [email, setEmail] = useState('mark.jecno@example.com');
+  const [name, setName] = useState(user?.name || 'Sarah Ahmed');
+  const [phone, setPhone] = useState(user?.phone || '+353 87 234 5678');
+  const [email, setEmail] = useState(user?.email || 'sarah.ahmed@dublin.ie');
   const [address, setAddress] = useState(fulfillment.customerAddress);
   const [eircode, setEircode] = useState(fulfillment.eircode);
   const [specialNotes, setSpecialNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'apple_pay' | 'cash'>('apple_pay');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  React.useEffect(() => {
+    if (user) {
+      if (user.name) setName(user.name);
+      if (user.email) setEmail(user.email);
+      if (user.phone) setPhone(user.phone);
+    }
+  }, [user]);
 
   if (!fulfillment.isCheckoutOpen) return null;
 

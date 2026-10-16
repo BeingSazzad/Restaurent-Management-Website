@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
 import { login } from '@/redux/slices/authSlice';
 import { registerCustomer } from '@/services/staffService';
+import { MOCK_USER } from '@/Mockdata';
 import { Lock, Mail, ArrowRight, User, Phone } from 'lucide-react';
 
 export default function RegisterPage() {
