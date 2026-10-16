@@ -793,20 +793,20 @@ export function CmsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-stone-100 gap-3">
             <div>
               <h3 className="font-bold text-sm text-[#1A130E] flex items-center gap-2">
-                <span>Restaurant Spaces &amp; Gallery Photos</span>
+                <span>Gallery Photos</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
                   {data.gallery.length} items
                 </span>
               </h3>
               <p className="text-xs text-stone-500 mt-0.5">
-                Add, edit, or remove photos and architectural descriptions displayed on the customer Gallery page.
+                Add, edit, or remove photos displayed on the customer Gallery page.
               </p>
             </div>
             <button
               type="button"
               onClick={() => {
                 setEditingGalleryItem({
-                  id: `space-${Date.now()}`,
+                  id: `photo-${Date.now()}`,
                   title: '',
                   category: 'interior',
                   image: '/images/interior/main_dining_hall.jpg',
@@ -816,7 +816,7 @@ export function CmsPage() {
               className="h-9 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold flex items-center gap-2 cursor-pointer shadow-xs active:scale-95 transition-all shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Add Space / Photo</span>
+              <span>Add Photo</span>
             </button>
           </div>
 
@@ -1712,7 +1712,7 @@ export function CmsPage() {
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
               <h3 className="font-bold text-base text-[#1A130E] flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-[#B84A22]" />
-                <span>{editingGalleryItem.id ? 'Edit Space & Photo' : 'Add New Restaurant Space'}</span>
+                <span>{editingGalleryItem.id ? 'Edit Photo' : 'Add Photo'}</span>
               </h3>
               <button
                 type="button"
@@ -1833,7 +1833,7 @@ export function CmsPage() {
                 }}
                 className="h-9 px-5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-all"
               >
-                Save Space
+                Save Photo
               </button>
             </div>
           </div>
