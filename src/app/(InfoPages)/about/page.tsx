@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Flame,
@@ -15,8 +15,23 @@ import {
   Clock,
   ChevronRight,
 } from 'lucide-react';
+import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
 
 export default function AboutPage() {
+  const [aboutData, setAboutData] = useState(() => getCmsPage('about') || DEFAULT_CMS_DATA.about);
+
+  useEffect(() => {
+    const handleCmsUpdate = () => {
+      setAboutData(getCmsPage('about') || DEFAULT_CMS_DATA.about);
+    };
+    window.addEventListener('amber_spice_cms_updated', handleCmsUpdate);
+    window.addEventListener('storage', handleCmsUpdate);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', handleCmsUpdate);
+      window.removeEventListener('storage', handleCmsUpdate);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-[rgb(249,249,249)]">
       {/* 1. HERO BANNER WITH BREADCRUMB */}
@@ -33,7 +48,7 @@ export default function AboutPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-['Poppins']">
-            About Us
+            {aboutData.heroTitle || 'About Us'}
           </h1>
 
           <div className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] text-stone-300 font-medium">
@@ -54,16 +69,16 @@ export default function AboutPage() {
             <div className="space-y-3">
               <div className="section-decorator mb-1" />
               <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] leading-tight font-['Poppins']">
-                From Royal Heritage Recipes To Your Modern Dining Table
+                {aboutData.storyTitle}
               </h2>
             </div>
 
-            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed">
-              At Amber Spice, every recipe is an authentic homage to centuries-old Awadhi and Mughlai culinary lineage. While fast-paced modern kitchens turned to shortcuts and commercial powders, we chose the sacred, unhurried craft of ancient dum pukht — slow-cooking with 100% stone-ground spices in sealed copper handis.
+            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed whitespace-pre-line">
+              {aboutData.storyParagraph1}
             </p>
 
-            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed">
-              We pair timeless Indian heritage techniques with premium Irish produce — from 100% grass-fed halal beef to farm-fresh vegetables and local dairy, delivering honest flavours in every bite.
+            <p className="text-[14px] sm:text-[15px] text-[#555555] leading-relaxed whitespace-pre-line">
+              {aboutData.storyParagraph2}
             </p>
 
             {/* CTA & Customer Social Proof */}

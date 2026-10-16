@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { syncMenuFromStorage } from '@/redux/slices/menuSlice';
 import { MENU_ITEMS, MenuItem } from '@/Mockdata';
 import { DishCard } from '@/components/shared/DishCard';
 import { ModifierModal } from '@/components/shared/ModifierModal';
@@ -14,6 +16,21 @@ import {
 } from 'lucide-react';
 
 function MenuContent() {
+  const dispatch = useAppDispatch();
+  const reduxMenuItems = useAppSelector((state) => state.menu.items);
+  const menuItems = reduxMenuItems?.length > 0 ? reduxMenuItems : MENU_ITEMS;
+
+  useEffect(() => {
+    dispatch(syncMenuFromStorage());
+    const handleMenuUpdated = () => dispatch(syncMenuFromStorage());
+    window.addEventListener('amber_spice_menu_updated', handleMenuUpdated);
+    window.addEventListener('storage', handleMenuUpdated);
+    return () => {
+      window.removeEventListener('amber_spice_menu_updated', handleMenuUpdated);
+      window.removeEventListener('storage', handleMenuUpdated);
+    };
+  }, [dispatch]);
+
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category') || 'all';
 
@@ -28,7 +45,7 @@ function MenuContent() {
 
   // Filter & Sort Logic
   const filteredDishes = useMemo(() => {
-    return MENU_ITEMS.filter((dish) => {
+    return menuItems.filter((dish) => {
       // Category match
       const matchesCategory =
         selectedCategory === 'all' || dish.category === selectedCategory;
@@ -53,16 +70,16 @@ function MenuContent() {
       // Default: popularity / bestsellers first
       return (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0);
     });
-  }, [selectedCategory, searchQuery, dietaryFilter, sortBy]);
+  }, [menuItems, selectedCategory, searchQuery, dietaryFilter, sortBy]);
 
   const categoryList = [
-    { id: 'all', name: 'All Dishes', count: MENU_ITEMS.length },
-    { id: 'biryani', name: 'Dum Biryani', count: MENU_ITEMS.filter((d) => d.category === 'biryani').length },
-    { id: 'curries', name: 'Heritage Curries', count: MENU_ITEMS.filter((d) => d.category === 'curries').length },
-    { id: 'grill', name: 'Tandoori Grills', count: MENU_ITEMS.filter((d) => d.category === 'grill').length },
-    { id: 'vegetarian', name: 'Vegetarian', count: MENU_ITEMS.filter((d) => d.category === 'vegetarian').length },
-    { id: 'breads', name: 'Naan & Breads', count: MENU_ITEMS.filter((d) => d.category === 'breads').length },
-    { id: 'desserts', name: 'Royal Desserts', count: MENU_ITEMS.filter((d) => d.category === 'desserts').length },
+    { id: 'all', name: 'All Dishes', count: menuItems.length },
+    { id: 'biryani', name: 'Dum Biryani', count: menuItems.filter((d) => d.category === 'biryani').length },
+    { id: 'curries', name: 'Heritage Curries', count: menuItems.filter((d) => d.category === 'curries').length },
+    { id: 'grill', name: 'Tandoori Grills', count: menuItems.filter((d) => d.category === 'grill').length },
+    { id: 'vegetarian', name: 'Vegetarian', count: menuItems.filter((d) => d.category === 'vegetarian').length },
+    { id: 'breads', name: 'Naan & Breads', count: menuItems.filter((d) => d.category === 'breads').length },
+    { id: 'desserts', name: 'Royal Desserts', count: menuItems.filter((d) => d.category === 'desserts').length },
   ];
 
   const dietaryTags = [

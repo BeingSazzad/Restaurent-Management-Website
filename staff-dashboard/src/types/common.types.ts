@@ -22,6 +22,7 @@ export interface DishItem {
   price: number;
   image: string;
   isAvailable: boolean;
+  description?: string;
 }
 
 export interface OrderModifier {

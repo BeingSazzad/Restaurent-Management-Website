@@ -1,79 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronDown, MessageCircle, ArrowRight } from 'lucide-react';
-
-interface FAQItem {
-  id: number;
-  category: 'ordering' | 'dietary' | 'delivery' | 'payments';
-  question: string;
-  answer: string;
-}
-
-const FAQ_LIST: FAQItem[] = [
-  {
-    id: 1,
-    category: 'dietary',
-    question: 'Is all meat 100% Halal certified?',
-    answer:
-      'Yes, absolutely. All poultry, lamb, and beef prepared in our South William Street kitchen are 100% certified Halal from reputable Irish suppliers. Certificates are displayed on-site.',
-  },
-  {
-    id: 2,
-    category: 'delivery',
-    question: 'How long does Dublin doorstep delivery take?',
-    answer:
-      'Average delivery takes between 30 to 35 minutes depending on traffic and Dublin postal zone. Orders are prepared fresh and dispatched in thermal insulated bags.',
-  },
-  {
-    id: 3,
-    category: 'delivery',
-    question: 'What are the delivery fees and free delivery threshold?',
-    answer:
-      'Delivery is FREE on all orders over €30 across Dublin Zones 1 to 4. For orders under €30, a modest delivery fee between €2.50 and €4.50 applies depending on your postal code.',
-  },
-  {
-    id: 4,
-    category: 'ordering',
-    question: 'Can I customize the spice level of my curries and biryanis?',
-    answer:
-      'Yes! When selecting any dish on our menu, you can customize the spice level (Mild, Medium, Royal Spicy, or Extra Hot) as well as add dietary preferences and cooking instructions.',
-  },
-  {
-    id: 5,
-    category: 'dietary',
-    question: 'Do you cater to gluten-free, dairy-free, and vegan diets?',
-    answer:
-      'Yes. Our Dum Biryanis and several lentils (Dal Tadka, Chana Masala) are naturally gluten-free. We also offer dairy-free curries upon request and clearly label all 14 EU allergens on our menu.',
-  },
-  {
-    id: 6,
-    category: 'ordering',
-    question: 'How does takeaway counter collection work?',
-    answer:
-      'Choose "Counter Takeaway" at checkout. Your order will be cooked and packaged hot in approximately 15-20 minutes. Pick it up directly from our collection counter at 18 South William St, Dublin 2.',
-  },
-  {
-    id: 7,
-    category: 'payments',
-    question: 'What payment methods do you accept?',
-    answer:
-      'We accept all major credit and debit cards (Visa, Mastercard, American Express), Apple Pay, Google Pay, and secure Cash on Delivery.',
-  },
-  {
-    id: 8,
-    category: 'ordering',
-    question: 'Can I track my order live?',
-    answer:
-      'Yes! Right after placing your order, our visual Live Tracker displays live updates: Order Placed -> Tandoor Preparation -> Out for Delivery -> Delivered.',
-  },
-];
+import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
 
 export default function FAQPage() {
-  const [openIds, setOpenIds] = useState<number[]>([1, 2]);
+  const [faqData, setFaqData] = useState(() => getCmsPage('faq') || DEFAULT_CMS_DATA.faq);
+  const [openIds, setOpenIds] = useState<string[]>(['faq-1', 'faq-2']);
 
-  const toggleAccordion = (id: number) => {
+  useEffect(() => {
+    const handleCmsUpdate = () => {
+      setFaqData(getCmsPage('faq') || DEFAULT_CMS_DATA.faq);
+    };
+    window.addEventListener('amber_spice_cms_updated', handleCmsUpdate);
+    window.addEventListener('storage', handleCmsUpdate);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', handleCmsUpdate);
+      window.removeEventListener('storage', handleCmsUpdate);
+    };
+  }, []);
+
+  const toggleAccordion = (id: string) => {
     setOpenIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -84,16 +32,13 @@ export default function FAQPage() {
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="section-decorator mx-auto" />
-        <h1 className="section-title mb-3">Frequently Asked Questions</h1>
-        <p className="section-subtitle">
-          Everything you need to know about our authentic cuisine, doorstep delivery, Halal
-          standards, and ordering.
-        </p>
+        <h1 className="section-title mb-3">{faqData.title}</h1>
+        <p className="section-subtitle">{faqData.subtitle}</p>
       </div>
 
       {/* Accordion List */}
       <div className="space-y-3.5 mb-14">
-        {FAQ_LIST.map((item) => {
+        {faqData.items.map((item) => {
           const isOpen = openIds.includes(item.id);
           return (
             <div
@@ -109,9 +54,16 @@ export default function FAQPage() {
                   isOpen ? 'pb-2 sm:pb-2.5' : 'pb-4 sm:pb-5'
                 } text-left flex items-center justify-between gap-4 hover:text-[#B84A22] transition-colors cursor-pointer`}
               >
-                <span className={`text-[16.5px] sm:text-[18px] font-bold leading-snug transition-colors ${isOpen ? 'text-[#B84A22]' : 'text-[#1A130E]'}`}>
-                  {item.question}
-                </span>
+                <div className="flex flex-col">
+                  {item.category && (
+                    <span className="text-[11px] font-bold text-[#F15A24] uppercase tracking-wider mb-0.5">
+                      {item.category}
+                    </span>
+                  )}
+                  <span className={`text-[16.5px] sm:text-[18px] font-bold leading-snug transition-colors ${isOpen ? 'text-[#B84A22]' : 'text-[#1A130E]'}`}>
+                    {item.question}
+                  </span>
+                </div>
                 <div
                   className={`w-9 h-9 min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px] aspect-square rounded-full flex items-center justify-center shrink-0 border transition-all duration-200 ${
                     isOpen
@@ -128,7 +80,7 @@ export default function FAQPage() {
               </button>
 
               {isOpen && (
-                <div className="px-5 sm:px-6 pb-4 sm:pb-5 pt-1 text-[13.5px] sm:text-[14px] text-[#555555] leading-[24px] animate-in fade-in duration-150">
+                <div className="px-5 sm:px-6 pb-4 sm:pb-5 pt-1 text-[13.5px] sm:text-[14px] text-[#555555] leading-[24px] animate-in fade-in duration-150 whitespace-pre-line">
                   {item.answer}
                 </div>
               )}

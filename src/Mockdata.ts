@@ -28,6 +28,7 @@ export interface MenuItem {
   dietary: ('halal' | 'vegetarian' | 'vegan' | 'gluten-free')[];
   isBestSeller?: boolean;
   isAvailable: boolean;
+  spiceLevel?: number;
   modifierGroups?: DishModifierGroup[];
 }
 

@@ -11,6 +11,9 @@ import DashboardPage from '../pages/dashboard/DashboardPage';
 import AnalyticsPage from '../pages/dashboard/AnalyticsPage';
 import Stock86Page from '../pages/dashboard/Stock86Page';
 import StaffUsersPage from '../pages/dashboard/StaffUsersPage';
+import OrdersPage from '../pages/dashboard/OrdersPage';
+import ProductsPage from '../pages/dashboard/ProductsPage';
+import CmsPage from '../pages/dashboard/CmsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -35,6 +38,18 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <DashboardPage />,
+          },
+          {
+            path: 'all-orders',
+            element: <OrdersPage />,
+          },
+          {
+            path: 'products',
+            element: <ProductsPage />,
+          },
+          {
+            path: 'cms',
+            element: <CmsPage />,
           },
           {
             path: 'stock-86',

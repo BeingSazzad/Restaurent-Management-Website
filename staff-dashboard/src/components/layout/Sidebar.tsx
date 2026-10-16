@@ -9,6 +9,9 @@ import {
   LogOut,
   Flame,
   ChevronRight,
+  ClipboardList,
+  Utensils,
+  FileText,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../hooks/useAuth';
@@ -25,6 +28,24 @@ export function Sidebar() {
       icon: LayoutDashboard,
       badge: 'Live',
       allowedRoles: ['admin', 'chef', 'expo', 'staff'],
+    },
+    {
+      name: 'All Orders',
+      path: ROUTES.DASHBOARD.ORDERS,
+      icon: ClipboardList,
+      allowedRoles: ['admin', 'expo'],
+    },
+    {
+      name: 'Menu & Products',
+      path: ROUTES.DASHBOARD.PRODUCTS,
+      icon: Utensils,
+      allowedRoles: ['admin'],
+    },
+    {
+      name: 'CMS & Policies',
+      path: ROUTES.DASHBOARD.CMS,
+      icon: FileText,
+      allowedRoles: ['admin'],
     },
     {
       name: '86 Inventory',

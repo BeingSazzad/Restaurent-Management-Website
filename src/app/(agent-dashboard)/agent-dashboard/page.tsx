@@ -31,8 +31,11 @@ import {
   MapPin,
   ArrowUpRight,
 } from 'lucide-react';
+import { ProductManager } from '@/components/admin/ProductManager';
+import { CmsManager } from '@/components/admin/CmsManager';
+import { MasterOrdersManager } from '@/components/admin/MasterOrdersManager';
 
-type KdsTab = 'kds' | 'menu-86' | 'sales' | 'manual-order';
+type KdsTab = 'kds' | 'all-orders' | 'product-manager' | 'cms-updater' | 'menu-86' | 'sales' | 'manual-order';
 type StationFilter = 'all' | 'curries' | 'biryani' | 'grill' | 'breads';
 type FulfillmentFilter = 'all' | 'delivery' | 'collection';
 
@@ -299,29 +302,69 @@ export default function AgentDashboardPage() {
 
           {/* Row 2: Standard Clean Underline Tab Navigation */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
               <button
                 onClick={() => setSelectedTab('kds')}
-                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
                   selectedTab === 'kds'
                     ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                <span>Kitchen Orders</span>
+                <span>Kitchen KDS</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'kds' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {orders.length}
                 </span>
               </button>
+
+              <button
+                onClick={() => setSelectedTab('all-orders')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'all-orders'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>All Orders</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'all-orders' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
+                  {orders.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setSelectedTab('product-manager')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'product-manager'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>Products & Media</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'product-manager' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
+                  {menuItems.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setSelectedTab('cms-updater')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'cms-updater'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>CMS & Policies</span>
+              </button>
+
               <button
                 onClick={() => setSelectedTab('menu-86')}
-                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
                   selectedTab === 'menu-86'
                     ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
                     : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
-                <span>86 Inventory</span>
+                <span>86 Stock</span>
                 {soldOutCount > 0 ? (
                   <span className="bg-rose-100 text-rose-700 text-[11px] px-2 py-0.5 rounded-full font-semibold">
                     {soldOutCount}
@@ -330,9 +373,10 @@ export default function AgentDashboardPage() {
                   <span className="text-[11px] text-emerald-600 font-semibold">All In</span>
                 )}
               </button>
+
               <button
                 onClick={() => setSelectedTab('sales')}
-                className={`pb-3 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${
                   selectedTab === 'sales'
                     ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
                     : 'text-stone-500 hover:text-stone-900'
@@ -989,6 +1033,21 @@ export default function AgentDashboardPage() {
             );
           })()}
         </div>
+      )}
+
+      {/* ================= TAB 3: ALL ORDERS MANAGEMENT ================= */}
+      {selectedTab === 'all-orders' && (
+        <MasterOrdersManager onOpenReceiptSlip={(o) => setActiveSlipOrder(o)} />
+      )}
+
+      {/* ================= TAB 4: PRODUCT & MENU MANAGER ================= */}
+      {selectedTab === 'product-manager' && (
+        <ProductManager />
+      )}
+
+      {/* ================= TAB 5: DYNAMIC CMS UPDATER ================= */}
+      {selectedTab === 'cms-updater' && (
+        <CmsManager />
       )}
 
       {/* ================= TICKET DETAILS & KITCHEN SLIP MODAL ================= */}

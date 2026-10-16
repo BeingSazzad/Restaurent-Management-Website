@@ -1,109 +1,66 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
 
 export default function TermsPage() {
+  const [termsData, setTermsData] = useState(() => getCmsPage('terms') || DEFAULT_CMS_DATA.terms);
+
+  useEffect(() => {
+    const handleCmsUpdate = () => {
+      setTermsData(getCmsPage('terms') || DEFAULT_CMS_DATA.terms);
+    };
+    window.addEventListener('amber_spice_cms_updated', handleCmsUpdate);
+    window.addEventListener('storage', handleCmsUpdate);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', handleCmsUpdate);
+      window.removeEventListener('storage', handleCmsUpdate);
+    };
+  }, []);
+
   return (
     <div className="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="section-decorator mx-auto" />
-        <h1 className="section-title mb-3">Terms & Conditions</h1>
-        <p className="section-subtitle">
-          Customer terms and conditions for ordering, delivery, and dining services.
-        </p>
+        <h1 className="section-title mb-3">{termsData.title}</h1>
+        <p className="section-subtitle">{termsData.subtitle}</p>
         <span className="text-[11px] text-[#747474] font-medium mt-2 block">
-          Last Updated: October 2026
+          Last Updated: {termsData.lastUpdated}
         </span>
       </div>
 
       <div className="space-y-8 bg-white border border-[#E5E5E5] rounded-3xl p-6 sm:p-10 text-[14px] sm:text-[15px] text-[#444444] leading-[26px] shadow-xs">
-        {/* Section 1 */}
-        <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            1. Agreement to Terms
-          </h2>
-          <p>
-            By accessing our website or placing an online order for delivery or collection, you agree
-            to be bound by these Terms & Conditions. If you disagree with any portion of these terms,
-            please refrain from utilizing our online ordering platform.
-          </p>
-        </section>
-
-        {/* Section 2 */}
-        <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            2. Pricing, VAT & Payment
-          </h2>
-          <p>
-            All menu prices are listed in Euros (€) and are inclusive of standard Irish Value Added
-            Tax (VAT). While we endeavor to ensure accurate pricing across the platform, we reserve
-            the right to update prices, seasonal dishes, and special promotions without prior notice.
-          </p>
-        </section>
-
-        {/* Section 3 */}
-        <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            3. Fulfillment, Delivery & Collections
-          </h2>
-          <p>
-            Estimated delivery times (~30-35 mins) and collection preparation times (~15-20 mins) are
-            approximate and may vary due to peak hours, kitchen volume, or inclement weather in Dublin.
-            Customers are responsible for providing complete and accurate Dublin addresses, Eircodes,
-            and contact numbers.
-          </p>
-        </section>
-
-        {/* Section 4 */}
-        <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            4. Allergen Information & Dietary Care
-          </h2>
-          <p>
-            Our kitchen prepares food containing nuts, gluten, dairy, mustard, and sesame. While our
-            chefs enforce strict hygienic separation and clear EU allergen labeling, we cannot
-            guarantee complete absence of airborne cross-contamination. If you suffer from severe
-            allergies, please contact our team directly before placing an order.
-          </p>
-        </section>
-
-        {/* Section 5 */}
-        <section className="space-y-2">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            5. Cancellations, Modifications & Refunds
-          </h2>
-          <p>
-            Due to the perishable and custom nature of freshly cooked food, order cancellations can
-            only be accepted within <strong>5 minutes</strong> of placing the order before cooking
-            commences. If you receive an incorrect or damaged item, please contact our South William
-            Street counter immediately with your order receipt for a swift replacement or refund.
-          </p>
-        </section>
-
-        {/* Section 6 */}
-        <section className="space-y-2 pt-4 border-t border-[#E5E5E5]">
-          <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
-            6. Governing Jurisdiction
-          </h2>
-          <p>
-            These terms are governed by and construed in accordance with the laws of the Republic of
-            Ireland. Any disputes arising in connection with these terms shall be subject to the
-            exclusive jurisdiction of the courts of Dublin, Ireland.
-          </p>
-        </section>
+        {termsData.sections.map((section, idx) => (
+          <section
+            key={section.id || idx}
+            className={`space-y-2 ${idx > 0 && idx === termsData.sections.length - 1 ? 'pt-4 border-t border-[#E5E5E5]' : ''}`}
+          >
+            <h2 className="text-[17px] sm:text-[18px] font-bold text-[#1A130E]">
+              {section.title}
+            </h2>
+            <p className="whitespace-pre-line">{section.content}</p>
+          </section>
+        ))}
       </div>
 
-      {/* Back to Home */}
-      <div className="mt-8 text-center">
+      {/* Back to Home & Privacy Link */}
+      <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
         <Link
           href="/"
           className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] shadow-xs inline-flex items-center gap-2 transition-colors"
         >
           <span>Return to Homepage</span>
           <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+        <Link
+          href="/privacy-policy"
+          className="px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-white border border-[#E5E5E5] text-[#1A130E] hover:border-[#F15A24] hover:text-[#F15A24] shadow-xs inline-flex items-center gap-2 transition-colors"
+        >
+          <ShieldCheck className="w-4 h-4 text-[#F15A24]" />
+          <span>View Privacy Policy</span>
         </Link>
       </div>
     </div>
