@@ -13,7 +13,6 @@ import {
   ArrowRight,
   Star,
   Clock,
-  ChevronRight,
 } from 'lucide-react';
 import { getCmsPage, DEFAULT_CMS_DATA } from '@/services/cmsService';
 
@@ -34,41 +33,28 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-[rgb(249,249,249)]">
-      {/* 1. HERO BANNER WITH BREADCRUMB */}
-      <section className="relative bg-[#1A130E] text-white py-16 sm:py-24 overflow-hidden">
-        {/* Background photo with overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/about_banner.jpg"
-            alt="Amber Spice Restaurant Atmosphere"
-            className="w-full h-full object-cover opacity-25 scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1A130E] via-[#1A130E]/90 to-[#1A130E]/80" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-['Poppins']">
-            {aboutData.heroTitle || 'About Us'}
-          </h1>
-
-          <div className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] text-stone-300 font-medium">
-            <Link href="/" className="hover:text-[#F15A24] transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-500" />
-            <span className="text-[#FBA138]">About Us</span>
-          </div>
-        </div>
+      {/* 1. UNIFIED PAGE HEADER (Matching All Pages) */}
+      <section className="pt-12 sm:pt-16 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="section-decorator mx-auto mb-3.5" />
+        <h1 className="section-title mb-3">
+          {aboutData.heroTitle || 'About Us'}
+        </h1>
+        <p className="section-subtitle">
+          {aboutData.heroSubtitle ||
+            'Discover our centuries-old royal Awadhi culinary heritage, slow dum-cooking traditions, and genuine passion for Dublin dining.'}
+        </p>
       </section>
 
       {/* 2. MAIN STORY SECTION (DUAL COLUMN + MEDIA COLLAGE) */}
-      <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Story & Highlights */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="space-y-3">
-              <div className="section-decorator mb-1" />
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] leading-tight font-['Poppins']">
+            <div className="space-y-2">
+              <span className="text-xs uppercase font-bold tracking-widest text-[#B84A22] block">
+                Our Royal Heritage
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1A130E] leading-tight font-['Poppins']">
                 {aboutData.storyTitle}
               </h2>
             </div>
@@ -259,12 +245,12 @@ export default function AboutPage() {
 
       {/* 4. WHAT WE OFFER / 3 CORE SPECIALTIES (Like "Provide Professional..." in ref) */}
       <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <div className="section-decorator mx-auto mb-2" />
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="section-decorator mx-auto mb-3" />
+          <h2 className="section-title mb-3">
             Authentic Recipes Crafted with Royal Precision
           </h2>
-          <p className="text-[14px] text-[#747474]">
+          <p className="section-subtitle">
             Explore the culinary pillars that define the unforgettable dining journey at Amber Spice.
           </p>
         </div>
@@ -374,12 +360,12 @@ export default function AboutPage() {
       {/* 5. CULINARY PROCESS WITH CENTER CHEF PORTRAIT (Directly inspired by reference row 5) */}
       <section className="py-14 sm:py-20 bg-stone-100/60 border-y border-[#EAE5DF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14 space-y-2">
-            <div className="section-decorator mx-auto mb-2" />
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1A130E] font-['Poppins']">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="section-decorator mx-auto mb-3" />
+            <h2 className="section-title mb-3">
               Our 4-Step Culinary Journey
             </h2>
-            <p className="text-[14px] text-[#747474]">
+            <p className="section-subtitle">
               Every dish that leaves our kitchen follows a sacred sequence of traditional craftsmanship.
             </p>
           </div>

@@ -110,10 +110,10 @@ function MenuContent() {
         {/* Header with Senior UX Hierarchy */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="section-decorator mx-auto mb-3" />
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#1A130E] tracking-tight mb-3">
+          <h1 className="section-title mb-3">
             Explore Authentic Flavors
           </h1>
-          <p className="text-[14px] sm:text-[15px] text-[#7A746E] leading-relaxed max-w-2xl mx-auto">
+          <p className="section-subtitle">
             Every dish is handcrafted using heirloom recipes, stone-ground garam masalas, and the freshest Irish ingredients.
           </p>
         </div>

@@ -26,11 +26,11 @@ export default function AllergensPage() {
     <div className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <div className="w-12 h-1 bg-[#E85D26] rounded-full mx-auto mb-3" />
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#1A130E] tracking-tight mb-2">
-          Allergen & Dietary Information
+        <div className="section-decorator mx-auto mb-3" />
+        <h1 className="section-title mb-3">
+          Allergen &amp; Dietary Information
         </h1>
-        <p className="text-sm text-[#747474]">
+        <p className="section-subtitle">
           Full transparency in compliance with the Food Safety Authority of Ireland (FSAI) and EU
           Regulation No. 1169/2011.
         </p>

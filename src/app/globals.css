@@ -90,37 +90,38 @@ h1, h2, h3, h4, h5, h6 {
    TYPOGRAPHY HIERARCHY UTILITIES
    ========================================================================== */
 
-/* Main Section Title (H1 / H2) - Exact Inspector Spec: Poppins 36px/43px, 600, #3D3D3D */
+/* Main Section Title (H1 / H2) - Global Uniform Spec: Poppins 36px, 700 Bold, #1A130E */
 .section-title {
   font-family: 'Poppins', sans-serif !important;
-  font-size: 36px;
-  line-height: 43px;
-  font-weight: 600;
-  color: #3D3D3D;
-  letter-spacing: 0;
+  font-size: 36px !important;
+  line-height: 44px !important;
+  font-weight: 700 !important;
+  color: #1A130E !important;
+  letter-spacing: -0.02em !important;
 }
 
 @media (max-width: 640px) {
   .section-title {
-    font-size: 26px;
-    line-height: 34px;
+    font-size: 28px !important;
+    line-height: 36px !important;
   }
 }
 
-/* Section Subtitle (Paragraph lead) - Exact Inspector Spec: Poppins, #747474 */
+/* Section Subtitle (Paragraph lead) - Global Uniform Spec: Poppins 15px, 400 Regular, #747474 */
 .section-subtitle {
   font-family: 'Poppins', sans-serif !important;
-  font-size: 16px;
-  line-height: 26px;
-  font-weight: 400;
-  color: #747474;
-  letter-spacing: 0;
+  font-size: 15px !important;
+  line-height: 25px !important;
+  font-weight: 400 !important;
+  color: #747474 !important;
+  letter-spacing: 0 !important;
+  max-width: 640px;
 }
 
 @media (max-width: 640px) {
   .section-subtitle {
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 13.5px !important;
+    line-height: 22px !important;
   }
 }
 

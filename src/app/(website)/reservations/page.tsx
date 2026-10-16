@@ -40,11 +40,11 @@ export default function ReservationsPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="w-10 h-1 bg-[#F15A24] rounded-full mx-auto mb-3" />
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1A130E] tracking-tight">
+          <div className="section-decorator mx-auto mb-3" />
+          <h1 className="section-title mb-3">
             Table Reservations
           </h1>
-          <p className="text-[14px] sm:text-[15px] text-[#8C8681] mt-2 leading-relaxed">
+          <p className="section-subtitle">
             Reserve a dining table at our South William Street restaurant for an intimate royal culinary experience.
           </p>
         </div>
