@@ -377,7 +377,7 @@ export function CmsPage() {
           {/* Title & Subtitle in Clean 2-Column Row (No Last Update Input - Handled Automatically) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-stone-100">
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Document Title</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Page Title</label>
               <input
                 type="text"
                 value={data[activeTab].title}
@@ -410,7 +410,7 @@ export function CmsPage() {
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <span className="text-xs font-bold text-[#1A130E] uppercase tracking-wider">
-                Full Policy Content &amp; Clauses
+                Policy Content
               </span>
 
               {/* Edit / Preview Segmented Switcher */}
@@ -568,9 +568,9 @@ export function CmsPage() {
                   <span>·</span>
                   <span>{charCount} characters</span>
                 </div>
-                <div className="text-[11px] text-stone-400 font-medium">
-                  Auto-stamped on publish: <strong>{data[activeTab].lastUpdated || 'Current Month'}</strong>
-                </div>
+                <span className="text-[11px] text-stone-400 font-medium">
+                  Last updated: {data[activeTab].lastUpdated || 'Current Month'}
+                </span>
               </div>
             </div>
           </div>
