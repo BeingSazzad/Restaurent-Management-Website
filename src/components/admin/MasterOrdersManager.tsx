@@ -77,39 +77,47 @@ export const MasterOrdersManager: React.FC<MasterOrdersManagerProps> = ({ onOpen
     <div className="space-y-6">
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Total Sales</span>
-            <span className="p-2 rounded-xl bg-orange-50 text-[#F15A24]">€</span>
+            <div className="w-8 h-8 rounded-xl bg-orange-50 text-[#F15A24] font-bold flex items-center justify-center text-xs shrink-0">
+              €
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-[#1A130E]">€{totalRevenue.toFixed(2)}</div>
+          <div className="text-2xl font-extrabold text-[#1A130E] tracking-tight">€{totalRevenue.toFixed(2)}</div>
           <div className="text-[11px] text-stone-400 mt-1">Across all confirmed customer orders</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Active Tickets</span>
-            <Clock className="w-4 h-4 text-blue-500" />
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-blue-600">{activeOrders.length}</div>
+          <div className="text-2xl font-extrabold text-blue-600 tracking-tight">{activeOrders.length}</div>
           <div className="text-[11px] text-stone-400 mt-1">Currently in prep or dispatch</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Completed Orders</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600">{completedOrders.length}</div>
+          <div className="text-2xl font-extrabold text-emerald-600 tracking-tight">{completedOrders.length}</div>
           <div className="text-[11px] text-stone-400 mt-1">Delivered or collected</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Average Order (AOV)</span>
-            <TrendingUp className="w-4 h-4 text-purple-500" />
+            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <TrendingUp className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-[#1A130E]">
+          <div className="text-2xl font-extrabold text-[#1A130E] tracking-tight">
             €{orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : '0.00'}
           </div>
           <div className="text-[11px] text-stone-400 mt-1">Per ticket ticket spend</div>

@@ -28,7 +28,11 @@ module.exports = {
         serif: ["'Poppins'", "sans-serif"],
         mono: ["'Poppins'", "sans-serif"],
       },
+      spacing: {
+        '4.5': '1.125rem',
+      },
       boxShadow: {
+        '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
         amber: "0 10px 30px rgba(184, 74, 34, 0.15)",
         card: "0 4px 20px rgba(44, 34, 28, 0.06)",
         cardHover: "0 14px 35px rgba(44, 34, 28, 0.12)",

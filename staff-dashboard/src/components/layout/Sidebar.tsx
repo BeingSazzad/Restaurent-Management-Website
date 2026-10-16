@@ -12,6 +12,8 @@ import {
   ClipboardList,
   Utensils,
   FileText,
+  UserCheck,
+  Receipt,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../hooks/useAuth';
@@ -21,7 +23,7 @@ export function Sidebar() {
   const { user, logout } = useAuth();
   const currentRole = user?.role || 'admin';
 
-  const navigationItems = [
+  const operationsItems = [
     {
       name: 'Kitchen Orders',
       path: ROUTES.DASHBOARD.KDS,
@@ -36,33 +38,48 @@ export function Sidebar() {
       allowedRoles: ['admin', 'expo'],
     },
     {
+      name: '86 Inventory',
+      path: ROUTES.DASHBOARD.STOCK_86,
+      icon: PackageX,
+      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
+    },
+  ].filter((item) => item.allowedRoles.includes(currentRole));
+
+  const managementItems = [
+    {
+      name: 'Business Analytics',
+      path: ROUTES.DASHBOARD.ANALYTICS,
+      icon: BarChart3,
+      allowedRoles: ['admin', 'expo'],
+    },
+    {
+      name: 'Customers',
+      path: ROUTES.DASHBOARD.CUSTOMERS,
+      icon: UserCheck,
+      allowedRoles: ['admin'],
+    },
+    {
+      name: 'Transactions',
+      path: ROUTES.DASHBOARD.TRANSACTIONS,
+      icon: Receipt,
+      allowedRoles: ['admin'],
+    },
+    {
       name: 'Menu & Products',
       path: ROUTES.DASHBOARD.PRODUCTS,
       icon: Utensils,
       allowedRoles: ['admin'],
     },
     {
-      name: 'CMS & Policies',
-      path: ROUTES.DASHBOARD.CMS,
-      icon: FileText,
-      allowedRoles: ['admin'],
-    },
-    {
-      name: '86 Inventory',
-      path: ROUTES.DASHBOARD.STOCK_86,
-      icon: PackageX,
-      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
-    },
-    {
-      name: 'Shift Report',
-      path: ROUTES.DASHBOARD.ANALYTICS,
-      icon: BarChart3,
-      allowedRoles: ['admin', 'expo'],
-    },
-    {
       name: 'Staff & Roles',
       path: ROUTES.DASHBOARD.USERS,
       icon: Users,
+      allowedRoles: ['admin'],
+    },
+    {
+      name: 'CMS & Policies',
+      path: ROUTES.DASHBOARD.CMS,
+      icon: FileText,
       allowedRoles: ['admin'],
     },
   ].filter((item) => item.allowedRoles.includes(currentRole));
@@ -97,33 +114,71 @@ export function Sidebar() {
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="p-3.5 space-y-1.5">
-          {navigationItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center justify-between px-3.5 py-3 rounded-xl text-[14px] font-medium transition-all ${
-                  isActive
-                    ? 'bg-[#F15A24] text-white font-semibold shadow-md shadow-[#F15A24]/25'
-                    : 'text-stone-300 hover:text-white hover:bg-white/8'
-                }`
-              }
-            >
-              <div className="flex items-center gap-3">
-                <item.icon className="w-4.5 h-4.5 shrink-0" />
-                <span>{item.name}</span>
+        {/* Navigation Section */}
+        <nav className="p-3 space-y-4 max-h-[calc(100vh-140px)] overflow-y-auto scrollbar-none">
+          {/* Operations Group */}
+          <div>
+            <p className="px-3 mb-1 text-[10.5px] font-bold text-stone-500 uppercase tracking-wider">
+              Operations
+            </p>
+            <div className="space-y-1">
+              {operationsItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center justify-between px-3 py-2.5 rounded-xl text-[13.5px] font-medium transition-all ${
+                      isActive
+                        ? 'bg-[#F15A24] text-white font-semibold shadow-md shadow-[#F15A24]/25'
+                        : 'text-stone-300 hover:text-white hover:bg-white/8'
+                    }`
+                  }
+                >
+                  <div className="flex items-center gap-2.5">
+                    <item.icon className="w-4 h-4 shrink-0" />
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge ? (
+                    <span className="text-[10.5px] px-2 py-0.2 rounded-full bg-white/20 text-white font-bold tracking-wide">
+                      {item.badge}
+                    </span>
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 text-stone-500/70" />
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+
+          {/* Management Group */}
+          {managementItems.length > 0 && (
+            <div>
+              <p className="px-3 mb-1 text-[10.5px] font-bold text-stone-500 uppercase tracking-wider">
+                Management
+              </p>
+              <div className="space-y-1">
+                {managementItems.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `flex items-center justify-between px-3 py-2.5 rounded-xl text-[13.5px] font-medium transition-all ${
+                        isActive
+                          ? 'bg-[#F15A24] text-white font-semibold shadow-md shadow-[#F15A24]/25'
+                          : 'text-stone-300 hover:text-white hover:bg-white/8'
+                      }`
+                    }
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <item.icon className="w-4 h-4 shrink-0" />
+                      <span>{item.name}</span>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-stone-500/70" />
+                  </NavLink>
+                ))}
               </div>
-              {item.badge ? (
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-bold tracking-wide">
-                  {item.badge}
-                </span>
-              ) : (
-                <ChevronRight className="w-3.5 h-3.5 text-stone-500/70" />
-              )}
-            </NavLink>
-          ))}
+            </div>
+          )}
         </nav>
       </div>
 
@@ -135,7 +190,7 @@ export function Sidebar() {
               <Flame className="w-4 h-4 text-[#F15A24]" />
             </div>
             <div className="min-w-0">
-              <p className="text-[14px] font-semibold text-white truncate">{user?.name || 'Chef on Duty'}</p>
+              <p className="text-[13.5px] font-semibold text-white truncate">{user?.name || 'Chef on Duty'}</p>
               <p className="text-[11px] text-stone-400 capitalize">{user?.role || 'Staff'} · Active Shift</p>
             </div>
           </div>
@@ -151,3 +206,5 @@ export function Sidebar() {
     </aside>
   );
 }
+
+export default Sidebar;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { INITIAL_STAFF_USERS } from '../../lib/constants';
 import { StaffUser, UserRole } from '../../types/common.types';
 import { PageHeader } from '../layout/PageHeader';
@@ -7,35 +7,60 @@ import { Badge } from '../shared/Badge';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
-import { Plus, ShieldCheck, Search, X, Trash2, CheckCircle2 } from 'lucide-react';
+import {
+  Plus,
+  ShieldCheck,
+  Search,
+  X,
+  Trash2,
+  CheckCircle2,
+  Users,
+  ChefHat,
+  Send,
+  KeyRound,
+  Sparkles,
+  UserPlus,
+} from 'lucide-react';
 
 export function StaffManager() {
   const [users, setUsers] = useState<StaffUser[]>(INITIAL_STAFF_USERS);
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
-  const [newRole, setNewRole] = useState<UserRole>('chef');
+  const [newPhone, setNewPhone] = useState('');
+  const [newRole, setNewRole] = useState<UserRole>('admin');
+  const [newStation, setNewStation] = useState<'all' | 'curries' | 'biryani' | 'grill' | 'breads'>('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handleRoleChange = (userId: string, newRole: UserRole) => {
+  const counts = useMemo(() => {
+    const total = users.length;
+    const onDuty = users.filter((u) => u.isActive).length;
+    const admins = users.filter((u) => u.role === 'admin').length;
+    const chefs = users.filter((u) => u.role === 'chef').length;
+    const expo = users.filter((u) => u.role === 'expo').length;
+    const staff = users.filter((u) => u.role === 'staff').length;
+    return { total, onDuty, admins, chefs, expo, staff };
+  }, [users]);
+
+  const handleRoleChange = (userId: string, nextRole: UserRole) => {
     setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u))
+      prev.map((u) => (u.id === userId ? { ...u, role: nextRole } : u))
     );
-    showToast(`Role updated to ${newRole}`);
+    showToast(`Role updated to ${nextRole.toUpperCase()}`);
   };
 
   const handleToggleActive = (userId: string) => {
     setUsers((prev) =>
       prev.map((u) => (u.id === userId ? { ...u, isActive: !u.isActive } : u))
     );
-    showToast('Staff status updated');
+    showToast('Staff duty status updated');
   };
 
   const handleDeleteStaff = (userId: string) => {
@@ -43,7 +68,7 @@ export function StaffManager() {
     showToast('Staff member removed');
   };
 
-  const handleAddStaff = (e: React.FormEvent) => {
+  const handleInviteStaff = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim() || !newEmail.trim()) return;
 
@@ -53,20 +78,23 @@ export function StaffManager() {
       email: newEmail.trim().toLowerCase(),
       role: newRole,
       isActive: true,
-      shiftStation: newRole === 'chef' ? 'curries' : 'all',
+      shiftStation: newRole === 'chef' ? newStation : 'all',
     };
 
     setUsers((prev) => [newStaff, ...prev]);
     setNewName('');
     setNewEmail('');
-    setNewRole('chef');
-    setIsAddModalOpen(false);
-    showToast(`${newStaff.name} added to kitchen brigade!`);
+    setNewPhone('');
+    setNewRole('admin');
+    setNewStation('all');
+    setIsInviteModalOpen(false);
+    showToast(`🎉 Invitation sent to ${newStaff.email} as ${newRole.toUpperCase()}!`);
   };
 
   const filteredUsers = users.filter((u) => {
     const matchesRole = selectedRole === 'all' || u.role === selectedRole;
-    const matchesSearch = !searchQuery.trim() || 
+    const matchesSearch =
+      !searchQuery.trim() ||
       u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.role.toLowerCase().includes(searchQuery.toLowerCase());
@@ -74,7 +102,7 @@ export function StaffManager() {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed top-20 right-6 z-50 px-4 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-semibold flex items-center gap-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
@@ -83,29 +111,84 @@ export function StaffManager() {
         </div>
       )}
 
+      {/* Page Header with Invite Admin Button */}
       <PageHeader
-        title="Staff & Roles"
-        description="Manage kitchen team members, roles, and shift status."
+        title="Staff & Roles Management"
+        description="Monitor kitchen brigade count, active shifts, permission tiers, and invite new administrators or cooks."
         action={
           <Button
             size="sm"
             variant="secondary"
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
-            onClick={() => setIsAddModalOpen(true)}
+            leftIcon={<UserPlus className="w-3.5 h-3.5" />}
+            onClick={() => setIsInviteModalOpen(true)}
           >
-            Add Staff Member
+            Invite Admin / Staff
           </Button>
         }
       />
 
-      {/* Standard Unified Toolbar Card (Equal h-10 height across controls) */}
+      {/* Executive Staff Summary Bar ("staff koyjon") */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            Total Staff
+          </span>
+          <span className="text-xl font-bold text-stone-900 mt-1 block">{counts.total} Members</span>
+          <span className="text-[10.5px] text-stone-400">Dublin brigade</span>
+        </div>
+
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            On Duty
+          </span>
+          <div className="flex items-center gap-1.5 mt-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xl font-bold text-emerald-600">{counts.onDuty} Active</span>
+          </div>
+          <span className="text-[10.5px] text-stone-400">Current shift</span>
+        </div>
+
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            Admins
+          </span>
+          <span className="text-xl font-bold text-purple-700 mt-1 block">{counts.admins} Admins</span>
+          <span className="text-[10.5px] text-stone-400">Full platform access</span>
+        </div>
+
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            Kitchen Chefs
+          </span>
+          <span className="text-xl font-bold text-amber-700 mt-1 block">{counts.chefs} Chefs</span>
+          <span className="text-[10.5px] text-stone-400">KDS station leads</span>
+        </div>
+
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            Expo Dispatch
+          </span>
+          <span className="text-xl font-bold text-blue-700 mt-1 block">{counts.expo} Expo</span>
+          <span className="text-[10.5px] text-stone-400">Packaging &amp; drivers</span>
+        </div>
+
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-3.5 shadow-2xs">
+          <span className="text-[11px] font-medium text-stone-500 uppercase tracking-wider block">
+            Line Staff
+          </span>
+          <span className="text-xl font-bold text-stone-700 mt-1 block">{counts.staff} Staff</span>
+          <span className="text-[10.5px] text-stone-400">Food prep &amp; grill</span>
+        </div>
+      </div>
+
+      {/* Toolbar & Filters */}
       <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        {/* Search Field (Equal h-10 height, spacious pl-11 icon clearance) */}
+        {/* Search */}
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search staff by name or email..."
+            placeholder="Search staff by name, email, or role..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-10 bg-stone-50 hover:bg-stone-100/70 focus:bg-white border border-stone-200 focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 rounded-xl pl-11 pr-10 text-[13.5px] font-medium text-stone-900 placeholder:text-stone-400 transition-all outline-none"
@@ -120,96 +203,104 @@ export function StaffManager() {
           )}
         </div>
 
-        {/* Role Segmented Filter (Equal h-10 height) */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <div className="h-10 flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto overflow-y-hidden scrollbar-none">
-            {[
-              { id: 'all', label: 'All Staff' },
-              { id: 'chef', label: 'Chefs' },
-              { id: 'expo', label: 'Expo' },
-              { id: 'staff', label: 'Line Staff' },
-              { id: 'admin', label: 'Admins' },
-            ].map((r) => (
-              <button
-                key={r.id}
-                onClick={() => setSelectedRole(r.id)}
-                className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  selectedRole === r.id
-                    ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
-                    : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-          <span className="text-xs text-stone-400 font-medium hidden sm:inline px-1">
-            {filteredUsers.length} Members
-          </span>
+        {/* Role Segmented Filter */}
+        <div className="flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto">
+          {[
+            { id: 'all', label: 'All Staff' },
+            { id: 'admin', label: 'Admins' },
+            { id: 'chef', label: 'Chefs' },
+            { id: 'expo', label: 'Expo' },
+            { id: 'staff', label: 'Line Staff' },
+          ].map((r) => (
+            <button
+              key={r.id}
+              onClick={() => setSelectedRole(r.id)}
+              className={`h-8 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                selectedRole === r.id
+                  ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/60'
+                  : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Staff Members List */}
-      <div className="bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-2xs">
-        <div className="divide-y divide-stone-100">
-          {filteredUsers.map((staff) => (
-            <div key={staff.id} className="p-4 flex items-center justify-between gap-4 hover:bg-stone-50/50 transition-colors">
-              <div className="flex items-center gap-3">
-                <Avatar name={staff.name} isOnline={staff.isActive} />
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-semibold text-sm text-stone-900">{staff.name}</h4>
-                    {!staff.isActive && (
-                      <span className="text-[10px] bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded font-medium">
-                        Off Duty
-                      </span>
-                    )}
+      {/* Staff Roster Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredUsers.map((staff) => (
+          <div
+            key={staff.id}
+            className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs flex flex-col justify-between hover:border-stone-300 transition-colors"
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <Avatar name={staff.name} size="md" />
+                  <div>
+                    <h3 className="font-bold text-stone-900 text-sm leading-tight">{staff.name}</h3>
+                    <p className="text-xs text-stone-500 mt-0.5">{staff.email}</p>
                   </div>
-                  <p className="text-xs text-stone-500">{staff.email}</p>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <Badge
-                  variant={
-                    staff.role === 'chef'
-                      ? 'primary'
-                      : staff.role === 'admin'
-                      ? 'warning'
-                      : 'neutral'
-                  }
-                  size="sm"
-                >
-                  <ShieldCheck className="w-3 h-3 mr-0.5" />
-                  <span className="capitalize">{staff.role}</span>
-                </Badge>
-
-                {/* Role Selector */}
-                <select
-                  value={staff.role}
-                  onChange={(e) => handleRoleChange(staff.id, e.target.value as UserRole)}
-                  className="h-8 px-2.5 rounded-lg border border-stone-200 text-xs bg-stone-50 text-stone-800 outline-none hover:border-stone-300 transition-colors cursor-pointer"
-                >
-                  <option value="chef">Chef / Line Cook</option>
-                  <option value="expo">Expo Dispatch</option>
-                  <option value="staff">Station Staff</option>
-                  <option value="admin">Kitchen Admin</option>
-                </select>
-
-                {/* Toggle Online / Offline */}
-                <button
-                  onClick={() => handleToggleActive(staff.id)}
-                  title={staff.isActive ? 'Mark Off Duty' : 'Mark On Duty'}
-                  className={`h-8 px-2.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+                {/* Duty Tag */}
+                <span
+                  className={`text-[10.5px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${
                     staff.isActive
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                      : 'bg-stone-100 text-stone-500 border-stone-200 hover:bg-stone-200'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : 'bg-stone-100 text-stone-500 border border-stone-200'
                   }`}
                 >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      staff.isActive ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'
+                    }`}
+                  />
                   {staff.isActive ? 'On Duty' : 'Off Duty'}
+                </span>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+                <span className="text-stone-400 font-medium">Assigned Role</span>
+                <span className="font-bold uppercase tracking-wider text-[11px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-800">
+                  {staff.role}
+                </span>
+              </div>
+
+              <div className="mt-2 flex items-center justify-between text-xs">
+                <span className="text-stone-400 font-medium">Station Coverage</span>
+                <span className="text-stone-700 capitalize font-medium">
+                  {staff.shiftStation || 'All Kitchen Stations'}
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+              <select
+                value={staff.role}
+                onChange={(e) => handleRoleChange(staff.id, e.target.value as UserRole)}
+                className="h-8 px-2 text-xs font-medium rounded-lg border border-stone-200 bg-stone-50 text-stone-800 outline-none focus:border-[#F15A24] cursor-pointer"
+              >
+                <option value="admin">Admin</option>
+                <option value="chef">Chef</option>
+                <option value="expo">Expo</option>
+                <option value="staff">Staff</option>
+              </select>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => handleToggleActive(staff.id)}
+                  className={`h-8 px-2.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                    staff.isActive
+                      ? 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
+                      : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                  }`}
+                >
+                  {staff.isActive ? 'Set Off Duty' : 'Set On Duty'}
                 </button>
 
-                {/* Delete Staff Member */}
                 <button
                   onClick={() => handleDeleteStaff(staff.id)}
                   title="Remove staff member"
@@ -219,19 +310,19 @@ export function StaffManager() {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
-      {/* Add Staff Modal */}
+      {/* Invite Admin & Staff Modal */}
       <Modal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        title="Add Staff Member"
-        subtitle="Add a new kitchen or management team member"
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        title="Invite Admin or Kitchen Staff"
+        subtitle="Issue an invitation link with secure temporary access credentials"
         maxWidth="md"
       >
-        <form onSubmit={handleAddStaff} className="space-y-4">
+        <form onSubmit={handleInviteStaff} className="space-y-4">
           <Input
             label="Full Name"
             placeholder="e.g. Liam O'Connor"
@@ -240,42 +331,145 @@ export function StaffManager() {
             required
           />
           <Input
-            label="Staff Email"
+            label="Official Staff Email"
             type="email"
             placeholder="e.g. liam@amberspice.ie"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             required
           />
+          <Input
+            label="Contact Mobile (Optional)"
+            placeholder="e.g. +353 87 234 5678"
+            value={newPhone}
+            onChange={(e) => setNewPhone(e.target.value)}
+          />
+
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-stone-700">Kitchen Role</label>
+            <label className="block text-xs font-semibold text-stone-700">Access Tier / Role</label>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <label
+                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                  newRole === 'admin'
+                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                    : 'border-stone-200 bg-white hover:bg-stone-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-stone-900">Administrator</span>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={newRole === 'admin'}
+                    onChange={() => setNewRole('admin')}
+                    className="accent-[#F15A24]"
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500 mt-1">Full control (Revenue, CMS, Staff, Menu)</p>
+              </label>
+
+              <label
+                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                  newRole === 'chef'
+                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                    : 'border-stone-200 bg-white hover:bg-stone-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-stone-900">Head Chef</span>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="chef"
+                    checked={newRole === 'chef'}
+                    onChange={() => setNewRole('chef')}
+                    className="accent-[#F15A24]"
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500 mt-1">KDS kitchen display, stations, and 86 inventory</p>
+              </label>
+
+              <label
+                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                  newRole === 'expo'
+                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                    : 'border-stone-200 bg-white hover:bg-stone-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-stone-900">Expo Dispatch</span>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="expo"
+                    checked={newRole === 'expo'}
+                    onChange={() => setNewRole('expo')}
+                    className="accent-[#F15A24]"
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500 mt-1">Packaging, driver dispatch, and tickets</p>
+              </label>
+
+              <label
+                className={`p-3 rounded-xl border cursor-pointer flex flex-col justify-between transition-all ${
+                  newRole === 'staff'
+                    ? 'border-[#F15A24] bg-orange-50/50 ring-1 ring-[#F15A24]'
+                    : 'border-stone-200 bg-white hover:bg-stone-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-stone-900">Line Staff</span>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="staff"
+                    checked={newRole === 'staff'}
+                    onChange={() => setNewRole('staff')}
+                    className="accent-[#F15A24]"
+                  />
+                </div>
+                <p className="text-[11px] text-stone-500 mt-1">Station food prep and stock availability</p>
+              </label>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-stone-700">Kitchen Station (Optional)</label>
             <select
-              value={newRole}
-              onChange={(e) => setNewRole(e.target.value as UserRole)}
+              value={newStation}
+              onChange={(e) => setNewStation(e.target.value as any)}
               className="w-full h-10 rounded-xl border border-stone-200 bg-white px-3 text-xs text-stone-900 outline-none focus:border-[#F15A24] cursor-pointer"
             >
-              <option value="chef">Chef / Line Cook</option>
-              <option value="expo">Expo Dispatch</option>
-              <option value="staff">Station Staff</option>
-              <option value="admin">Kitchen Admin</option>
+              <option value="all">All Stations (General Dispatch)</option>
+              <option value="curries">Karahi &amp; Curries</option>
+              <option value="biryani">Dum Biryani &amp; Rice</option>
+              <option value="grill">Clay Oven Tandoor Grill</option>
+              <option value="breads">Artisan Naan &amp; Breads</option>
             </select>
           </div>
+
+          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600 flex items-center gap-2">
+            <KeyRound className="w-4 h-4 text-stone-400 shrink-0" />
+            <span>A temporary login PIN will be dispatched to this email address automatically.</span>
+          </div>
+
           <div className="pt-2 flex justify-end gap-2.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => setIsAddModalOpen(false)}
+              onClick={() => setIsInviteModalOpen(false)}
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              variant="primary"
+              variant="secondary"
               size="sm"
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
+              leftIcon={<Send className="w-3.5 h-3.5" />}
             >
-              Save Member
+              Send Invitation
             </Button>
           </div>
         </form>
@@ -283,3 +477,5 @@ export function StaffManager() {
     </div>
   );
 }
+
+export default StaffManager;

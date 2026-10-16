@@ -71,39 +71,47 @@ export function OrdersPage() {
     <div className="space-y-6">
       {/* Financial Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Total Revenue</span>
-            <span className="p-2 rounded-xl bg-orange-50 text-[#B84A22] font-bold">€</span>
+            <div className="w-8 h-8 rounded-xl bg-orange-50 text-[#B84A22] font-bold flex items-center justify-center text-xs shrink-0">
+              €
+            </div>
           </div>
-          <div className="text-2xl font-extrabold">€{totalRevenue.toFixed(2)}</div>
+          <div className="text-2xl font-extrabold tracking-tight">€{totalRevenue.toFixed(2)}</div>
           <div className="text-[11px] text-stone-500 mt-1">Confirmed orders volume</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Active Pipeline</span>
-            <Clock className="w-4 h-4 text-blue-500" />
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-blue-600">{activeOrders.length}</div>
+          <div className="text-2xl font-extrabold text-blue-600 tracking-tight">{activeOrders.length}</div>
           <div className="text-[11px] text-stone-500 mt-1">Live in prep or handover</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Completed Tickets</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600">{completedOrders.length}</div>
+          <div className="text-2xl font-extrabold text-emerald-600 tracking-tight">{completedOrders.length}</div>
           <div className="text-[11px] text-stone-500 mt-1">Successfully fulfilled</div>
         </div>
 
-        <div className="bg-white border border-stone-200/90 rounded-2xl p-4.5 shadow-2xs text-[#1A130E]">
-          <div className="flex items-center justify-between text-stone-500 mb-1">
+        <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Average Ticket</span>
-            <TrendingUp className="w-4 h-4 text-purple-600" />
+            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+              <TrendingUp className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold">
+          <div className="text-2xl font-extrabold tracking-tight">
             €{orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : '0.00'}
           </div>
           <div className="text-[11px] text-stone-500 mt-1">Average order value (AOV)</div>

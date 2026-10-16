@@ -9,7 +9,23 @@ export const RESTAURANT_BRAND = {
 
 export const INITIAL_STAFF_USERS: StaffUser[] = [
   {
+    id: 'user-00',
+    name: 'Tariq Al-Hassan',
+    email: 'admin@amberspice.ie',
+    role: 'admin',
+    shiftStation: 'all',
+    isActive: true,
+  },
+  {
     id: 'user-01',
+    name: 'Marcus Ryan',
+    email: 'manager@amberspice.ie',
+    role: 'admin',
+    shiftStation: 'all',
+    isActive: true,
+  },
+  {
+    id: 'user-02',
     name: 'Chef Tariq Al-Mansoor',
     email: 'headchef@amberspice.ie',
     role: 'chef',
@@ -17,7 +33,15 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     isActive: true,
   },
   {
-    id: 'user-02',
+    id: 'user-03',
+    name: 'Kabir Hussain',
+    email: 'curry@amberspice.ie',
+    role: 'chef',
+    shiftStation: 'curries',
+    isActive: true,
+  },
+  {
+    id: 'user-04',
     name: 'Sarah O’Connor',
     email: 'expo@amberspice.ie',
     role: 'expo',
@@ -25,12 +49,12 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     isActive: true,
   },
   {
-    id: 'user-03',
+    id: 'user-05',
     name: 'Vikram Singh',
     email: 'grill@amberspice.ie',
     role: 'staff',
     shiftStation: 'grill',
-    isActive: true,
+    isActive: false,
   },
 ];
 
