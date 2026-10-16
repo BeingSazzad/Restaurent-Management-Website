@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { RESTAURANT_INFO } from '@/Mockdata';
+import { getFullCmsData } from '@/services/cmsService';
 import {
   Phone,
   Mail,
@@ -17,6 +18,25 @@ import {
 } from 'lucide-react';
 
 export default function ContactPage() {
+  const [storeInfo, setStoreInfo] = useState(() => (typeof window !== 'undefined' ? getFullCmsData().storeInfo : null));
+
+  useEffect(() => {
+    const refreshData = () => {
+      setStoreInfo(getFullCmsData().storeInfo);
+    };
+    window.addEventListener('amber_spice_cms_updated', refreshData);
+    window.addEventListener('storage', refreshData);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', refreshData);
+      window.removeEventListener('storage', refreshData);
+    };
+  }, []);
+
+  const phone = storeInfo?.phone || RESTAURANT_INFO.phone;
+  const email = storeInfo?.email || RESTAURANT_INFO.email;
+  const address = storeInfo?.address || '18 South William St, Dublin 2';
+  const eircode = storeInfo?.eircode || 'D02 HR58';
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -68,10 +88,10 @@ export default function ContactPage() {
           <div className="min-w-0">
             <span className="block font-bold text-[15px] text-[#1A130E]">Phone</span>
             <a
-              href={`tel:${RESTAURANT_INFO.phone}`}
+              href={`tel:${phone}`}
               className="text-[13px] sm:text-[14px] text-[#555555] hover:text-[#B84A22] truncate block transition-colors mt-0.5"
             >
-              {RESTAURANT_INFO.phone}
+              {phone}
             </a>
           </div>
         </div>
@@ -84,10 +104,10 @@ export default function ContactPage() {
           <div className="min-w-0">
             <span className="block font-bold text-[15px] text-[#1A130E]">Email</span>
             <a
-              href={`mailto:${RESTAURANT_INFO.email}`}
+              href={`mailto:${email}`}
               className="text-[13px] sm:text-[14px] text-[#555555] hover:text-[#B84A22] truncate block transition-colors mt-0.5"
             >
-              {RESTAURANT_INFO.email}
+              {email}
             </a>
           </div>
         </div>
@@ -100,7 +120,7 @@ export default function ContactPage() {
           <div className="min-w-0">
             <span className="block font-bold text-[15px] text-[#1A130E]">Dublin Kitchen</span>
             <span className="text-[13px] sm:text-[14px] text-[#555555] truncate block mt-0.5">
-              18 South William St, D02
+              {address} · {eircode}
             </span>
           </div>
         </div>

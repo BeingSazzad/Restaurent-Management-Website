@@ -23,15 +23,37 @@ export interface CmsStoreInfo {
   name: string;
   tagline: string;
   phone: string;
+  secondaryPhone?: string;
   email: string;
   address: string;
   eircode: string;
   openingHours: string;
+  hoursMonThu?: string;
+  hoursFriSat?: string;
+  hoursSun?: string;
   minOrderDelivery: number;
   deliveryPrepTime: string;
   collectionPrepTime: string;
   announcementBanner?: string;
   isAnnouncementActive?: boolean;
+}
+
+export interface CmsSocialLinks {
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  tripadvisor?: string;
+  googleMaps?: string;
+  whatsapp?: string;
+}
+
+export interface GalleryItem {
+  id: number | string;
+  title: string;
+  category: 'dining' | 'private' | 'bar_kitchen' | 'exterior';
+  image: string;
+  tag: string;
+  description: string;
 }
 
 export interface CmsDatabase {
@@ -55,6 +77,8 @@ export interface CmsDatabase {
     items: CmsFaqItem[];
   };
   storeInfo: CmsStoreInfo;
+  social?: CmsSocialLinks;
+  gallery?: GalleryItem[];
 }
 
 export const DEFAULT_TERMS_TEXT = `## 1. Agreement to Terms
@@ -112,6 +136,82 @@ Cookies and browser storage are small data files saved on your device to keep yo
 • **Essential Session Cookies**: Retains dishes in your shopping cart during navigation
 • **Preferences Storage**: Remembers your preferred order fulfillment method (Delivery vs Collection)
 • **KDS & Tracking Sync**: Real-time order progress updates between kitchen and diner`;
+
+export const DEFAULT_SOCIAL_LINKS: CmsSocialLinks = {
+  facebook: 'https://facebook.com/amberspicedublin',
+  instagram: 'https://instagram.com/amberspicedublin',
+  youtube: 'https://youtube.com/@amberspicedublin',
+  tripadvisor: 'https://tripadvisor.com/Restaurant_Review-Dublin_Amber_Spice',
+  googleMaps: 'https://maps.google.com/?q=Amber+Spice+18+South+William+St+Dublin',
+  whatsapp: '+35314859210',
+};
+
+export const DEFAULT_GALLERY_ITEMS: GalleryItem[] = [
+  {
+    id: 1,
+    title: 'Main Heritage Dining Hall',
+    category: 'dining',
+    image: '/images/interior/main_dining_hall.jpg',
+    tag: 'Historic Brick Arches',
+    description: 'Exposed Georgian Dublin brick arches, warm amber brass chandeliers, and plush terracotta velvet booths.',
+  },
+  {
+    id: 2,
+    title: 'Maharaja Private Dining Alcove',
+    category: 'private',
+    image: '/images/interior/private_dining_alcove.jpg',
+    tag: 'Exclusive Private Room',
+    description: 'Intimate banquet dining with hand-carved mahogany jali fretwork, candlelit table settings, and bespoke royal feasts.',
+  },
+  {
+    id: 3,
+    title: 'The Spice Lounge & Cocktail Bar',
+    category: 'bar_kitchen',
+    image: '/images/interior/spice_lounge_bar.jpg',
+    tag: 'Artisanal Cocktail Bar',
+    description: 'Dark marble bar counter with backlit apothecary whole spice jars, signature saffron botanical cocktails, and velvet seating.',
+  },
+  {
+    id: 4,
+    title: 'Live Copper Tandoor Kitchen Theater',
+    category: 'bar_kitchen',
+    image: '/images/interior/live_tandoor_kitchen.jpg',
+    tag: 'Live Culinary Pass',
+    description: 'Theatrical open kitchen where master chefs bake blistered artisan naans and char-grill skewers over 480°C clay embers.',
+  },
+  {
+    id: 5,
+    title: 'Dublin South William St Storefront',
+    category: 'exterior',
+    image: '/images/interior/dublin_storefront_facade.jpg',
+    tag: 'Georgian Dublin Facade',
+    description: 'Classic Dublin red-brick streetfront at twilight with illuminated gold-leaf brass signage and warm window glow.',
+  },
+  {
+    id: 6,
+    title: 'Starlight Conservatory Courtyard',
+    category: 'dining',
+    image: '/images/interior/conservatory_courtyard.jpg',
+    tag: 'Glass Atrium Patio',
+    description: 'Romantic glass-roof courtyard dining surrounded by botanical greenery, terracotta tiles, and hanging Moorish brass lanterns.',
+  },
+  {
+    id: 7,
+    title: 'Grand Royal Banqueting Suite',
+    category: 'private',
+    image: '/images/about_banner.jpg',
+    tag: 'Group Feasts & Events',
+    description: 'Spacious celebratory group dining space accommodating anniversary dinners, private parties, and corporate receptions.',
+  },
+  {
+    id: 8,
+    title: 'Master Chef Service & Plating Pass',
+    category: 'bar_kitchen',
+    image: '/images/chef_master.jpg',
+    tag: 'Culinary Craftsmanship',
+    description: 'Our culinary team meticulously garnishing royal Awadhi copper handi pots with saffron threads and fresh coriander.',
+  },
+];
 
 export const DEFAULT_CMS_DATA: CmsDatabase = {
   terms: {
@@ -287,16 +387,22 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
     name: 'AMBER SPICE',
     tagline: 'Authentic Flavors · Timeless Recipes',
     phone: '+353 (01) 485 9210',
+    secondaryPhone: '+353 (01) 485 9211',
     email: 'orders@amberspice.ie',
     address: '18 South William St, Dublin 2',
     eircode: 'D02 HR58',
     openingHours: 'Mon – Thu: 17:00 – 22:00, Fri – Sat: 16:30 – 22:30 (Sun: Closed)',
+    hoursMonThu: '17:00 – 22:00',
+    hoursFriSat: '16:30 – 22:30',
+    hoursSun: 'Closed',
     minOrderDelivery: 15.0,
     deliveryPrepTime: '30-40 min',
     collectionPrepTime: '15-20 min',
     announcementBanner: '🌟 Weekend Royal Feast Offer: 10% OFF on all Dum Biryanis with code ROYAL10!',
     isAnnouncementActive: true,
   },
+  social: DEFAULT_SOCIAL_LINKS,
+  gallery: DEFAULT_GALLERY_ITEMS,
 };
 
 const CMS_STORAGE_KEY = 'amber_spice_cms_data';
@@ -347,6 +453,8 @@ export function getFullCmsData(): CmsDatabase {
         },
         faq: { ...DEFAULT_CMS_DATA.faq, ...(parsed.faq || {}) },
         storeInfo: { ...DEFAULT_CMS_DATA.storeInfo, ...(parsed.storeInfo || {}) },
+        social: { ...DEFAULT_CMS_DATA.social, ...(parsed.social || {}) },
+        gallery: Array.isArray(parsed.gallery) && parsed.gallery.length > 0 ? parsed.gallery : DEFAULT_GALLERY_ITEMS,
       };
     }
   } catch {

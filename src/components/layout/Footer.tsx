@@ -1,13 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Logo } from '../shared/Logo';
+import { getFullCmsData } from '@/services/cmsService';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
 export const Footer: React.FC = () => {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
+  const [cmsData, setCmsData] = useState(() => (typeof window !== 'undefined' ? getFullCmsData() : null));
+
+  useEffect(() => {
+    const refreshData = () => {
+      setCmsData(getFullCmsData());
+    };
+    window.addEventListener('amber_spice_cms_updated', refreshData);
+    window.addEventListener('storage', refreshData);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', refreshData);
+      window.removeEventListener('storage', refreshData);
+    };
+  }, []);
+
+  const social = cmsData?.social;
+  const storeInfo = cmsData?.storeInfo;
 
   return (
     <footer className="bg-[#1A130E] text-[#C4B5A5] pt-16 pb-10 border-t border-[#2D241E]">
@@ -61,7 +78,9 @@ export const Footer: React.FC = () => {
             {/* Social Icons with SVGs (Enlarged) */}
             <div className="flex items-center gap-3 pt-2">
               <a
-                href="#facebook"
+                href={social?.facebook || 'https://facebook.com/amberspicedublin'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-11 h-11 rounded-full bg-[#251D17] hover:bg-gradient-to-r hover:from-[#B84A22] hover:to-[#FBA138] text-[#D5CBC2] hover:text-white border border-[#3E3228] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:border-transparent shadow-xs"
                 aria-label="Facebook"
               >
@@ -70,7 +89,9 @@ export const Footer: React.FC = () => {
                 </svg>
               </a>
               <a
-                href="#instagram"
+                href={social?.instagram || 'https://instagram.com/amberspicedublin'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-11 h-11 rounded-full bg-[#251D17] hover:bg-gradient-to-r hover:from-[#B84A22] hover:to-[#FBA138] text-[#D5CBC2] hover:text-white border border-[#3E3228] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:border-transparent shadow-xs"
                 aria-label="Instagram"
               >
@@ -79,7 +100,9 @@ export const Footer: React.FC = () => {
                 </svg>
               </a>
               <a
-                href="#youtube"
+                href={social?.youtube || 'https://youtube.com/@amberspicedublin'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-11 h-11 rounded-full bg-[#251D17] hover:bg-gradient-to-r hover:from-[#B84A22] hover:to-[#FBA138] text-[#D5CBC2] hover:text-white border border-[#3E3228] flex items-center justify-center transition-all duration-300 hover:scale-110 hover:border-transparent shadow-xs"
                 aria-label="YouTube"
               >
@@ -145,15 +168,15 @@ export const Footer: React.FC = () => {
             <div className="space-y-0 text-[13.5px]">
               <div className="flex items-center justify-between py-2.5 border-b border-dashed border-[#382C22]">
                 <span className="text-[#A6998E]">Mon – Thu</span>
-                <span className="font-semibold text-white">17:00 – 22:00</span>
+                <span className="font-semibold text-white">{storeInfo?.hoursMonThu || '17:00 – 22:00'}</span>
               </div>
               <div className="flex items-center justify-between py-2.5 border-b border-dashed border-[#382C22]">
                 <span className="text-[#A6998E]">Fri – Sat</span>
-                <span className="font-semibold text-white">16:30 – 22:30</span>
+                <span className="font-semibold text-white">{storeInfo?.hoursFriSat || '16:30 – 22:30'}</span>
               </div>
               <div className="flex items-center justify-between py-2.5 border-b border-dashed border-[#382C22]">
                 <span className="text-[#A6998E]">Sunday</span>
-                <span className="font-semibold text-[#FBA138]">Closed</span>
+                <span className="font-semibold text-[#FBA138]">{storeInfo?.hoursSun || 'Closed'}</span>
               </div>
             </div>
           </div>

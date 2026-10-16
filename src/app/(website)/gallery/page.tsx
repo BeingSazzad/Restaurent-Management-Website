@@ -1,93 +1,40 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Sparkles, Eye, UtensilsCrossed, Calendar } from 'lucide-react';
-
-interface GalleryItem {
-  id: number;
-  title: string;
-  category: 'dining' | 'private' | 'bar_kitchen' | 'exterior';
-  image: string;
-  tag: string;
-  description: string;
-}
-
-const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    id: 1,
-    title: 'Main Heritage Dining Hall',
-    category: 'dining',
-    image: '/images/interior/main_dining_hall.jpg',
-    tag: 'Historic Brick Arches',
-    description: 'Exposed Georgian Dublin brick arches, warm amber brass chandeliers, and plush terracotta velvet booths.',
-  },
-  {
-    id: 2,
-    title: 'Maharaja Private Dining Alcove',
-    category: 'private',
-    image: '/images/interior/private_dining_alcove.jpg',
-    tag: 'Exclusive Private Room',
-    description: 'Intimate banquet dining with hand-carved mahogany jali fretwork, candlelit table settings, and bespoke royal feasts.',
-  },
-  {
-    id: 3,
-    title: 'The Spice Lounge & Cocktail Bar',
-    category: 'bar_kitchen',
-    image: '/images/interior/spice_lounge_bar.jpg',
-    tag: 'Artisanal Cocktail Bar',
-    description: 'Dark marble bar counter with backlit apothecary whole spice jars, signature saffron botanical cocktails, and velvet seating.',
-  },
-  {
-    id: 4,
-    title: 'Live Copper Tandoor Kitchen Theater',
-    category: 'bar_kitchen',
-    image: '/images/interior/live_tandoor_kitchen.jpg',
-    tag: 'Live Culinary Pass',
-    description: 'Theatrical open kitchen where master chefs bake blistered artisan naans and char-grill skewers over 480°C clay embers.',
-  },
-  {
-    id: 5,
-    title: 'Dublin South William St Storefront',
-    category: 'exterior',
-    image: '/images/interior/dublin_storefront_facade.jpg',
-    tag: 'Georgian Dublin Facade',
-    description: 'Classic Dublin red-brick streetfront at twilight with illuminated gold-leaf brass signage and warm window glow.',
-  },
-  {
-    id: 6,
-    title: 'Starlight Conservatory Courtyard',
-    category: 'dining',
-    image: '/images/interior/conservatory_courtyard.jpg',
-    tag: 'Glass Atrium Patio',
-    description: 'Romantic glass-roof courtyard dining surrounded by botanical greenery, terracotta tiles, and hanging Moorish brass lanterns.',
-  },
-  {
-    id: 7,
-    title: 'Grand Royal Banqueting Suite',
-    category: 'private',
-    image: '/images/about_banner.jpg',
-    tag: 'Group Feasts & Events',
-    description: 'Spacious celebratory group dining space accommodating anniversary dinners, private parties, and corporate receptions.',
-  },
-  {
-    id: 8,
-    title: 'Master Chef Service & Plating Pass',
-    category: 'bar_kitchen',
-    image: '/images/chef_master.jpg',
-    tag: 'Culinary Craftsmanship',
-    description: 'Our culinary team meticulously garnishing royal Awadhi copper handi pots with saffron threads and fresh coriander.',
-  },
-];
+import { getFullCmsData, GalleryItem, DEFAULT_GALLERY_ITEMS } from '@/services/cmsService';
 
 export default function GalleryPage() {
+  const [items, setItems] = useState<GalleryItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      return getFullCmsData().gallery || DEFAULT_GALLERY_ITEMS;
+    }
+    return DEFAULT_GALLERY_ITEMS;
+  });
+
+  useEffect(() => {
+    const refreshGallery = () => {
+      const full = getFullCmsData();
+      if (full.gallery && full.gallery.length > 0) {
+        setItems(full.gallery);
+      }
+    };
+    window.addEventListener('amber_spice_cms_updated', refreshGallery);
+    window.addEventListener('storage', refreshGallery);
+    return () => {
+      window.removeEventListener('amber_spice_cms_updated', refreshGallery);
+      window.removeEventListener('storage', refreshGallery);
+    };
+  }, []);
+
   const [activeFilter, setActiveFilter] = useState<'all' | 'dining' | 'private' | 'bar_kitchen' | 'exterior'>('all');
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
   const filteredItems =
     activeFilter === 'all'
-      ? GALLERY_ITEMS
-      : GALLERY_ITEMS.filter((item) => item.category === activeFilter);
+      ? items
+      : items.filter((item) => item.category === activeFilter);
 
   return (
     <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,26 +52,26 @@ export default function GalleryPage() {
       <div className="flex justify-center mb-12">
         <div className="bg-white border border-[#E5E5E5] p-1.5 rounded-2xl shadow-xs inline-flex items-center gap-1.5 max-w-full overflow-x-auto overflow-y-hidden scrollbar-none">
           {[
-            { key: 'all', label: 'All Spaces', count: GALLERY_ITEMS.length },
+            { key: 'all', label: 'All Spaces', count: items.length },
             {
               key: 'dining',
               label: 'Dining Halls',
-              count: GALLERY_ITEMS.filter((i) => i.category === 'dining').length,
+              count: items.filter((i) => i.category === 'dining').length,
             },
             {
               key: 'private',
               label: 'Private Dining Rooms',
-              count: GALLERY_ITEMS.filter((i) => i.category === 'private').length,
+              count: items.filter((i) => i.category === 'private').length,
             },
             {
               key: 'bar_kitchen',
               label: 'Bar & Open Kitchen',
-              count: GALLERY_ITEMS.filter((i) => i.category === 'bar_kitchen').length,
+              count: items.filter((i) => i.category === 'bar_kitchen').length,
             },
             {
               key: 'exterior',
               label: 'Dublin Facade',
-              count: GALLERY_ITEMS.filter((i) => i.category === 'exterior').length,
+              count: items.filter((i) => i.category === 'exterior').length,
             },
           ].map((tab) => {
             const isActive = activeFilter === tab.key;
