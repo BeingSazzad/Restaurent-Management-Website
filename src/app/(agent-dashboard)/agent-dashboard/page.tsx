@@ -33,18 +33,31 @@ import {
   LayoutList,
   LayoutGrid,
   Package,
+  ShieldAlert,
+  ShieldCheck,
 } from 'lucide-react';
 import { ProductManager } from '@/components/admin/ProductManager';
 import { CmsManager } from '@/components/admin/CmsManager';
 import { CouponManager } from '@/components/admin/CouponManager';
 import { MasterOrdersManager } from '@/components/admin/MasterOrdersManager';
+import { StaffManager } from '@/components/admin/StaffManager';
 
-type KdsTab = 'kds' | 'all-orders' | 'product-manager' | 'coupons' | 'cms-updater' | 'menu-86' | 'sales' | 'manual-order';
+type KdsTab =
+  | 'kds'
+  | 'all-orders'
+  | 'product-manager'
+  | 'coupons'
+  | 'staff-management'
+  | 'cms-updater'
+  | 'menu-86'
+  | 'sales'
+  | 'manual-order';
 type StationFilter = 'all' | 'curries' | 'biryani' | 'grill' | 'breads';
 type FulfillmentFilter = 'all' | 'delivery' | 'collection';
 
 export default function AgentDashboardPage() {
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.auth.user);
   const orders = useAppSelector((state) => state.orders.orders);
   const menuItems = useAppSelector((state) => state.menu.items);
   const couponsCount = useAppSelector((state) => state.coupons?.items?.length || 5);
@@ -244,6 +257,48 @@ export default function AgentDashboardPage() {
     setManualQty(1);
   };
 
+  // ACCESS BARRIER: If a user is logged in as a normal diner/customer ('user'), restrict access
+  if (currentUser && currentUser.role === 'user') {
+    return (
+      <div className="min-h-screen bg-[#FBF9F6] text-[#1A130E] flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl max-w-lg w-full p-8 sm:p-10 border border-[#EAE5DF] shadow-xl text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-[#B84A22] border border-amber-200/80 flex items-center justify-center mx-auto shadow-xs">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <div>
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200 uppercase tracking-wider">
+              Staff Clearance Required
+            </span>
+            <h1 className="text-2xl font-bold text-stone-900 mt-3 tracking-tight">
+              Kitchen &amp; Operations Restricted
+            </h1>
+            <p className="text-[13.5px] text-stone-600 mt-2.5 leading-relaxed">
+              Your account (<strong>{currentUser.email}</strong>) is currently registered as a <strong>Diner / Customer</strong>.
+              In a restaurant, kitchen tickets, menu pricing, and KDS controls are restricted to verified staff members.
+            </p>
+            <p className="text-xs text-stone-500 mt-3 bg-stone-50 p-3 rounded-xl border border-stone-200 leading-relaxed">
+              💡 <em>To access staff operations, ask your restaurant administrator to grant role clearance to your email in the <strong>Staff &amp; Access</strong> manager.</em>
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/menu"
+              className="flex-1 py-3 px-4 rounded-xl border border-stone-200 text-stone-800 text-xs sm:text-sm font-semibold hover:bg-stone-50 transition-colors"
+            >
+              Return to Storefront
+            </Link>
+            <Link
+              href="/login"
+              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] text-white text-xs sm:text-sm font-bold shadow-md hover:scale-[1.02] active:scale-98 transition-all"
+            >
+              Sign In with Staff Account
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FBF9F6] text-[#1A130E] py-6 sm:py-8 lg:py-10">
       {/* Toast Notification */}
@@ -268,6 +323,13 @@ export default function AgentDashboardPage() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   Live Sync
                 </span>
+                {currentUser && currentUser.role && currentUser.role !== 'user' && (
+                  <span className="bg-purple-50 text-purple-700 border border-purple-200/80 text-xs px-2.5 py-0.5 rounded-full font-bold inline-flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span className="capitalize">{currentUser.role}</span>
+                    <span className="text-purple-400 font-normal">({currentUser.name.split(' ')[0]})</span>
+                  </span>
+                )}
                 {kitchenSnooze && (
                   <span className="bg-rose-50 text-rose-700 border border-rose-200 text-xs px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1">
                     <Clock className="w-3 h-3" />
@@ -399,6 +461,17 @@ export default function AgentDashboardPage() {
                 <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'coupons' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {couponsCount}
                 </span>
+              </button>
+
+              <button
+                onClick={() => setSelectedTab('staff-management')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'staff-management'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>Staff &amp; Access</span>
               </button>
 
               <button
@@ -1397,6 +1470,11 @@ export default function AgentDashboardPage() {
       {/* ================= TAB 5: DYNAMIC CMS UPDATER ================= */}
       {selectedTab === 'cms-updater' && (
         <CmsManager />
+      )}
+
+      {/* ================= TAB: STAFF & ROLE ACCESS MANAGEMENT ================= */}
+      {selectedTab === 'staff-management' && (
+        <StaffManager />
       )}
 
       {/* ================= TICKET DETAILS & KITCHEN SLIP MODAL ================= */}

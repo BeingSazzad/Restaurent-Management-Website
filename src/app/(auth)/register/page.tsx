@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
 import { login } from '@/redux/slices/authSlice';
-import { MOCK_USER } from '@/Mockdata';
+import { registerCustomer } from '@/services/staffService';
 import { Lock, Mail, ArrowRight, User, Phone } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -21,11 +21,20 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!name || !email) return;
 
+    // 1. Register strictly as diner/customer into system directory
+    const customer = registerCustomer({
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim() || '+353 87 555 1234',
+    });
+
+    // 2. Log in with role: 'user'
     dispatch(
       login({
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim() || '+353 87 555 1234',
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        role: 'user',
         addresses: MOCK_USER.addresses,
       })
     );
