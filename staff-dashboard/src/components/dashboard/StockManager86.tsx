@@ -16,6 +16,9 @@ import {
   AlertOctagon,
   RefreshCw,
   Clock,
+  Minus,
+  ChevronDown,
+  Utensils,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -123,6 +126,9 @@ export function StockManager86() {
   const [rawSearchQuery, setRawSearchQuery] = useState('');
   const [rawCategoryFilter, setRawCategoryFilter] = useState('all');
   const [rawStatusFilter, setRawStatusFilter] = useState<'all' | 'healthy' | 'low_stock' | 'out_of_stock'>('all');
+
+  // Batch Dropdown State
+  const [activeBatchDropdownId, setActiveBatchDropdownId] = useState<string | null>(null);
 
   // Wastage Filters & Modal State
   const [isWasteModalOpen, setIsWasteModalOpen] = useState(false);
@@ -622,7 +628,7 @@ export function StockManager86() {
                       <th className="py-3.5 px-4 font-semibold">Dish &amp; Station</th>
                       <th className="py-3.5 px-4 font-semibold">Prep Station</th>
                       <th className="py-3.5 px-4 font-semibold">Price</th>
-                      <th className="py-3.5 px-4 font-semibold">Portions Remaining &amp; Prep Log</th>
+                      <th className="py-3.5 px-4 font-semibold">Live Stock &amp; Prep Batch</th>
                       <th className="py-3.5 px-4 font-semibold">Stock Status</th>
                       <th className="py-3.5 px-4 font-semibold text-right">Instant 86 Kill-Switch</th>
                     </tr>
@@ -690,57 +696,137 @@ export function StockManager86() {
                             </span>
                           </td>
 
-                          {/* Portions Remaining & Quick Log */}
+                          {/* Live Stock & Batch Prep Control */}
                           <td className="py-3 px-4 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              <div className="min-w-[110px]">
-                                <div className="flex items-center gap-1.5 font-bold text-xs">
-                                  {!isOut ? (
-                                    <span
-                                      className={
-                                        isLow
-                                          ? 'text-amber-600 font-extrabold flex items-center gap-1'
-                                          : 'text-stone-900'
-                                      }
-                                    >
-                                      {isLow && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
-                                      )}
-                                      {dish.stockCount} portions left
-                                    </span>
-                                  ) : (
-                                    <span className="text-rose-600 font-extrabold">0 portions (Out)</span>
-                                  )}
-                                </div>
-                                <span className="text-[10px] text-stone-400 block mt-0.5">
-                                  Min par: {dish.lowStockThreshold || 5}
-                                </span>
-                              </div>
-
-                              {/* Quick Adjustment Actions */}
-                              <div className="inline-flex items-center gap-1 bg-stone-100/90 p-0.5 rounded-lg border border-stone-200/80">
+                              {/* Quantity Stepper with Editable Box */}
+                              <div className="inline-flex items-center bg-stone-50 border border-stone-200/90 rounded-xl p-0.5 shadow-2xs">
                                 <button
+                                  type="button"
                                   onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
                                   disabled={!dish.stockCount || dish.stockCount <= 0}
-                                  className="h-7 w-7 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-bold flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-xs transition-colors shadow-2xs"
-                                  title="Deduct 1 portion (sold)"
+                                  className="w-7 h-7 rounded-lg bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-100 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                                  title="Deduct 1 portion"
                                 >
-                                  -1
+                                  <Minus className="w-3.5 h-3.5" />
                                 </button>
+
+                                <div className="px-1.5 flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    value={dish.stockCount ?? 0}
+                                    onChange={(e) => {
+                                      const val = parseInt(e.target.value, 10);
+                                      if (!isNaN(val)) {
+                                        dispatch(setDishPortions({ id: dish.id, count: val }));
+                                      }
+                                    }}
+                                    className={`w-11 text-center text-xs font-bold outline-none bg-transparent ${
+                                      isOut ? 'text-rose-600 font-extrabold' : isLow ? 'text-amber-600 font-extrabold' : 'text-stone-900'
+                                    }`}
+                                    title="Click to type exact portion count"
+                                  />
+                                  <span className="text-[10px] text-stone-400 font-medium">pts</span>
+                                </div>
+
                                 <button
+                                  type="button"
                                   onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
-                                  className="h-7 w-7 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-bold flex items-center justify-center cursor-pointer text-xs transition-colors shadow-2xs"
-                                  title="Add 1 portion (prepped)"
+                                  className="w-7 h-7 rounded-lg bg-white border border-stone-200 hover:border-stone-300 hover:bg-stone-100 text-stone-700 flex items-center justify-center cursor-pointer transition-colors"
+                                  title="Add 1 portion"
                                 >
-                                  +1
+                                  <Plus className="w-3.5 h-3.5" />
                                 </button>
+                              </div>
+
+                              {/* Quick Batch Popover Trigger */}
+                              <div className="relative">
                                 <button
-                                  onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 5 }))}
-                                  className="h-7 px-2 rounded-md bg-white hover:bg-stone-50 text-stone-700 font-semibold flex items-center justify-center cursor-pointer text-xs transition-colors shadow-2xs"
-                                  title="Add 5 portions (batch cook)"
+                                  type="button"
+                                  onClick={() => setActiveBatchDropdownId(activeBatchDropdownId === dish.id ? null : dish.id)}
+                                  className="h-8 px-2.5 rounded-xl bg-white border border-stone-200 hover:border-[#B84A22]/50 hover:bg-orange-50/40 text-stone-700 hover:text-[#B84A22] text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs"
+                                  title="Quick Batch Actions"
                                 >
-                                  +5
+                                  <Utensils className="w-3.5 h-3.5 text-[#B84A22]" />
+                                  <span>+ Batch</span>
+                                  <ChevronDown className="w-3 h-3 text-stone-400" />
                                 </button>
+
+                                {activeBatchDropdownId === dish.id && (
+                                  <>
+                                    <div
+                                      className="fixed inset-0 z-40"
+                                      onClick={() => setActiveBatchDropdownId(null)}
+                                    />
+                                    <div className="absolute left-0 mt-1.5 w-52 bg-white border border-stone-200 rounded-xl shadow-lg p-1.5 z-50 text-xs animate-in fade-in zoom-in-95">
+                                      <div className="px-2 py-1 text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                                        Log Kitchen Batch
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          dispatch(adjustDishPortions({ id: dish.id, delta: 5 }));
+                                          setActiveBatchDropdownId(null);
+                                        }}
+                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
+                                      >
+                                        <span>+5 Half Batch</span>
+                                        <span className="font-bold text-[#B84A22]">+5</span>
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          dispatch(adjustDishPortions({ id: dish.id, delta: 10 }));
+                                          setActiveBatchDropdownId(null);
+                                        }}
+                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
+                                      >
+                                        <span>+10 Standard Pot Cook</span>
+                                        <span className="font-bold text-[#B84A22]">+10</span>
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          dispatch(adjustDishPortions({ id: dish.id, delta: 20 }));
+                                          setActiveBatchDropdownId(null);
+                                        }}
+                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-orange-50 hover:text-[#B84A22] flex items-center justify-between text-stone-700 cursor-pointer"
+                                      >
+                                        <span>+20 Royal Degh (Rush)</span>
+                                        <span className="font-bold text-[#B84A22]">+20</span>
+                                      </button>
+                                      <div className="border-t border-stone-100 my-1" />
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          dispatch(setDishPortions({ id: dish.id, count: dish.lowStockThreshold || 5 }));
+                                          setActiveBatchDropdownId(null);
+                                        }}
+                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 text-stone-600 flex items-center justify-between cursor-pointer"
+                                      >
+                                        <span>Reset to Min Par ({dish.lowStockThreshold || 5})</span>
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          dispatch(adjustDishPortions({ id: dish.id, delta: -1 }));
+                                          setActiveBatchDropdownId(null);
+                                        }}
+                                        disabled={!dish.stockCount || dish.stockCount <= 0}
+                                        className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-rose-50 hover:text-rose-700 text-rose-600 flex items-center justify-between cursor-pointer disabled:opacity-40"
+                                      >
+                                        <span>Record Spoilage / Waste</span>
+                                        <span className="font-bold">-1</span>
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+
+                              {/* Par status info */}
+                              <div className="text-[11px] text-stone-400">
+                                <span>Par: {dish.lowStockThreshold || 5}</span>
                               </div>
                             </div>
                           </td>
@@ -851,22 +937,42 @@ export function StockManager86() {
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
-                          disabled={!dish.stockCount || dish.stockCount <= 0}
-                          className="h-7 w-7 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center text-xs disabled:opacity-30"
-                        >
-                          -1
-                        </button>
-                        <button
-                          onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
-                          className="h-7 w-7 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center text-xs"
-                        >
-                          +1
-                        </button>
+                        <div className="inline-flex items-center bg-stone-50 border border-stone-200/90 rounded-lg p-0.5 shadow-2xs">
+                          <button
+                            type="button"
+                            onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: -1 }))}
+                            disabled={!dish.stockCount || dish.stockCount <= 0}
+                            className="w-6 h-6 rounded bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                            title="Deduct 1"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <input
+                            type="number"
+                            min="0"
+                            value={dish.stockCount ?? 0}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10);
+                              if (!isNaN(val)) {
+                                dispatch(setDishPortions({ id: dish.id, count: val }));
+                              }
+                            }}
+                            className="w-10 text-center text-xs font-bold outline-none bg-transparent"
+                            title="Click to type exact count"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => dispatch(adjustDishPortions({ id: dish.id, delta: 1 }))}
+                            className="w-6 h-6 rounded bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 flex items-center justify-center cursor-pointer"
+                            title="Add 1"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+
                         <button
                           onClick={() => dispatch(toggleDishAvailability(dish.id))}
-                          className={`h-7 px-2.5 rounded-md text-xs font-semibold ${
+                          className={`h-7 px-2.5 rounded-lg text-xs font-semibold cursor-pointer active:scale-95 transition-all ${
                             !isOut
                               ? 'bg-stone-100 hover:bg-rose-50 text-stone-700 border border-stone-200'
                               : 'bg-rose-600 text-white'
