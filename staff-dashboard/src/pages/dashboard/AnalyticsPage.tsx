@@ -5,7 +5,7 @@ import {
   ShoppingBag,
   CreditCard,
   Flame,
-  Printer,
+  FileText,
   BarChart3,
   Percent,
   AlertOctagon,
@@ -109,7 +109,7 @@ export function AnalyticsPage() {
                 : 'text-stone-500 hover:text-stone-800'
             }`}
           >
-            <Printer className="w-3.5 h-3.5 text-stone-600" />
+            <FileText className="w-3.5 h-3.5 text-stone-600" />
             <span>Shift Report</span>
           </button>
         </div>
