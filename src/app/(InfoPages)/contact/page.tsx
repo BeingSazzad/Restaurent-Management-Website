@@ -35,6 +35,9 @@ export default function ContactPage() {
   const email = storeInfo?.email || RESTAURANT_INFO.email;
   const address = storeInfo?.address || '18 South William St, Dublin 2';
   const eircode = storeInfo?.eircode || 'D02 HR58';
+  const hoursMonThu = storeInfo?.hoursMonThu || '17:00–22:00';
+  const hoursFriSat = storeInfo?.hoursFriSat || '16:30–22:30';
+  const hoursSun = storeInfo?.hoursSun || 'Closed';
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -73,54 +76,83 @@ export default function ContactPage() {
           Get in Touch With Us
         </h1>
         <p className="section-subtitle text-[#666666]">
-          Have queries regarding catering feasts, allergen guidance, or custom orders? Reach out directly to our Dublin team.
+          Visit our central Dublin kitchen on South William Street, send us an inquiry, or order direct takeaway collection.
         </p>
       </div>
 
-      {/* 3 Contact Info Cards Matching Reference */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-        {/* Card 1: Phone */}
-        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 sm:p-6 shadow-xs flex items-center gap-4 hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
-            <Phone className="w-5 h-5 fill-current" />
-          </div>
-          <div className="min-w-0">
-            <span className="block font-bold text-[15px] text-[#1A130E]">Phone</span>
-            <a
-              href={`tel:${phone}`}
-              className="text-[13px] sm:text-[14px] text-[#555555] hover:text-[#B84A22] truncate block transition-colors mt-0.5"
-            >
-              {phone}
-            </a>
-          </div>
-        </div>
-
-        {/* Card 2: Email */}
-        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 sm:p-6 shadow-xs flex items-center gap-4 hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
-            <Mail className="w-5 h-5" />
-          </div>
-          <div className="min-w-0">
-            <span className="block font-bold text-[15px] text-[#1A130E]">Email</span>
-            <a
-              href={`mailto:${email}`}
-              className="text-[13px] sm:text-[14px] text-[#555555] hover:text-[#B84A22] truncate block transition-colors mt-0.5"
-            >
-              {email}
-            </a>
+      {/* 4 Contact Info Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        {/* Card 1: Dublin Kitchen */}
+        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 shadow-xs hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <span className="block font-bold text-[15px] text-[#1A130E]">Dublin Kitchen</span>
+              <p className="text-[13px] text-[#555555] mt-1 leading-snug">
+                18 South William Street
+              </p>
+              <span className="text-[11.5px] font-semibold text-[#B84A22] block mt-0.5">
+                Dublin 2, {eircode}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Card 3: Dublin Central Kitchen */}
-        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 sm:p-6 shadow-xs flex items-center gap-4 hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
-            <MapPin className="w-5 h-5" />
+        {/* Card 2: Opening Hours */}
+        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 shadow-xs hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <span className="block font-bold text-[15px] text-[#1A130E]">Opening Hours</span>
+              <p className="text-[12.5px] text-[#555555] mt-1 leading-snug">
+                Mon–Thu: {hoursMonThu}
+                <br />
+                Fri–Sat: {hoursFriSat}
+              </p>
+              <span className="text-[11.5px] font-semibold text-[#D49B37] block mt-0.5">
+                Sunday: {hoursSun}
+              </span>
+            </div>
           </div>
-          <div className="min-w-0">
-            <span className="block font-bold text-[15px] text-[#1A130E]">Dublin Kitchen</span>
-            <span className="text-[13px] sm:text-[14px] text-[#555555] truncate block mt-0.5">
-              {address} · {eircode}
-            </span>
+        </div>
+
+        {/* Card 3: Phone Support */}
+        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 shadow-xs hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Phone className="w-5 h-5 fill-current" />
+            </div>
+            <div className="min-w-0">
+              <span className="block font-bold text-[15px] text-[#1A130E]">Phone Support</span>
+              <a
+                href={`tel:${phone}`}
+                className="text-[13.5px] font-semibold text-[#1A130E] hover:text-[#B84A22] block mt-1 transition-colors"
+              >
+                {phone}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 4: Email Inquiries */}
+        <div className="bg-white rounded-3xl border border-[#E5E5E5] p-5 shadow-xs hover:border-[#B84A22]/50 hover:shadow-md transition-all hover:-translate-y-0.5">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#B84A22] to-[#FBA138] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Mail className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <span className="block font-bold text-[15px] text-[#1A130E]">Email Inquiries</span>
+              <a
+                href={`mailto:${email}`}
+                className="text-[13.5px] font-semibold text-[#1A130E] hover:text-[#B84A22] block mt-1 transition-colors truncate"
+              >
+                {email}
+              </a>
+            </div>
           </div>
         </div>
       </div>
