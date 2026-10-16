@@ -151,7 +151,7 @@ export const DEFAULT_CMS_DATA: CmsDatabase = {
     ],
   },
   about: {
-    heroTitle: 'Our Heritage Kitchen & Craft',
+    heroTitle: 'About Us',
     heroSubtitle: 'Preserving authentic royal culinary heritage in the heart of Dublin since 2014.',
     storyTitle: 'From Imperial Durbars to South William Street',
     storyParagraph1:
@@ -253,7 +253,14 @@ export function getFullCmsData(): CmsDatabase {
         terms: { ...DEFAULT_CMS_DATA.terms, ...(parsed.terms || {}) },
         privacy: { ...DEFAULT_CMS_DATA.privacy, ...(parsed.privacy || {}) },
         cookie: { ...DEFAULT_CMS_DATA.cookie, ...(parsed.cookie || {}) },
-        about: { ...DEFAULT_CMS_DATA.about, ...(parsed.about || {}) },
+        about: {
+          ...DEFAULT_CMS_DATA.about,
+          ...(parsed.about || {}),
+          heroTitle:
+            parsed.about?.heroTitle === 'Our Heritage Kitchen & Craft'
+              ? 'About Us'
+              : (parsed.about?.heroTitle || 'About Us'),
+        },
         faq: { ...DEFAULT_CMS_DATA.faq, ...(parsed.faq || {}) },
         storeInfo: { ...DEFAULT_CMS_DATA.storeInfo, ...(parsed.storeInfo || {}) },
       };

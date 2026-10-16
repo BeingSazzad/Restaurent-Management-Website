@@ -34,15 +34,17 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[rgb(249,249,249)]">
       {/* 1. UNIFIED PAGE HEADER (Matching All Pages) */}
-      <section className="pt-12 sm:pt-16 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="section-decorator mx-auto mb-3.5" />
-        <h1 className="section-title mb-3">
-          {aboutData.heroTitle || 'About Us'}
-        </h1>
-        <p className="section-subtitle">
-          {aboutData.heroSubtitle ||
-            'Discover our centuries-old royal Awadhi culinary heritage, slow dum-cooking traditions, and genuine passion for Dublin dining.'}
-        </p>
+      <section className="pt-12 sm:pt-16 pb-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto">
+          <div className="section-decorator mx-auto mb-3.5" />
+          <h1 className="section-title mb-2.5">
+            About Us
+          </h1>
+          <p className="section-subtitle mx-auto">
+            {aboutData.heroSubtitle ||
+              'Preserving authentic royal culinary heritage in the heart of Dublin since 2014.'}
+          </p>
+        </div>
       </section>
 
       {/* 2. MAIN STORY SECTION (DUAL COLUMN + MEDIA COLLAGE) */}
