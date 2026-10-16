@@ -3,7 +3,7 @@ import { StaffManager } from '../../components/users/StaffManager';
 
 export function StaffUsersPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <StaffManager />
     </div>
   );

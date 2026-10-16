@@ -40,7 +40,7 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-stone-200/90 px-8 sm:px-10 lg:px-12 xl:px-16 flex items-center justify-between shrink-0">
+    <header className="h-14 bg-white border-b border-stone-200/90 px-6 sm:px-8 lg:px-10 flex items-center justify-between shrink-0">
       {/* Left: Shift Clock & Active Role Indicator */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5 text-xs text-stone-600 font-medium">

@@ -80,7 +80,7 @@ export function OrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Financial Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-[#1A130E] flex flex-col justify-between">

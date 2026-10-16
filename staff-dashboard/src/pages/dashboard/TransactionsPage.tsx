@@ -61,7 +61,7 @@ export function TransactionsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <PageHeader
         title="Transactions"
         description="Payment records and order history."

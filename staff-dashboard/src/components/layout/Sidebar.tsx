@@ -109,7 +109,7 @@ export function Sidebar() {
       {/* Main Content */}
       <div className="relative z-10">
         {/* Brand */}
-        <div className="h-16 px-5 border-b border-stone-800/80 flex items-center justify-between">
+        <div className="h-14 px-5 border-b border-stone-800/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9.5 h-9.5 rounded-xl bg-[#F15A24] flex items-center justify-center font-bold shadow-md shadow-[#F15A24]/20 text-white">
               <ChefHat className="w-5 h-5" />
