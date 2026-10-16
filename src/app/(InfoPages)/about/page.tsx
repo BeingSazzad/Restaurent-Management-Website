@@ -9,14 +9,11 @@ import {
   Award,
   Heart,
   UtensilsCrossed,
-  CheckCircle2,
   Phone,
   ArrowRight,
   Star,
   Clock,
   ChevronRight,
-  BookOpen,
-  Users,
 } from 'lucide-react';
 
 export default function AboutPage() {

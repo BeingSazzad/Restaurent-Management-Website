@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { updateOrderStatus, toggleKitchenSnooze, createOrder } from '@/redux/slices/orderSlice';
 import { toggleItemAvailability } from '@/redux/slices/menuSlice';
-import { OrderItem, RESTAURANT_INFO, MENU_ITEMS } from '@/Mockdata';
+import { OrderItem, RESTAURANT_INFO } from '@/Mockdata';
 import {
   ChefHat,
   Clock,
@@ -15,10 +15,8 @@ import {
   Bike,
   Store,
   Printer,
-  Sparkles,
   TrendingUp,
   Search,
-  SlidersHorizontal,
   Flame,
   AlertTriangle,
   RotateCcw,
@@ -27,11 +25,8 @@ import {
   X,
   Check,
   UtensilsCrossed,
-  Timer,
-  ShoppingBag,
   Phone,
   FileText,
-  BadgePercent,
   CheckCheck,
   MapPin,
   ArrowUpRight,
@@ -131,7 +126,6 @@ export default function AgentDashboardPage() {
   const readyOrders = filteredOrders.filter(
     (o) => o.status === 'ready' || o.status === 'out_for_delivery'
   );
-  const completedOrders = filteredOrders.filter((o) => o.status === 'completed');
 
   // Filtered Items for 86 Stock Manager
   const filteredStockItems = useMemo(() => {

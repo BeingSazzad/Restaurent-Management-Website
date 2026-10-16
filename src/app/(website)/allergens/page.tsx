@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, AlertTriangle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ArrowRight } from 'lucide-react';
 
 const ALLERGENS_LIST = [
   { id: 1, name: 'Gluten / Wheat', notes: 'Present in naans, rotis, and samosa pastry. Gluten-free biryanis & rice dishes available.' },

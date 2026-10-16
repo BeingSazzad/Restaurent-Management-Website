@@ -11,15 +11,11 @@ import confetti from 'canvas-confetti';
 import {
   X,
   CreditCard,
-  CheckCircle2,
   Bike,
   Store,
   MapPin,
-  Phone,
   User,
-  Mail,
   ChevronDown,
-  ArrowRight,
 } from 'lucide-react';
 
 export const CheckoutModal: React.FC = () => {

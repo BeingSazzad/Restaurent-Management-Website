@@ -1,39 +1,30 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, Suspense } from 'react';
-import Link from 'next/link';
+import React, { useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { MENU_ITEMS, CATEGORIES, MenuItem } from '@/Mockdata';
+import { MENU_ITEMS, MenuItem } from '@/Mockdata';
 import { DishCard } from '@/components/shared/DishCard';
 import { ModifierModal } from '@/components/shared/ModifierModal';
 import {
   Search,
   SlidersHorizontal,
   Filter,
-  Flame,
-  Award,
-  Sparkles,
   RotateCcw,
-  UtensilsCrossed,
   X,
-  Check,
 } from 'lucide-react';
 
 function MenuContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category') || 'all';
 
-  const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam);
+  const [userCategory, setUserCategory] = useState<string | null>(null);
+  const selectedCategory = userCategory ?? categoryParam;
+  const setSelectedCategory = (cat: string) => setUserCategory(cat);
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [dietaryFilter, setDietaryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc' | 'rating'>('popular');
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
-
-  useEffect(() => {
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
-  }, [categoryParam]);
 
   // Filter & Sort Logic
   const filteredDishes = useMemo(() => {

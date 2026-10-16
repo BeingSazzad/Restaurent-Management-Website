@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MenuItem, CartItem } from '../../Mockdata';
 import { useAppDispatch } from '../../redux/hooks';
 import { addToCart } from '../../redux/slices/cartSlice';
@@ -11,41 +11,43 @@ interface ModifierModalProps {
   onClose: () => void;
 }
 
+function getInitialModifiers(dish: MenuItem | null) {
+  const initial: {
+    [groupId: string]: { optionId: string; name: string; price: number }[];
+  } = {};
+
+  if (dish?.modifierGroups) {
+    dish.modifierGroups.forEach((group) => {
+      if (group.required && group.maxSelect === 1 && group.options.length > 0) {
+        initial[group.id] = [
+          {
+            optionId: group.options[0].id,
+            name: group.options[0].name,
+            price: group.options[0].price,
+          },
+        ];
+      } else {
+        initial[group.id] = [];
+      }
+    });
+  }
+
+  return initial;
+}
+
 export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) => {
   const dispatch = useAppDispatch();
+  const [prevDishId, setPrevDishId] = useState<string | null>(dish?.id || null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedModifiers, setSelectedModifiers] = useState<{
-    [groupId: string]: { optionId: string; name: string; price: number }[];
-  }>({});
+  const [selectedModifiers, setSelectedModifiers] = useState(() => getInitialModifiers(dish));
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  useEffect(() => {
-    if (!dish) return;
+  if (dish && dish.id !== prevDishId) {
+    setPrevDishId(dish.id);
     setQuantity(1);
     setSpecialInstructions('');
-
-    const initial: {
-      [groupId: string]: { optionId: string; name: string; price: number }[];
-    } = {};
-
-    if (dish.modifierGroups) {
-      dish.modifierGroups.forEach((group) => {
-        if (group.required && group.maxSelect === 1 && group.options.length > 0) {
-          initial[group.id] = [
-            {
-              optionId: group.options[0].id,
-              name: group.options[0].name,
-              price: group.options[0].price,
-            },
-          ];
-        } else {
-          initial[group.id] = [];
-        }
-      });
-    }
-
-    setSelectedModifiers(initial);
-  }, [dish]);
+    setSelectedModifiers(getInitialModifiers(dish));
+  }
 
   if (!dish) return null;
 

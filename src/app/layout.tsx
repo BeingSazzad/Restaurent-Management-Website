@@ -2,13 +2,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import { ReduxProvider } from '../redux/ReduxProvider';
-import { Navbar } from '../components/layout/Navbar';
-import { Footer } from '../components/layout/Footer';
-import { CartDrawer } from '../components/shared/CartDrawer';
-import { CheckoutModal } from '../components/shared/CheckoutModal';
-import { OrderTrackerModal } from '../components/shared/OrderTrackerModal';
-import { MobileStickyBar } from '../components/layout/MobileStickyBar';
-
 import { AppShell } from '../components/layout/AppShell';
 
 export const metadata: Metadata = {

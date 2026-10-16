@@ -4,6 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Logo } from '../shared/Logo';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC = () => {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
 
@@ -175,7 +177,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Copyright Line */}
         <div className="pt-6 border-t border-[#271E18] flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-[#8C7D72]">
-          <p>© {new Date().getFullYear()} Amber Spice. All rights reserved.</p>
+          <p>© {CURRENT_YEAR} Amber Spice. All rights reserved.</p>
           <div className="flex items-center gap-4 text-[#8C7D72]">
             <Link href="/privacy-policy" className="hover:text-white transition-colors">
               Privacy Policy

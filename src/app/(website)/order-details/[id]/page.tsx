@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
@@ -17,13 +17,190 @@ import {
   ChefHat,
   ClipboardCheck,
   UtensilsCrossed,
-  CreditCard,
-  ShoppingBag,
 } from 'lucide-react';
+import { INITIAL_ORDERS, OrderItem } from '@/Mockdata';
+
+// Static historical partner orders for account history demonstrations
+const HISTORICAL_ORDERS: Record<string, any> = {
+  acb12345458: {
+    id: 'ord-mcd',
+    orderNumber: 'ACB12345458',
+    customerName: 'Sarah Ahmed',
+    customerPhone: '+353 87 234 5678',
+    customerEmail: 'sarah.ahmed@gmail.com',
+    fulfillmentType: 'delivery',
+    deliveryAddress: '42 Baggot St Lower, Dublin 2',
+    eircode: 'D02 P682',
+    items: [
+      {
+        cartItemId: 'mcd-1',
+        dish: {
+          id: 'mcd-1',
+          name: 'Big Mac Meal',
+          price: 12.50,
+          image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
+          description: 'Double beef patty with special sauce, lettuce, cheese, pickles.',
+          category: 'Burgers',
+          spiceLevel: 0,
+          allergens: ['Gluten', 'Dairy'],
+          isPopular: true,
+          isVeg: false,
+        },
+        quantity: 2,
+        selectedModifiers: [{ groupName: 'Drink', optionName: 'Coke Large', price: 0 }],
+        specialInstructions: 'Extra napkins please',
+        totalPrice: 25.00,
+      },
+      {
+        cartItemId: 'mcd-2',
+        dish: {
+          id: 'mcd-2',
+          name: 'Crispy McNuggets (9 pcs) & Large Fries',
+          price: 15.00,
+          image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+          description: 'Tender crispy chicken bites with golden salted fries and sweet curry dip.',
+          category: 'Sides',
+          spiceLevel: 0,
+          allergens: ['Gluten'],
+          isPopular: true,
+          isVeg: false,
+        },
+        quantity: 1,
+        selectedModifiers: [{ groupName: 'Sauce', optionName: 'Sweet Curry Dip', price: 0 }],
+        totalPrice: 15.00,
+      },
+    ],
+    subtotal: 40.00,
+    deliveryFee: 0,
+    discount: 0,
+    total: 40.00,
+    status: 'completed',
+    createdAt: '2026-10-15T10:00:00.000Z',
+    estimatedMinutes: 0,
+    specialNotes: 'Leave at apartment reception desk.',
+    paymentMethod: 'apple_pay',
+  },
+  acb12345459: {
+    id: 'ord-sbx',
+    orderNumber: 'ACB12345459',
+    customerName: 'Sarah Ahmed',
+    customerPhone: '+353 87 234 5678',
+    customerEmail: 'sarah.ahmed@gmail.com',
+    fulfillmentType: 'delivery',
+    deliveryAddress: '42 Baggot St Lower, Dublin 2',
+    eircode: 'D02 P682',
+    items: [
+      {
+        cartItemId: 'sbx-1',
+        dish: {
+          id: 'sbx-1',
+          name: 'Caramel Macchiato & Butter Croissant',
+          price: 25.00,
+          image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80',
+          description: 'Freshly steamed milk with practical vanilla syrup, espresso and caramel drizzle.',
+          category: 'Coffee & Bakery',
+          spiceLevel: 0,
+          allergens: ['Dairy'],
+          isPopular: true,
+          isVeg: true,
+        },
+        quantity: 4,
+        selectedModifiers: [{ groupName: 'Milk Choice', optionName: 'Oat Milk', price: 0 }],
+        totalPrice: 100.00,
+      },
+    ],
+    subtotal: 100.00,
+    deliveryFee: 0,
+    discount: 0,
+    total: 100.00,
+    status: 'completed',
+    createdAt: '2026-10-14T10:00:00.000Z',
+    estimatedMinutes: 0,
+    specialNotes: 'Contactless delivery requested.',
+    paymentMethod: 'apple_pay',
+  },
+  acb12345678: {
+    id: 'ord-pzh',
+    orderNumber: 'ACB12345678',
+    customerName: 'Sarah Ahmed',
+    customerPhone: '+353 87 234 5678',
+    customerEmail: 'sarah.ahmed@gmail.com',
+    fulfillmentType: 'delivery',
+    deliveryAddress: '42 Baggot St Lower, Dublin 2',
+    eircode: 'D02 P682',
+    items: [
+      {
+        cartItemId: 'pzh-1',
+        dish: {
+          id: 'pzh-1',
+          name: 'Stuffed Crust Pepperoni Feast & Garlic Breadsticks',
+          price: 60.00,
+          image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+          description: 'Loaded mozzarella stuffed crust pepperoni pizza with hot garlic breadsticks.',
+          category: 'Pizza',
+          spiceLevel: 1,
+          allergens: ['Gluten', 'Dairy'],
+          isPopular: true,
+          isVeg: false,
+        },
+        quantity: 1,
+        selectedModifiers: [],
+        totalPrice: 60.00,
+      },
+    ],
+    subtotal: 60.00,
+    deliveryFee: 0,
+    discount: 0,
+    total: 60.00,
+    status: 'completed',
+    createdAt: '2026-10-13T10:00:00.000Z',
+    estimatedMinutes: 0,
+    specialNotes: 'Ring bell twice.',
+    paymentMethod: 'apple_pay',
+  },
+  acb12345679: {
+    id: 'ord-bk',
+    orderNumber: 'ACB12345679',
+    customerName: 'Sarah Ahmed',
+    customerPhone: '+353 87 234 5678',
+    customerEmail: 'sarah.ahmed@gmail.com',
+    fulfillmentType: 'delivery',
+    deliveryAddress: '42 Baggot St Lower, Dublin 2',
+    eircode: 'D02 P682',
+    items: [
+      {
+        cartItemId: 'bk-1',
+        dish: {
+          id: 'bk-1',
+          name: 'Flame-Grilled Whopper & Onion Rings',
+          price: 22.50,
+          image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+          description: 'Flame-grilled beef burger with crunchy golden onion rings and chilled drinks.',
+          category: 'Burgers',
+          spiceLevel: 1,
+          allergens: ['Gluten'],
+          isPopular: true,
+          isVeg: false,
+        },
+        quantity: 2,
+        selectedModifiers: [],
+        totalPrice: 45.00,
+      },
+    ],
+    subtotal: 45.00,
+    deliveryFee: 0,
+    discount: 0,
+    total: 45.00,
+    status: 'completed',
+    createdAt: '2026-10-12T10:00:00.000Z',
+    estimatedMinutes: 0,
+    specialNotes: 'Leave with concierge.',
+    paymentMethod: 'apple_pay',
+  },
+};
 
 export default function OrderDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const rawId = (params?.id as string) || '';
   const cleanId = decodeURIComponent(rawId).replace(/^#/, '').trim();
@@ -42,7 +219,8 @@ export default function OrderDetailsPage() {
   }, [dispatch]);
   
   // Intelligent lookup: matches AS-2041, ord-2041, 2041, ZM-4047, zm-4047, etc.
-  const foundOrder = orders.find((o) => {
+  const allKnownOrders = React.useMemo(() => [...orders, ...INITIAL_ORDERS], [orders]);
+  const foundOrder = allKnownOrders.find((o) => {
     const oId = (o.id || '').toLowerCase();
     const oNum = (o.orderNumber || '').toLowerCase();
     const cId = cleanId.toLowerCase();
@@ -60,349 +238,10 @@ export default function OrderDetailsPage() {
     );
   });
 
-  // Sample historical Dublin orders map if user clicked a past order
-  const mockOrdersMap: Record<string, any> = {
-    'zm-4047': {
-      id: 'ord-4047',
-      orderNumber: 'ZM-4047',
-      customerName: 'Mark Jecno',
-      customerPhone: '+353 87 123 4567',
-      customerEmail: 'mark.jecno@example.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '14 Grafton Street, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'c-4047',
-          dish: {
-            id: 'dish-curry-02',
-            name: 'Kashmiri Lamb Rogan Josh',
-            price: 14.99,
-            image: '/images/curry_dish.jpg',
-            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
-            category: 'Main Curries',
-            spiceLevel: 2,
-            allergens: ['Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [],
-          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
-          totalPrice: 14.99,
-        },
-      ],
-      subtotal: 14.99,
-      deliveryFee: 2.00,
-      discount: 0,
-      total: 16.99,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-      estimatedMinutes: 35,
-      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
-      paymentMethod: 'apple_pay',
-    },
-    'zm4047': {
-      id: 'ord-4047',
-      orderNumber: 'ZM-4047',
-      customerName: 'Mark Jecno',
-      customerPhone: '+353 87 123 4567',
-      customerEmail: 'mark.jecno@example.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '14 Grafton Street, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'c-4047',
-          dish: {
-            id: 'dish-curry-02',
-            name: 'Kashmiri Lamb Rogan Josh',
-            price: 14.99,
-            image: '/images/curry_dish.jpg',
-            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
-            category: 'Main Curries',
-            spiceLevel: 2,
-            allergens: ['Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [],
-          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
-          totalPrice: 14.99,
-        },
-      ],
-      subtotal: 14.99,
-      deliveryFee: 2.00,
-      discount: 0,
-      total: 16.99,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-      estimatedMinutes: 35,
-      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
-      paymentMethod: 'apple_pay',
-    },
-    '4047': {
-      id: 'ord-4047',
-      orderNumber: 'ZM-4047',
-      customerName: 'Mark Jecno',
-      customerPhone: '+353 87 123 4567',
-      customerEmail: 'mark.jecno@example.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '14 Grafton Street, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'c-4047',
-          dish: {
-            id: 'dish-curry-02',
-            name: 'Kashmiri Lamb Rogan Josh',
-            price: 14.99,
-            image: '/images/curry_dish.jpg',
-            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
-            category: 'Main Curries',
-            spiceLevel: 2,
-            allergens: ['Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [],
-          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
-          totalPrice: 14.99,
-        },
-      ],
-      subtotal: 14.99,
-      deliveryFee: 2.00,
-      discount: 0,
-      total: 16.99,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-      estimatedMinutes: 35,
-      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
-      paymentMethod: 'apple_pay',
-    },
-    'ord-4047': {
-      id: 'ord-4047',
-      orderNumber: 'ZM-4047',
-      customerName: 'Mark Jecno',
-      customerPhone: '+353 87 123 4567',
-      customerEmail: 'mark.jecno@example.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '14 Grafton Street, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'c-4047',
-          dish: {
-            id: 'dish-curry-02',
-            name: 'Kashmiri Lamb Rogan Josh',
-            price: 14.99,
-            image: '/images/curry_dish.jpg',
-            description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
-            category: 'Main Curries',
-            spiceLevel: 2,
-            allergens: ['Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [],
-          specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
-          totalPrice: 14.99,
-        },
-      ],
-      subtotal: 14.99,
-      deliveryFee: 2.00,
-      discount: 0,
-      total: 16.99,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-      estimatedMinutes: 35,
-      specialNotes: 'Ring Apt 3 buzzer, leave at reception',
-      paymentMethod: 'apple_pay',
-    },
-    acb12345458: {
-      id: 'ord-mcd',
-      orderNumber: 'ACB12345458',
-      customerName: 'Sarah Ahmed',
-      customerPhone: '+353 87 234 5678',
-      customerEmail: 'sarah.ahmed@gmail.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '42 Baggot St Lower, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'mcd-1',
-          dish: {
-            id: 'mcd-1',
-            name: 'Big Mac Meal',
-            price: 12.50,
-            image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
-            description: 'Double beef patty with special sauce, lettuce, cheese, pickles.',
-            category: 'Burgers',
-            spiceLevel: 0,
-            allergens: ['Gluten', 'Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 2,
-          selectedModifiers: [{ groupName: 'Drink', optionName: 'Coke Large', price: 0 }],
-          specialInstructions: 'Extra napkins please',
-          totalPrice: 25.00,
-        },
-        {
-          cartItemId: 'mcd-2',
-          dish: {
-            id: 'mcd-2',
-            name: 'Crispy McNuggets (9 pcs) & Large Fries',
-            price: 15.00,
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
-            description: 'Tender crispy chicken bites with golden salted fries and sweet curry dip.',
-            category: 'Sides',
-            spiceLevel: 0,
-            allergens: ['Gluten'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [{ groupName: 'Sauce', optionName: 'Sweet Curry Dip', price: 0 }],
-          totalPrice: 15.00,
-        },
-      ],
-      subtotal: 40.00,
-      deliveryFee: 0,
-      discount: 0,
-      total: 40.00,
-      status: 'completed',
-      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      estimatedMinutes: 0,
-      specialNotes: 'Leave at apartment reception desk.',
-      paymentMethod: 'apple_pay',
-    },
-    acb12345459: {
-      id: 'ord-sbx',
-      orderNumber: 'ACB12345459',
-      customerName: 'Sarah Ahmed',
-      customerPhone: '+353 87 234 5678',
-      customerEmail: 'sarah.ahmed@gmail.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '42 Baggot St Lower, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'sbx-1',
-          dish: {
-            id: 'sbx-1',
-            name: 'Caramel Macchiato & Butter Croissant',
-            price: 25.00,
-            image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80',
-            description: 'Freshly steamed milk with practical vanilla syrup, espresso and caramel drizzle.',
-            category: 'Coffee & Bakery',
-            spiceLevel: 0,
-            allergens: ['Dairy'],
-            isPopular: true,
-            isVeg: true,
-          },
-          quantity: 4,
-          selectedModifiers: [{ groupName: 'Milk Choice', optionName: 'Oat Milk', price: 0 }],
-          totalPrice: 100.00,
-        },
-      ],
-      subtotal: 100.00,
-      deliveryFee: 0,
-      discount: 0,
-      total: 100.00,
-      status: 'completed',
-      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      estimatedMinutes: 0,
-      specialNotes: 'Contactless delivery requested.',
-      paymentMethod: 'apple_pay',
-    },
-    acb12345678: {
-      id: 'ord-pzh',
-      orderNumber: 'ACB12345678',
-      customerName: 'Sarah Ahmed',
-      customerPhone: '+353 87 234 5678',
-      customerEmail: 'sarah.ahmed@gmail.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '42 Baggot St Lower, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'pzh-1',
-          dish: {
-            id: 'pzh-1',
-            name: 'Stuffed Crust Pepperoni Feast & Garlic Breadsticks',
-            price: 60.00,
-            image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
-            description: 'Loaded mozzarella stuffed crust pepperoni pizza with hot garlic breadsticks.',
-            category: 'Pizza',
-            spiceLevel: 1,
-            allergens: ['Gluten', 'Dairy'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 1,
-          selectedModifiers: [],
-          totalPrice: 60.00,
-        },
-      ],
-      subtotal: 60.00,
-      deliveryFee: 0,
-      discount: 0,
-      total: 60.00,
-      status: 'completed',
-      createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-      estimatedMinutes: 0,
-      specialNotes: 'Ring bell twice.',
-      paymentMethod: 'apple_pay',
-    },
-    acb12345679: {
-      id: 'ord-bk',
-      orderNumber: 'ACB12345679',
-      customerName: 'Sarah Ahmed',
-      customerPhone: '+353 87 234 5678',
-      customerEmail: 'sarah.ahmed@gmail.com',
-      fulfillmentType: 'delivery',
-      deliveryAddress: '42 Baggot St Lower, Dublin 2',
-      eircode: 'D02 P682',
-      items: [
-        {
-          cartItemId: 'bk-1',
-          dish: {
-            id: 'bk-1',
-            name: 'Flame-Grilled Whopper & Onion Rings',
-            price: 22.50,
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
-            description: 'Flame-grilled beef burger with crunchy golden onion rings and chilled drinks.',
-            category: 'Burgers',
-            spiceLevel: 1,
-            allergens: ['Gluten'],
-            isPopular: true,
-            isVeg: false,
-          },
-          quantity: 2,
-          selectedModifiers: [],
-          totalPrice: 45.00,
-        },
-      ],
-      subtotal: 45.00,
-      deliveryFee: 0,
-      discount: 0,
-      total: 45.00,
-      status: 'completed',
-      createdAt: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
-      estimatedMinutes: 0,
-      specialNotes: 'Leave with concierge.',
-      paymentMethod: 'apple_pay',
-    },
-  };
-
-  const matchedMock =
-    mockOrdersMap[cleanId.toLowerCase()] ||
-    mockOrdersMap[cleanId.toLowerCase().replace(/[^a-z0-9]/gi, '')] ||
-    Object.values(mockOrdersMap).find(
+  const matchedHistorical =
+    HISTORICAL_ORDERS[cleanId.toLowerCase()] ||
+    HISTORICAL_ORDERS[cleanId.toLowerCase().replace(/[^a-z0-9]/gi, '')] ||
+    Object.values(HISTORICAL_ORDERS).find(
       (m) =>
         m.id.toLowerCase() === cleanId.toLowerCase() ||
         m.orderNumber.toLowerCase() === cleanId.toLowerCase() ||
@@ -411,115 +250,16 @@ export default function OrderDetailsPage() {
     );
 
   const is4047 = cleanId.toLowerCase().includes('4047') || cleanId.toLowerCase().startsWith('zm');
-
-  // Fallback realistic Dublin order if direct URL is hit
-  const currentOrder = foundOrder || matchedMock || (
-    is4047
-      ? {
-          id: cleanId || 'ord-4047',
-          orderNumber: cleanId ? cleanId.toUpperCase() : 'ZM-4047',
-          customerName: 'Mark Jecno',
-          customerPhone: '+353 87 123 4567',
-          customerEmail: 'mark.jecno@example.com',
-          fulfillmentType: 'delivery' as const,
-          deliveryAddress: '14 Grafton Street, Dublin 2',
-          eircode: 'D02 P682',
-          items: [
-            {
-              cartItemId: 'c-4047',
-              dish: {
-                id: 'dish-curry-02',
-                name: 'Kashmiri Lamb Rogan Josh',
-                price: 14.99,
-                image: '/images/curry_dish.jpg',
-                description: 'Slow-braised tender lamb shoulder infused with Kashmiri dry red chillies, ratan jot, green cardamom, and rich aromatic gravy.',
-                category: 'Main Curries',
-                spiceLevel: 2,
-                allergens: ['Dairy'],
-                isPopular: true,
-                isVeg: false,
-              },
-              quantity: 1,
-              selectedModifiers: [],
-              specialInstructions: 'Ring Apt 3 buzzer, leave at reception',
-              totalPrice: 14.99,
-            },
-          ],
-          subtotal: 14.99,
-          deliveryFee: 2.00,
-          discount: 0,
-          total: 16.99,
-          status: 'new' as const,
-          createdAt: new Date().toISOString(),
-          estimatedMinutes: 35,
-          specialNotes: 'Ring Apt 3 buzzer, leave at reception',
-          paymentMethod: 'apple_pay' as const,
-        }
-      : {
-          id: cleanId || 'ord-2041',
-          orderNumber: cleanId
-            ? (cleanId.toUpperCase().startsWith('AS-') || cleanId.toUpperCase().startsWith('ZM-')
-                ? cleanId.toUpperCase()
-                : `AS-${cleanId.replace(/[^0-9]/g, '') || '2041'}`)
-            : 'AS-2041',
-          customerName: 'Sarah Ahmed',
-          customerPhone: '+353 87 234 5678',
-          customerEmail: 'sarah.ahmed@gmail.com',
-          fulfillmentType: 'delivery' as const,
-          deliveryAddress: '42 Baggot St Lower, Dublin 2',
-          eircode: 'D02 P682',
-          items: [
-            {
-              cartItemId: 'c1',
-              dish: {
-                id: 'dish-1',
-                name: 'Royal Chicken Dum Biryani',
-                price: 13.99,
-                image: '/images/hero_dish.jpg',
-                description: 'Slow-cooked aromatic basmati rice layered with tender spiced chicken.',
-                category: 'Rice & Biryani',
-                spiceLevel: 2,
-                allergens: ['Dairy'],
-                isPopular: true,
-                isVeg: false,
-              },
-              quantity: 2,
-              selectedModifiers: [
-                { groupName: 'Portion Size', optionName: 'Standard Handi Portion (1 Person)', price: 0 },
-              ],
-              specialInstructions: 'Please include extra mint raita!',
-              totalPrice: 27.98,
-            },
-            {
-              cartItemId: 'c2',
-              dish: {
-                id: 'dish-2',
-                name: 'Old Delhi Butter Chicken',
-                price: 12.99,
-                image: '/images/curry_dish.jpg',
-                description: 'Velvety tomato cream sauce infused with fenugreek and butter.',
-                category: 'Main Curries',
-                spiceLevel: 1,
-                allergens: ['Dairy', 'Nuts'],
-                isPopular: true,
-                isVeg: false,
-              },
-              quantity: 1,
-              selectedModifiers: [],
-              totalPrice: 12.99,
-            },
-          ],
-          subtotal: 40.97,
-          deliveryFee: 0,
-          discount: 4.10,
-          total: 36.87,
-          status: 'preparing' as const,
-          createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-          estimatedMinutes: 25,
-          specialNotes: 'Ring Apartment 4B buzzer.',
-          paymentMethod: 'apple_pay' as const,
-        }
-  );
+  const baseFallback = is4047 ? INITIAL_ORDERS[0] : (INITIAL_ORDERS[1] || INITIAL_ORDERS[0]);
+  const currentOrder: OrderItem = (foundOrder || matchedHistorical || {
+    ...baseFallback,
+    id: cleanId || baseFallback.id,
+    orderNumber: cleanId
+      ? (cleanId.toUpperCase().startsWith('AS-') || cleanId.toUpperCase().startsWith('ZM-')
+          ? cleanId.toUpperCase()
+          : `AS-${cleanId.replace(/[^0-9]/g, '') || baseFallback.orderNumber.replace(/[^0-9]/g, '')}`)
+      : baseFallback.orderNumber,
+  }) as OrderItem;
 
   const [localStatus, setLocalStatus] = React.useState<
     'new' | 'preparing' | 'ready' | 'completed' | null

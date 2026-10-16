@@ -15,8 +15,6 @@ import {
   X,
   Calendar,
   UtensilsCrossed,
-  LogIn,
-  UserPlus,
   LogOut,
   ChevronDown,
   ChefHat,
@@ -44,10 +42,12 @@ export const Navbar: React.FC = () => {
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   // Close menus on route change
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setIsMobileMenuOpen(false);
     setIsAccountMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Click outside to close account menu
   useEffect(() => {
@@ -59,12 +59,6 @@ export const Navbar: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const scrollToSection = (id: string) => {
-    setIsMobileMenuOpen(false);
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const navLinks = [
     { href: '/', label: 'Home' },

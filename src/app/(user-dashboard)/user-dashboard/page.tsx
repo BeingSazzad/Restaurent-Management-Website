@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addToCart, setCartOpen } from '@/redux/slices/cartSlice';
-import { setActiveTrackingOrderId, updateOrderStatus } from '@/redux/slices/orderSlice';
+import { setActiveTrackingOrderId } from '@/redux/slices/orderSlice';
 import { logout } from '@/redux/slices/authSlice';
 import { MenuItem, MOCK_USER } from '@/Mockdata';
 import { ModifierModal } from '@/components/shared/ModifierModal';
@@ -26,19 +26,10 @@ import {
   Plus,
   Home,
   Briefcase,
-  ShieldCheck,
   KeyRound,
   Bell,
   Sparkles,
-  ArrowLeft,
   Clock,
-  Bike,
-  Store,
-  ChefHat,
-  ClipboardCheck,
-  UtensilsCrossed,
-  FileText,
-  Star,
   Edit3,
 } from 'lucide-react';
 
@@ -69,19 +60,18 @@ function DashboardContent() {
   const orders = useAppSelector((state) => state.orders.orders);
   const { user } = useAppSelector((state) => state.auth);
 
-  const initialTab = (searchParams.get('tab') as TabType) || 'profile';
-  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
-  const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
-
-  useEffect(() => {
-    const tabParam = searchParams.get('tab') as TabType | null;
-    if (
-      tabParam &&
-      ['profile', 'orders', 'addresses', 'payment', 'security', 'notifications', 'logout'].includes(tabParam)
-    ) {
-      setActiveTab(tabParam);
+  const tabParam = searchParams.get('tab') as TabType | null;
+  const validTab = tabParam && ['profile', 'orders', 'addresses', 'payment', 'security', 'notifications', 'logout'].includes(tabParam) ? tabParam : null;
+  const [userTab, setUserTab] = useState<TabType | null>(null);
+  const activeTab: TabType = userTab ?? validTab ?? 'profile';
+  const setActiveTab = (tab: TabType | ((prev: TabType) => TabType)) => {
+    if (typeof tab === 'function') {
+      setUserTab(tab(activeTab));
+    } else {
+      setUserTab(tab);
     }
-  }, [searchParams]);
+  };
+  const [selectedDishForCustomize, setSelectedDishForCustomize] = useState<MenuItem | null>(null);
 
   // Profile data
   const [profile, setProfile] = useState({
@@ -191,8 +181,6 @@ function DashboardContent() {
       itemsSummary: '2x Flame-Grilled Whopper, 1x Onion Rings, 2x Coke Zero',
     },
   ]);
-
-  const [expandedOrderDetails, setExpandedOrderDetails] = useState<string | null>(null);
 
   // Notification Preferences toggles
   const [notifications, setNotifications] = useState({

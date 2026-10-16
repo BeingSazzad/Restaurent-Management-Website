@@ -16,7 +16,9 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
   const { user } = useAuth();
   const { soundEnabled, rushMode, rushMinutes } = useAppSelector((state) => state.orders);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  const [currentTime, setCurrentTime] = useState(() =>
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {

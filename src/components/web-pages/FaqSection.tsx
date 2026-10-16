@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, HelpCircle, ArrowRight, MessageSquareQuote } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 
 interface FAQItem {
   id: number;

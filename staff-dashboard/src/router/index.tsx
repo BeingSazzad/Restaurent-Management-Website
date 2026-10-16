@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { PrivateRoute } from './PrivateRoute';
 import { DashboardLayout } from '../components/layout/DashboardLayout';

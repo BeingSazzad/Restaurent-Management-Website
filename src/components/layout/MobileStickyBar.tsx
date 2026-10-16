@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setCartOpen } from '../../redux/slices/cartSlice';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export const MobileStickyBar: React.FC = () => {
   const dispatch = useAppDispatch();
