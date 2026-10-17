@@ -11,7 +11,6 @@ import {
   Store,
   Clock,
   FileText,
-  AlertTriangle,
   LayoutList,
   LayoutGrid,
 } from 'lucide-react';
@@ -311,7 +310,7 @@ export function KdsPipeline() {
                 <tr>
                   <th className="py-3 px-4">Ticket & Type</th>
                   <th className="py-3 px-4">Customer</th>
-                  <th className="py-3 px-4 min-w-[240px]">Items & Prep Notes</th>
+                  <th className="py-3 px-4 min-w-[180px]">Items</th>
                   <th className="py-3 px-4">Elapsed</th>
                   <th className="py-3 px-4">Stage</th>
                   <th className="py-3 px-4 text-right">Actions</th>
@@ -363,32 +362,15 @@ export function KdsPipeline() {
                         </div>
                       </td>
 
-                      {/* Items & Instructions */}
+                      {/* Items */}
                       <td className="py-3 px-4 align-top">
                         <div className="space-y-1 max-w-md">
                           {order.items.map((item, idx) => (
-                            <div key={idx} className="text-xs text-stone-800 flex flex-wrap items-baseline gap-1.5">
+                            <div key={idx} className="text-xs text-stone-800 flex items-baseline gap-1.5">
                               <span className="font-bold text-[#F15A24]">{item.quantity}×</span>
                               <span className="font-semibold text-stone-900">{item.dish.name}</span>
-                              {item.selectedModifiers && item.selectedModifiers.length > 0 && (
-                                <span className="text-[11px] text-stone-500">
-                                  ({item.selectedModifiers.map((m) => m.optionName).join(', ')})
-                                </span>
-                              )}
-                              {item.specialInstructions && (
-                                <span className="text-[11px] font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60 inline-flex items-center gap-1">
-                                  <AlertTriangle className="w-2.5 h-2.5 text-amber-600" />
-                                  {item.specialInstructions}
-                                </span>
-                              )}
                             </div>
                           ))}
-                          {order.specialNotes && (
-                            <div className="text-[11px] text-stone-600 bg-stone-50 rounded px-2 py-1 border-l-2 border-[#F15A24] mt-1 flex items-start gap-1">
-                              <span className="font-bold text-stone-700 shrink-0">Note:</span>
-                              <span className="line-clamp-2">{order.specialNotes}</span>
-                            </div>
-                          )}
                         </div>
                       </td>
 

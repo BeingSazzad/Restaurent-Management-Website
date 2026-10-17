@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bike, Store, Clock, FileText, Flame, CheckCircle2, CheckCheck, Undo2, AlertTriangle } from 'lucide-react';
+import { Bike, Store, Clock, FileText, Flame, CheckCircle2, CheckCheck, Undo2 } from 'lucide-react';
 import { KdsOrder, OrderStatus } from '../../types/common.types';
 import { formatCurrency } from '../../lib/utils';
 
@@ -89,56 +89,17 @@ export function KdsTicketCard({ order, onStatusChange, onViewSlip }: KdsTicketCa
       </div>
 
       {/* 3. Items List */}
-      <div className="space-y-2.5 flex-1 border-t border-stone-100 pt-2.5">
-        {order.items.map((item, idx) => {
-          const hasInstruction =
-            item.specialInstructions &&
-            item.specialInstructions.trim().toLowerCase() !== order.specialNotes?.trim().toLowerCase();
-
-          return (
-            <div key={idx} className="space-y-0.5">
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-semibold text-xs text-[#F15A24] shrink-0">
-                  {item.quantity}×
-                </span>
-                <span className="font-medium text-xs sm:text-sm text-stone-800 leading-snug">
-                  {item.dish.name}
-                </span>
-              </div>
-
-              {/* Modifiers List */}
-              {item.selectedModifiers && item.selectedModifiers.length > 0 && (
-                <div className="pl-4 space-y-0.5">
-                  {item.selectedModifiers.map((mod, mIdx) => (
-                    <p key={mIdx} className="text-xs text-stone-500">
-                      • {mod.optionName}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              {/* Special Instructions */}
-              {hasInstruction && (
-                <div className="pl-4 pt-0.5 flex items-center gap-1.5 text-xs font-medium text-amber-700">
-                  <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
-                  <span>{item.specialInstructions}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        {/* Special Delivery Note */}
-        {order.specialNotes && (
-          <div
-            onClick={onViewSlip}
-            title="Click to view full ticket details"
-            className="mt-2 pl-2 border-l-2 border-stone-300 text-xs text-stone-600 cursor-pointer hover:border-[#F15A24] transition-colors"
-          >
-            <span className="font-semibold text-stone-800 text-[11px] block">Note:</span>
-            <span className="line-clamp-2 leading-relaxed">{order.specialNotes}</span>
+      <div className="space-y-1.5 flex-1 border-t border-stone-100 pt-2.5">
+        {order.items.map((item, idx) => (
+          <div key={idx} className="flex items-baseline gap-1.5">
+            <span className="font-bold text-xs text-[#F15A24] shrink-0">
+              {item.quantity}×
+            </span>
+            <span className="font-medium text-xs sm:text-sm text-stone-800 leading-snug">
+              {item.dish.name}
+            </span>
           </div>
-        )}
+        ))}
       </div>
 
       {/* 4. Action Footer */}

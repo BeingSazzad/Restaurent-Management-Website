@@ -282,12 +282,6 @@ export function OrdersPage() {
                     <div className="line-clamp-1 font-medium">
                       {order.items.map((i: any) => `${i.quantity}x ${i.dish.name}`).join(', ')}
                     </div>
-                    {order.specialNotes && (
-                      <div className="text-[10px] text-amber-700 italic mt-0.5">Note: {order.specialNotes}</div>
-                    )}
-                    {order.internalNotes && (
-                      <div className="text-[10px] text-blue-700 font-semibold mt-0.5">Internal: {order.internalNotes}</div>
-                    )}
                   </td>
 
                   <td className="py-3.5 px-4 font-extrabold text-[13px] text-[#1A130E] whitespace-nowrap">
