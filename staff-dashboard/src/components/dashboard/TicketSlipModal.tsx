@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { KdsOrder } from '../../types/common.types';
 import { formatCurrency } from '../../lib/utils';
 import { RESTAURANT_BRAND } from '../../lib/constants';
-import { Printer, MapPin, Phone, AlertTriangle } from 'lucide-react';
+import { Printer, MapPin, Phone, AlertTriangle, User } from 'lucide-react';
 
 export interface TicketSlipModalProps {
   order: KdsOrder | null;
@@ -21,7 +21,6 @@ export function TicketSlipModal({ order, onClose }: TicketSlipModalProps) {
       isOpen={!!order}
       onClose={onClose}
       title={`Ticket #${order.orderNumber}`}
-      subtitle={`Customer: ${order.customerName} · ${order.fulfillmentType.toUpperCase()}`}
       footer={
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
@@ -59,14 +58,27 @@ export function TicketSlipModal({ order, onClose }: TicketSlipModalProps) {
     >
       {tab === 'details' ? (
         <div className="space-y-4 text-xs">
-          {/* Customer line */}
+          {/* Customer info card */}
           <div className="p-3 bg-stone-50 rounded-xl space-y-1.5 border border-stone-200/80">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
+              <span className="text-stone-500">Customer:</span>
+              <span className="font-semibold text-stone-900 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-stone-400" />
+                <span>{order.customerName}</span>
+              </span>
+            </div>
+            <div className="flex justify-between items-center pt-1 border-t border-stone-200/60">
               <span className="text-stone-500">Contact:</span>
-              <a href={`tel:${order.customerPhone}`} className="font-semibold text-[#F15A24] flex items-center gap-1">
+              <a href={`tel:${order.customerPhone}`} className="font-semibold text-[#F15A24] flex items-center gap-1 hover:underline">
                 <Phone className="w-3 h-3" />
                 <span>{order.customerPhone}</span>
               </a>
+            </div>
+            <div className="flex justify-between items-center pt-1 border-t border-stone-200/60">
+              <span className="text-stone-500">Order Type:</span>
+              <span className="font-semibold text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-stone-200/80 text-stone-700">
+                {order.fulfillmentType}
+              </span>
             </div>
             {order.deliveryAddress && (
               <div className="flex justify-between items-start pt-1 border-t border-stone-200/60">
