@@ -759,7 +759,7 @@ export function CmsPage() {
           }`}
         >
           <Phone className="w-3.5 h-3.5" />
-          <span>Contact &amp; Store Details</span>
+          <span>Contact Info</span>
         </button>
 
         <button
@@ -774,7 +774,7 @@ export function CmsPage() {
           }`}
         >
           <Share2 className="w-3.5 h-3.5" />
-          <span>Social Media Links</span>
+          <span>Social Links</span>
         </button>
 
         <button
@@ -789,7 +789,7 @@ export function CmsPage() {
           }`}
         >
           <HelpCircle className="w-3.5 h-3.5" />
-          <span>FAQ Questions ({data.faq.items.length})</span>
+          <span>FAQs ({data.faq.items.length})</span>
         </button>
 
         <button
@@ -941,9 +941,9 @@ export function CmsPage() {
       {activeTab === 'contact' && (
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-6">
           <div className="pb-3 border-b border-stone-100">
-            <h3 className="font-bold text-sm text-[#1A130E]">Restaurant Contact &amp; Operating Details</h3>
+            <h3 className="font-bold text-sm text-[#1A130E]">Contact &amp; Store Details</h3>
             <p className="text-xs text-stone-500 mt-0.5">
-              Updates phone numbers, Dublin location addresses, weekly opening times, and top announcement message.
+              Manage restaurant contact info, store hours, and announcement banner.
             </p>
           </div>
 
@@ -1013,7 +1013,7 @@ export function CmsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-stone-700 mb-1">
-                Primary Phone Number (Orders &amp; Front Desk)
+                Phone Number
               </label>
               <input
                 type="text"
@@ -1029,7 +1029,7 @@ export function CmsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Official Email Address</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Email Address</label>
               <input
                 type="email"
                 value={data.storeInfo.email}
@@ -1044,7 +1044,7 @@ export function CmsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Dublin Eircode</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Eircode</label>
               <input
                 type="text"
                 value={data.storeInfo.eircode}
@@ -1059,7 +1059,7 @@ export function CmsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Street Address</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Address</label>
               <input
                 type="text"
                 value={data.storeInfo.address}
@@ -1080,7 +1080,7 @@ export function CmsPage() {
               <div>
                 <h4 className="font-bold text-xs text-stone-800 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-[#B84A22]" />
-                  <span>Operating Hours &amp; Weekly Schedule (Dine-in, Takeaway &amp; Delivery)</span>
+                  <span>Weekly Operating Hours</span>
                 </h4>
                 <p className="text-[11px] text-stone-500 mt-0.5">
                   Set opening times and closed days for each day of the week.
@@ -1263,7 +1263,7 @@ export function CmsPage() {
           {/* Announcement Banner */}
           <div className="pt-4 border-t border-stone-100 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-stone-700">Top Announcement Banner Message</label>
+              <label className="text-xs font-bold text-stone-700">Announcement Banner</label>
               <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-stone-600">
                 <input
                   type="checkbox"
@@ -1276,7 +1276,7 @@ export function CmsPage() {
                   }
                   className="w-4 h-4 rounded text-[#B84A22] focus:ring-[#B84A22]"
                 />
-                <span>Show banner on customer website</span>
+                <span>Show on website</span>
               </label>
             </div>
             <input
@@ -1300,9 +1300,9 @@ export function CmsPage() {
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-6">
           <div className="pb-3 border-b border-stone-100 flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-sm text-[#1A130E]">Social Media Profiles &amp; Online Links</h3>
+              <h3 className="font-bold text-sm text-[#1A130E]">Social Profiles &amp; Links</h3>
               <p className="text-xs text-stone-500 mt-0.5">
-                Control social profiles, TripAdvisor links, Google Maps coordinates, official contact numbers, and WhatsApp messaging.
+                Manage social channels, location links, and contact channels.
               </p>
             </div>
           </div>
@@ -1310,7 +1310,7 @@ export function CmsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Facebook */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">Facebook Page URL</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Facebook</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <FacebookOfficialIcon />
@@ -1332,7 +1332,7 @@ export function CmsPage() {
 
             {/* Instagram */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">Instagram Profile URL</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Instagram</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <InstagramOfficialIcon />
@@ -1354,7 +1354,7 @@ export function CmsPage() {
 
             {/* YouTube */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">YouTube Channel URL</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">YouTube</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <YouTubeOfficialIcon />
@@ -1376,7 +1376,7 @@ export function CmsPage() {
 
             {/* TripAdvisor */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">TripAdvisor Review Page</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">TripAdvisor</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <TripAdvisorOfficialIcon />
@@ -1398,7 +1398,7 @@ export function CmsPage() {
 
             {/* WhatsApp Business */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">WhatsApp Business Direct Number</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">WhatsApp</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <WhatsAppOfficialIcon />
@@ -1420,7 +1420,7 @@ export function CmsPage() {
 
             {/* Primary Restaurant Contact Number */}
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">Official Restaurant Contact Number</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Contact Number</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <ContactPhoneOfficialIcon />
@@ -1443,7 +1443,7 @@ export function CmsPage() {
 
             {/* Google Maps Location Link (Spans both columns) */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-stone-700 mb-1.5">Google Maps Location Link</label>
+              <label className="block text-xs font-bold text-stone-700 mb-1.5">Google Maps</label>
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <GoogleMapsOfficialIcon />
@@ -1643,9 +1643,9 @@ export function CmsPage() {
         <div className="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-2xs space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-stone-100">
             <div>
-              <h3 className="font-bold text-sm text-[#1A130E]">Frequently Asked Questions</h3>
+              <h3 className="font-bold text-sm text-[#1A130E]">FAQs</h3>
               <p className="text-xs text-stone-500 mt-0.5">
-                Add, edit, or remove customer Q&amp;A cards shown on the website FAQ page.
+                Manage questions and answers shown on the customer FAQ page.
               </p>
             </div>
             <button
