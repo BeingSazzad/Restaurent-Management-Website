@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Volume2,
-  VolumeX,
   Clock,
   Maximize,
   Minimize,
@@ -17,8 +15,7 @@ import {
   Check,
   ExternalLink,
 } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { toggleSound, toggleRushMode } from '../../store/slices/orderSlice';
+import { useAppDispatch } from '../../store/hooks';
 import { setActiveRole } from '../../store/slices/authSlice';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole, AppNotification } from '../../types/common.types';
@@ -37,7 +34,6 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { soundEnabled, rushMode, rushMinutes } = useAppSelector((state) => state.orders);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(() =>
     new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -259,43 +255,6 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
             {user?.name?.split(' ')[0] || 'Admin'}
           </span>
         </Link>
-
-        {/* Sound Toggle */}
-        <button
-          onClick={() => dispatch(toggleSound())}
-          className={`h-8 px-2.5 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${
-            soundEnabled
-              ? 'bg-white border-stone-200 text-stone-800 hover:border-[#F15A24]'
-              : 'bg-stone-100 border-transparent text-stone-400'
-          }`}
-          title="Toggle Chime Sound"
-        >
-          {soundEnabled ? (
-            <>
-              <Volume2 className="w-3.5 h-3.5 text-[#F15A24]" />
-              <span className="hidden sm:inline">Sound</span>
-            </>
-          ) : (
-            <>
-              <VolumeX className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Mute</span>
-            </>
-          )}
-        </button>
-
-        {/* Rush Mode (+20m delay) */}
-        <button
-          onClick={() => dispatch(toggleRushMode())}
-          className={`h-8 px-2.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer border ${
-            rushMode
-              ? 'bg-rose-600 text-white border-rose-600 hover:bg-rose-700'
-              : 'bg-white border-stone-200 text-stone-800 hover:border-[#F15A24]'
-          }`}
-          title="Toggle Rush Hour (+20m prep delay)"
-        >
-          <Clock className="w-3.5 h-3.5" />
-          <span>{rushMode ? `Rush (+${rushMinutes}m)` : 'Rush Mode'}</span>
-        </button>
 
         {/* Fullscreen Toggle */}
         <button
