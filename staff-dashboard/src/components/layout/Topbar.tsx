@@ -4,7 +4,6 @@ import {
   Clock,
   Maximize,
   Minimize,
-  Plus,
   ShieldCheck,
   Bell,
   User,
@@ -19,18 +18,13 @@ import { useAppDispatch } from '../../store/hooks';
 import { setActiveRole } from '../../store/slices/authSlice';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRole, AppNotification } from '../../types/common.types';
-import { Button } from '../ui/Button';
 import {
   getNotifications,
   markAllAsRead,
   markAsRead,
 } from '../../services/notificationService';
 
-export interface TopbarProps {
-  onFireManualTicket?: () => void;
-}
-
-export function Topbar({ onFireManualTicket }: TopbarProps) {
+export function Topbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -264,18 +258,6 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
         >
           {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
         </button>
-
-        {/* New Ticket Button */}
-        {onFireManualTicket && (
-          <Button
-            size="sm"
-            variant="secondary"
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
-            onClick={onFireManualTicket}
-          >
-            <span>New Ticket</span>
-          </Button>
-        )}
       </div>
     </header>
   );
