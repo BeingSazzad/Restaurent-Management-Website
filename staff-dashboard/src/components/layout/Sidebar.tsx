@@ -184,8 +184,15 @@ export function Sidebar() {
             title="View & Edit Admin Profile"
             className="flex items-center gap-2.5 min-w-0 hover:opacity-85 transition-opacity cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded-lg bg-stone-800 group-hover:bg-stone-700 flex items-center justify-center text-xs font-bold text-[#FFA940] transition-colors">
-              <Flame className="w-4 h-4 text-[#F15A24]" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-stone-800 shrink-0 border border-white/15 shadow-sm group-hover:border-[#FFA940]/50 transition-colors">
+              <img
+                src={user?.avatarUrl || '/images/chef_master.jpg'}
+                alt={user?.name || 'Chef Tariq Al-Hassan'}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/chef_master.jpg';
+                }}
+              />
             </div>
             <div className="min-w-0">
               <p className="text-[13px] font-semibold text-white truncate group-hover:text-[#FFA940] transition-colors">

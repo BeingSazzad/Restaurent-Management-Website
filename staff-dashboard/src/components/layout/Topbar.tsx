@@ -244,12 +244,17 @@ export function Topbar({ onFireManualTicket }: TopbarProps) {
         {/* Admin Profile Link */}
         <Link
           to="/profile"
-          className="h-8 px-2.5 rounded-lg border border-stone-200 hover:border-stone-300 bg-white hover:bg-stone-50 flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="h-8 pl-1.5 pr-2.5 rounded-lg border border-stone-200 hover:border-stone-300 bg-white hover:bg-stone-50 flex items-center gap-1.5 transition-colors cursor-pointer"
           title="Admin Profile & Password"
         >
-          <div className="w-5 h-5 rounded-md bg-[#140F0C] text-white flex items-center justify-center text-[10px] font-bold shadow-2xs">
-            {initials}
-          </div>
+          <img
+            src={user?.avatarUrl || '/images/chef_master.jpg'}
+            alt="Profile"
+            className="w-5 h-5 rounded-md object-cover shadow-2xs border border-stone-200"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/images/chef_master.jpg';
+            }}
+          />
           <span className="text-xs font-semibold text-stone-800 hidden md:inline">
             {user?.name?.split(' ')[0] || 'Admin'}
           </span>

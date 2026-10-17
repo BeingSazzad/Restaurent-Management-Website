@@ -95,8 +95,15 @@ export function ProfilePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
         {/* Left Column: Profile Overview Card */}
         <div className="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-2xs space-y-4 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#140F0C] to-stone-800 text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm ring-4 ring-orange-500/10">
-            {initials}
+          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-stone-800 text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm ring-4 ring-orange-500/10">
+            <img
+              src={user?.avatarUrl || '/images/chef_master.jpg'}
+              alt={user?.name || name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/images/chef_master.jpg';
+              }}
+            />
           </div>
 
           <div>
