@@ -17,6 +17,7 @@ import OrdersPage from '../pages/dashboard/OrdersPage';
 import OrderDetailPage from '../pages/dashboard/OrderDetailPage';
 import ProductsPage from '../pages/dashboard/ProductsPage';
 import CustomersPage from '../pages/dashboard/CustomersPage';
+import CustomerDetailPage from '../pages/dashboard/CustomerDetailPage';
 import TransactionsPage from '../pages/dashboard/TransactionsPage';
 import CmsPage from '../pages/dashboard/CmsPage';
 import NotificationsPage from '../pages/dashboard/NotificationsPage';
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
           {
             path: 'customers',
             element: <CustomersPage />,
+          },
+          {
+            path: 'customers/:customerId',
+            element: <CustomerDetailPage />,
           },
           {
             path: 'transactions',

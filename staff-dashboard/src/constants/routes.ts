@@ -12,6 +12,7 @@ export const ROUTES = {
     ORDER_DETAILS: '/all-orders/:orderId',
     PRODUCTS: '/products',
     CUSTOMERS: '/customers',
+    CUSTOMER_DETAILS: '/customers/:customerId',
     TRANSACTIONS: '/transactions',
     CMS: '/cms',
     STOCK_86: '/stock-86',

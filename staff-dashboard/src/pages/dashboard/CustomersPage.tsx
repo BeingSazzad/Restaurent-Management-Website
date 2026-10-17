@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Users,
   Search,
@@ -30,9 +31,6 @@ export function CustomersPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Selected customer for quick detail view
-  const [selectedCustomer, setSelectedCustomer] = useState<RegisteredCustomer | null>(null);
-
   // Customer to ban state
   const [customerToBan, setCustomerToBan] = useState<RegisteredCustomer | null>(null);
   const [banReason, setBanReason] = useState('Repeated fake or cancelled orders');
@@ -61,21 +59,15 @@ export function CustomersPage() {
   const handleConfirmBan = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerToBan) return;
-    const updated = banCustomer(customerToBan.id, banReason);
+    banCustomer(customerToBan.id, banReason);
     setCustomers(getCustomersList());
-    if (selectedCustomer && selectedCustomer.id === customerToBan.id && updated) {
-      setSelectedCustomer(updated);
-    }
     showToast(`✓ ${customerToBan.name} has been banned.`);
     setCustomerToBan(null);
   };
 
   const handleUnban = (c: RegisteredCustomer) => {
-    const updated = unbanCustomer(c.id);
+    unbanCustomer(c.id);
     setCustomers(getCustomersList());
-    if (selectedCustomer && selectedCustomer.id === c.id && updated) {
-      setSelectedCustomer(updated);
-    }
     showToast(`✓ ${c.name} has been unbanned.`);
   };
 
@@ -243,22 +235,20 @@ export function CustomersPage() {
                   >
                     {/* Customer */}
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-lg font-bold text-xs flex items-center justify-center shrink-0 border ${
-                          c.isBanned || c.status === 'banned'
-                            ? 'bg-rose-100 text-rose-700 border-rose-200'
-                            : 'bg-stone-100 text-stone-700 border-stone-200/60'
-                        }`}>
-                          {c.name
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')
-                            .substring(0, 2)
-                            .toUpperCase()}
-                        </div>
+                      <Link to={`/customers/${c.id}`} className="flex items-center gap-3 group">
+                        <img
+                          src={c.avatarUrl || '/images/avatars/sarah.jpg'}
+                          alt={c.name}
+                          className="w-9 h-9 rounded-xl object-cover shrink-0 border border-stone-200/80 shadow-2xs group-hover:scale-105 transition-transform"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/chef_master.jpg';
+                          }}
+                        />
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <p className="font-semibold text-stone-900 leading-tight">{c.name}</p>
+                            <p className="font-semibold text-stone-900 group-hover:text-[#B84A22] transition-colors leading-tight">
+                              {c.name}
+                            </p>
                             {(c.isBanned || c.status === 'banned') && (
                               <span className="text-[10px] font-bold text-rose-600 bg-rose-100 px-1.5 py-0.2 rounded">
                                 Banned
@@ -267,7 +257,7 @@ export function CustomersPage() {
                           </div>
                           <p className="text-xs text-stone-500 mt-0.5">{c.email}</p>
                         </div>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* Phone */}
@@ -322,12 +312,12 @@ export function CustomersPage() {
                     {/* Action */}
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => setSelectedCustomer(c)}
-                          className="px-2.5 py-1 text-xs font-semibold text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer border border-stone-200/60"
+                        <Link
+                          to={`/customers/${c.id}`}
+                          className="px-2.5 py-1 text-xs font-semibold text-stone-700 hover:text-[#B84A22] hover:bg-orange-50/60 rounded-lg transition-colors cursor-pointer border border-stone-200/60 inline-flex items-center gap-1"
                         >
-                          View Profile
-                        </button>
+                          View Details
+                        </Link>
                         {c.isBanned || c.status === 'banned' ? (
                           <button
                             onClick={() => handleUnban(c)}
@@ -360,110 +350,7 @@ export function CustomersPage() {
         </div>
       </div>
 
-      {/* Customer Profile Modal */}
-      {selectedCustomer && (
-        <Modal
-          isOpen={!!selectedCustomer}
-          onClose={() => setSelectedCustomer(null)}
-          title={`Customer: ${selectedCustomer.name}`}
-          subtitle="Customer account details and order summary."
-          maxWidth="md"
-        >
-          <div className="space-y-4">
-            {(selectedCustomer.isBanned || selectedCustomer.status === 'banned') && (
-              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="font-bold text-rose-900">This customer account is currently BANNED</p>
-                  <p className="mt-0.5 text-rose-700">Reason: {selectedCustomer.banReason || 'Policy violation'}</p>
-                  {selectedCustomer.bannedAt && (
-                    <p className="text-[11px] text-rose-500 mt-1">
-                      Banned on {new Date(selectedCustomer.bannedAt).toLocaleString('en-IE')}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
 
-            <div className="p-4 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
-              <div>
-                <p className="font-bold text-stone-900 text-sm">{selectedCustomer.name}</p>
-                <p className="text-xs text-stone-500 mt-0.5">{selectedCustomer.email}</p>
-                <p className="text-xs text-stone-500">{selectedCustomer.phone}</p>
-              </div>
-              <div className="text-right">
-                <span className="text-xs font-medium text-stone-400 block">Total Spend</span>
-                <span className="text-lg font-bold text-stone-900">{formatCurrency(selectedCustomer.totalSpent)}</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Registered</span>
-                <span className="font-semibold text-stone-800">
-                  {new Date(selectedCustomer.registeredAt).toLocaleDateString('en-IE', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
-                </span>
-              </div>
-              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Orders</span>
-                <span className="font-semibold text-stone-800">{selectedCustomer.totalOrders} completed</span>
-              </div>
-              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Favorite Dish</span>
-                <span className="font-semibold text-stone-800">{selectedCustomer.favoriteDish}</span>
-              </div>
-              <div className="p-3 rounded-xl border border-stone-200/80 bg-white">
-                <span className="text-stone-400 block mb-1">Status</span>
-                <span className="font-semibold text-stone-800 uppercase">{selectedCustomer.status}</span>
-              </div>
-              <div className="p-3 rounded-xl border border-stone-200/80 bg-white col-span-2">
-                <span className="text-stone-400 block mb-1">Delivery Address</span>
-                <span className="font-semibold text-stone-800">
-                  {selectedCustomer.deliveryAddress} ({selectedCustomer.eircode})
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-2 flex justify-between items-center">
-              {selectedCustomer.isBanned || selectedCustomer.status === 'banned' ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
-                  onClick={() => handleUnban(selectedCustomer)}
-                  leftIcon={<ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />}
-                >
-                  Unban Customer
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-rose-300 text-rose-600 hover:bg-rose-50"
-                  onClick={() => {
-                    setCustomerToBan(selectedCustomer);
-                    setBanReason('Repeated fake or cancelled orders');
-                  }}
-                  leftIcon={<Ban className="w-3.5 h-3.5 text-rose-500" />}
-                >
-                  Ban Customer
-                </Button>
-              )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedCustomer(null)}
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-        </Modal>
-      )}
 
       {/* Ban Confirmation Modal */}
       {customerToBan && (

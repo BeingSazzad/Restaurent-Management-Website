@@ -3,6 +3,7 @@ export interface RegisteredCustomer {
   name: string;
   email: string;
   phone: string;
+  avatarUrl?: string;
   registeredAt: string;
   totalOrders: number;
   totalSpent: number;
@@ -25,6 +26,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'Sarah Ahmed',
     email: 'sarah.ahmed@dublin.ie',
     phone: '+353 87 555 1234',
+    avatarUrl: '/images/avatars/sarah.jpg',
     registeredAt: '2026-10-02T11:20:00Z',
     totalOrders: 6,
     totalSpent: 184.50,
@@ -39,6 +41,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'Mark Jecno',
     email: 'mark.jecno@gmail.com',
     phone: '+353 87 123 4567',
+    avatarUrl: '/images/avatars/cian.jpg',
     registeredAt: '2026-10-06T15:45:00Z',
     totalOrders: 3,
     totalSpent: 64.80,
@@ -53,6 +56,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'Aoife Kelly',
     email: 'aoife.kelly@tcd.ie',
     phone: '+353 83 456 7890',
+    avatarUrl: '/images/avatars/elena.jpg',
     registeredAt: '2026-10-08T09:10:00Z',
     totalOrders: 5,
     totalSpent: 132.00,
@@ -67,6 +71,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'James Miller',
     email: 'james.m@outlook.com',
     phone: '+353 85 987 6543',
+    avatarUrl: '/images/avatars/james.jpg',
     registeredAt: '2026-10-10T18:30:00Z',
     totalOrders: 2,
     totalSpent: 38.50,
@@ -81,6 +86,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'Dr. Declan Byrne',
     email: 'declan.byrne@stjames.ie',
     phone: '+353 87 888 9900',
+    avatarUrl: '/images/avatars/cian.jpg',
     registeredAt: '2026-10-12T12:00:00Z',
     totalOrders: 4,
     totalSpent: 96.50,
@@ -95,6 +101,7 @@ export const INITIAL_CUSTOMERS: RegisteredCustomer[] = [
     name: 'Conor Murphy',
     email: 'conor.murphy@eircom.net',
     phone: '+353 86 333 4455',
+    avatarUrl: '/images/avatars/ayesha.jpg',
     registeredAt: '2026-10-15T14:05:00Z',
     totalOrders: 1,
     totalSpent: 28.99,
@@ -114,9 +121,16 @@ export function getCustomersList(): RegisteredCustomer[] {
       localStorage.setItem(CUSTOMERS_STORAGE_KEY, JSON.stringify(INITIAL_CUSTOMERS));
       return INITIAL_CUSTOMERS;
     }
-    const parsed = JSON.parse(raw);
+    const parsed: RegisteredCustomer[] = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      // Ensure avatars are backfilled
+      return parsed.map((c) => {
+        if (!c.avatarUrl) {
+          const match = INITIAL_CUSTOMERS.find((i) => i.id === c.id || i.email.toLowerCase() === c.email.toLowerCase());
+          return { ...c, avatarUrl: match?.avatarUrl || '/images/avatars/sarah.jpg' };
+        }
+        return c;
+      });
     }
   } catch {
     // fallback
@@ -189,5 +203,10 @@ export function unbanCustomer(id: string): RegisteredCustomer | null {
   current[index] = updatedCustomer;
   saveCustomersList(current);
   return updatedCustomer;
+}
+
+export function getCustomerById(id: string): RegisteredCustomer | undefined {
+  const customers = getCustomersList();
+  return customers.find((c) => c.id === id);
 }
 
