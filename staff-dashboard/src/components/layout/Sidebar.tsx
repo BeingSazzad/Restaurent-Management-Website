@@ -3,7 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import {
   ChefHat,
   LayoutDashboard,
-  PackageX,
+  Boxes,
   BarChart3,
   Users,
   LogOut,
@@ -38,9 +38,9 @@ export function Sidebar() {
       allowedRoles: ['admin', 'expo'],
     },
     {
-      name: 'Inventory & 86',
+      name: 'Inventory & Stock',
       path: ROUTES.DASHBOARD.STOCK_86,
-      icon: PackageX,
+      icon: Boxes,
       allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
   ].filter((item) => item.allowedRoles.includes(currentRole));

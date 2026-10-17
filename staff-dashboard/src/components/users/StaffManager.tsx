@@ -335,7 +335,7 @@ export function StaffManager() {
             <div className="grid grid-cols-2 gap-2 text-xs">
               {[
                 { id: 'admin', label: 'Administrator', desc: 'Full control (Revenue, CMS, Staff, Menu)' },
-                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and 86 inventory' },
+                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and stock inventory' },
                 { id: 'expo', label: 'Expo Dispatch', desc: 'Packaging, driver dispatch, and tickets' },
                 { id: 'staff', label: 'Line Staff', desc: 'Station food prep and stock availability' },
               ].map((r) => (
@@ -419,7 +419,7 @@ export function StaffManager() {
             <div className="grid grid-cols-2 gap-2 text-xs">
               {[
                 { id: 'admin', label: 'Administrator', desc: 'Full control (Revenue, CMS, Staff, Menu)' },
-                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and 86 inventory' },
+                { id: 'chef', label: 'Head Chef', desc: 'KDS kitchen display, stations, and stock inventory' },
                 { id: 'expo', label: 'Expo Dispatch', desc: 'Packaging, driver dispatch, and tickets' },
                 { id: 'staff', label: 'Line Staff', desc: 'Station food prep and stock availability' },
               ].map((r) => (

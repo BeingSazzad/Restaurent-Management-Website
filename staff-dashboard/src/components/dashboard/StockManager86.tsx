@@ -309,8 +309,8 @@ export function StockManager86() {
     <div className="space-y-5 text-[#1A130E]">
       {/* Page Header */}
       <PageHeader
-        title="Inventory & 86 Management"
-        description="Kitchen stock control, real-time portion burn rates, and live 86 dish availability."
+        title="Inventory & Stock Management"
+        description="Kitchen stock control, real-time portion burn rates, and live dish availability."
         action={
           activeInventoryTab === 'dishes_86' && soldOutCount > 0 ? (
             <Button
@@ -319,7 +319,7 @@ export function StockManager86() {
               leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
               onClick={() => dispatch(restockAllDishes())}
             >
-              Restock All 86&apos;d ({soldOutCount})
+              Restock All Sold Out ({soldOutCount})
             </Button>
           ) : activeInventoryTab === 'raw_inventory' ? (
             <Button
@@ -357,7 +357,7 @@ export function StockManager86() {
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
-          <span>Menu Dishes &amp; Portions (86 List)</span>
+          <span>Menu Dishes &amp; Portions (Stock Availability)</span>
           {soldOutCount > 0 && (
             <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-white/20 text-white">
               {soldOutCount}
@@ -481,7 +481,7 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  86&apos;d ({soldOutCount})
+                  Sold Out ({soldOutCount})
                 </button>
               </div>
 
@@ -524,7 +524,7 @@ export function StockManager86() {
                       <th className="py-3.5 px-4 font-semibold">Prep Station</th>
                       <th className="py-3.5 px-4 font-semibold">Price</th>
                       <th className="py-3.5 px-4 font-semibold">Stock Status</th>
-                      <th className="py-3.5 px-4 font-semibold text-right">Instant 86 Kill-Switch</th>
+                      <th className="py-3.5 px-4 font-semibold text-right">Instant Stock Toggle</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 text-xs">
@@ -563,7 +563,7 @@ export function StockManager86() {
                                   </h4>
                                   {isOut && (
                                     <span className="text-[10px] font-bold text-rose-600 bg-rose-100/80 px-1.5 py-0.5 rounded-md">
-                                      86&apos;d
+                                      Sold Out
                                     </span>
                                   )}
                                 </div>
@@ -594,7 +594,7 @@ export function StockManager86() {
                             {isOut ? (
                               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
                                 <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
-                                86&apos;d / Sold Out
+                                Sold Out
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
@@ -618,7 +618,7 @@ export function StockManager86() {
                               {!isOut ? (
                                 <>
                                   <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
-                                  <span>Mark 86 (Sold Out)</span>
+                                  <span>Mark Sold Out</span>
                                 </>
                               ) : (
                                 <>
@@ -683,7 +683,7 @@ export function StockManager86() {
                         {isOut ? (
                           <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-600">
                             <AlertOctagon className="w-3.5 h-3.5" />
-                            86&apos;d (Out)
+                            Sold Out
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
@@ -705,7 +705,7 @@ export function StockManager86() {
                         {!isOut ? (
                           <>
                             <AlertOctagon className="w-3.5 h-3.5 text-rose-500" />
-                            <span>Mark 86</span>
+                            <span>Mark Sold Out</span>
                           </>
                         ) : (
                           <>

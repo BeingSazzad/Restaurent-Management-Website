@@ -366,7 +366,7 @@ export function ProductsPage() {
                           }`}
                           title="Click to toggle availability"
                         >
-                          {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                          {dish.isAvailable ? 'In Stock' : 'Sold Out'}
                         </button>
                       </td>
 
@@ -428,7 +428,7 @@ export function ProductsPage() {
                             : 'bg-rose-600 text-white hover:bg-rose-700'
                         }`}
                       >
-                        {dish.isAvailable ? 'In Stock' : '86 Sold Out'}
+                        {dish.isAvailable ? 'In Stock' : 'Sold Out'}
                       </button>
                     </div>
                   </div>
@@ -455,7 +455,7 @@ export function ProductsPage() {
                         {dish.stockCount} portions remaining
                       </span>
                     ) : (
-                      <span className="text-rose-600 font-bold">86&apos;d (0 portions)</span>
+                      <span className="text-rose-600 font-bold">Sold Out (0 portions)</span>
                     )}
                   </div>
                 </div>
