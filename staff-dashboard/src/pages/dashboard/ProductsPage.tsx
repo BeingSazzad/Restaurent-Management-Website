@@ -141,10 +141,10 @@ export function ProductsPage() {
       categoryLabel: formCategory.toUpperCase(),
       description: formDescription.trim() || 'Authentic heirloom recipe prepared with stone-ground spices.',
       price: Number(formPrice) || 12.0,
-      stockCount: Number(formStockCount) || 0,
+      stockCount: editingDish ? (editingDish.stockCount ?? 20) : 20,
       lowStockThreshold: 5,
       image: formImage.trim() || '/images/amber_hero_dish.jpg',
-      isAvailable: Number(formStockCount) > 0 && formIsAvailable,
+      isAvailable: formIsAvailable,
     };
 
     let updated: DishItem[];
@@ -630,18 +630,21 @@ export function ProductsPage() {
                 </div>
               </div>
 
-              {/* Name & Category */}
+              {/* Dish Name */}
+              <div>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Dish Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Royal Chicken Dum Biryani"
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                  className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
+                />
+              </div>
+
+              {/* Category & Price */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={formName}
-                    onChange={(e) => setFormName(e.target.value)}
-                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
-                  />
-                </div>
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
                   <select
@@ -657,10 +660,7 @@ export function ProductsPage() {
                     <option value="desserts">Desserts</option>
                   </select>
                 </div>
-              </div>
 
-              {/* Price & Stock Portions 2-Column Row */}
-              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">Price (€) *</label>
                   <input
@@ -671,18 +671,6 @@ export function ProductsPage() {
                     value={formPrice}
                     onChange={(e) => setFormPrice(parseFloat(e.target.value) || 0)}
                     className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Daily Prep Portions *</label>
-                  <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    required
-                    value={formStockCount}
-                    onChange={(e) => setFormStockCount(parseInt(e.target.value, 10) || 0)}
-                    className="w-full h-9 px-3 bg-stone-50 border border-stone-200 focus:bg-white focus:border-[#B84A22] rounded-lg text-xs text-[#1A130E] outline-none font-bold"
                   />
                 </div>
               </div>
