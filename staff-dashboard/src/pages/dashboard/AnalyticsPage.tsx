@@ -367,13 +367,9 @@ export function AnalyticsPage() {
                     Total Sales Growth
                   </h2>
                 </div>
-                <div className="flex items-baseline gap-2 mt-1">
+                <div className="mt-1">
                   <span className="text-lg font-bold text-stone-900">
                     €{(totalYearSales / 1000).toFixed(1)}k
-                  </span>
-                  <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                    <ArrowUpRight className="w-3 h-3" />
-                    +{avgMonthlyGrowth}% MoM avg
                   </span>
                 </div>
               </div>
@@ -384,7 +380,7 @@ export function AnalyticsPage() {
                   value={salesYear}
                   onChange={(e) => setSalesYear(e.target.value as '2026' | '2025' | '2024')}
                   aria-label="Filter sales year"
-                  className="text-xs font-bold bg-[#F15A24]/10 hover:bg-[#F15A24]/15 border border-[#F15A24]/20 rounded-xl px-2.5 py-1.5 text-[#F15A24] outline-none cursor-pointer transition-colors"
+                  className="text-xs font-semibold bg-white hover:bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-stone-800 outline-none cursor-pointer transition-colors shadow-2xs"
                 >
                   <option value="2026">Year 2026</option>
                   <option value="2025">Year 2025</option>
@@ -568,7 +564,7 @@ export function AnalyticsPage() {
                   value={incomeYear}
                   onChange={(e) => setIncomeYear(e.target.value as '2026' | '2025' | '2024')}
                   aria-label="Filter income year"
-                  className="text-xs font-bold bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/80 rounded-xl px-2.5 py-1.5 text-emerald-700 outline-none cursor-pointer transition-colors"
+                  className="text-xs font-semibold bg-white hover:bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-stone-800 outline-none cursor-pointer transition-colors shadow-2xs"
                 >
                   <option value="2026">Year 2026</option>
                   <option value="2025">Year 2025</option>
