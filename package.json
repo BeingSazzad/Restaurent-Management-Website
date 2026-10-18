@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "dev:staff": "npm --prefix staff-dashboard run dev",
     "build": "next build",
+    "build:staff": "npm --prefix staff-dashboard run build",
     "start": "next start"
   },
   "dependencies": {
