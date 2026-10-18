@@ -7,39 +7,19 @@ import { useAppDispatch } from '@/redux/hooks';
 import { login } from '@/redux/slices/authSlice';
 import { getUserByEmail, registerCustomer } from '@/services/staffService';
 import { MOCK_USER } from '@/Mockdata';
-import { Lock, Mail, ArrowRight, ShieldCheck, ChefHat, UserCheck, User } from 'lucide-react';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('sarah.ahmed@dublin.ie');
   const [password, setPassword] = useState('••••••••');
-  const [detectedRole, setDetectedRole] = useState<'admin' | 'manager' | 'chef' | 'user'>('user');
-
-  // Live detection of role as user types email
-  const handleEmailChange = (val: string) => {
-    setEmail(val);
-    const matched = getUserByEmail(val);
-    if (matched) {
-      setDetectedRole(matched.role);
-    } else {
-      setDetectedRole('user');
-    }
-  };
-
-  const handleQuickFill = (demoEmail: string) => {
-    setEmail(demoEmail);
-    const matched = getUserByEmail(demoEmail);
-    if (matched) {
-      setDetectedRole(matched.role);
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
-    // Check if user exists in the staff/user registry
+    // Check if user exists or register customer
     const matched = getUserByEmail(email);
 
     if (matched) {
@@ -48,20 +28,11 @@ export default function LoginPage() {
           name: matched.name,
           email: matched.email,
           phone: matched.phone,
-          role: matched.role,
-          station: matched.station,
+          role: 'user',
           addresses: MOCK_USER.addresses,
         })
       );
-
-      // Intelligent routing: staff/kitchen goes to KDS / agent-dashboard, customer goes to user-dashboard
-      if (matched.role === 'admin' || matched.role === 'manager' || matched.role === 'chef') {
-        router.push('/agent-dashboard');
-      } else {
-        router.push('/user-dashboard');
-      }
     } else {
-      // Default to customer role if not in staff directory
       const newDiner = registerCustomer({
         name: email.split('@')[0],
         email,
@@ -76,8 +47,8 @@ export default function LoginPage() {
           addresses: MOCK_USER.addresses,
         })
       );
-      router.push('/user-dashboard');
     }
+    router.push('/user-dashboard');
   };
 
   return (
@@ -96,36 +67,8 @@ export default function LoginPage() {
             Sign In to Amber Spice
           </h1>
           <p className="text-[13px] text-[#7A746E] mt-1.5 leading-relaxed max-w-xs mx-auto">
-            Enter your email to access your diner dashboard or staff kitchen portal
+            Welcome back! Please enter your details to access your account.
           </p>
-
-          {/* Role Detection Pill */}
-          <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border">
-            {detectedRole === 'admin' && (
-              <span className="bg-purple-50 text-purple-700 border-purple-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Restaurant Admin Role</span>
-              </span>
-            )}
-            {detectedRole === 'manager' && (
-              <span className="bg-blue-50 text-blue-700 border-blue-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                <UserCheck className="w-3.5 h-3.5" />
-                <span>Shift Operations Manager</span>
-              </span>
-            )}
-            {detectedRole === 'chef' && (
-              <span className="bg-amber-50 text-amber-800 border-amber-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                <ChefHat className="w-3.5 h-3.5" />
-                <span>Kitchen Staff (KDS Station)</span>
-              </span>
-            )}
-            {detectedRole === 'user' && (
-              <span className="bg-stone-50 text-stone-700 border-stone-200 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                <User className="w-3.5 h-3.5" />
-                <span>Customer &amp; Diner Account</span>
-              </span>
-            )}
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-[13px]">
@@ -138,7 +81,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => handleEmailChange(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="name@domain.com"
                 className="w-full h-12 bg-[#FAF8F5] border border-[#E6E1DC] focus:bg-white focus:border-[#B84A22] focus:ring-2 focus:ring-[#B84A22]/15 rounded-xl pl-11 pr-4 text-[14px] text-[#1A130E] outline-none transition-all font-medium"
@@ -175,55 +118,16 @@ export default function LoginPage() {
             type="submit"
             className="w-full h-12 rounded-xl text-[14px] font-bold bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white shadow-[0_4px_14px_rgba(184,74,34,0.3)] flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all mt-1"
           >
-            <span>
-              {detectedRole === 'user' ? 'Sign In as Diner' : 'Sign In to Staff Portal'}
-            </span>
+            <span>Sign In</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        {/* Quick Demo Switcher for Evaluation */}
-        <div className="mt-6 pt-4 border-t border-[#F2EFE9] space-y-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 block text-center">
-            Quick Role Switcher (For Evaluation)
-          </span>
-          <div className="grid grid-cols-2 gap-2 text-[11.5px]">
-            <button
-              type="button"
-              onClick={() => handleQuickFill('admin@amberspice.ie')}
-              className="px-2.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 font-medium text-left truncate cursor-pointer transition-colors"
-            >
-              👑 <strong>Admin</strong> (Tariq)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('chef@amberspice.ie')}
-              className="px-2.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 font-medium text-left truncate cursor-pointer transition-colors"
-            >
-              👨‍🍳 <strong>Chef</strong> (Kabir)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('manager@amberspice.ie')}
-              className="px-2.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 font-medium text-left truncate cursor-pointer transition-colors"
-            >
-              📋 <strong>Manager</strong> (Marcus)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('sarah.ahmed@dublin.ie')}
-              className="px-2.5 py-1.5 rounded-lg bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-700 font-medium text-left truncate cursor-pointer transition-colors"
-            >
-              👤 <strong>Customer</strong> (Sarah)
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 pt-3 border-t border-[#F2EFE9] text-center text-[13px]">
+        <div className="mt-6 pt-4 border-t border-[#F2EFE9] text-center text-[13px]">
           <p className="text-[#7A746E]">
             Don&apos;t have an account?{' '}
             <Link href="/register" className="text-[#B84A22] font-bold hover:underline">
-              Create Diner Account
+              Create an Account
             </Link>
           </p>
         </div>

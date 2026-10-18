@@ -41,10 +41,12 @@ import { CmsManager } from '@/components/admin/CmsManager';
 import { CouponManager } from '@/components/admin/CouponManager';
 import { MasterOrdersManager } from '@/components/admin/MasterOrdersManager';
 import { StaffManager } from '@/components/admin/StaffManager';
+import { ReservationManager } from '@/components/admin/ReservationManager';
 
 type KdsTab =
   | 'kds'
   | 'all-orders'
+  | 'reservations'
   | 'product-manager'
   | 'coupons'
   | 'staff-management'
@@ -441,6 +443,20 @@ export default function AgentDashboardPage() {
                 <span>All Orders</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'all-orders' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
                   {orders.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setSelectedTab('reservations')}
+                className={`pb-3 text-xs sm:text-sm font-medium transition-colors flex items-center gap-2 relative cursor-pointer whitespace-nowrap ${
+                  selectedTab === 'reservations'
+                    ? 'text-[#F15A24] font-semibold border-b-2 border-[#F15A24] -mb-[1px]'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                <span>Reservations</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${selectedTab === 'reservations' ? 'bg-orange-100 text-[#F15A24]' : 'bg-stone-100 text-stone-600'}`}>
+                  Live
                 </span>
               </button>
 
@@ -1212,6 +1228,11 @@ export default function AgentDashboardPage() {
       {/* ================= TAB 3: ALL ORDERS MANAGEMENT ================= */}
       {selectedTab === 'all-orders' && (
         <MasterOrdersManager onOpenReceiptSlip={(o) => setActiveSlipOrder(o)} />
+      )}
+
+      {/* ================= TAB: TABLE RESERVATIONS ================= */}
+      {selectedTab === 'reservations' && (
+        <ReservationManager />
       )}
 
       {/* ================= TAB 4: PRODUCT & MENU MANAGER ================= */}

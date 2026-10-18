@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import {
   ArrowRight,
   ChevronLeft,
@@ -164,13 +165,13 @@ export const HeroSection: React.FC = () => {
 
             {/* Dual CTAs (Dedicated Row) */}
             <div className="flex items-center gap-3.5 sm:gap-4 mb-5">
-              <button
-                onClick={scrollToMenu}
+              <Link
+                href="/reservations"
                 className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#FBA138] hover:from-[#9E3E1B] hover:to-[#E59128] text-white text-sm font-semibold flex items-center gap-2 shadow-[0_4px_16px_rgba(184,74,34,0.35)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
-                <span>Order Now</span>
+                <span>Book a Table</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
 
               <button
                 onClick={scrollToMenu}

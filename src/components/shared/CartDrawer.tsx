@@ -9,9 +9,10 @@ import {
   removeFromCart,
   applyPromoCode,
   removePromoCode,
+  addToCart,
 } from '../../redux/slices/cartSlice';
 import { setCheckoutOpen } from '../../redux/slices/fulfillmentSlice';
-import { RESTAURANT_INFO } from '../../Mockdata';
+import { RESTAURANT_INFO, MENU_ITEMS, MenuItem } from '../../Mockdata';
 import {
   X,
   Plus,
@@ -33,6 +34,26 @@ export const CartDrawer: React.FC = () => {
   const coupons = useAppSelector((state) => state.coupons?.items || []);
   const [promoInput, setPromoInput] = useState('');
   const [promoError, setPromoError] = useState('');
+
+  // Curate 2 quick complementary items (Naan, Dessert, etc.) not currently in the cart
+  const cartDishIds = new Set(cart.items.map((i) => i.dish.id));
+  const suggestedAddons = MENU_ITEMS.filter(
+    (dish) =>
+      !cartDishIds.has(dish.id) &&
+      (dish.category === 'breads' || dish.category === 'desserts' || dish.category === 'combos')
+  ).slice(0, 2);
+
+  const handleAddSuggested = (dish: MenuItem) => {
+    dispatch(
+      addToCart({
+        cartItemId: `${dish.id}-${Date.now()}`,
+        dish,
+        quantity: 1,
+        selectedModifiers: [],
+        totalPrice: dish.price,
+      })
+    );
+  };
 
   if (!cart.isOpen) return null;
 
@@ -257,6 +278,45 @@ export const CartDrawer: React.FC = () => {
                   </div>
                 </div>
               ))
+            )}
+
+            {/* Smart Cross-Sell: Complete Your Meal */}
+            {cart.items.length > 0 && suggestedAddons.length > 0 && (
+              <div className="pt-3 border-t border-[#E5E5E5] mt-2">
+                <div className="flex items-center gap-1.5 mb-2.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#B84A22]" />
+                  <h4 className="text-[12.5px] font-bold text-[#1A130E]">Complete Your Meal</h4>
+                  <span className="text-[11px] text-[#747474] ml-auto">Popular sides</span>
+                </div>
+                <div className="space-y-2">
+                  {suggestedAddons.map((dish) => (
+                    <div
+                      key={dish.id}
+                      className="flex items-center justify-between p-2.5 bg-white border border-[#E5E5E5] rounded-xl shadow-2xs hover:border-[#B84A22]/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <img
+                          src={dish.image}
+                          alt={dish.name}
+                          className="w-10 h-10 rounded-lg object-cover shrink-0 border border-[#EBEBEB]"
+                        />
+                        <div className="min-w-0">
+                          <p className="text-[12.5px] font-semibold text-[#1A130E] truncate">{dish.name}</p>
+                          <span className="text-[11.5px] font-bold text-[#B84A22]">€{dish.price.toFixed(2)}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleAddSuggested(dish)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[rgb(249,249,249)] hover:bg-[#B84A22] text-[#1A130E] hover:text-white border border-[#E5E5E5] hover:border-[#B84A22] shadow-2xs active:scale-95 transition-all flex items-center gap-1 shrink-0 cursor-pointer"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
 

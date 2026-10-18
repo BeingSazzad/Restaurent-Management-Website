@@ -15,6 +15,7 @@ import {
   UserCheck,
   Receipt,
   User,
+  Calendar,
 } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { useAuth } from '../../hooks/useAuth';
@@ -36,6 +37,12 @@ export function Sidebar() {
       path: ROUTES.DASHBOARD.ORDERS,
       icon: ClipboardList,
       allowedRoles: ['admin', 'expo'],
+    },
+    {
+      name: 'Table Reservations',
+      path: ROUTES.DASHBOARD.RESERVATIONS,
+      icon: Calendar,
+      allowedRoles: ['admin', 'chef', 'expo', 'staff'],
     },
     {
       name: 'Inventory & Stock',

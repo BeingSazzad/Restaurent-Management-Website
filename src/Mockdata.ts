@@ -32,6 +32,7 @@ export interface MenuItem {
   lowStockThreshold?: number;
   spiceLevel?: number;
   modifierGroups?: DishModifierGroup[];
+  suggestedPairingIds?: string[];
 }
 
 export interface CartItem {
@@ -120,6 +121,7 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["halal"],
     isBestSeller: true,
     isAvailable: true,
+    suggestedPairingIds: ["dish-bread-01", "dish-dessert-01"],
     modifierGroups: [
       {
         id: "portion",
@@ -132,8 +134,19 @@ export const MENU_ITEMS: MenuItem[] = [
         ],
       },
       {
+        id: "spice",
+        name: "Spice Level",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "mild", name: "Mild Aromatic", price: 0 },
+          { id: "medium", name: "Authentic Dum Spice", price: 0 },
+          { id: "hot", name: "Extra Spiced Handi", price: 0 },
+        ],
+      },
+      {
         id: "sides",
-        name: "Complimentary Accompaniments",
+        name: "Food Extensions & Accompaniments",
         required: false,
         maxSelect: 3,
         options: [
@@ -160,7 +173,18 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["halal"],
     isBestSeller: true,
     isAvailable: true,
+    suggestedPairingIds: ["dish-bread-01", "dish-biryani-01"],
     modifierGroups: [
+      {
+        id: "portion",
+        name: "Portion Size",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "reg", name: "Standard Bowl (1 Person)", price: 0 },
+          { id: "sharing", name: "Family Sharing Bowl (+40% Chicken)", price: 4.00 },
+        ],
+      },
       {
         id: "spice",
         name: "Spice Level",
@@ -170,6 +194,16 @@ export const MENU_ITEMS: MenuItem[] = [
           { id: "mild", name: "Mild & Creamy (Classic)", price: 0 },
           { id: "med", name: "Medium Spiced", price: 0 },
           { id: "hot", name: "Spicy Delhi Kick", price: 0 },
+        ],
+      },
+      {
+        id: "addons",
+        name: "Curry Add-ons",
+        required: false,
+        maxSelect: 2,
+        options: [
+          { id: "cream", name: "Extra Fresh Cream & Butter Swirl", price: 1.00 },
+          { id: "extra_chicken", name: "Extra Tandoori Chicken Chunks", price: 3.00 },
         ],
       },
     ],
@@ -190,6 +224,29 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["halal", "gluten-free"],
     isBestSeller: false,
     isAvailable: true,
+    suggestedPairingIds: ["dish-bread-01", "dish-dessert-01"],
+    modifierGroups: [
+      {
+        id: "spice",
+        name: "Spice Level",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "medium", name: "Medium Kashmiri Spiced", price: 0 },
+          { id: "fiery", name: "Royal Fiery Rogan Hot", price: 0 },
+        ],
+      },
+      {
+        id: "sides",
+        name: "Add-ons & Extras",
+        required: false,
+        maxSelect: 2,
+        options: [
+          { id: "onion_salad", name: "Kashmiri Spiced Onion Salad", price: 1.20 },
+          { id: "extra_gravy", name: "Extra Aromatic Rogan Gravy Cup", price: 2.00 },
+        ],
+      },
+    ],
   },
   {
     id: "dish-grill-01",
@@ -207,6 +264,29 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["halal", "gluten-free"],
     isBestSeller: true,
     isAvailable: true,
+    suggestedPairingIds: ["dish-bread-01", "dish-dessert-01"],
+    modifierGroups: [
+      {
+        id: "portion",
+        name: "Portion Selection",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "half", name: "Half Chicken (4 Pieces)", price: 0 },
+          { id: "full", name: "Full Chicken Feast (8 Pieces)", price: 5.50 },
+        ],
+      },
+      {
+        id: "addons",
+        name: "Grill Dips & Extras",
+        required: false,
+        maxSelect: 2,
+        options: [
+          { id: "mint_dip", name: "Extra Mint Yogurt & Pickled Onions", price: 1.50 },
+          { id: "garlic_butter", name: "Smoked Garlic Butter Glaze", price: 1.00 },
+        ],
+      },
+    ],
   },
   {
     id: "dish-veg-01",
@@ -224,6 +304,29 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["vegetarian", "halal"],
     isBestSeller: false,
     isAvailable: true,
+    suggestedPairingIds: ["dish-bread-01", "dish-dessert-01"],
+    modifierGroups: [
+      {
+        id: "spice",
+        name: "Spice Level",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "mild", name: "Mild & Velvety", price: 0 },
+          { id: "medium", name: "Medium Spiced", price: 0 },
+        ],
+      },
+      {
+        id: "addons",
+        name: "Vegetarian Add-ons",
+        required: false,
+        maxSelect: 2,
+        options: [
+          { id: "extra_paneer", name: "Extra Fresh Paneer Cubes", price: 2.50 },
+          { id: "butter_dip", name: "Clarified Ghee Butter Drizzle", price: 1.00 },
+        ],
+      },
+    ],
   },
   {
     id: "dish-combo-01",
@@ -241,6 +344,29 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["halal"],
     isBestSeller: true,
     isAvailable: true,
+    suggestedPairingIds: ["dish-dessert-01"],
+    modifierGroups: [
+      {
+        id: "size",
+        name: "Platter Size",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "regular", name: "Standard Platter (Serves 2-3)", price: 0 },
+          { id: "mega", name: "Grand Platter (+ Extra Seekh Kebabs, Serves 4-5)", price: 8.50 },
+        ],
+      },
+      {
+        id: "addons",
+        name: "Platter Add-ons",
+        required: false,
+        maxSelect: 2,
+        options: [
+          { id: "extra_naan", name: "Extra Garlic Butter Naan", price: 2.50 },
+          { id: "extra_dip", name: "Trio of Signature Chutneys", price: 2.00 },
+        ],
+      },
+    ],
   },
   {
     id: "dish-bread-01",
@@ -258,6 +384,20 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["vegetarian", "halal"],
     isBestSeller: false,
     isAvailable: true,
+    suggestedPairingIds: ["dish-curry-01", "dish-biryani-01"],
+    modifierGroups: [
+      {
+        id: "variety",
+        name: "Naan Style",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "garlic", name: "Roasted Garlic & Ghee (3 Naans)", price: 0 },
+          { id: "cheese", name: "Melted Cheddar Stuffed Naan (+2 Naans)", price: 2.50 },
+          { id: "peshwari", name: "Peshwari Sweet Coconut & Almond Naan", price: 2.00 },
+        ],
+      },
+    ],
   },
   {
     id: "dish-dessert-01",
@@ -275,6 +415,29 @@ export const MENU_ITEMS: MenuItem[] = [
     dietary: ["vegetarian", "halal"],
     isBestSeller: true,
     isAvailable: true,
+    suggestedPairingIds: ["dish-biryani-01"],
+    modifierGroups: [
+      {
+        id: "portions",
+        name: "Portion Size",
+        required: true,
+        maxSelect: 1,
+        options: [
+          { id: "p2", name: "Classic (2 Dumplings)", price: 0 },
+          { id: "p4", name: "Royal Feast (4 Dumplings)", price: 3.00 },
+        ],
+      },
+      {
+        id: "icecream",
+        name: "Dessert Add-ons",
+        required: false,
+        maxSelect: 1,
+        options: [
+          { id: "vanilla", name: "Artisan Madagascan Vanilla Ice Cream Scoop", price: 2.00 },
+          { id: "pistachio", name: "Extra Roasted Iranian Pistachio Dust", price: 1.00 },
+        ],
+      },
+    ],
   },
 ];
 

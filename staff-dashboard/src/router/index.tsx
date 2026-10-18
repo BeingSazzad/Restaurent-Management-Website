@@ -22,6 +22,7 @@ import TransactionsPage from '../pages/dashboard/TransactionsPage';
 import CmsPage from '../pages/dashboard/CmsPage';
 import NotificationsPage from '../pages/dashboard/NotificationsPage';
 import ProfilePage from '../pages/dashboard/ProfilePage';
+import ReservationsPage from '../pages/dashboard/ReservationsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 export const router = createBrowserRouter([
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
           {
             path: 'all-orders/:orderId',
             element: <OrderDetailPage />,
+          },
+          {
+            path: 'reservations',
+            element: <ReservationsPage />,
           },
           {
             path: 'products',

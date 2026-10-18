@@ -10,6 +10,7 @@ export const ROUTES = {
     KDS: '/',
     ORDERS: '/all-orders',
     ORDER_DETAILS: '/all-orders/:orderId',
+    RESERVATIONS: '/reservations',
     PRODUCTS: '/products',
     CUSTOMERS: '/customers',
     CUSTOMER_DETAILS: '/customers/:customerId',

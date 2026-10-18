@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MenuItem, CartItem } from '../../Mockdata';
+import React, { useState, useMemo } from 'react';
+import { MenuItem, CartItem, MENU_ITEMS } from '../../Mockdata';
 import { useAppDispatch } from '../../redux/hooks';
 import { addToCart } from '../../redux/slices/cartSlice';
-import { X, Plus, Minus, Check } from 'lucide-react';
+import { X, Plus, Minus, Check, Sparkles } from 'lucide-react';
 
 interface ModifierModalProps {
   dish: MenuItem | null;
@@ -41,13 +41,37 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
   const [quantity, setQuantity] = useState(1);
   const [selectedModifiers, setSelectedModifiers] = useState(() => getInitialModifiers(dish));
   const [specialInstructions, setSpecialInstructions] = useState('');
+  const [addedPairingIds, setAddedPairingIds] = useState<string[]>([]);
 
   if (dish && dish.id !== prevDishId) {
     setPrevDishId(dish.id);
     setQuantity(1);
     setSpecialInstructions('');
     setSelectedModifiers(getInitialModifiers(dish));
+    setAddedPairingIds([]);
   }
+
+  const pairedItems = useMemo(() => {
+    if (!dish) return [];
+    if (dish.suggestedPairingIds && dish.suggestedPairingIds.length > 0) {
+      return MENU_ITEMS.filter((m) => dish.suggestedPairingIds?.includes(m.id));
+    }
+    // Fallback: suggest 2 popular complements (e.g. naan and dessert)
+    return MENU_ITEMS.filter((m) => m.id !== dish.id && (m.category === 'breads' || m.category === 'desserts')).slice(0, 2);
+  }, [dish]);
+
+  const handleAddPairing = (pair: MenuItem) => {
+    dispatch(
+      addToCart({
+        cartItemId: `${pair.id}-${Date.now()}`,
+        dish: pair,
+        quantity: 1,
+        selectedModifiers: [],
+        totalPrice: pair.price,
+      })
+    );
+    setAddedPairingIds((prev) => [...prev, pair.id]);
+  };
 
   if (!dish) return null;
 
@@ -241,6 +265,65 @@ export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) =
               className="w-full bg-[rgb(249,249,249)] border border-[#E5E5E5] focus:bg-white rounded-2xl p-3.5 text-[13px] text-[#1A130E] placeholder:text-[#A0A0A0] focus:outline-none focus:border-[#F15A24] resize-none transition-colors"
             />
           </div>
+
+          {/* Related Suggestions / Frequently Paired Together */}
+          {pairedItems.length > 0 && (
+            <div className="pt-2 border-t border-[#EAEAEA]">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#B84A22]" />
+                <h3 className="font-bold text-[13px] text-[#1A130E]">Frequently Paired With</h3>
+                <span className="text-[11px] text-[#747474] ml-auto">Popular combinations</span>
+              </div>
+              <div className="space-y-2">
+                {pairedItems.map((item) => {
+                  const isAdded = addedPairingIds.includes(item.id);
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-2.5 rounded-xl border border-[#EBEBEB] bg-[#FBF9F6] hover:border-[#B84A22]/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-10 h-10 rounded-lg object-cover shrink-0 border border-[#E5E5E5]"
+                        />
+                        <div className="min-w-0">
+                          <p className="font-semibold text-[13px] text-[#1A130E] truncate">
+                            {item.name}
+                          </p>
+                          <span className="text-[12px] font-bold text-[#B84A22]">
+                            €{item.price.toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleAddPairing(item)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all flex items-center gap-1 ${
+                          isAdded
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
+                            : 'bg-white border border-[#E5E5E5] hover:border-[#B84A22] text-[#1A130E] hover:text-[#B84A22] shadow-xs active:scale-95'
+                        }`}
+                      >
+                        {isAdded ? (
+                          <>
+                            <Check className="w-3 h-3 stroke-[2.5]" />
+                            <span>Added</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="w-3 h-3" />
+                            <span>Add</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Modal Footer */}
