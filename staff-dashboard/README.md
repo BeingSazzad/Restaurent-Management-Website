@@ -96,31 +96,15 @@ src/
 
 ---
 
-## 🚀 How to Push to a Separate Git Repository
+## 🚀 Remote Repository
 
-To keep the staff console completely isolated from the customer-facing website:
+Repository: [https://github.com/BeingSazzad/Restaurent-Dashboard](https://github.com/BeingSazzad/Restaurent-Dashboard)
 
 ```bash
-# 1. Open terminal in the staff-dashboard directory
-cd "c:\Users\Bhaijaan\Desktop\RESTAURENT WEBSITE\staff-dashboard"
-
-# 2. Initialize a fresh Git repository
-git init
-
-# 3. Stage all files
-git add .
-
-# 4. Create the initial commit
-git commit -m "feat: initial commit for Amber Spice Staff KDS portal"
-
-# 5. Set main branch
-git branch -M main
-
-# 6. Add your new remote repository URL (from GitHub / GitLab)
-git remote add origin https://github.com/<YOUR_ORGANIZATION>/amber-spice-kds.git
-
-# 7. Push to the remote repository
-git push -u origin main
+git clone https://github.com/BeingSazzad/Restaurent-Dashboard.git
+cd Restaurent-Dashboard
+npm install
+npm run dev
 ```
 
 ---
