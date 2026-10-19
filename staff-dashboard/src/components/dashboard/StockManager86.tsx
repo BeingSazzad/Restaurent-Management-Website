@@ -10,6 +10,7 @@ import {
   Package,
   CheckCircle2,
   Plus,
+  Minus,
   Box,
   Layers,
   TrendingDown,
@@ -18,12 +19,14 @@ import {
   Clock,
   ChevronDown,
   Utensils,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   toggleDishAvailability,
   restockAllDishes,
   adjustRawStock,
+  setRawStock,
   restockRawToPar,
   addRawIngredient,
   syncStockFromStorage,
@@ -147,6 +150,12 @@ export function StockManager86() {
   const [newIngUnit, setNewIngUnit] = useState('kg');
   const [newIngCost, setNewIngCost] = useState<number>(5.5);
   const [newIngSupplier, setNewIngSupplier] = useState('');
+
+  // Stock Adjustment Modal State
+  const [adjustingItem, setAdjustingItem] = useState<RawIngredientItem | null>(null);
+  const [adjustMode, setAdjustMode] = useState<'add' | 'deduct' | 'set'>('add');
+  const [adjustAmount, setAdjustAmount] = useState<number>(5);
+  const [adjustReason, setAdjustReason] = useState<string>('Delivery Restock');
 
   // Counts
   const totalDishesCount = dishes.length;
@@ -304,6 +313,50 @@ export function StockManager86() {
     setIsWasteModalOpen(false);
     setWasteNotes('');
   };
+
+  const handleOpenAdjust = (item: RawIngredientItem, defaultMode: 'add' | 'deduct' | 'set' = 'add') => {
+    setAdjustingItem(item);
+    setAdjustMode(defaultMode);
+    if (defaultMode === 'add') {
+      const needed = Math.max(1, Math.round((item.parLevel - item.currentStock) * 10) / 10);
+      setAdjustAmount(needed > 0 && item.currentStock < item.parLevel ? needed : 5);
+      setAdjustReason('Delivery Restock');
+    } else if (defaultMode === 'deduct') {
+      setAdjustAmount(1);
+      setAdjustReason('Kitchen Prep / Shift Usage');
+    } else {
+      setAdjustAmount(item.currentStock);
+      setAdjustReason('Physical Inventory Count');
+    }
+  };
+
+  const handleConfirmAdjust = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!adjustingItem) return;
+    const num = Number(adjustAmount) || 0;
+    if (adjustMode === 'add') {
+      dispatch(adjustRawStock({ id: adjustingItem.id, delta: num }));
+    } else if (adjustMode === 'deduct') {
+      dispatch(adjustRawStock({ id: adjustingItem.id, delta: -num }));
+    } else if (adjustMode === 'set') {
+      dispatch(setRawStock({ id: adjustingItem.id, count: num }));
+    }
+    setAdjustingItem(null);
+  };
+
+  const getPredictedStock = () => {
+    if (!adjustingItem) return 0;
+    const val = Number(adjustAmount) || 0;
+    if (adjustMode === 'add') {
+      return Math.max(0, Math.round((adjustingItem.currentStock + val) * 10) / 10);
+    }
+    if (adjustMode === 'deduct') {
+      return Math.max(0, Math.round((adjustingItem.currentStock - val) * 10) / 10);
+    }
+    return Math.max(0, Math.round(val * 10) / 10);
+  };
+
+  const predictedStock = getPredictedStock();
 
   return (
     <div className="space-y-5 text-[#1A130E]">
@@ -760,7 +813,7 @@ export function StockManager86() {
               )}
             </div>
 
-            {/* Filters */}
+            {/* Filters & Actions */}
             <div className="flex items-center gap-2 flex-wrap">
               {/* Category Segmented */}
               <div className="h-10 flex items-center gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200/60 overflow-x-auto scrollbar-none">
@@ -796,7 +849,7 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  All Status
+                  All
                 </button>
                 <button
                   onClick={() => setRawStatusFilter('healthy')}
@@ -806,7 +859,7 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  Healthy
+                  In Stock
                 </button>
                 <button
                   onClick={() => setRawStatusFilter('low_stock')}
@@ -826,9 +879,19 @@ export function StockManager86() {
                       : 'text-stone-500 hover:text-stone-900 hover:bg-stone-200/40'
                   }`}
                 >
-                  Out of Stock
+                  Out
                 </button>
               </div>
+
+              {/* Add Material Action */}
+              <button
+                type="button"
+                onClick={() => setIsAddModalOpen(true)}
+                className="h-10 px-3.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#F15A24] hover:opacity-95 text-white font-semibold text-xs inline-flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Material</span>
+              </button>
             </div>
           </div>
 
@@ -838,55 +901,54 @@ export function StockManager86() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-stone-50/80 border-b border-stone-200/90 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
-                    <th className="py-3.5 px-4 font-semibold">Ingredient &amp; Category</th>
-                    <th className="py-3.5 px-4 font-semibold">Stock vs Par Level</th>
-                    <th className="py-3.5 px-4 font-semibold">Portion Yield Est.</th>
-                    <th className="py-3.5 px-4 font-semibold">Health Status</th>
-                    <th className="py-3.5 px-4 font-semibold">Unit Cost / Val</th>
-                    <th className="py-3.5 px-4 font-semibold">Supplier</th>
-                    <th className="py-3.5 px-4 font-semibold text-right">Quick Stock Adjustment</th>
+                    <th className="py-3.5 px-5 font-semibold">Ingredient</th>
+                    <th className="py-3.5 px-5 font-semibold">Stock Level</th>
+                    <th className="py-3.5 px-5 font-semibold">Status</th>
+                    <th className="py-3.5 px-5 font-semibold text-right">Stock Adjustment</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-100 text-xs">
                   {paginatedRaw.map((item) => {
                     const badge = getIngredientCategoryBadge(item.category);
                     const percent = Math.min(100, Math.round((item.currentStock / item.parLevel) * 100));
-                    // Estimated yield: 250g per portion for proteins, 100g for grains/dairy
-                    const portionYield =
-                      item.category === 'protein'
-                        ? Math.floor(item.currentStock / 0.25)
-                        : item.category === 'grain'
-                        ? Math.floor(item.currentStock / 0.1)
-                        : item.unit === 'pcs'
-                        ? Math.floor(item.currentStock)
-                        : Math.floor(item.currentStock * 4);
 
                     return (
                       <tr key={item.id} className="hover:bg-stone-50/70 transition-colors">
-                        <td className="py-3.5 px-4">
-                          <div>
-                            <div className="font-bold text-stone-900 text-sm">{item.name}</div>
-                            <span
-                              className={`inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-semibold border ${badge.bg}`}
-                            >
-                              {badge.label}
-                            </span>
+                        {/* 1. Ingredient & Clean Details */}
+                        <td className="py-3.5 px-5">
+                          <div className="space-y-1">
+                            <div className="font-bold text-stone-900 text-sm leading-snug">{item.name}</div>
+                            <div className="flex items-center gap-2 flex-wrap text-[11px] text-stone-500">
+                              <span
+                                className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold border ${badge.bg}`}
+                              >
+                                {badge.label}
+                              </span>
+                              <span>·</span>
+                              <span className="text-stone-500 font-medium">{item.supplier}</span>
+                              <span>·</span>
+                              <span className="text-stone-400 font-mono">
+                                {formatCurrency(item.unitCost)} / {item.unit}
+                              </span>
+                            </div>
                           </div>
                         </td>
 
-                        <td className="py-3.5 px-4">
-                          <div className="space-y-1.5 min-w-[140px]">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="font-bold text-stone-900">
-                                {item.currentStock} {item.unit}
+                        {/* 2. Current Stock & Par */}
+                        <td className="py-3.5 px-5 whitespace-nowrap">
+                          <div className="space-y-1.5 min-w-[150px]">
+                            <div className="flex items-baseline justify-between gap-3">
+                              <span className="text-sm font-extrabold text-stone-900 tracking-tight">
+                                {item.currentStock}{' '}
+                                <span className="text-xs font-semibold text-stone-500">{item.unit}</span>
                               </span>
-                              <span className="text-stone-400">
+                              <span className="text-[11px] font-medium text-stone-400">
                                 Par: {item.parLevel} {item.unit}
                               </span>
                             </div>
                             <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden">
                               <div
-                                className={`h-full rounded-full transition-all ${
+                                className={`h-full rounded-full transition-all duration-300 ${
                                   item.status === 'out_of_stock'
                                     ? 'bg-rose-500 w-0'
                                     : item.status === 'low_stock'
@@ -899,80 +961,73 @@ export function StockManager86() {
                           </div>
                         </td>
 
-                        {/* Portion Yield Est. */}
-                        <td className="py-3.5 px-4 whitespace-nowrap">
-                          <span className="font-semibold text-stone-800">
-                            ~{portionYield} {portionYield === 1 ? 'portion' : 'portions'}
-                          </span>
-                          <span className="text-[10px] text-stone-400 block mt-0.5">
-                            Kitchen prep capacity
-                          </span>
-                        </td>
-
-                        <td className="py-3.5 px-4 whitespace-nowrap">
+                        {/* 3. Status */}
+                        <td className="py-3.5 px-5 whitespace-nowrap">
                           {item.status === 'healthy' && (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                              Healthy Stock
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              In Stock
                             </span>
                           )}
                           {item.status === 'low_stock' && (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
-                              <TrendingDown className="w-3.5 h-3.5 text-amber-600" />
-                              Below Par (Low)
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                              Low Stock
                             </span>
                           )}
                           {item.status === 'out_of_stock' && (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80">
-                              <AlertOctagon className="w-3.5 h-3.5 text-rose-600" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                               Out of Stock
                             </span>
                           )}
                         </td>
 
-                        <td className="py-3.5 px-4 whitespace-nowrap">
-                          <div className="font-semibold text-stone-900">
-                            {formatCurrency(item.unitCost)} / {item.unit}
-                          </div>
-                          <div className="text-[11px] text-stone-400">
-                            Val: {formatCurrency(item.currentStock * item.unitCost)}
-                          </div>
-                        </td>
+                        {/* 4. Stock Adjustment */}
+                        <td className="py-3.5 px-5 text-right whitespace-nowrap">
+                          <div className="inline-flex items-center justify-end gap-2">
+                            {/* Stepper Control */}
+                            <div className="inline-flex items-center bg-stone-100/90 rounded-xl p-0.5 border border-stone-200/70">
+                              <button
+                                type="button"
+                                onClick={() => dispatch(adjustRawStock({ id: item.id, delta: -1 }))}
+                                disabled={item.currentStock <= 0}
+                                className="w-7 h-7 rounded-lg flex items-center justify-center text-stone-600 hover:text-stone-900 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs"
+                                title="Deduct 1 unit"
+                              >
+                                <Minus className="w-3.5 h-3.5" />
+                              </button>
+                              <span className="min-w-[42px] px-1 text-center font-bold text-stone-800 text-xs select-none">
+                                {item.currentStock}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => dispatch(adjustRawStock({ id: item.id, delta: 1 }))}
+                                className="w-7 h-7 rounded-lg flex items-center justify-center text-stone-600 hover:text-stone-900 hover:bg-white transition-all cursor-pointer shadow-2xs"
+                                title="Add 1 unit"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
 
-                        <td className="py-3.5 px-4 whitespace-nowrap">
-                          <div className="font-medium text-stone-800">{item.supplier}</div>
-                          <div className="text-[10px] text-stone-400">Restocked: {item.lastRestocked}</div>
-                        </td>
+                            {/* Standard Adjust Action Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenAdjust(item)}
+                              className="h-8 px-3 rounded-xl bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 font-semibold text-xs inline-flex items-center gap-1.5 border border-stone-200/90 hover:border-stone-300 transition-all shadow-2xs cursor-pointer active:scale-95"
+                              title="Detailed stock adjustment"
+                            >
+                              <SlidersHorizontal className="w-3.5 h-3.5 text-stone-500" />
+                              <span>Adjust</span>
+                            </button>
 
-                        <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                          <div className="inline-flex items-center gap-1.5">
-                            <button
-                              onClick={() => dispatch(adjustRawStock({ id: item.id, delta: -1 }))}
-                              disabled={item.currentStock <= 0}
-                              className="h-8 w-8 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-xs transition-colors"
-                              title="Deduct 1 unit"
-                            >
-                              -1
-                            </button>
-                            <button
-                              onClick={() => dispatch(adjustRawStock({ id: item.id, delta: 1 }))}
-                              className="h-8 w-8 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold flex items-center justify-center cursor-pointer text-xs transition-colors"
-                              title="Add 1 unit"
-                            >
-                              +1
-                            </button>
-                            <button
-                              onClick={() => dispatch(adjustRawStock({ id: item.id, delta: 5 }))}
-                              className="h-8 px-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold flex items-center justify-center cursor-pointer text-xs transition-colors"
-                              title="Add 5 units"
-                            >
-                              +5
-                            </button>
+                            {/* Quick Restock Shortcut if not healthy */}
                             {item.status !== 'healthy' && (
                               <button
+                                type="button"
                                 onClick={() => dispatch(restockRawToPar(item.id))}
-                                className="h-8 px-2.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#B84A22] font-semibold flex items-center gap-1 cursor-pointer text-xs transition-colors"
-                                title="Restock to 150% Par"
+                                className="h-8 px-2.5 rounded-xl bg-gradient-to-r from-[#B84A22] to-[#F15A24] text-white font-semibold text-xs inline-flex items-center gap-1 transition-all shadow-xs hover:opacity-95 cursor-pointer active:scale-95"
+                                title={`Restock to Par (${item.parLevel} ${item.unit})`}
                               >
                                 <RefreshCw className="w-3 h-3" />
                                 <span>Restock</span>
@@ -1386,6 +1441,258 @@ export function StockManager86() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Standard Stock Adjustment Modal */}
+      {adjustingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="bg-white rounded-2xl max-w-lg w-full border border-stone-200 shadow-2xl p-6 space-y-5">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <div>
+                <h3 className="font-bold text-base text-stone-900">Adjust Stock</h3>
+                <p className="text-xs text-stone-500 mt-0.5">{adjustingItem.name}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAdjustingItem(null)}
+                className="text-stone-400 hover:text-stone-700 p-1.5 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Current Stock Banner */}
+            <div className="bg-stone-50 border border-stone-200/70 rounded-xl p-3.5 flex items-center justify-between">
+              <div>
+                <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">Current In-Stock</span>
+                <div className="text-lg font-extrabold text-stone-900 mt-0.5">
+                  {adjustingItem.currentStock} <span className="text-xs font-semibold text-stone-500">{adjustingItem.unit}</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">Target Par</span>
+                <div className="text-sm font-bold text-stone-700 mt-0.5">
+                  {adjustingItem.parLevel} <span className="text-xs text-stone-400">{adjustingItem.unit}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Mode Selector (Add / Deduct / Set Exact) */}
+            <div>
+              <label className="block font-bold text-stone-700 text-xs mb-1.5">Adjustment Mode</label>
+              <div className="grid grid-cols-3 gap-1.5 bg-stone-100 p-1 rounded-xl border border-stone-200/70">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAdjustMode('add');
+                    setAdjustAmount(5);
+                    setAdjustReason('Delivery Restock');
+                  }}
+                  className={`h-9 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    adjustMode === 'add'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/60'
+                  }`}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Receive / Add</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAdjustMode('deduct');
+                    setAdjustAmount(1);
+                    setAdjustReason('Kitchen Prep / Shift Usage');
+                  }}
+                  className={`h-9 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    adjustMode === 'deduct'
+                      ? 'bg-rose-600 text-white shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/60'
+                  }`}
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                  <span>Deduct / Used</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAdjustMode('set');
+                    setAdjustAmount(adjustingItem.currentStock);
+                    setAdjustReason('Physical Inventory Count');
+                  }}
+                  className={`h-9 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    adjustMode === 'set'
+                      ? 'bg-stone-800 text-white shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/60'
+                  }`}
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  <span>Exact Count</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Chips & Quantity Input */}
+            <div className="space-y-2">
+              <label className="block font-bold text-stone-700 text-xs">
+                {adjustMode === 'add'
+                  ? 'Quantity to Add'
+                  : adjustMode === 'deduct'
+                  ? 'Quantity to Deduct'
+                  : 'New Total On-Hand Count'}
+              </label>
+
+              {/* Quick Presets */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {adjustMode === 'add' && (
+                  <>
+                    {[1, 5, 10, 20].map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setAdjustAmount(val)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                          adjustAmount === val
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                        }`}
+                      >
+                        +{val} {adjustingItem.unit}
+                      </button>
+                    ))}
+                    {adjustingItem.parLevel > adjustingItem.currentStock && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setAdjustAmount(
+                            Math.round((adjustingItem.parLevel - adjustingItem.currentStock) * 10) / 10
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#B84A22]/10 text-[#B84A22] border border-[#B84A22]/20 hover:bg-[#B84A22]/20 transition-all cursor-pointer"
+                      >
+                        Fill to Par (+{Math.round((adjustingItem.parLevel - adjustingItem.currentStock) * 10) / 10} {adjustingItem.unit})
+                      </button>
+                    )}
+                  </>
+                )}
+
+                {adjustMode === 'deduct' && (
+                  <>
+                    {[1, 2, 5, 10].map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => setAdjustAmount(val)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                          adjustAmount === val
+                            ? 'bg-rose-50 text-rose-800 border-rose-300'
+                            : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                        }`}
+                      >
+                        -{val} {adjustingItem.unit}
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {adjustMode === 'set' && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setAdjustAmount(0)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                    >
+                      0 (Out of stock)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAdjustAmount(adjustingItem.parLevel)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                    >
+                      Par ({adjustingItem.parLevel} {adjustingItem.unit})
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Number Input with unit */}
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  required
+                  value={adjustAmount}
+                  onChange={(e) => setAdjustAmount(parseFloat(e.target.value) || 0)}
+                  className="w-full h-11 px-3.5 pr-14 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] focus:ring-2 focus:ring-[#F15A24]/10 outline-none text-sm font-bold text-stone-900"
+                />
+                <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-stone-500 pointer-events-none">
+                  {adjustingItem.unit}
+                </span>
+              </div>
+            </div>
+
+            {/* Reason / Reference */}
+            <div>
+              <label className="block font-bold text-stone-700 text-xs mb-1">Reason / Note</label>
+              <select
+                value={adjustReason}
+                onChange={(e) => setAdjustReason(e.target.value)}
+                className="w-full h-10 px-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:border-[#F15A24] outline-none text-xs font-medium text-stone-800"
+              >
+                <option value="Delivery Restock">Delivery / Supplier Restock</option>
+                <option value="Kitchen Prep / Shift Usage">Kitchen Prep / Shift Usage</option>
+                <option value="Physical Inventory Count">Physical Inventory Count / Audit</option>
+                <option value="Correction">Data Correction / Adjustment</option>
+                <option value="Damaged / Spoilage">Damaged / Spoilage</option>
+              </select>
+            </div>
+
+            {/* Live Impact Preview */}
+            <div className="bg-stone-50 border border-stone-200/70 rounded-xl p-3 flex items-center justify-between text-xs">
+              <span className="text-stone-500 font-medium">Resulting Stock:</span>
+              <div className="flex items-center gap-2">
+                <span className="text-stone-400 line-through">
+                  {adjustingItem.currentStock} {adjustingItem.unit}
+                </span>
+                <span className="font-bold text-stone-900 text-sm">
+                  → {predictedStock} {adjustingItem.unit}
+                </span>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    predictedStock <= 0
+                      ? 'bg-rose-100 text-rose-700'
+                      : predictedStock <= adjustingItem.parLevel
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-emerald-100 text-emerald-800'
+                  }`}
+                >
+                  {predictedStock <= 0 ? 'Out of Stock' : predictedStock <= adjustingItem.parLevel ? 'Low Stock' : 'In Stock'}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
+              <Button
+                variant="secondary"
+                size="sm"
+                type="button"
+                onClick={() => setAdjustingItem(null)}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                type="button"
+                onClick={handleConfirmAdjust}
+              >
+                Save Stock Adjustment
+              </Button>
+            </div>
           </div>
         </div>
       )}

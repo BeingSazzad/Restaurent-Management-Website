@@ -246,6 +246,20 @@ export const stockSlice = createSlice({
         persistRaw(state.rawIngredients);
       }
     },
+    setRawStock: (state, action: PayloadAction<{ id: string; count: number }>) => {
+      const item = state.rawIngredients.find((i) => i.id === action.payload.id);
+      if (item) {
+        item.currentStock = Math.max(0, Math.round(action.payload.count * 10) / 10);
+        if (item.currentStock === 0) {
+          item.status = 'out_of_stock';
+        } else if (item.currentStock <= item.parLevel) {
+          item.status = 'low_stock';
+        } else {
+          item.status = 'healthy';
+        }
+        persistRaw(state.rawIngredients);
+      }
+    },
     restockRawToPar: (state, action: PayloadAction<string>) => {
       const item = state.rawIngredients.find((i) => i.id === action.payload);
       if (item) {
@@ -277,6 +291,7 @@ export const {
   updateDishRecipe,
   restockAllDishes,
   adjustRawStock,
+  setRawStock,
   restockRawToPar,
   addRawIngredient,
   deleteRawIngredient,
