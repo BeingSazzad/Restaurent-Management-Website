@@ -11,9 +11,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.3.4",
     "@reduxjs/toolkit": "^2.13.0",
-    "antd": "^6.6.6",
     "autoprefixer": "^10.6.1",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.57.0",
@@ -28,9 +26,7 @@
     "@types/node": "^26.6.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.0"
+    "typescript": "^7.0.2"
   }
 }

@@ -53,15 +53,13 @@ const TIME_SLOTS = [
 
 export default function ReservationsPage() {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  const [mounted, setMounted] = useState<boolean>(false);
-
   // Form State
   const [partySize, setPartySize] = useState<number>(2);
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
   const [timeSlot, setTimeSlot] = useState<string>('7:00 PM');
-  const [guestName, setGuestName] = useState<string>('');
-  const [guestPhone, setGuestPhone] = useState<string>('');
-  const [guestEmail, setGuestEmail] = useState<string>('');
+  const [guestName, setGuestName] = useState<string>(() => user?.name || '');
+  const [guestPhone, setGuestPhone] = useState<string>(() => user?.phone || '');
+  const [guestEmail, setGuestEmail] = useState<string>(() => user?.email || '');
   const [specialRequests, setSpecialRequests] = useState<string>('');
 
   // UI state
@@ -69,21 +67,16 @@ export default function ReservationsPage() {
   const [confirmedReservation, setConfirmedReservation] = useState<ReservationRecord | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  useEffect(() => {
-    setMounted(true);
-    const today = new Date().toISOString().split('T')[0];
-    setDate(today);
-  }, []);
-
   // Auto-fill for logged in users
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.name && !guestName) setGuestName(user.name);
+      if (user.phone && !guestPhone) setGuestPhone(user.phone);
       if (user.email && !guestEmail) setGuestEmail(user.email);
     }
   }, [isAuthenticated, user]);
 
-  const minDate = mounted ? new Date().toISOString().split('T')[0] : '';
+  const minDate = new Date().toISOString().split('T')[0];
 
   const handleValidate = () => {
     const errs: { [key: string]: string } = {};

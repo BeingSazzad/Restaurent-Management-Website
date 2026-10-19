@@ -37,19 +37,19 @@ function getInitialModifiers(dish: MenuItem | null) {
 
 export const ModifierModal: React.FC<ModifierModalProps> = ({ dish, onClose }) => {
   const dispatch = useAppDispatch();
-  const [prevDishId, setPrevDishId] = useState<string | null>(dish?.id || null);
   const [quantity, setQuantity] = useState(1);
   const [selectedModifiers, setSelectedModifiers] = useState(() => getInitialModifiers(dish));
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [addedPairingIds, setAddedPairingIds] = useState<string[]>([]);
 
-  if (dish && dish.id !== prevDishId) {
-    setPrevDishId(dish.id);
-    setQuantity(1);
-    setSpecialInstructions('');
-    setSelectedModifiers(getInitialModifiers(dish));
-    setAddedPairingIds([]);
-  }
+  React.useEffect(() => {
+    if (dish) {
+      setQuantity(1);
+      setSpecialInstructions('');
+      setSelectedModifiers(getInitialModifiers(dish));
+      setAddedPairingIds([]);
+    }
+  }, [dish?.id]);
 
   const pairedItems = useMemo(() => {
     if (!dish) return [];
