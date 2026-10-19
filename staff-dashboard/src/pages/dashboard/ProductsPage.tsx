@@ -15,10 +15,6 @@ import {
   Eye,
   CheckCircle2,
   AlertTriangle,
-  Flame,
-  UtensilsCrossed,
-  Layers,
-  Sparkles,
 } from 'lucide-react';
 import { Pagination } from '../../components/ui/Pagination';
 

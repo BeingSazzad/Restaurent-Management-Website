@@ -3,22 +3,15 @@ import {
   Search,
   X,
   Check,
-  AlertTriangle,
   RotateCcw,
   LayoutList,
   LayoutGrid,
-  Package,
-  CheckCircle2,
   Plus,
   Minus,
   Box,
   Layers,
-  TrendingDown,
   AlertOctagon,
   RefreshCw,
-  Clock,
-  ChevronDown,
-  Utensils,
   SlidersHorizontal,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -127,9 +120,6 @@ export function StockManager86() {
   const [rawCategoryFilter, setRawCategoryFilter] = useState('all');
   const [rawStatusFilter, setRawStatusFilter] = useState<'all' | 'healthy' | 'low_stock' | 'out_of_stock'>('all');
 
-  // Batch Dropdown State
-  const [activeBatchDropdownId, setActiveBatchDropdownId] = useState<string | null>(null);
-
   // Wastage Filters & Modal State
   const [isWasteModalOpen, setIsWasteModalOpen] = useState(false);
   const [wasteItemType, setWasteItemType] = useState<'raw' | 'dish'>('raw');
@@ -160,11 +150,7 @@ export function StockManager86() {
   // Counts
   const totalDishesCount = dishes.length;
   const soldOutCount = dishes.filter((d) => !d.isAvailable || (d.stockCount || 0) <= 0).length;
-  const lowPortionDishesCount = dishes.filter(
-    (d) => d.isAvailable && (d.stockCount || 0) > 0 && (d.stockCount || 0) <= (d.lowStockThreshold || 5)
-  ).length;
   const lowStockRawCount = rawIngredients.filter((i) => i.status === 'low_stock' || i.status === 'out_of_stock').length;
-  const outOfStockRawCount = rawIngredients.filter((i) => i.status === 'out_of_stock').length;
   const totalWastageCost = (wastageHistory || []).reduce((sum, w) => sum + (w.costLost || 0), 0);
 
   // Filtered Dishes

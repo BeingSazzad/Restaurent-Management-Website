@@ -3,7 +3,6 @@ import { INITIAL_STAFF_USERS } from '../../lib/constants';
 import { StaffUser, UserRole } from '../../types/common.types';
 import { PageHeader } from '../layout/PageHeader';
 import { Avatar } from '../shared/Avatar';
-import { Badge } from '../shared/Badge';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
@@ -16,9 +15,6 @@ import {
   CheckCircle2,
   Users,
   ChefHat,
-  Send,
-  Sparkles,
-  UserPlus,
   Pencil,
   Calendar,
 } from 'lucide-react';

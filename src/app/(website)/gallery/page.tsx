@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Eye, UtensilsCrossed } from 'lucide-react';
+import { Eye, UtensilsCrossed } from 'lucide-react';
 import { getFullCmsData, GalleryItem, DEFAULT_GALLERY_ITEMS } from '@/services/cmsService';
 
 export default function GalleryPage() {

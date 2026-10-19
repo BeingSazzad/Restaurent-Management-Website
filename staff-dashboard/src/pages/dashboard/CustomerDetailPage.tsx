@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft,
   Crown,
@@ -14,11 +14,9 @@ import {
   Ban,
   AlertTriangle,
   CheckCircle2,
-  ExternalLink,
   Bike,
   Store,
   Receipt,
-  CreditCard,
   Clock,
 } from 'lucide-react';
 import {
@@ -49,7 +47,6 @@ interface HistoricalOrder {
 
 export function CustomerDetailPage() {
   const { customerId } = useParams<{ customerId: string }>();
-  const navigate = useNavigate();
   const { orders: liveOrders } = useAppSelector((state) => state.orders);
 
   const [customer, setCustomer] = useState<RegisteredCustomer | undefined>(() =>

@@ -86,7 +86,7 @@ export default function ContactPage() {
             <div className="min-w-0">
               <span className="block font-bold text-[15px] text-[#1A130E]">Dublin Kitchen</span>
               <p className="text-[13px] text-[#555555] mt-1 leading-snug">
-                18 South William Street
+                {address}
               </p>
               <span className="text-[12px] font-semibold text-[#B84A22] block mt-0.5">
                 Dublin 2, {eircode}

@@ -78,13 +78,6 @@ export function ProfilePage() {
     showToast('✓ Password updated successfully');
   };
 
-  const initials = (name || 'Admin')
-    .split(' ')
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-
   return (
     <div className="space-y-6 max-w-4xl">
       <PageHeader

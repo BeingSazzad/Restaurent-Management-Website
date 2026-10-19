@@ -13,7 +13,6 @@ import {
   ArrowRight,
   Menu as MenuIcon,
   X,
-  Calendar,
   UtensilsCrossed,
   LogOut,
   ChevronDown,

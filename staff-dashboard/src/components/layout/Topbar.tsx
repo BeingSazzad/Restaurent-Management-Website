@@ -6,13 +6,10 @@ import {
   Minimize,
   ShieldCheck,
   Bell,
-  User,
   ShoppingBag,
   AlertTriangle,
   Flame,
   Info,
-  Check,
-  ExternalLink,
 } from 'lucide-react';
 import { useAppDispatch } from '../../store/hooks';
 import { setActiveRole } from '../../store/slices/authSlice';
@@ -92,13 +89,6 @@ export function Topbar() {
         return <Info className="w-3.5 h-3.5 text-stone-500" />;
     }
   };
-
-  const initials = (user?.name || 'Admin')
-    .split(' ')
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
 
   return (
     <header className="h-14 bg-white border-b border-stone-200/90 px-6 sm:px-8 lg:px-10 flex items-center justify-between shrink-0">

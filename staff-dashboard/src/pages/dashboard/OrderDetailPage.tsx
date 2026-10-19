@@ -11,7 +11,6 @@ import {
   Clock,
   Phone,
   Mail,
-  MapPin,
   Bike,
   Store,
   CheckCircle2,

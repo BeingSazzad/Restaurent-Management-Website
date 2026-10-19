@@ -97,7 +97,7 @@ export const PolicyContentRenderer: React.FC<PolicyContentRendererProps> = ({ co
 
       // Bullet List item
       if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        const itemText = trimmed.replace(/^[•\-\*]\s*/, '');
+        const itemText = trimmed.replace(/^[•\-*]\s*/, '');
         currentBulletList.push(itemText);
         return;
       }

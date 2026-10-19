@@ -7,7 +7,6 @@ import {
   BarChart3,
   Users,
   LogOut,
-  Flame,
   ChevronRight,
   ClipboardList,
   Utensils,

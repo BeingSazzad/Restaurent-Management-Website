@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Ban,
   ShieldCheck,
-  AlertTriangle,
 } from 'lucide-react';
 import {
   getCustomersList,
@@ -41,7 +40,7 @@ export function CustomersPage() {
   const [newPhone, setNewPhone] = useState('');
   const [newAddress, setNewAddress] = useState('');
   const [newEircode, setNewEircode] = useState('');
-  const [newFavDish, setNewFavDish] = useState('Old Delhi Butter Chicken');
+  const newFavDish = 'Old Delhi Butter Chicken';
 
   const showToast = (msg: string) => {
     setToastMessage(msg);

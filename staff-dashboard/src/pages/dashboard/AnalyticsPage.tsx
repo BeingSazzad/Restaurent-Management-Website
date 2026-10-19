@@ -214,9 +214,6 @@ export function AnalyticsPage() {
   const activeSalesData = rawSalesData;
 
   const totalYearSales = activeSalesData.reduce((acc, d) => acc + d.sales, 0);
-  const avgMonthlyGrowth = (
-    activeSalesData.reduce((acc, d) => acc + d.growth, 0) / activeSalesData.length
-  ).toFixed(1);
 
   // SVG Chart 1 dimensions (Edge-to-edge standard width)
   const c1Width = 760;

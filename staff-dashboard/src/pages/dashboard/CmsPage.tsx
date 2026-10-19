@@ -21,11 +21,8 @@ import {
   Image as ImageIcon,
   Phone,
   Share2,
-  MapPin,
   Clock,
-  ExternalLink,
   X,
-  Sparkles,
   Upload,
 } from 'lucide-react';
 import { PolicyPreview } from '../../components/cms/PolicyPreview';
