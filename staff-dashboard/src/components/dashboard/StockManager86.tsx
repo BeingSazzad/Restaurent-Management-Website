@@ -794,7 +794,7 @@ export function StockManager86() {
           {/* Raw Inventory Toolbar */}
           <div className="bg-white border border-stone-200/90 rounded-2xl p-3 shadow-2xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
+            <div className="relative w-full md:w-64 lg:w-72 shrink-0">
               <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
@@ -1665,12 +1665,12 @@ export function StockManager86() {
                   className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                     predictedStock <= 0
                       ? 'bg-rose-100 text-rose-700'
-                      : predictedStock <= adjustingItem.parLevel
+                      : predictedStock < adjustingItem.parLevel
                       ? 'bg-amber-100 text-amber-800'
                       : 'bg-emerald-100 text-emerald-800'
                   }`}
                 >
-                  {predictedStock <= 0 ? 'Out of Stock' : predictedStock <= adjustingItem.parLevel ? 'Low Stock' : 'In Stock'}
+                  {predictedStock <= 0 ? 'Out of Stock' : predictedStock < adjustingItem.parLevel ? 'Low Stock' : 'In Stock'}
                 </span>
               </div>
             </div>

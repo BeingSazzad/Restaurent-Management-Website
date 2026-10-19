@@ -238,7 +238,7 @@ export const stockSlice = createSlice({
         item.currentStock = Math.max(0, Math.round((item.currentStock + action.payload.delta) * 10) / 10);
         if (item.currentStock === 0) {
           item.status = 'out_of_stock';
-        } else if (item.currentStock <= item.parLevel) {
+        } else if (item.currentStock < item.parLevel) {
           item.status = 'low_stock';
         } else {
           item.status = 'healthy';
@@ -252,7 +252,7 @@ export const stockSlice = createSlice({
         item.currentStock = Math.max(0, Math.round(action.payload.count * 10) / 10);
         if (item.currentStock === 0) {
           item.status = 'out_of_stock';
-        } else if (item.currentStock <= item.parLevel) {
+        } else if (item.currentStock < item.parLevel) {
           item.status = 'low_stock';
         } else {
           item.status = 'healthy';
