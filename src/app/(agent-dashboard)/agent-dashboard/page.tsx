@@ -15,7 +15,6 @@ import {
   Bike,
   Store,
   Printer,
-  TrendingUp,
   Search,
   Flame,
   AlertTriangle,
@@ -29,7 +28,6 @@ import {
   FileText,
   CheckCheck,
   MapPin,
-  ArrowUpRight,
   LayoutList,
   LayoutGrid,
   Package,
@@ -211,9 +209,6 @@ export default function AgentDashboardPage() {
   }, [menuItems, stockCategoryFilter, stockStatusFilter, stockSearchQuery]);
 
   // Quick Stats
-  const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
-  const deliveryCount = orders.filter((o) => o.fulfillmentType === 'delivery').length;
-  const collectionCount = orders.filter((o) => o.fulfillmentType === 'collection').length;
   const soldOutCount = menuItems.filter((i) => !i.isAvailable).length;
 
   // Handle Manual Order Submission
